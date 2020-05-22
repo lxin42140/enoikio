@@ -1,0 +1,36 @@
+.Listing {
+    /* border-width: 10px;
+    border-color: black;
+    text-align: center;
+    position: fixed; */
+    z-index: 500;
+    background-color: white;
+    width: 250px;
+    height: 100%;
+    border: 1px solid #ccc;
+    /* box-shadow: 1px 1px 1px black; */
+    padding: 16px;
+    /* left: 15%;
+    top: 30%; */
+    box-sizing: border-box;
+    text-align: left;
+    margin: 10px;
+    display: inline-block;
+}
+
+
+.Image {
+    height: 200px;
+    width: 200px;
+}
+
+.Textbook {
+    font-size: 14px;
+    margin-bottom: -10px;
+}
+
+.Description {
+    font-size: 12px;
+    margin-bottom: -10px;
+    color: grey;
+}

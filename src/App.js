@@ -3,6 +3,9 @@ import { Route, withRouter, Switch, Redirect } from "react-router-dom";
 
 import Layout from "./hoc/Layout/Layout";
 import SearchBar from './containers/Homepage/SearchBar/SearchBar';
+import Listings from './containers/Homepage/Listings/Listings';
+import NewPost from './containers/Homepage/NewPost/NewPost';
+
 // import Logout from "./containers/Auth/Logout/Logout";
 // import { connect } from "react-redux";
 // import * as actions from "../src/store/actions/index";
@@ -38,6 +41,8 @@ class App extends Component {
     return (
       <div>
         <SearchBar />
+        <Listings />
+        <NewPost />
       </div>
     );
   }
