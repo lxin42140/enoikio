@@ -1,0 +1,47 @@
+.input {
+    margin: auto;
+    width: 400px;
+    display: block;
+    border: none;
+    padding: 10px 0;
+    border-bottom: solid 1px #ff5138;
+    color: rgb(0, 0, 0);
+}
+
+.input:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.noSuggestions {
+    color: #999;
+    padding: 0.5rem;
+}
+
+.suggestions {
+    display: none;
+    border: 1px solid #999;
+    border-top-width: 0;
+    list-style: none;
+    margin-top: 0;
+    max-height: 143px;
+    overflow-y: auto;
+    padding-left: 0;
+    width: calc(300px + 1rem);
+}
+
+.suggestions li {
+    padding: 0.5rem;
+}
+
+.suggestionActive,
+.suggestions li:hover {
+    background-color: #008f68;
+    color: #fae042;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.suggestions li:not(:last-of-type) {
+    border-bottom: 1px solid #999;
+}
