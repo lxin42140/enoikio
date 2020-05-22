@@ -1,13 +1,32 @@
 .Button {
-    background-color: transparent;
-    border: none;
-    color: white;
-    outline: none;
+    border-radius: 2em;
     cursor: pointer;
-    font: inherit;
-    padding: 10px;
-    margin: 10px;
+    padding: auto;
+    margin: 0 0.3em 0.3em 0;
     font-weight: bold;
+    font: inherit;
+    text-align: center;
+    background-color: white;
+    border: 2px solid #4CAF50;
+    transition-duration: 0.2s;
+    position: relative;
+}
+
+.Button:hover {
+    background-color: #4CAF50;
+    color: white;
+    box-shadow: 0 5px 5px 0 rgba(26, 26, 26, 0.205), 0 5px 5px 0 rgba(26, 26, 26, 0.205);
+}
+
+.Button:active {
+    top: 0.1em
+}
+
+@media all and (max-width:30em) {
+    .Button {
+        display: block;
+        margin: 0.2em auto;
+    }
 }
 
 .Button:first-of-type {
@@ -24,6 +43,6 @@
 }
 
 .Button:disabled {
-    color: gray;
-    cursor: not-allowed ;
+    opacity: 0.6;
+    cursor: not-allowed;
 }
