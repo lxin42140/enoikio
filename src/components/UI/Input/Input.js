@@ -32,7 +32,16 @@ const input = (props) => {
         />
       );
       break;
-
+    case "number":
+      inputElement = (
+        <number
+          onChange={props.change}
+          className={inputClasses.join(" ")}
+          {...props.elementConfig}
+          value={props.value}
+        />
+      );
+      break;
     case "select":
       inputElement = (
         <select
