@@ -2,22 +2,18 @@ import React, { Component } from "react";
 import { Route, withRouter, Switch, Redirect } from "react-router-dom";
 
 import Layout from "./hoc/Layout/Layout";
-import SearchBar from './containers/Homepage/SearchBar/SearchBar';
-import Listings from './containers/Homepage/Listings/Listings';
-import NewPost from './containers/Homepage/NewPost/NewPost';
 
 // import Logout from "./containers/Auth/Logout/Logout";
 // import { connect } from "react-redux";
 // import * as actions from "../src/store/actions/index";
-// import asyncComponent from './hoc/asyncComponent/asyncComponent';
+import asyncComponent from "./hoc/asyncComponent/asyncComponent";
+import Homepage from "./containers/Homepage/Homepage";
 
-// const asyncCheckout = asyncComponent(() => {
-//   return import("./containers/Checkout/Checkout")
-// });
-
+const asyncNewPost = asyncComponent(() => {
+  return import("../src/containers/NewPost/NewPost");
+});
 
 class App extends Component {
-
   // componentDidMount() {
   //   this.props.onTryAutoSignUp();
   // }
@@ -40,9 +36,13 @@ class App extends Component {
 
     return (
       <div>
-        <SearchBar />
-        <Listings />
-        <NewPost />
+        <Layout>
+          <Switch>
+            <Route path="/" exact component={Homepage} />
+            <Route path="/new-post" component={asyncNewPost} />
+            <Redirect to="/" />
+          </Switch>
+        </Layout>
       </div>
     );
   }
