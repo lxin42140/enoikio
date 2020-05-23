@@ -24,11 +24,12 @@
 }
 
 .InputElement:focus {
-    outline: none;
+    border: solid 2px black;
     background-color: #fff;
 }
 
 .Invalid {
-    border: 1px solid red;
-    background-color: rebeccapurple;
+    border: 2px solid red;
+    background-color: rgb(252, 135, 135);
+    color: black
 }
