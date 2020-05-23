@@ -2,8 +2,10 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 
 import classes from "./AutoComplete.css";
-import Button from "../../../../components/UI/Button/Button";
 import * as actions from "../../../../store/actions/index";
+import Button from "../../../../components/UI/Button/Button";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
 class Autocomplete extends Component {
   state = {
@@ -29,6 +31,7 @@ class Autocomplete extends Component {
   };
 
   onClick = (event) => {
+    this.props.dispatchSearchRequest(event.currentTarget.innerText);
     this.setState({
       activeSuggestion: 0,
       filteredSuggestions: [],
@@ -68,7 +71,6 @@ class Autocomplete extends Component {
   };
 
   render() {
-
     let suggestionsListComponent;
     const suggestionArray = Object.assign(this.state.filteredSuggestions, []);
     if (
@@ -76,9 +78,6 @@ class Autocomplete extends Component {
       this.state.userInput !== "" &&
       this.state.showSuggestions
     ) {
-      if (suggestionArray.length > 10) {
-        suggestionArray.length = 10;
-      }
       suggestionsListComponent = suggestionArray.map((suggestion, index) => {
         let name;
         if (index === this.state.activeSuggestion) {
@@ -102,23 +101,29 @@ class Autocomplete extends Component {
       "Enter the " + this.props.filterType + " to start searching!";
 
     return (
-      <div>
-        <input
-          className={classes.input}
-          type="text"
-          onChange={this.onChange}
-          onKeyDown={this.onKeyDown}
-          value={this.state.userInput}
-          placeholder={placeHolder}
-        />
-        <ul className={classes.suggestions}>{suggestionsListComponent}</ul>
+      <React.Fragment>
+        <div className={classes.autoComplete}>
+          <input
+            className={classes.input}
+            type="text"
+            onChange={this.onChange}
+            onKeyDown={this.onKeyDown}
+            value={this.state.userInput}
+            placeholder={placeHolder}
+          />
+          <ul className={classes.suggestions}>{suggestionsListComponent}</ul>
+        </div>
         <Button
-          btnType="Success"
-          onClick={() => this.props.dispatchSearchRequest(this.state.userInput)}
+          btnType="Search"
+          onClick={() =>
+            this.state.userInput !== ""
+              ? this.props.dispatchSearchRequest(this.state.userInput)
+              : null
+          }
         >
           Search
         </Button>
-      </div>
+      </React.Fragment>
     );
   }
 }
