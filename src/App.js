@@ -10,6 +10,10 @@ const asyncNewPost = asyncComponent(() => {
   return import("../src/containers/NewPost/NewPost");
 });
 
+const asyncAuth = asyncComponent(() => {
+  return import("./containers/Auth/Auth")
+})
+
 class App extends Component {
   render() {
     return (
@@ -18,6 +22,7 @@ class App extends Component {
           <Switch>
             <Route path="/" exact component={Listings} />
             <Route path="/new-post" component={asyncNewPost} />
+            <Route path="/Auth" component={asyncAuth} />
             <Redirect to="/" />
           </Switch>
         </Layout>

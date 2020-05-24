@@ -40,6 +40,7 @@ class Auth extends Component {
       },
     },
     isSignUp: true,
+    valid: false,
   };
 
   checkValidation(value, rules) {
@@ -72,18 +73,20 @@ class Auth extends Component {
         touched: true,
       },
     };
+    let valid = updatedControls.email.valid && updatedControls.password.valid;
     this.setState({
       controls: updatedControls,
+      valid: valid,
     });
   };
 
   submitHandler = (event) => {
     event.preventDefault();
-    this.props.onAuth(
-      this.state.controls.email.value,
-      this.state.controls.password.value,
-      this.state.isSignUp
-    );
+    // this.props.onAuth(
+    //   this.state.controls.email.value,
+    //   this.state.controls.password.value,
+    //   this.state.isSignUp
+    // );
   };
 
   switchAuthModeHandler = () => {
@@ -129,7 +132,7 @@ class Auth extends Component {
     ) : (
       <form onSubmit={this.submitHandler}>
         {form}
-        <Button btnType="Success">
+        <Button btnType="Important" disabled={!this.state.valid}>
           {this.state.isSignUp ? "Sign up" : "Sign in"}
         </Button>
       </form>
@@ -144,41 +147,44 @@ class Auth extends Component {
     //   redirect = <Redirect to={this.props.authRedirect}/>;
     // }
 
-    if (this.props.isAuthenticated && this.props.building) {
-      redirect = <Redirect to="/checkout" />;
-    } else if (this.props.isAuthenticated) {
-      redirect = <Redirect to="/" />;
-    }
+    // if (this.props.isAuthenticated && this.props.building) {
+    //   redirect = <Redirect to="/checkout" />;
+    // } else if (this.props.isAuthenticated) {
+    //   redirect = <Redirect to="/" />;
+    // }
 
     return (
       <div className={classes.Auth}>
         {redirect}
         {errorMessage}
         {content}
-        <Button btnType="Danger" clicked={this.switchAuthModeHandler}>
-          Switch to {this.state.isSignUp ? "Sign in" : "Sign up"}
+        <br />
+        <Button onClick={this.switchAuthModeHandler}>
+          {(this.state.isSignUp ? "Sign in" : "Sign up") + " instead"}
         </Button>
       </div>
     );
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    loading: state.auth.loading,
-    error: state.auth.error,
-    isAuthenticated: state.auth.token !== null,
-    building: state.burgerBuilder.building,
-    //authRedirect: state.auth.authRedirectPath
-  };
-};
+// const mapStateToProps = (state) => {
+//   return {
+//     loading: state.auth.loading,
+//     error: state.auth.error,
+//     isAuthenticated: state.auth.token !== null,
+//     building: state.burgerBuilder.building,
+//     //authRedirect: state.auth.authRedirectPath
+//   };
+// };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    onAuth: (email, password, isSignUp) =>
-      dispatch(actions.auth(email, password, isSignUp)),
-    //onSetRedirectPath: () => dispatch(actions.setAuthRedirectPath("/"))
-  };
-};
+// const mapDispatchToProps = (dispatch) => {
+//   return {
+//     onAuth: (email, password, isSignUp) =>
+//       dispatch(actions.auth(email, password, isSignUp)),
+//     //onSetRedirectPath: () => dispatch(actions.setAuthRedirectPath("/"))
+//   };
+// };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Auth);
+// export default connect(mapStateToProps, mapDispatchToProps)(Auth);
+
+export default Auth;

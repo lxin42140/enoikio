@@ -17,14 +17,10 @@ export const fetchListingFail = (error) => {
 
 export const fetchListingInit = (filter) => {
   return (dispatch) => {
-    let result = [];
     axios
       .get("/listings.json")
       .then((response) => {
-        response.data.forEach((element) => {
-          result.push(element.moduleCode);
-        });
-        dispatch(fetchListingSuccess(result));
+        dispatch(fetchListingSuccess(response.data));
       })
       .catch((error) => {
         dispatch(fetchListingFail(error));
