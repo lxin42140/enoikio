@@ -7,15 +7,20 @@ const fileInput = React.createRef();
 
 class NewPost extends Component {
 
-  /**
-   * module,
-   * textbook,
-   * price,
-   * delivery method,
-   * location,
-   * image
-   */
-  
+    // data = {
+    //     username:
+    //     module:
+    //     textbook:
+    //     image: 
+    //     delivery method:
+    //     location:
+    //     rentPrice:
+    //     image: 
+    //     ratings:
+
+    //     date posted:??
+    // }
+
   state = {
     dataForm: {
       module: {
@@ -168,7 +173,11 @@ class NewPost extends Component {
       <div className={classes.NewPost}>
         <h4>Enter Rental Details</h4>
         {form}
-        <input type="file" onClick={this.fileChangeHandler} ref={fileInput} />
+        <input 
+          type="file"
+          accept="image/*" 
+          onClick={this.fileChangeHandler} 
+          ref={fileInput} />
         <Button onClick={this.onFileUpload}>Upload!</Button>
         <br />
         <br />
