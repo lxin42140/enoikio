@@ -9,9 +9,11 @@ import "./index.css";
 import App from "./App";
 import registerServiceWorker from "./registerServiceWorker";
 import ListingReducer from './store/reducers/Listings';
+import newPostReducer from './store/reducers/newPost';
 
 const rootReducer = combineReducers({
   listing: ListingReducer,
+  newPost: newPostReducer
 });
 
 const composeEnhancers = (process.env.NODE_ENV === 'development' ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : null) || compose;
