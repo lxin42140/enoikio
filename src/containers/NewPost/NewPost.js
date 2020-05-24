@@ -184,7 +184,7 @@ class NewPost extends Component {
             />
           );
         })}
-        <input type="file" accept=".png,.jpeg"  onClick={this.fileChangeHandler} ref={fileInput} />
+        <input type="file" accept=".png,.jpeg, .jpg"  onClick={this.fileChangeHandler} ref={fileInput} />
         <Button onClick={this.onFileUpload}>Upload!</Button>
         <br /> <br />
       </React.Fragment>
