@@ -61,7 +61,7 @@ class Listings extends Component {
                 {this.state.listings.map(listing => {
                     const data={...listing}
                     return (
-                        <Link to={"/listing/"+ listing.textbook} key={listing.name}>
+                        <Link to={"/listings/"+ listing.textbook} key={listing.name}>
                             <Listing info={data} />
                         </Link>
                     )

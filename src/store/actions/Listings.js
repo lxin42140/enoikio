@@ -1,5 +1,5 @@
 import * as actionTypes from "./actionTypes";
-import axios from "axios";
+import axios from "../../firebaseAxios";
 
 export const fetchListingSuccess = (data) => {
   return {
@@ -15,15 +15,11 @@ export const fetchListingFail = (error) => {
   };
 };
 
-
 export const fetchListingInit = (filter) => {
   return (dispatch) => {
     let result = [];
-    let url = "https://api.nusmods.com/v2/2019-2020/moduleList.json";
-    if (filter !== "module code") {
-    }
     axios
-      .get(url)
+      .get("/listings.json")
       .then((response) => {
         response.data.forEach((element) => {
           result.push(element.moduleCode);

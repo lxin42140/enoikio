@@ -82,6 +82,17 @@ class NewPost extends Component {
         valid: false,
         touched: false,
       },
+      Description: {
+        elementType: "input",
+        elementConfig: {
+          type: "text",
+          placeholder: "Please enter any other information",
+        },
+        value: "",
+        validation: false,
+        valid: false,
+        touched: false,
+      },
     },
     image: null,
     formIsValid: false,
