@@ -3,7 +3,7 @@ import Listing from './Listing/Listing';
 // import axios from 'axios';
 // import classes from './Listing/Listing.css';
 //import img1 from './../assets/img1.jpg'
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 class Listings extends Component {
 
@@ -11,24 +11,29 @@ class Listings extends Component {
     //pass all these as props from database
     state = {
         listings: [{
-            name: 'John', 
+            name: 'John',
             module: 'CS2030',
             textbook: 'Introduction to CS2030',
+            collectionMethod: 'Meet up',
             location: '',
             rentPrice: '$2.30',
             postTime: '',
             image: require("../../../assets/images/img1.jpg"),
-            ratins: ''
+            ratings: '',
+            otherInformation: ''
         }, {
-            name: 'Johnny', 
+            name: 'Johnny',
             module: 'CS2040',
             textbook: 'Introduction to CS2040',
+            collectionMethod: 'Meet up',
             location: '',
             rentPrice: '$2.40',
             postTime: '',
             image: require("../../../assets/images/img1.jpg"),
-            ratins: ''
-        }]
+            ratings: '',
+            otherInformation: ''
+        }],
+        clicked: false
 
     }
 
@@ -56,14 +61,17 @@ class Listings extends Component {
     // }
 
     render() {
+
         return (
-            <div>           
+            <div>
                 {this.state.listings.map(listing => {
-                    const data={...listing}
+                    const data = { ...listing }
                     return (
-                        <Link to={"/listings/"+ listing.textbook} key={listing.name}>
-                            <Listing info={data} />
-                        </Link>
+                        // <Link to={"/listings/"+ listing.textbook} key={listing.name}>
+                        <Listing
+                            info={data}
+                            key={listing.name} />
+                        // </Link>
                     )
                 })}
             </div>
