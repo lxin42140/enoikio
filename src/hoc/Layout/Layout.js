@@ -2,26 +2,13 @@ import React, { Component } from "react";
 //import { connect } from "react-redux";
 
 import classes from "./Layout.css";
+import NavigationItems from "../../components/Navigation/NavigationItems/NavigationItems";
 
 class Layout extends Component {
-
-  // state = {
-  //   showSideDrawer: false,
-  // };
-
-  // sideDrawerClosedHandler = () => {
-  //   this.setState({ showSideDrawer: false });
-  // };
-
-  // sideDrawerToggleHandler = () => {
-  //   this.setState((prevState) => {
-  //     return { showSideDrawer: !prevState.showSideDrawer };
-  //   });
-  // };
-
   render() {
     return (
       <React.Fragment>
+        <NavigationItems />
         <main className={classes.Content}>{this.props.children}</main>
       </React.Fragment>
     );

@@ -8,10 +8,10 @@ import thunk from "redux-thunk";
 import "./index.css";
 import App from "./App";
 import registerServiceWorker from "./registerServiceWorker";
-import searchBarReducer from './store/reducers/searchBar';
+import ListingReducer from './store/reducers/Listings';
 
 const rootReducer = combineReducers({
-  search: searchBarReducer,
+  listing: ListingReducer,
 });
 
 const composeEnhancers = (process.env.NODE_ENV === 'development' ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : null) || compose;

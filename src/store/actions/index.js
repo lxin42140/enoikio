@@ -1,4 +1,3 @@
 export {
-    suggestionsInit,
-    searchRequest,
-} from './searchBar'
+    fetchListingInit,
+} from './Listings'

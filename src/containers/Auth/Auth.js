@@ -129,7 +129,9 @@ class Auth extends Component {
     ) : (
       <form onSubmit={this.submitHandler}>
         {form}
-        <Button btnType="Success">{this.state.isSignUp ? "Sign up" : "Sign in" }</Button>
+        <Button btnType="Success">
+          {this.state.isSignUp ? "Sign up" : "Sign in"}
+        </Button>
       </form>
     );
 
@@ -143,9 +145,9 @@ class Auth extends Component {
     // }
 
     if (this.props.isAuthenticated && this.props.building) {
-      redirect =  <Redirect to="/checkout"/>;
+      redirect = <Redirect to="/checkout" />;
     } else if (this.props.isAuthenticated) {
-      redirect =  <Redirect to="/"/>;
+      redirect = <Redirect to="/" />;
     }
 
     return (
