@@ -1,7 +1,13 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+
 import classes from "./NewPost.css";
 import Input from "../../components/UI/Input/Input";
 import Button from "../../components/UI/Button/Button";
+import * as actions from "../../store/actions/index";
+import Spinner from "../../components/UI/Spinner/Spinner";
+import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
+import firebaseAxios from "../../firebaseAxios";
 
 const fileInput = React.createRef();
 
@@ -32,6 +38,7 @@ class NewPost extends Component {
         value: "",
         validation: {
           required: true,
+          maxLength: 8,
         },
         valid: false,
         touched: false,
@@ -66,7 +73,7 @@ class NewPost extends Component {
         elementType: "select",
         elementConfig: {
           options: [
-            { value: "meetup", displayValue: "Meet up" },
+            { value: "meet up", displayValue: "Meet up" },
             { value: "mail", displayValue: "Mail" },
           ],
         },
@@ -101,13 +108,15 @@ class NewPost extends Component {
     },
     image: null,
     formIsValid: false,
-    loading: false,
   };
 
   checkValidity(value, rules) {
     let isValid = true;
     if (rules.required) {
       isValid = value.trim() !== "" && isValid;
+    }
+    if (rules.maxLength) {
+      isValid = value.length <= rules.maxLength && isValid;
     }
     return isValid;
   }
@@ -120,18 +129,18 @@ class NewPost extends Component {
       ...updatedDataForm[inputIdentifier],
     };
     updatedFormElement.value = event.target.value;
-    if (!updatedFormElement.valid) {
-      updatedFormElement.valid = this.checkValidity(
-        updatedFormElement.value,
-        updatedFormElement.validation
-      );
-    }
+    updatedFormElement.valid = this.checkValidity(
+      updatedFormElement.value,
+      updatedFormElement.validation
+    );
     updatedFormElement.touched = true;
     updatedDataForm[inputIdentifier] = updatedFormElement;
-
     let formIsValid = true;
     for (let inputIdentifiers in updatedDataForm) {
-      formIsValid = updatedDataForm[inputIdentifiers].valid && formIsValid;
+      if (!updatedDataForm[inputIdentifiers].valid) {
+        formIsValid = false;
+        break;
+      }
     }
     this.setState({ dataForm: updatedDataForm, formIsValid: formIsValid });
   };
@@ -140,16 +149,40 @@ class NewPost extends Component {
     this.setState({ image: event.target.files[0] });
   };
 
+  onSubmitHandler = (event) => {
+    const formData = {};
+    for (let key in this.state.dataForm) {
+      formData[key] = this.state.dataForm[key].value;
+    }
+    const postDetails = {
+      postDetails: formData,
+      image: this.state.image,
+      userId: new Date().getTime(),
+    };
+    this.props.onSubmitPost(postDetails);
+    const refreshedForm = {
+      ...this.state.dataForm,
+    };
+    for (let element in refreshedForm) {
+      refreshedForm[element].value = "";
+    }
+    this.setState({
+      dataForm: refreshedForm,
+    });
+  };
+
   render() {
     const formElementsArray = [];
+
     for (let key in this.state.dataForm) {
       formElementsArray.push({
         id: key,
         config: this.state.dataForm[key],
       });
     }
+
     let form = (
-      <form onSubmit={this.orderHandler}>
+      <React.Fragment>
         {formElementsArray.map((formElement) => {
           return (
             <Input
@@ -157,7 +190,7 @@ class NewPost extends Component {
               elementType={formElement.config.elementType}
               elementConfig={formElement.config.elementConfig}
               value={formElement.config.value}
-              invalid={!formElement.config.valid}
+              valid={formElement.config.valid}
               shouldValidate={formElement.config.validation}
               touched={formElement.config.touched}
               change={(event) =>
@@ -166,22 +199,25 @@ class NewPost extends Component {
             />
           );
         })}
-      </form>
+        <input type="file" accept=".png,.jpeg, .jpg"  onClick={this.fileChangeHandler} ref={fileInput} />
+        <Button onClick={this.onFileUpload}>Upload!</Button>
+        <br /> <br />
+      </React.Fragment>
     );
+
+    if (this.props.loading) {
+      form = <Spinner />;
+    }
 
     return (
       <div className={classes.NewPost}>
-        <h4>Enter Rental Details</h4>
+        <h4>{this.props.loading ? "Submitting..." : "Enter Rental Details"}</h4>
         {form}
-        <input 
-          type="file"
-          accept="image/*" 
-          onClick={this.fileChangeHandler} 
-          ref={fileInput} />
-        <Button onClick={this.onFileUpload}>Upload!</Button>
-        <br />
-        <br />
-        <Button btnType="Important" disabled={!this.state.formIsValid}>
+        <Button
+          btnType="Important"
+          disabled={!this.state.formIsValid}
+          onClick={this.onSubmitHandler}
+        >
           SUBMIT
         </Button>
       </div>
@@ -189,4 +225,20 @@ class NewPost extends Component {
   }
 }
 
-export default NewPost;
+const mapStateToProps = (state) => {
+  return {
+    loading: state.newPost.loading,
+    submitted: state.newPost.submitted,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onSubmitPost: (newPost) => dispatch(actions.submitNewPost(newPost)),
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withErrorHandler(NewPost, firebaseAxios));

@@ -99,7 +99,7 @@ class SearchBar extends Component {
               btnType="Important"
               onClick={() =>
                 this.state.userInput !== ""
-                  ? this.props.dispatchListingInit(this.state.userInput)
+                  ? this.props.dispatchFetchListing(this.state.userInput)
                   : null
               }
             >
@@ -114,8 +114,8 @@ class SearchBar extends Component {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    dispatchListingInit: (userInput) =>
-      dispatch(actions.fetchListingInit(userInput)),
+    dispatchFetchListing: (userInput) =>
+      dispatch(actions.fetchListing(userInput)),
   };
 };
 

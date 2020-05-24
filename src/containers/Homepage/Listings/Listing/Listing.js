@@ -1,14 +1,25 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 //import img1 from '../../assets/img1.jpg';
-import classes from './Listing.css';
+import classes from "./Listing.css";
+import Button from "../../../../components/UI/Button/Button";
 // import { connect } from 'react-redux';
 // import axios from 'axios';
 import { Link, Route } from 'react-router-dom';
 import DetailedListing from './DetailedListing/DetailedListing';
 import Modal from '../../../../components/UI/Modal/Modal';
-import Button from '../../../../components/UI/Button/Button';
 
 class Listing extends Component {
+    // data = {
+    //     username:
+    //     module:
+    //     textbook:
+    //     image:
+    //     location:
+    //     rentPrice:
+    //     postTime:
+    //     image:
+    //     ratings:
+    // }
 
     // data = {
     //     username:
@@ -41,10 +52,15 @@ class Listing extends Component {
         const listing = (
             <div className={classes.Listing} onClick={this.toggleFull}>
                 <img src={this.props.info.image} alt="" className={classes.Image} />
-                <p className={classes.Textbook}><strong>{this.props.info.textbook}</strong></p>
+                <p className={classes.Textbook}>
+                    <strong>{this.props.info.textbook}</strong>
+                </p>
                 <p className={classes.Description}>{this.props.info.module}</p>
                 <p className={classes.Description}>{this.props.info.rentPrice}</p>
                 <p className={classes.Description}>Posted by: {this.props.info.name}</p>
+                <span className={classes.RentButton}>
+                    <Button btnType="Important">Rent now</Button>
+                </span>
             </div>
         );
 
@@ -74,7 +90,6 @@ class Listing extends Component {
             </React.Fragment>
         );
     }
-
 }
 
 //need to add name to redux store

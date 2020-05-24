@@ -61,3 +61,7 @@
 .Button {
     display: inherit;
 }
+
+.RentButton {
+    float: right;
+}
