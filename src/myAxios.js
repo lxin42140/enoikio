@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const instance = axios.create({
-    baseURL: ''
+    baseURL: 'https://enoikio-orbit2020.firebaseio.com/'
 });
 
 export default instance;
