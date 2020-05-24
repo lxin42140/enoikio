@@ -1,8 +1,22 @@
-.searchbar {
+.Searchbar {
+    flex: 1;
     display: flex;
-    justify-content: center;
     align-items: center;
-    align-content: center;
+    justify-content: center;
+}
+
+.input {
+    width: 30%;
+    font-size: medium;
+    text-align: center;
+    background-color: #fdb2a7;
+    border-style: none;
+    color: white;
+    border-bottom: 2px solid black;
+}
+
+.input::placeholder {
+    color:white;
 }
 
 .dropdownContent {

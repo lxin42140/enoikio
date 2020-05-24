@@ -1,15 +1,14 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 
-import AutoComplete from "./AutoComplete/AutoComplete";
 import withErrorHandler from "../../../hoc/withErrorHandler/withErrorHandler";
 import classes from "./SearchBar.css";
 import * as actions from "../../../store/actions/index";
 import Button from "../../../components/UI/Button/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faFilter,
   faLocationArrow,
   faBook,
   faUniversity,
@@ -18,46 +17,31 @@ import {
 class SearchBar extends Component {
   state = {
     filterType: "module code",
-    showDropDown: false,
+    showFilterDropDown: false,
+    userInput: "",
   };
 
-  componentDidMount() {
-    this.props.dispatchSuggestionsInit("modules");
-  }
-
   changeFilterHandler = (filter) => {
-    switch (filter) {
-      case "locations":
-        this.setState({
-          showDropDown: false,
-          filterType: "preferred location",
-        });
-        break;
-      case "titles":
-        this.setState({
-          showDropDown: false,
-          filterType: "book title",
-        });
-        break;
-      default:
-        this.setState({
-          showDropDown: false,
-          filterType: "module code",
-        });
-        break;
-    }
+    this.setState({
+      showFilterDropDown: false,
+      filterType: filter,
+    });
   };
 
   filterDropdownHandler = (event) => {
     this.setState((prevState) => ({
-      showDropDown: !prevState.showDropDown,
+      showFilterDropDown: !prevState.showFilterDropDown,
     }));
+  };
+
+  onChangeHandler = (event) => {
+    this.setState({ userInput: event.target.value });
   };
 
   render() {
     let dropDown = null;
 
-    if (this.state.showDropDown) {
+    if (this.state.showFilterDropDown) {
       dropDown = (
         <React.Fragment>
           <span className={classes.dropDownElement}>
@@ -65,7 +49,7 @@ class SearchBar extends Component {
               icon={faLocationArrow}
               style={{ padding: "0 3px", fontSize: "1rem", color: "#ff9f90" }}
             />
-            <a onClick={() => this.changeFilterHandler("locations")}>
+            <a onClick={() => this.changeFilterHandler("preferred location")}>
               location
             </a>
           </span>
@@ -74,14 +58,16 @@ class SearchBar extends Component {
               icon={faBook}
               style={{ padding: "0 3px", fontSize: "1rem", color: "#ff9f90" }}
             />
-            <a onClick={() => this.changeFilterHandler("titles")}>book title</a>
+            <a onClick={() => this.changeFilterHandler("textbook title")}>
+              book title
+            </a>
           </span>
           <span className={classes.dropDownElement}>
             <FontAwesomeIcon
               icon={faUniversity}
               style={{ padding: "0 3px", fontSize: "1rem", color: "#ff9f90" }}
             />
-            <a onClick={() => this.changeFilterHandler("modules")}>
+            <a onClick={() => this.changeFilterHandler("module code")}>
               module code
             </a>
           </span>
@@ -89,37 +75,51 @@ class SearchBar extends Component {
       );
     }
 
+    const placeHolder =
+      "Enter the " + this.state.filterType + " to start searching!";
+
     return (
-      <div className={classes.searchbar}>
+      <div className={classes.Searchbar}>
         <div className={classes.dropDown}>
-          <Button onClick={this.filterDropdownHandler}>Filter by</Button>
-          <div className={classes.dropdownContent}>{dropDown}</div>
+          <span style={{ paddingRight: "20px" }}>
+            <Button onClick={this.filterDropdownHandler}>Filter by</Button>
+            <div className={classes.dropdownContent}>{dropDown}</div>
+          </span>
         </div>
-        <AutoComplete
-          suggestions={this.props.modules}
-          filterType={this.state.filterType}
+        <input
+          className={classes.input}
+          type="text"
+          onChange={this.onChangeHandler}
+          value={this.state.userInput}
+          placeholder={placeHolder}
         />
+        <span style={{ paddingLeft: "20px" }}>
+          <Link to="/">
+            <Button
+              btnType="Important"
+              onClick={() =>
+                this.state.userInput !== ""
+                  ? this.props.dispatchListingInit(this.state.userInput)
+                  : null
+              }
+            >
+              Search
+            </Button>
+          </Link>
+        </span>
       </div>
     );
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    modules: state.search.modules,
-    locations: state.search.locations,
-    textbooks: state.search.textbook,
-  };
-};
-
 const mapDispatchToProps = (dispatch) => {
   return {
-    dispatchSuggestionsInit: (filter) =>
-      dispatch(actions.suggestionsInit(filter)),
+    dispatchListingInit: (userInput) =>
+      dispatch(actions.fetchListingInit(userInput)),
   };
 };
 
 export default connect(
-  mapStateToProps,
+  null,
   mapDispatchToProps
 )(withErrorHandler(SearchBar, axios));
