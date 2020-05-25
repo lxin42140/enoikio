@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 import classes from "./NavigationItems.css";
 import NavigationItem from "./NavigationItem/NavigationItem";
-import SearchBar from "../../../containers/Homepage/SearchBar/SearchBar";
+import SearchBar from "../../../containers/Navigation/SearchBar/SearchBar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faWindowClose } from "@fortawesome/free-solid-svg-icons";
 

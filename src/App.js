@@ -4,7 +4,7 @@ import { Route, withRouter, Switch, Redirect } from "react-router-dom";
 import Layout from "./hoc/Layout/Layout";
 
 import asyncComponent from "./hoc/asyncComponent/asyncComponent";
-import Listings from "./containers/Homepage/Listings/Listings";
+import Listings from "./containers/Listings/Listings";
 
 const asyncNewPost = asyncComponent(() => {
   return import("../src/containers/NewPost/NewPost");

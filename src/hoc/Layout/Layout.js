@@ -2,7 +2,7 @@ import React, { Component } from "react";
 //import { connect } from "react-redux";
 
 import classes from "./Layout.css";
-import NavigationItems from "../../components/Navigation/NavigationItems/NavigationItems";
+import NavigationItems from "../../containers/Navigation/NavigationItems/NavigationItems";
 
 class Layout extends Component {
   render() {

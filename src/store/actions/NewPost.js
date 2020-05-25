@@ -24,7 +24,7 @@ export const submitNewPost = (data) => {
   return (dispatch) => {
     dispatch(submitNewPostInit());
     axios
-      .put("/listings.json", data)
+      .post("/listings.json", data)
       .then((response) => dispatch(submitNewPostSuccess()))
       .catch((error) => submitNewPostFail(error));
   };
