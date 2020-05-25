@@ -4,6 +4,9 @@ import classes from "./Listing.css";
 import Button from "../../../components/UI/Button/Button";
 import { storage } from "../../../firebase/firebase";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faWindowClose } from "@fortawesome/free-solid-svg-icons";
+
 class Listing extends Component {
   state = {
     image: "",
@@ -35,18 +38,33 @@ class Listing extends Component {
           alt={this.state.error ? "Unable to load image" : "Loading image..."}
           className={classes.Image}
         />
-        <p className={classes.Textbook}>
-          <strong>{this.props.textbook}</strong>
-        </p>
-        <p className={classes.Description}>{this.props.module}</p>
-        <p className={classes.Description}>{this.props.price}</p>
+
+        {this.props.showFullListing ?
+          <FontAwesomeIcon
+            icon={faWindowClose}
+            style={{
+              justifyContent: 'flex-start',
+              verticalAlign: 'top'
+            }}
+            onClick={this.props.clicked} /> : null}
+
+        <ul className={classes.Description}>
+          <li>
+            <strong>{this.props.textbook}</strong>
+          </li>
+          <li>{this.props.module}</li>
+          <li>${this.props.price}</li>
+        </ul>
+
         {this.props.showFullListing ? (
-          <React.Fragment>
-            <p className={classes.Description}>{this.props.deliveryMethod}</p>
-            <p className={classes.Description}>{this.props.location}</p>
-            <p className={classes.Description}>{this.props.description}</p>
-          </React.Fragment>
+            <ul className={classes.Description}>
+              <li>{this.props.deliveryMethod}</li>
+              <li>{this.props.location}</li>
+              <br />
+              <li>Description: <br /> {this.props.description}</li>
+            </ul>
         ) : null}
+
         <p className={classes.Description}>Posted by: {this.props.userId}</p>
       </React.Fragment>
     );
@@ -54,6 +72,7 @@ class Listing extends Component {
     return (
       <div className={classes.Listing}>
         {listing}
+        <br />
         <span className={classes.RentButton}>
           <Button btnType="Important">Rent now</Button>
         </span>

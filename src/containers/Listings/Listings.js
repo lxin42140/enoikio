@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faWindowClose } from "@fortawesome/free-solid-svg-icons";
+
 
 import Listing from "./Listing/Listing";
 import * as actions from "../../store/actions/index";
@@ -46,6 +45,7 @@ class Listings extends Component {
   render() {
     let listings = this.props.listingData.map((listing) => {
       return (
+        <React.Fragment>
         <div
           key={listing[6]}
           onClick={(event) => this.showFullListingHandler(event, listing[6])}
@@ -58,6 +58,7 @@ class Listings extends Component {
             userId={listing[6]}
           />
         </div>
+        </React.Fragment>
       );
     });
 
@@ -67,12 +68,9 @@ class Listings extends Component {
         .map((listing) => {
           return (
             <div key={listing[6]}>
-              <FontAwesomeIcon
-                icon={faWindowClose}
-                onClick={this.hideFullListingHandler}
-              />
               <Listing
                 showFullListing={this.state.showFullListing}
+                clicked={this.hideFullListingHandler}
                 description={listing[0]}
                 deliveryMethod={listing[1]}
                 location={listing[2]}

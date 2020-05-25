@@ -5,63 +5,28 @@
     position: fixed; */
     z-index: 500;
     background-color: white;
-    width: 250px;
+    width: 255px;
     height: 100%;
     border: 1px solid #ccc;
     /* box-shadow: 1px 1px 1px black; */
-    padding: 16px;
+    padding: 8px;
     /* left: 15%;
     top: 30%; */
     box-sizing: border-box;
     text-align: left;
     margin: 10px;
-    display: inline-block;
 }
 
 .Image {
     height: 200px;
     width: 200px;
-}
-
-.Textbook {
-    font-size: 14px;
-    margin-bottom: -10px;
+    padding: 5px;
 }
 
 .Description {
     font-size: 12px;
     margin-bottom: -10px;
     color: grey;
-}
-
-.FullListing {
-    /* z-index: 500; */
-    border: 0px;
-    background-color: white;
-    /* width: 200px;
-    height: 100%; */
-    padding: 1px;
-    text-align: left;
-    margin: 10px;
-    display: inline-block;
-    vertical-align: top;
-}
-
-.FullListing img {
-    height: 350px;
-    width: 300px;
-    display: inline-block;
-}
-
-.UserInfo {
-    margin-bottom: -10px;
-    font-size: 12px;
-}
-
-.Button {
-    display: inherit;
-}
-
-.RentButton {
-    float: right;
+    list-style: none;
+    padding-left: 0px;
 }
