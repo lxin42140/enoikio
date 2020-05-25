@@ -135,8 +135,7 @@ class NewPost extends Component {
     }
     const postDetails = {
       postDetails: formData,
-      image: "",
-      userId: new Date().getDate()
+      userId: new Date().getDate(),
     };
     this.props.onSubmitPost(postDetails);
     const refreshedForm = {
@@ -153,7 +152,10 @@ class NewPost extends Component {
 
   handleFireBaseUpload = (event) => {
     event.preventDefault();
-    this.props.onSubmitPhoto(this.state.imageAsFile, this.state.dataForm.textbook.value);
+    this.props.onSubmitPhoto(
+      this.state.imageAsFile,
+      this.state.dataForm.textbook.value
+    );
   };
 
   handleImageAsFile = (event) => {
@@ -171,48 +173,51 @@ class NewPost extends Component {
       });
     }
 
-    let form = (
-      <React.Fragment>
-        {formElementsArray.map((formElement) => {
-          return (
-            <Input
-              key={formElement.id}
-              elementType={formElement.config.elementType}
-              elementConfig={formElement.config.elementConfig}
-              value={formElement.config.value}
-              valid={formElement.config.valid}
-              shouldValidate={formElement.config.validation}
-              touched={formElement.config.touched}
-              change={(event) =>
-                this.inputChangedHandler(event, formElement.id)
-              }
-            />
-          );
-        })}
-        {this.props.loading ? (
-          <Spinner />
-        ) : (
-          <form onSubmit={this.handleFireBaseUpload}>
-            <input
-              type="file"
-              accept=".png,.jpeg, .jpg"
-              onChange={this.handleImageAsFile}
-            />
-            <Button>Upload!</Button>
-          </form>
-        )}
-        <br /> <br />
-      </React.Fragment>
+    let form = formElementsArray.map((formElement) => {
+      return (
+        <Input
+          key={formElement.id}
+          elementType={formElement.config.elementType}
+          elementConfig={formElement.config.elementConfig}
+          value={formElement.config.value}
+          valid={formElement.config.valid}
+          shouldValidate={formElement.config.validation}
+          touched={formElement.config.touched}
+          change={(event) => this.inputChangedHandler(event, formElement.id)}
+        />
+      );
+    });
+
+    let uploadImageButton = this.props.imageUploaded ? (
+      <strong>
+        <p> Image Successfully uploaded !</p>
+      </strong>
+    ) : this.props.imageUploading ? (
+      <span>
+        <p>Uploading image...</p>
+        <Spinner />
+      </span>
+    ) : (
+      <form onSubmit={this.handleFireBaseUpload}>
+        <input
+          type="file"
+          accept=".png,.jpeg, .jpg"
+          onChange={this.handleImageAsFile}
+        />
+        <Button disabled={!this.state.formIsValid}>Upload!</Button>
+      </form>
     );
 
     if (this.props.loading) {
       form = <Spinner />;
+      uploadImageButton = null;
     }
-
     return (
       <div className={classes.NewPost}>
         <h4>{this.props.loading ? "Submitting..." : "Enter Rental Details"}</h4>
         {form}
+        {uploadImageButton}
+        <br /> <br />
         <Button
           btnType="Important"
           disabled={!this.state.formIsValid}
@@ -228,15 +233,17 @@ class NewPost extends Component {
 const mapStateToProps = (state) => {
   return {
     loading: state.newPost.loading,
-    submitted: state.newPost.submitted,
+    imageUploading: state.newPost.uploadingImageLoading,
+    imageUploaded: state.newPost.imageUploaded,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onSubmitPost: (newPost, userID) => dispatch(actions.submitNewPost(newPost, userID)),
-    onSubmitPhoto: (imageAsFile) =>
-      dispatch(actions.submitNewPhoto(imageAsFile)),
+    onSubmitPost: (newPost, userID) =>
+      dispatch(actions.submitNewPost(newPost, userID)),
+    onSubmitPhoto: (imageAsFile, identifier) =>
+      dispatch(actions.submitNewPhoto(imageAsFile, identifier)),
   };
 };
 

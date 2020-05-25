@@ -8,7 +8,6 @@ import * as actions from "../../store/actions/index";
 import Spinner from "../../components/UI/Spinner/Spinner";
 import firebaseAxios from "../../firebaseAxios";
 import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
-import { storage } from "../../firebase/firebase";
 
 class Listings extends Component {
   state = {
@@ -29,16 +28,6 @@ class Listings extends Component {
 5: textbook
 6: userId
 */
-
-  fetchListingImage = (index) => {
-    storage
-      .ref("listingPictures")
-      .child()
-      .getDownloadURL()
-      .then((url) => {
-        
-      });
-  };
 
   showFullListingHandler = (event, listId) => {
     this.setState({

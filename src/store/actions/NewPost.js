@@ -49,7 +49,7 @@ export const submitNewPhotoSuccess = () => {
   };
 };
 
-export const submitNewPhoto = (imageAsFile, textbookName) => {
+export const submitNewPhoto = (imageAsFile, identifier) => {
   return (dispatch) => {
     if (imageAsFile === "") {
       dispatch(
@@ -60,7 +60,7 @@ export const submitNewPhoto = (imageAsFile, textbookName) => {
     } else {
       dispatch(submitNewPhotoInit());
       storage
-        .ref(`/listingPictures/${textbookName}`)
+        .ref(`/listingPictures/${identifier}`)
         .put(imageAsFile)
         .then(
           () => {
