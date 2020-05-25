@@ -12,6 +12,21 @@ import firebaseAxios from "../../firebaseAxios";
 const fileInput = React.createRef();
 
 class NewPost extends Component {
+
+    // data = {
+    //     username:
+    //     module:
+    //     textbook:
+    //     image: 
+    //     delivery method:
+    //     location:
+    //     rentPrice:
+    //     image: 
+    //     ratings:
+
+    //     date posted:??
+    // }
+
   state = {
     dataForm: {
       module: {

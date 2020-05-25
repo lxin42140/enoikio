@@ -34,6 +34,34 @@
     color: grey;
 }
 
+.FullListing {
+    /* z-index: 500; */
+    border: 0px;
+    background-color: white;
+    /* width: 200px;
+    height: 100%; */
+    padding: 1px;
+    text-align: left;
+    margin: 10px;
+    display: inline-block;
+    vertical-align: top;
+}
+
+.FullListing img {
+    height: 350px;
+    width: 300px;
+    display: inline-block;
+}
+
+.UserInfo {
+    margin-bottom: -10px;
+    font-size: 12px;
+}
+
+.Button {
+    display: inherit;
+}
+
 .RentButton {
     float: right;
 }
