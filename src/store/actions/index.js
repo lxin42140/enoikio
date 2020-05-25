@@ -3,5 +3,6 @@ export {
 } from './Listings'
 
 export {
-    submitNewPost
+    submitNewPost,
+    submitNewPhoto
 } from './NewPost'

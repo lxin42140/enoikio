@@ -1,5 +1,6 @@
 import * as actionTypes from "./actionTypes";
 import axios from "../../firebaseAxios";
+import { storage } from "../../firebase/firebase";
 
 export const submitNewPostInit = () => {
   return {
@@ -27,5 +28,48 @@ export const submitNewPost = (data) => {
       .post("/listings.json", data)
       .then((response) => dispatch(submitNewPostSuccess()))
       .catch((error) => submitNewPostFail(error));
+  };
+};
+
+export const submitNewPhotoInit = () => {
+  return {
+    type: actionTypes.SUBMIT_NEW_PHOTO_INIT,
+  };
+};
+
+export const submitNewPhotoFail = (error) => {
+  return {
+    type: actionTypes.SUBMIT_NEW_PHOTO_FAIL,
+  };
+};
+
+export const submitNewPhotoSuccess = () => {
+  return {
+    type: actionTypes.SUBMIT_NEW_PHOTO_SUCCESS,
+  };
+};
+
+export const submitNewPhoto = (imageAsFile, textbookName) => {
+  return (dispatch) => {
+    if (imageAsFile === "") {
+      dispatch(
+        submitNewPhotoFail(
+          `not an image, the image file is a ${typeof imageAsFile}`
+        )
+      );
+    } else {
+      dispatch(submitNewPhotoInit());
+      storage
+        .ref(`/listingPictures/${textbookName}`)
+        .put(imageAsFile)
+        .then(
+          () => {
+            dispatch(submitNewPhotoSuccess());
+          },
+          (error) => {
+            dispatch(submitNewPhotoFail(error));
+          }
+        );
+    }
   };
 };

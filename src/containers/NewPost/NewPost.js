@@ -9,24 +9,7 @@ import Spinner from "../../components/UI/Spinner/Spinner";
 import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
 import firebaseAxios from "../../firebaseAxios";
 
-const fileInput = React.createRef();
-
 class NewPost extends Component {
-
-    // data = {
-    //     username:
-    //     module:
-    //     textbook:
-    //     image: 
-    //     delivery method:
-    //     location:
-    //     rentPrice:
-    //     image: 
-    //     ratings:
-
-    //     date posted:??
-    // }
-
   state = {
     dataForm: {
       module: {
@@ -106,7 +89,7 @@ class NewPost extends Component {
         touched: false,
       },
     },
-    image: null,
+    imageAsFile: "",
     formIsValid: false,
   };
 
@@ -145,10 +128,6 @@ class NewPost extends Component {
     this.setState({ dataForm: updatedDataForm, formIsValid: formIsValid });
   };
 
-  fileChangeHandler = (event) => {
-    this.setState({ image: event.target.files[0] });
-  };
-
   onSubmitHandler = (event) => {
     const formData = {};
     for (let key in this.state.dataForm) {
@@ -156,8 +135,8 @@ class NewPost extends Component {
     }
     const postDetails = {
       postDetails: formData,
-      image: this.state.image,
-      userId: new Date().getTime(),
+      image: "",
+      userId: new Date().getDate()
     };
     this.props.onSubmitPost(postDetails);
     const refreshedForm = {
@@ -167,8 +146,19 @@ class NewPost extends Component {
       refreshedForm[element].value = "";
     }
     this.setState({
+      formIsValid: false,
       dataForm: refreshedForm,
     });
+  };
+
+  handleFireBaseUpload = (event) => {
+    event.preventDefault();
+    this.props.onSubmitPhoto(this.state.imageAsFile, this.state.dataForm.textbook.value);
+  };
+
+  handleImageAsFile = (event) => {
+    const image = event.target.files[0];
+    this.setState({ imageAsFile: image });
   };
 
   render() {
@@ -199,8 +189,18 @@ class NewPost extends Component {
             />
           );
         })}
-        <input type="file" accept=".png,.jpeg, .jpg"  onClick={this.fileChangeHandler} ref={fileInput} />
-        <Button onClick={this.onFileUpload}>Upload!</Button>
+        {this.props.loading ? (
+          <Spinner />
+        ) : (
+          <form onSubmit={this.handleFireBaseUpload}>
+            <input
+              type="file"
+              accept=".png,.jpeg, .jpg"
+              onChange={this.handleImageAsFile}
+            />
+            <Button>Upload!</Button>
+          </form>
+        )}
         <br /> <br />
       </React.Fragment>
     );
@@ -234,7 +234,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onSubmitPost: (newPost) => dispatch(actions.submitNewPost(newPost)),
+    onSubmitPost: (newPost, userID) => dispatch(actions.submitNewPost(newPost, userID)),
+    onSubmitPhoto: (imageAsFile) =>
+      dispatch(actions.submitNewPhoto(imageAsFile)),
   };
 };
 

@@ -41,6 +41,7 @@ export const fetchListing = (filter) => {
           }
           result.push(postDetails);
         }
+        console.log(result)
         dispatch(fetchListingSuccess(result));
       })
       .catch((error) => {
@@ -49,12 +50,39 @@ export const fetchListing = (filter) => {
   };
 };
 
-// postDetails:
-// Description: "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus. Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt. Duis leo. Sed fringilla mauris sit amet nibh. Donec sodales sagittis magna. Sed consequat, leo eget bibendum sodales, augue velit cursus nunc,"
-// deliveryMethod: "mail"
-// location: "NUS COMP2"
-// module: "cs2030"
-// price: "20"
-// textbook: "Introduction to programming"
-// __proto__: Object
-// userId: 1590374010637
+// handleFireBaseUpload = (e) => {
+//   e.preventDefault();
+//   console.log("start of upload");
+//   // async magic goes here...
+//   if (this.state.imageAsFile === "") {
+//     console.error(
+//       `not an image, the image file is a ${typeof this.state.imageAsFile}`
+//     );
+//   }
+//   const uploadTask = storage
+//     .ref(`/images/${this.state.imageAsFile.name}`)
+//     .put(this.state.imageAsFile);
+//   //initiates the firebase side uploading
+//   uploadTask.on(
+//     "state_changed",
+//     (snapShot) => {
+//       //takes a snap shot of the process as it is happening
+//       console.log(snapShot);
+//     },
+//     (err) => {
+//       //catches the errors
+//       console.log(err);
+//     },
+//     () => {
+//       // gets the functions from storage refences the image storage in firebase by the children
+//       // gets the download url then sets the image from firebase as the value for the imgUrl key:
+// storage
+//   .ref("images")
+//   .child(this.state.imageAsFile.name)
+//   .getDownloadURL()
+//   .then((fireBaseUrl) => {
+//     this.setState({ imageAsUrl: fireBaseUrl });
+//   });
+//     }
+//   );
+// };
