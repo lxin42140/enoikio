@@ -49,6 +49,8 @@ TODO: image id
         <Listing
           key={listing[6]}
           showFullListing={this.state.showFullListing}
+          isAuthenticated={this.props.isAuthenticated}
+          history={this.props.history}
           deliveryMethod={listing[1]}
           location={listing[2]}
           module={listing[3]}
@@ -97,6 +99,7 @@ const mapStateToProps = (state) => {
   return {
     listingData: state.listing.listings,
     loading: state.listing.loading,
+    isAuthenticated: state.auth.token !== null,
   };
 };
 
