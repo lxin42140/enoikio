@@ -3,9 +3,12 @@ import React, { Component } from "react";
 import classes from "./Listing.css";
 import Button from "../../../components/UI/Button/Button";
 import { storage } from "../../../firebase/firebase";
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faWindowClose, faHeart } from "@fortawesome/free-solid-svg-icons";
+import {
+  faWindowClose,
+  faHeart,
+  faExternalLinkAlt,
+} from "@fortawesome/free-solid-svg-icons";
 
 class Listing extends Component {
   state = {
@@ -35,6 +38,10 @@ class Listing extends Component {
     }
   }
 
+  onRedirectToAuth = (event) => {
+    this.props.history.push("/auth");
+  };
+
   //TODO: support display of more than one image
   render() {
     let listing = (
@@ -63,7 +70,7 @@ class Listing extends Component {
     );
 
     return (
-      <div className={classes.Listing} onClick={this.props.onShowFullListing}>
+      <div className={classes.Listing}>
         {this.props.showFullListing ? (
           <FontAwesomeIcon
             icon={faWindowClose}
@@ -74,11 +81,28 @@ class Listing extends Component {
             }}
             onClick={this.props.onHideFullListing}
           />
-        ) : null}
+        ) : (
+          <FontAwesomeIcon
+            icon={faExternalLinkAlt}
+            style={{
+              float: "right",
+              paddingLeft: "10px",
+              color: "#ff5138",
+            }}
+            onClick={this.props.onShowFullListing}
+          />
+        )}
         {listing}
         <br />
+
         <div className={classes.Selection}>
-          <Button btnType="Important">Rent now</Button>
+          {this.props.isAuthenticated ? (
+            <Button btnType="Important">Rent now</Button>
+          ) : (
+            <Button btnType="Important" onClick={this.onRedirectToAuth}>
+              Rent now
+            </Button>
+          )}
           <FontAwesomeIcon icon={faHeart} style={{ color: "red" }} />
         </div>
       </div>
