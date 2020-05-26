@@ -16,53 +16,78 @@ class NavigationItems extends Component {
   };
 
   render() {
+    let nav;
 
-    let nav = (
-      <React.Fragment>
-        <NavigationItem link="/" exact>
-          Home
-        </NavigationItem>
-        <NavigationItem link="/new-post">New Post</NavigationItem>
-        <NavigationItem link="/rental-history">Rental History</NavigationItem>
-        <NavigationItem link="/logout">Log out</NavigationItem>
-        <NavigationItem link="/auth">Log In</NavigationItem>
-        <FontAwesomeIcon
-          icon={faSearch}
-          style={{
-            color: "white",
-            fontSize: "1.5rem",
-            paddingLeft: "20px",
-            paddingRight: "10px",
-          }}
-          onClick={this.toggleSearchBarHandler}
-        />
-      </React.Fragment>
-    );
-    
+    if (this.props.isAuthenticated) {
+      nav = (
+        <React.Fragment>
+          <NavigationItem link="/" exact>
+            Home
+          </NavigationItem>
+          <NavigationItem link="/new-post">New Post</NavigationItem>
+          <NavigationItem link="/rental-history">Rental History</NavigationItem>
+          <NavigationItem link="/logout">Log out</NavigationItem>
+          <FontAwesomeIcon
+            icon={faSearch}
+            style={{
+              color: "white",
+              fontSize: "1.5rem",
+              paddingLeft: "20px",
+              paddingRight: "10px",
+            }}
+            onClick={this.toggleSearchBarHandler}
+          />
+        </React.Fragment>
+      );
+    } else {
+      nav = (
+        <React.Fragment>
+          <NavigationItem link="/" exact>
+            Home
+          </NavigationItem>
+          <NavigationItem link="/auth">Log In</NavigationItem>
+          <FontAwesomeIcon
+            icon={faSearch}
+            style={{
+              color: "white",
+              fontSize: "1.5rem",
+              paddingLeft: "20px",
+              paddingRight: "10px",
+            }}
+            onClick={this.toggleSearchBarHandler}
+          />
+        </React.Fragment>
+      );
+    }
+
     if (this.state.showSearchBar) {
       nav = (
         <React.Fragment>
           <SearchBar />
           <FontAwesomeIcon
-          icon={faWindowClose}
-          style={{
-            color: "white",
-            fontSize: "1.5rem",
-            paddingLeft: "20px",
-            paddingRight: "10px",
-          }}
-          onClick={this.toggleSearchBarHandler}
-        />
+            icon={faWindowClose}
+            style={{
+              color: "white",
+              fontSize: "1.5rem",
+              paddingLeft: "20px",
+              paddingRight: "10px",
+            }}
+            onClick={this.toggleSearchBarHandler}
+          />
         </React.Fragment>
-      )
+      );
     }
 
-  let backgroundColor = {backgroundColor: "#fd8673"};
-  if (this.state.showSearchBar) {
-    backgroundColor = {backgroundColor: "#fdb2a7"}
-  }
+    let backgroundColor = { backgroundColor: "#fd8673" };
+    if (this.state.showSearchBar) {
+      backgroundColor = { backgroundColor: "#fdb2a7" };
+    }
 
-  return <ul className={classes.NavigationItems} style={backgroundColor}>{nav}</ul>;
+    return (
+      <ul className={classes.NavigationItems} style={backgroundColor}>
+        {nav}
+      </ul>
+    );
   }
 }
 
