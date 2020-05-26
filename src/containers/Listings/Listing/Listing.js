@@ -45,32 +45,37 @@ class Listing extends Component {
   //TODO: support display of more than one image
   render() {
     let listing = (
-      <ul className={classes.Description}>
-        <p className={classes.Textbook}>
-          {this.props.module}:《{this.props.textbook}》
+      <React.Fragment>
+        <div className={classes.Textbook}>
+          <p>
+            {this.props.module}:《{this.props.textbook}》
         </p>
-        <img
-          src={this.state.image}
-          alt={this.state.error ? "Unable to load image" : "Loading image..."}
-          className={classes.Image}
-        />
-        <li>Price: ${this.props.price} / month</li>
-        <li>Delivery method: {this.props.deliveryMethod}</li>
-        <li>Location: {this.props.location}</li>
-        {this.props.showFullListing ? (
-          <React.Fragment>
-            <li>
-              Description: <br /> {this.props.description}
-            </li>
-          </React.Fragment>
-        ) : null}
-        <br />
-        <li>Posted by: {this.props.userId}</li>
-      </ul>
+        </div>
+        <div style={{ textAlign: 'center' }}>
+          <img
+            src={this.state.image}
+            alt={this.state.error ? "Unable to load image" : "Loading image..."}
+            className={classes.Image} />
+        </div>
+        <div>
+          <ul className={classes.Description}>
+            <li>Price: ${this.props.price} / month</li>
+            <li>Delivery method: {this.props.deliveryMethod}</li>
+            <li>Location: {this.props.location}</li>
+            {this.props.showFullListing ? (
+              <li>Description: <br /> {this.props.description}</li>
+            ) : null}
+            <br />
+            <li>Posted by: {this.props.userId}</li>
+          </ul>
+        </div>
+      </React.Fragment>
     );
 
+    const style = this.props.showFullListing ? classes.FullListing : classes.Listing;
+
     return (
-      <div className={classes.Listing}>
+      <div className={style}>
         {this.props.showFullListing ? (
           <FontAwesomeIcon
             icon={faWindowClose}
