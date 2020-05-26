@@ -21,11 +21,11 @@ export const submitNewPostFail = (error) => {
   };
 };
 
-export const submitNewPost = (data) => {
+export const submitNewPost = (data, token) => {
   return (dispatch) => {
     dispatch(submitNewPostInit());
     axios
-      .post("/listings.json", data)
+      .post("/listings.json?auth=" + token, data)
       .then((response) => dispatch(submitNewPostSuccess()))
       .catch((error) => submitNewPostFail(error));
   };

@@ -27,7 +27,8 @@ class Listings extends Component {
 4: price per month
 5: textbook
 6: userId
-TODO: image id
+7: unique id
+8: userID
 */
 
   showFullListingHandler = (event, listId) => {
@@ -48,7 +49,7 @@ TODO: image id
     let listings = this.props.listingData.map((listing) => {
       return (
         <Listing
-          key={listing[6]}
+          key={listing[7]}
           showFullListing={this.state.showFullListing}
           isAuthenticated={this.props.isAuthenticated}
           history={this.props.history}
@@ -57,9 +58,9 @@ TODO: image id
           module={listing[3]}
           price={listing[4]}
           textbook={listing[5]}
-          userId={listing[6]}
+          userId={listing[8]}
           onShowFullListing={(event) =>
-            this.showFullListingHandler(event, listing[5])
+            this.showFullListingHandler(event, listing[7])
           }
         />
       );
@@ -69,11 +70,11 @@ TODO: image id
 
     if (this.state.showFullListing) {
       listings = this.props.listingData
-        .filter((listing) => listing[5] === this.state.fullListingID)
+        .filter((listing) => listing[7] === this.state.fullListingID)
         .map((listing) => {
           return (
             <Listing
-              key={listing[6]}
+              key={listing[7]}
               showFullListing={this.state.showFullListing}
               onHideFullListing={this.hideFullListingHandler}
               description={listing[0]}
@@ -82,7 +83,7 @@ TODO: image id
               module={listing[3]}
               price={listing[4]}
               textbook={listing[5]}
-              userId={listing[6]}
+              userId={listing[8]}
             />
           );
         });

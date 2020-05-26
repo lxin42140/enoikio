@@ -27,18 +27,20 @@ export const fetchListing = (filter) => {
     axios
       .get("/listings.json")
       .then((response) => {
+        console.log(response.data)
         const result = [];
-        for (let key in response.data) {
+        for (let post in response.data) {
           const postDetails = [];
-          for (let post in response.data[key]) {
-            if (post === "postDetails") {
-              for (let detail in response.data[key][post]) {
-                postDetails.push(response.data[key][post][detail]);
+          for (let detail in response.data[post]) {
+            if (detail === "postDetails") {
+              for (let element in response.data[post][detail]) {
+                postDetails.push(response.data[post][detail][element]);
               }
             } else {
-              postDetails.push(response.data[key][post]);
+              postDetails.push(response.data[post][detail]);
             }
           }
+          console.log(postDetails)
           result.push(postDetails);
         }
         dispatch(fetchListingSuccess(result));

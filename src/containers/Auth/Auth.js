@@ -127,7 +127,7 @@ class Auth extends Component {
       <form onSubmit={this.submitHandler}>
         {form}
         <Button btnType="Important" disabled={!this.state.valid}>
-          {this.state.isSignUp ? "Sign up" : "Sign in"}
+          {this.state.isSignUp ? "Sign up now" : "Sign in now"}
         </Button>
       </form>
     );

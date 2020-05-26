@@ -132,26 +132,33 @@ class NewPost extends Component {
   };
 
   onSubmitHandler = (event) => {
+    event.preventDefault();
+    let today = new Date();
+    let date =
+      today.getFullYear() +
+      "-" +
+      (today.getMonth() + 1) +
+      "-" +
+      today.getDate();
+    let time =
+      today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    const unique = this.props.userId + date + time;
     const formData = {};
     for (let key in this.state.dataForm) {
       formData[key] = this.state.dataForm[key].value;
     }
-    // let today = new Date();
-    // let date =
-    //   today.getFullYear() +
-    //   "-" +
-    //   (today.getMonth() + 1) +
-    //   "-" +
-    //   today.getDate();
-    // let time =
-    //   today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
     const postDetails = {
       postDetails: formData,
-      userId: new Date().getDate(),
-      // postDate: date,
-      // postTime: time,
+      userId: this.props.userId,
+      unique: unique,
+      dateAndTime: {
+        date: date,
+        time: time,
+      },
     };
-    this.props.onSubmitPost(postDetails);
+    this.props.onSubmitPost(postDetails, this.props.token);
+    this.props.onSubmitPhoto(this.state.imageAsFile, unique);
+    //TODO: include a submitted state used to ask the user whether to make another post or proceed to homepage
     const refreshedForm = {
       ...this.state.dataForm,
     };
@@ -164,17 +171,16 @@ class NewPost extends Component {
     });
   };
 
-  handleFireBaseUpload = (event) => {
-    event.preventDefault();
-    this.props.onSubmitPhoto(
-      this.state.imageAsFile,
-      this.state.dataForm.textbook.value
-    );
-  };
-
   handleImageAsFile = (event) => {
     const image = event.target.files[0];
-    this.setState({ imageAsFile: image });
+    let formIsValid = true;
+    for (let element in this.state.dataForm) {
+      if (!this.state.dataForm[element].valid) {
+        formIsValid = false;
+        break;
+      }
+    }
+    this.setState({ imageAsFile: image, formIsValid: formIsValid });
   };
 
   render() {
@@ -202,43 +208,27 @@ class NewPost extends Component {
       );
     });
 
-    let uploadImageButton = this.props.imageUploaded ? (
-      <strong>
-        <p> Image Successfully uploaded !</p>
-      </strong>
-    ) : this.props.imageUploading ? (
-      <span>
-        <p>Uploading image...</p>
-        <Spinner />
-      </span>
-    ) : (
-      <form onSubmit={this.handleFireBaseUpload}>
-        <input
-          type="file"
-          accept=".png,.jpeg, .jpg"
-          onChange={this.handleImageAsFile}
-        />
-        <Button disabled={!this.state.formIsValid}>Upload!</Button>
-      </form>
-    );
-
-    if (this.props.loading) {
-      form = <Spinner />;
-      uploadImageButton = null;
-    }
     return (
       <div className={classes.NewPost}>
         <h4>{this.props.loading ? "Submitting..." : "Enter Rental Details"}</h4>
-        {form}
-        {uploadImageButton}
-        <br /> <br />
-        <Button
-          btnType="Important"
-          disabled={!this.state.formIsValid}
-          onClick={this.onSubmitHandler}
-        >
-          SUBMIT
-        </Button>
+        {this.props.loading ? (
+          <Spinner />
+        ) : (
+          <React.Fragment>
+            {form}
+            <br /> <br />
+            <form onSubmit={this.onSubmitHandler}>
+              <input
+                type="file"
+                accept=".png,.jpeg, .jpg"
+                onChange={this.handleImageAsFile}
+              />
+              <Button btnType="Important" disabled={!this.state.formIsValid}>
+                SUBMIT
+              </Button>
+            </form>
+          </React.Fragment>
+        )}
       </div>
     );
   }
@@ -249,13 +239,15 @@ const mapStateToProps = (state) => {
     loading: state.newPost.loading,
     imageUploading: state.newPost.uploadingImageLoading,
     imageUploaded: state.newPost.imageUploaded,
+    userId: state.auth.userId,
+    token: state.auth.token,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onSubmitPost: (newPost, userID) =>
-      dispatch(actions.submitNewPost(newPost, userID)),
+    onSubmitPost: (newPost, token) =>
+      dispatch(actions.submitNewPost(newPost, token)),
     onSubmitPhoto: (imageAsFile, identifier) =>
       dispatch(actions.submitNewPhoto(imageAsFile, identifier)),
   };
