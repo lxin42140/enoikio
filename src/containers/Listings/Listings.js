@@ -92,7 +92,12 @@ TODO: image id
       listings = <Spinner />;
     }
 
-    return <div className={classes.Listings}>{listings}</div>;
+    return <div 
+      className={classes.Listings}
+      style={this.state.showFullListing ? 
+        {justifyContent : 'left'} : 
+        {justifyContent: 'center'}}>
+          {listings}</div>;
   }
 }
 
