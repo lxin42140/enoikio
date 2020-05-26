@@ -12,6 +12,7 @@ class Listings extends Component {
   state = {
     showFullListing: false,
     fullListingID: "",
+    reload: false,
   };
 
   componentDidMount() {

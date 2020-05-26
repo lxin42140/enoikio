@@ -120,7 +120,10 @@ class NewPost extends Component {
     updatedDataForm[inputIdentifier] = updatedFormElement;
     let formIsValid = true;
     for (let inputIdentifiers in updatedDataForm) {
-      if (!updatedDataForm[inputIdentifiers].valid) {
+      if (
+        !updatedDataForm[inputIdentifiers].valid ||
+        this.state.imageAsFile === ""
+      ) {
         formIsValid = false;
         break;
       }
@@ -133,9 +136,20 @@ class NewPost extends Component {
     for (let key in this.state.dataForm) {
       formData[key] = this.state.dataForm[key].value;
     }
+    // let today = new Date();
+    // let date =
+    //   today.getFullYear() +
+    //   "-" +
+    //   (today.getMonth() + 1) +
+    //   "-" +
+    //   today.getDate();
+    // let time =
+    //   today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
     const postDetails = {
       postDetails: formData,
       userId: new Date().getDate(),
+      // postDate: date,
+      // postTime: time,
     };
     this.props.onSubmitPost(postDetails);
     const refreshedForm = {
