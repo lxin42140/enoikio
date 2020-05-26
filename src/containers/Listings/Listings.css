@@ -1,13 +1,10 @@
 .Listings {
     display: flex;
     box-sizing: border-box;
-    flex-direction: row;
-    flex-wrap: wrap;
     line-height: 21px;
     text-size-adjust: 100%;
     padding: 16px;
+    justify-content: flex-start;
+    flex-direction: row;
+    flex-wrap: wrap;
 }
-
-/* .Listing {
-    flex: 1 0 20%; 
-} */
