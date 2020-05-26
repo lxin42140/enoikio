@@ -1,26 +1,30 @@
+/*TODO: fix listing size to relative*/
 .Listing {
-    /* border-width: 10px;
-    border-color: black;
-    text-align: center;
-    position: fixed; */
     z-index: 500;
     background-color: white;
     width: 255px;
     height: 100%;
     border: 1px solid #ccc;
-    /* box-shadow: 1px 1px 1px black; */
     padding: 8px;
-    /* left: 15%;
-    top: 30%; */
     box-sizing: border-box;
     text-align: left;
     margin: 10px;
 }
 
+.Listing li {
+    padding: 3px;
+}
+
+.Textbook {
+    color: black;
+    font-size: medium;
+}
+
+/*TODO: fix image size to relative, affects the dimensions of each listing*/
 .Image {
-    height: 200px;
     width: 200px;
-    padding: 5px;
+    height: 200px;
+    object-fit: cover;
 }
 
 .Description {
@@ -29,4 +33,10 @@
     color: grey;
     list-style: none;
     padding-left: 0px;
+} 
+
+.Selection {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
 }

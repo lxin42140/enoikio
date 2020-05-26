@@ -5,13 +5,18 @@ import Button from "../../../components/UI/Button/Button";
 import { storage } from "../../../firebase/firebase";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faWindowClose } from "@fortawesome/free-solid-svg-icons";
+import { faWindowClose, faHeart } from "@fortawesome/free-solid-svg-icons";
 
 class Listing extends Component {
   state = {
     image: "",
     error: false,
   };
+
+  //TODO: add onclick handler that supports likes,
+  //1. when clicked, trigger heart icon to change color from lighter to darker, and number of heart counts increase by 1
+  //2. change should be uploaded to data base in the background
+  //3. heart icon remains as liked when the same user is logged in
 
   componentDidMount() {
     if (this.state.image === "") {
@@ -30,52 +35,52 @@ class Listing extends Component {
     }
   }
 
+  //TODO: support display of more than one image
   render() {
     let listing = (
-      <React.Fragment>
+      <ul className={classes.Description}>
+        <p className={classes.Textbook}>
+          {this.props.module}:《{this.props.textbook}》
+        </p>
         <img
           src={this.state.image}
           alt={this.state.error ? "Unable to load image" : "Loading image..."}
           className={classes.Image}
         />
-
-        {this.props.showFullListing ?
-          <FontAwesomeIcon
-            icon={faWindowClose}
-            style={{
-              justifyContent: 'flex-start',
-              verticalAlign: 'top'
-            }}
-            onClick={this.props.clicked} /> : null}
-
-        <ul className={classes.Description}>
-          <li>
-            <strong>{this.props.textbook}</strong>
-          </li>
-          <li>{this.props.module}</li>
-          <li>${this.props.price}</li>
-        </ul>
-
+        <li>Price: ${this.props.price} / month</li>
+        <li>Delivery method: {this.props.deliveryMethod}</li>
+        <li>Location: {this.props.location}</li>
         {this.props.showFullListing ? (
-            <ul className={classes.Description}>
-              <li>{this.props.deliveryMethod}</li>
-              <li>{this.props.location}</li>
-              <br />
-              <li>Description: <br /> {this.props.description}</li>
-            </ul>
+          <React.Fragment>
+            <li>
+              Description: <br /> {this.props.description}
+            </li>
+          </React.Fragment>
         ) : null}
-
-        <p className={classes.Description}>Posted by: {this.props.userId}</p>
-      </React.Fragment>
+        <br />
+        <li>Posted by: {this.props.userId}</li>
+      </ul>
     );
 
     return (
-      <div className={classes.Listing}>
+      <div className={classes.Listing} onClick={this.props.onShowFullListing}>
+        {this.props.showFullListing ? (
+          <FontAwesomeIcon
+            icon={faWindowClose}
+            style={{
+              float: "right",
+              paddingLeft: "10px",
+              color: "#ff5138",
+            }}
+            onClick={this.props.onHideFullListing}
+          />
+        ) : null}
         {listing}
         <br />
-        <span className={classes.RentButton}>
+        <div className={classes.Selection}>
           <Button btnType="Important">Rent now</Button>
-        </span>
+          <FontAwesomeIcon icon={faHeart} style={{ color: "red" }} />
+        </div>
       </div>
     );
   }
