@@ -56,11 +56,11 @@ class NewPost extends Component {
         elementType: "select",
         elementConfig: {
           options: [
-            { value: "meet up", displayValue: "Meet up" },
+            { value: "meet-up", displayValue: "Meet up" },
             { value: "mail", displayValue: "Mail" },
           ],
         },
-        value: "meetup",
+        value: "meet-up",
         validation: false,
         valid: true,
       },

@@ -19,15 +19,15 @@ class Listings extends Component {
     this.props.onFetchListingInit();
   }
 
-  /*
-0: description
-1: delivery method
-2: location
-3: module code
-4: price per month
-5: textbook
-6: userId
-7: unique id
+/*
+0: date and time
+1: description
+2: delivery method
+3: location
+4: module code
+5: price
+6: book title
+7: unique key
 8: userID
 */
 
@@ -53,11 +53,12 @@ class Listings extends Component {
           showFullListing={this.state.showFullListing}
           isAuthenticated={this.props.isAuthenticated}
           history={this.props.history}
-          deliveryMethod={listing[1]}
-          location={listing[2]}
-          module={listing[3]}
-          price={listing[4]}
-          textbook={listing[5]}
+          deliveryMethod={listing[2]}
+          location={listing[3]}
+          module={listing[4]}
+          price={listing[5]}
+          textbook={listing[6]}
+          identifier={listing[7]}
           userId={listing[8]}
           onShowFullListing={(event) =>
             this.showFullListingHandler(event, listing[7])
@@ -77,12 +78,13 @@ class Listings extends Component {
               key={listing[7]}
               showFullListing={this.state.showFullListing}
               onHideFullListing={this.hideFullListingHandler}
-              description={listing[0]}
-              deliveryMethod={listing[1]}
-              location={listing[2]}
-              module={listing[3]}
-              price={listing[4]}
-              textbook={listing[5]}
+              description={listing[1]}
+              deliveryMethod={listing[2]}
+              location={listing[3]}
+              module={listing[4]}
+              price={listing[5]}
+              textbook={listing[6]}
+              identifier={listing[7]}
               userId={listing[8]}
             />
           );

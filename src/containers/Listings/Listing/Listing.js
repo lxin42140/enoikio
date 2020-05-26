@@ -25,7 +25,7 @@ class Listing extends Component {
     if (this.state.image === "") {
       storage
         .ref("listingPictures/")
-        .child(this.props.textbook)
+        .child(this.props.identifier)
         .getDownloadURL()
         .then((url) => {
           this.setState({
@@ -49,13 +49,14 @@ class Listing extends Component {
         <div className={classes.Textbook}>
           <p>
             {this.props.module}:《{this.props.textbook}》
-        </p>
+          </p>
         </div>
-        <div style={{ textAlign: 'center' }}>
+        <div style={{ textAlign: "center" }}>
           <img
             src={this.state.image}
             alt={this.state.error ? "Unable to load image" : "Loading image..."}
-            className={classes.Image} />
+            className={classes.Image}
+          />
         </div>
         <div>
           <ul className={classes.Description}>
@@ -63,7 +64,9 @@ class Listing extends Component {
             <li>Delivery method: {this.props.deliveryMethod}</li>
             <li>Location: {this.props.location}</li>
             {this.props.showFullListing ? (
-              <li>Description: <br /> {this.props.description}</li>
+              <li>
+                Description: <br /> {this.props.description}
+              </li>
             ) : null}
             <br />
             <li>Posted by: {this.props.userId}</li>
@@ -72,7 +75,9 @@ class Listing extends Component {
       </React.Fragment>
     );
 
-    const style = this.props.showFullListing ? classes.FullListing : classes.Listing;
+    const style = this.props.showFullListing
+      ? classes.FullListing
+      : classes.Listing;
 
     return (
       <div className={style}>

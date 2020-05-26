@@ -27,7 +27,6 @@ export const fetchListing = (filter) => {
     axios
       .get("/listings.json")
       .then((response) => {
-        console.log(response.data)
         const result = [];
         for (let post in response.data) {
           const postDetails = [];
@@ -40,7 +39,6 @@ export const fetchListing = (filter) => {
               postDetails.push(response.data[post][detail]);
             }
           }
-          console.log(postDetails)
           result.push(postDetails);
         }
         dispatch(fetchListingSuccess(result));
