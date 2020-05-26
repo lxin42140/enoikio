@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 
-
 import Listing from "./Listing/Listing";
 import * as actions from "../../store/actions/index";
 import Spinner from "../../components/UI/Spinner/Spinner";
 import firebaseAxios from "../../firebaseAxios";
 import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
+import classes from "./Listings.css";
 
 class Listings extends Component {
   state = {
@@ -26,6 +26,7 @@ class Listings extends Component {
 4: price per month
 5: textbook
 6: userId
+TODO: image id
 */
 
   showFullListingHandler = (event, listId) => {
@@ -45,41 +46,41 @@ class Listings extends Component {
   render() {
     let listings = this.props.listingData.map((listing) => {
       return (
-        <React.Fragment>
-        <div
+        <Listing
           key={listing[6]}
-          onClick={(event) => this.showFullListingHandler(event, listing[6])}
-        >
-          <Listing
-            showFullListing={this.state.showFullListing}
-            module={listing[3]}
-            price={listing[4]}
-            textbook={listing[5]}
-            userId={listing[6]}
-          />
-        </div>
-        </React.Fragment>
+          showFullListing={this.state.showFullListing}
+          deliveryMethod={listing[1]}
+          location={listing[2]}
+          module={listing[3]}
+          price={listing[4]}
+          textbook={listing[5]}
+          userId={listing[6]}
+          onShowFullListing={(event) =>
+            this.showFullListingHandler(event, listing[5])
+          }
+        />
       );
     });
 
+    //TODO: when showing only one post, other summarized posts of the same module should show on the right
+
     if (this.state.showFullListing) {
       listings = this.props.listingData
-        .filter((listing) => listing[6] === this.state.fullListingID)
+        .filter((listing) => listing[5] === this.state.fullListingID)
         .map((listing) => {
           return (
-            <div key={listing[6]}>
-              <Listing
-                showFullListing={this.state.showFullListing}
-                clicked={this.hideFullListingHandler}
-                description={listing[0]}
-                deliveryMethod={listing[1]}
-                location={listing[2]}
-                module={listing[3]}
-                price={listing[4]}
-                textbook={listing[5]}
-                userId={listing[6]}
-              />
-            </div>
+            <Listing
+              key={listing[6]}
+              showFullListing={this.state.showFullListing}
+              onHideFullListing={this.hideFullListingHandler}
+              description={listing[0]}
+              deliveryMethod={listing[1]}
+              location={listing[2]}
+              module={listing[3]}
+              price={listing[4]}
+              textbook={listing[5]}
+              userId={listing[6]}
+            />
           );
         });
     }
@@ -88,7 +89,7 @@ class Listings extends Component {
       listings = <Spinner />;
     }
 
-    return <div>{listings}</div>;
+    return <div className={classes.Listings}>{listings}</div>;
   }
 }
 
