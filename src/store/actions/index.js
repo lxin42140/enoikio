@@ -6,3 +6,10 @@ export {
     submitNewPost,
     submitNewPhoto
 } from './NewPost'
+
+export {
+    auth,
+    logout,
+    setAuthRedirectPath,
+    authCheckState,
+} from "./Auth";
