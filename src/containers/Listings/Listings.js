@@ -16,7 +16,7 @@ class Listings extends Component {
   };
 
   componentDidMount() {
-    if (!this.props.filtered) {
+    if (!this.props.isFilteredListing) {
       this.props.onFetchALLListingInit();
     }
   }
@@ -105,6 +105,7 @@ const mapStateToProps = (state) => {
   return {
     listingData: state.listing.listings,
     loading: state.listing.loading,
+    isFilteredListing: state.listing.filteredListing,
     isAuthenticated: state.auth.token !== null,
   };
 };

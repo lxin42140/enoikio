@@ -2,7 +2,7 @@
     flex: 1;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-end;
 }
 
 .input {
@@ -25,28 +25,4 @@
     background-color: #f1f1f1;
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 1;
-}
-
-.dropdownContent a {
-    height: 20px;
-    width: 85px;
-    color: black;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    white-space: nowrap;
-}
-
-.dropdownContent a:hover {
-    background-color: #ffb3a7;
-    color: rgb(252, 31, 31);
-    cursor: pointer;
-    color: white
-}
-
-.dropDownElement {
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
 }

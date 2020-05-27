@@ -85,7 +85,7 @@ class NewPost extends Component {
         },
         value: "",
         validation: false,
-        valid: false,
+        valid: true,
         touched: false,
       },
     },
@@ -145,16 +145,13 @@ class NewPost extends Component {
     const unique = this.props.userId + date + time;
     const formData = {};
     for (let key in this.state.dataForm) {
-      formData[key] = this.state.dataForm[key].value;
+      formData[key] = this.state.dataForm[key].value.toLowerCase()
     }
     const postDetails = {
       postDetails: formData,
       userId: this.props.userId,
       unique: unique,
-      dateAndTime: {
-        date: date,
-        time: time,
-      },
+      dateAndTime: date + "_" + time
     };
     this.props.onSubmitPost(postDetails, this.props.token);
     this.props.onSubmitPhoto(this.state.imageAsFile, unique);

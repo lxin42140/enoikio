@@ -25,7 +25,7 @@ export const fetchAllListings = () => {
   return (dispatch) => {
     dispatch(fetchListingInit());
     axios
-      .get("/listings.json")
+      .get('/listings.json?orderBy="dateAndTime"')
       .then((response) => {
         const result = [];
         for (let post in response.data) {
@@ -41,6 +41,7 @@ export const fetchAllListings = () => {
           }
           result.push(postDetails);
         }
+        result.reverse();
         dispatch(fetchListingSuccess(result));
       })
       .catch((error) => {
@@ -49,25 +50,33 @@ export const fetchAllListings = () => {
   };
 };
 
+export const fetchFilteredListingInit = () => {
+  return {
+    type: actionTypes.FETCH_FILTERED_LISTINGS_INIT,
+  };
+};
+
 export const fetchFilteredListing = (filterType, data) => {
   return (dispatch) => {
+    const term = data.toLowerCase();
     let query;
     switch (filterType) {
       case "userID":
         query = '?orderBy="userId"&equalTo="' + data + '"';
         break;
       case "module":
-        query = '?orderBy="module"&equalTo="' + data + '"';
+        query = '?orderBy="/postDetails/module"&equalTo="' + term + '"';
         break;
       case "title":
-        query = '?orderBy="textbook"&equalTo="' + data + '"';
+        query = '?orderBy="/postDetails/textbook"&equalTo="' + term + '"';
         break;
       default:
+        query = '?orderBy="/postDetails/location"&equalTo="' + term + '"';
         break;
     }
-    dispatch(fetchListingInit());
+    dispatch(fetchFilteredListingInit());
     axios
-      .get("/listings.json" + query)
+      .get("/listings.json".concat(query).concat('&orderBy="dateAndTime"'))
       .then((response) => {
         const result = [];
         for (let post in response.data) {
@@ -83,6 +92,7 @@ export const fetchFilteredListing = (filterType, data) => {
           }
           result.push(postDetails);
         }
+        result.reverse();
         dispatch(fetchListingSuccess(result));
       })
       .catch((error) => {

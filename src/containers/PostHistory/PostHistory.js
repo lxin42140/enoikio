@@ -13,11 +13,7 @@ class PostHistory extends Component {
   }
 
   render() {
-    let history = this.props.loading ? (
-      <Spinner />
-    ) : (
-      <Listings filtered={true} />
-    );
+    let history = this.props.loading ? <Spinner /> : <Listings />;
     return <div>{history}</div>;
   }
 }

@@ -7,24 +7,40 @@ import withErrorHandler from "../../../hoc/withErrorHandler/withErrorHandler";
 import classes from "./SearchBar.css";
 import * as actions from "../../../store/actions/index";
 import Button from "../../../components/UI/Button/Button";
+import DropDown from "./Dropdown/DropDown";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faLocationArrow,
   faBook,
   faUniversity,
+  faWindowClose,
 } from "@fortawesome/free-solid-svg-icons";
 
 class SearchBar extends Component {
   state = {
-    filterType: "module code",
     showFilterDropDown: false,
     userInput: "",
+    filterType: "module",
+    placeHolder: "module code",
   };
 
   changeFilterHandler = (filter) => {
+    let placeHolder = "";
+    switch (filter) {
+      case "module":
+        placeHolder = "module code";
+        break;
+      case "title":
+        placeHolder = "textbook title";
+        break;
+      default:
+        placeHolder = "preferred location";
+        break;
+    }
     this.setState({
       showFilterDropDown: false,
       filterType: filter,
+      placeHolder: placeHolder,
     });
   };
 
@@ -38,54 +54,87 @@ class SearchBar extends Component {
     this.setState({ userInput: event.target.value });
   };
 
+  onCancelSearchHandler = (event) => {
+    if (this.state.userInput !== "") {
+      this.props.dispatchFetchAllListing();
+      this.props.history.goBack();
+    }
+    this.props.onClick();
+  };
+
   render() {
     let dropDown = null;
 
     if (this.state.showFilterDropDown) {
       dropDown = (
         <React.Fragment>
-          <span className={classes.dropDownElement}>
-            <FontAwesomeIcon
-              icon={faLocationArrow}
-              style={{ padding: "0 3px", fontSize: "1rem", color: "#ff9f90" }}
-            />
-            <a onClick={() => this.changeFilterHandler("preferred location")}>
-              location
-            </a>
-          </span>
-          <span className={classes.dropDownElement}>
-            <FontAwesomeIcon
-              icon={faBook}
-              style={{ padding: "0 3px", fontSize: "1rem", color: "#ff9f90" }}
-            />
-            <a onClick={() => this.changeFilterHandler("textbook title")}>
-              book title
-            </a>
-          </span>
-          <span className={classes.dropDownElement}>
-            <FontAwesomeIcon
-              icon={faUniversity}
-              style={{ padding: "0 3px", fontSize: "1rem", color: "#ff9f90" }}
-            />
-            <a onClick={() => this.changeFilterHandler("module code")}>
-              module code
-            </a>
-          </span>
+          <DropDown
+            icon={faLocationArrow}
+            onClick={() => this.changeFilterHandler("location")}
+            text={"location"}
+          />
+          <DropDown
+            icon={faBook}
+            onClick={() => this.changeFilterHandler("title")}
+            text={"book title"}
+          />
+          <DropDown
+            icon={faUniversity}
+            onClick={() => this.changeFilterHandler("module")}
+            text={"module code"}
+          />
         </React.Fragment>
       );
     }
 
+    let filterButton = (
+      <div className={classes.dropDown}>
+        <span style={{ paddingRight: "20px" }}>
+          <Button onClick={this.filterDropdownHandler}>Filter by</Button>
+          <div className={classes.dropdownContent}>{dropDown}</div>
+        </span>
+      </div>
+    );
+
+    let searchButton = (
+      <span style={{ paddingLeft: "20px" }}>
+        <Link to="/">
+          <Button
+            btnType="Important"
+            onClick={() =>
+              this.state.userInput !== ""
+                ? this.props.dispatchFetchFilteredListing(
+                    this.state.filterType,
+                    this.state.userInput
+                  )
+                : null
+            }
+          >
+            Search
+          </Button>
+        </Link>
+      </span>
+    );
+
+    let cancelSearchButton = (
+      <FontAwesomeIcon
+        icon={faWindowClose}
+        style={{
+          color: "white",
+          fontSize: "1.5rem",
+          paddingLeft: "10%",
+          paddingRight: "2%",
+        }}
+        onClick={this.onCancelSearchHandler}
+      />
+    );
+
     const placeHolder =
-      "Enter the " + this.state.filterType + " to start searching!";
+      "Enter the " + this.state.placeHolder + " to start searching!";
 
     return (
       <div className={classes.Searchbar}>
-        <div className={classes.dropDown}>
-          <span style={{ paddingRight: "20px" }}>
-            <Button onClick={this.filterDropdownHandler}>Filter by</Button>
-            <div className={classes.dropdownContent}>{dropDown}</div>
-          </span>
-        </div>
+        {filterButton}
         <input
           className={classes.input}
           type="text"
@@ -93,20 +142,8 @@ class SearchBar extends Component {
           value={this.state.userInput}
           placeholder={placeHolder}
         />
-        <span style={{ paddingLeft: "20px" }}>
-          <Link to="/">
-            <Button
-              btnType="Important"
-              onClick={() =>
-                this.state.userInput !== ""
-                  ? this.props.dispatchFetchListing(this.state.userInput)
-                  : null
-              }
-            >
-              Search
-            </Button>
-          </Link>
-        </span>
+        {searchButton}
+        {cancelSearchButton}
       </div>
     );
   }
@@ -114,8 +151,9 @@ class SearchBar extends Component {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    dispatchFetchListing: (userInput) =>
-      dispatch(actions.fetchListing(userInput)),
+    dispatchFetchFilteredListing: (filterType, data) =>
+      dispatch(actions.fetchFilteredListing(filterType, data)),
+    dispatchFetchAllListing: () => dispatch(actions.fetchAllListings()),
   };
 };
 

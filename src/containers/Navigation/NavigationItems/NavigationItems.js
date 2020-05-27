@@ -1,10 +1,10 @@
 import React, { Component } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
 import classes from "./NavigationItems.css";
 import NavigationItem from "./NavigationItem/NavigationItem";
 import SearchBar from "../../../containers/Navigation/SearchBar/SearchBar";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch, faWindowClose } from "@fortawesome/free-solid-svg-icons";
 
 class NavigationItems extends Component {
   state = {
@@ -63,16 +63,9 @@ class NavigationItems extends Component {
     if (this.state.showSearchBar) {
       nav = (
         <React.Fragment>
-          <SearchBar />
-          <FontAwesomeIcon
-            icon={faWindowClose}
-            style={{
-              color: "white",
-              fontSize: "1.5rem",
-              paddingLeft: "20px",
-              paddingRight: "10px",
-            }}
+          <SearchBar
             onClick={this.toggleSearchBarHandler}
+            history={this.props.history}
           />
         </React.Fragment>
       );
