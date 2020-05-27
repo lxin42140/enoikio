@@ -19,7 +19,7 @@ class Listings extends Component {
     this.props.onFetchListingInit();
   }
 
-/*
+  /*
 0: date and time
 1: description
 2: delivery method
@@ -95,9 +95,7 @@ class Listings extends Component {
       listings = <Spinner />;
     }
 
-    return <div 
-      className={classes.Listings}>
-          {listings}</div>;
+    return <div className={classes.Listings}>{listings}</div>;
   }
 }
 
