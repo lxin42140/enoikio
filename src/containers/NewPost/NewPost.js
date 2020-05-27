@@ -145,13 +145,21 @@ class NewPost extends Component {
     const unique = this.props.userId + date + time;
     const formData = {};
     for (let key in this.state.dataForm) {
-      formData[key] = this.state.dataForm[key].value.toLowerCase()
+      switch (formData[key]) {
+        case "module":
+        case "textbook":
+        case "location":
+          formData[key] = this.state.dataForm[key].value.toLowerCase();
+          break;
+        default:
+          formData[key] = this.state.dataForm[key].value;
+      }
     }
     const postDetails = {
       postDetails: formData,
       userId: this.props.userId,
       unique: unique,
-      dateAndTime: date + "_" + time
+      dateAndTime: date + "_" + time,
     };
     this.props.onSubmitPost(postDetails, this.props.token);
     this.props.onSubmitPhoto(this.state.imageAsFile, unique);

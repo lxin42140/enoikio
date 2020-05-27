@@ -15,6 +15,7 @@ class Listings extends Component {
     reload: false,
   };
 
+  //prevent re-rendering of listings caused by fetching of listings from firebase whenever the component is mounted
   componentDidMount() {
     if (!this.props.isFilteredListing) {
       this.props.onFetchALLListingInit();
