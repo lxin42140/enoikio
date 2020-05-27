@@ -96,10 +96,7 @@ class Listings extends Component {
     }
 
     return <div 
-      className={classes.Listings}
-      style={this.state.showFullListing ? 
-        {justifyContent : 'left'} : 
-        {justifyContent: 'center'}}>
+      className={classes.Listings}>
           {listings}</div>;
   }
 }
