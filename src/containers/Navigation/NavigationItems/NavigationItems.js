@@ -25,7 +25,7 @@ class NavigationItems extends Component {
             Home
           </NavigationItem>
           <NavigationItem link="/new-post">New Post</NavigationItem>
-          <NavigationItem link="/rental-history">Rental History</NavigationItem>
+          <NavigationItem link="/post-history">Past Posts</NavigationItem>
           <NavigationItem link="/logout">Log out</NavigationItem>
           <FontAwesomeIcon
             icon={faSearch}

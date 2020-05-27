@@ -1,5 +1,6 @@
 export {
-    fetchListing,
+    fetchFilteredListing,
+    fetchAllListings
 } from './Listings'
 
 export {

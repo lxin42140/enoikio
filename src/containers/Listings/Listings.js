@@ -16,7 +16,9 @@ class Listings extends Component {
   };
 
   componentDidMount() {
-    this.props.onFetchListingInit();
+    if (!this.props.filtered) {
+      this.props.onFetchALLListingInit();
+    }
   }
 
   /*
@@ -109,7 +111,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onFetchListingInit: () => dispatch(actions.fetchListing()),
+    onFetchALLListingInit: () => dispatch(actions.fetchAllListings()),
   };
 };
 

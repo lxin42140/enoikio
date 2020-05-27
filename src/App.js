@@ -16,6 +16,10 @@ const asyncAuth = asyncComponent(() => {
   return import("./containers/Auth/Auth");
 });
 
+const asyncPostHistory = asyncComponent(() => {
+  return import("./containers/PostHistory/PostHistory")
+})
+
 class App extends Component {
   componentDidMount() {
     this.props.onTryAutoSignUp();
@@ -35,7 +39,7 @@ class App extends Component {
         <Switch>
           <Route path="/" exact component={Listings} />
           <Route path="/new-post" component={asyncNewPost} />
-          <Route path="/auth" component={asyncAuth} />
+          <Route path="/post-history" component={asyncPostHistory} />
           <Route path="/logout" component={Logout} />
           <Redirect to="/" />
         </Switch>
