@@ -12,6 +12,10 @@ class PostHistory extends Component {
     this.props.onFetchUserPosts("userID", this.props.userID);
   }
 
+  componentWillUnmount() {
+    this.props.onFetchAllPosts()
+  }
+
   render() {
     let history = this.props.loading ? <Spinner /> : <Listings />;
     return <div>{history}</div>;
@@ -30,6 +34,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     onFetchUserPosts: (type, userID) =>
       dispatch(actions.fetchFilteredListing(type, userID)),
+    onFetchAllPosts: () => dispatch(actions.fetchAllListings())
   };
 };
 

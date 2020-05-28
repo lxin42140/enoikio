@@ -1,15 +1,29 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import { Redirect } from "react-router-dom";
+
 import Button from "../../components/UI/Button/Button";
 import Input from "../../components/UI/Input/Input";
 import classes from "./Auth.css";
 import * as actions from "../../store/actions/index";
-import { connect } from "react-redux";
 import Spinner from "../../components/UI/Spinner/Spinner";
-import { Redirect } from "react-router-dom";
+import firebaseAxios from "../../firebaseAxios";
 
 class Auth extends Component {
   state = {
     controls: {
+      displayName: {
+        elementType: "input",
+        elementConfig: {
+          type: "text",
+          placeholder: "Display name (permanent)",
+        },
+        validation: false,
+        valid: false,
+        validated: false,
+        validationError: null,
+        value: "",
+      },
       email: {
         elementType: "input",
         elementConfig: {
@@ -47,7 +61,7 @@ class Auth extends Component {
     let isValid = true;
     if (rules) {
       if (rules.required) {
-        isValid = value.trim() !== " ";
+        isValid = value.trim() !== "";
       }
       if (rules.minLength) {
         isValid = value.length >= rules.minLength && isValid;
@@ -59,6 +73,45 @@ class Auth extends Component {
     }
     return isValid;
   }
+
+  validateDisplayName = (event) => {
+    const displayName = this.state.controls.displayName.value;
+    if (displayName !== "") {
+      const query = 'orderBy="displayName"&equalTo="' + displayName + '"';
+      firebaseAxios
+        .get("/users.json?".concat(query))
+        .then((response) => {
+          this.setState((prevState) => ({
+            ...prevState,
+            controls: {
+              ...prevState.controls,
+              displayName: {
+                ...prevState.controls.displayName,
+                valid: Object.keys(response.data).length === 0,
+                validated: true,
+              },
+            },
+            valid:
+              prevState.controls.email.valid &&
+              prevState.controls.password.valid &&
+              Object.keys(response.data).length === 0,
+          }));
+        })
+        .catch((error) => {
+          this.setState((prevState) => ({
+            ...prevState,
+            controls: {
+              ...prevState.controls,
+              displayName: {
+                ...prevState.controls.displayName,
+                validationError: error,
+              },
+            },
+            valid: false,
+          }));
+        });
+    }
+  };
 
   inputChangeHandler = (event, controlName) => {
     const updatedControls = {
@@ -73,7 +126,14 @@ class Auth extends Component {
         touched: true,
       },
     };
-    let valid = updatedControls.email.valid && updatedControls.password.valid;
+    if (controlName === "displayName") {
+      updatedControls.displayName.validated = false;
+      updatedControls.displayName.valid = false;
+    }
+    let valid =
+      updatedControls.email.valid &&
+      updatedControls.password.valid &&
+      updatedControls.displayName.valid;
     this.setState({
       controls: updatedControls,
       valid: valid,
@@ -85,6 +145,7 @@ class Auth extends Component {
     this.props.onAuth(
       this.state.controls.email.value,
       this.state.controls.password.value,
+      this.state.controls.displayName.value,
       this.state.isSignUp
     );
   };
@@ -100,6 +161,9 @@ class Auth extends Component {
   render() {
     const formElementArray = [];
     for (let key in this.state.controls) {
+      if (key === "displayName" && !this.state.isSignUp) {
+        continue;
+      }
       formElementArray.push({
         id: key,
         config: this.state.controls[key],
@@ -107,33 +171,68 @@ class Auth extends Component {
     }
 
     const form = formElementArray.map((x) => {
+      let validationCheck = null;
+      let validationMessage = null;
+      if (x.id === "displayName") {
+        if (x.config.validated && x.config.valid) {
+          validationMessage = (
+            <p style={{ color: "green", fontWeight: "bold" }}>Valid!</p>
+          );
+        } else if (x.config.validated && !x.config.valid) {
+          validationMessage = (
+            <p style={{ color: "red", fontWeight: "bold" }}>
+              Name already exists!
+            </p>
+          );
+        }
+        validationCheck = (
+          <React.Fragment>
+            {validationMessage}
+            <Button
+              onClick={this.validateDisplayName}
+              disabled={x.config.value === ""}
+            >
+              validate
+            </Button>
+          </React.Fragment>
+        );
+      }
       return (
-        <Input
-          key={x.id}
-          elementType={x.config.elementType}
-          elementConfig={x.config.elementConfig}
-          value={x.config.value}
-          valid={x.config.valid}
-          shouldValidate={x.config.validation}
-          touched={x.config.touched}
-          change={(event) => this.inputChangeHandler(event, x.id)}
-        />
+        <React.Fragment>
+          <Input
+            key={x.id}
+            elementType={x.config.elementType}
+            elementConfig={x.config.elementConfig}
+            value={x.config.value}
+            valid={x.config.valid}
+            shouldValidate={x.config.validation}
+            touched={x.config.touched}
+            change={(event) => this.inputChangeHandler(event, x.id)}
+          />
+          {validationCheck}
+        </React.Fragment>
       );
     });
 
     const content = this.props.loading ? (
       <Spinner />
     ) : (
-      <form onSubmit={this.submitHandler}>
+      <div>
         {form}
-        <Button btnType="Important" disabled={!this.state.valid}>
+        <Button
+          btnType="Important"
+          disabled={!this.state.valid}
+          onClick={this.submitHandler}
+        >
           {this.state.isSignUp ? "Sign up now" : "Sign in now"}
         </Button>
-      </form>
+      </div>
     );
 
     const errorMessage = this.props.error ? (
       <p>{this.props.error.message}</p>
+    ) : this.state.controls.displayName.validationError ? (
+      <p>{this.state.controls.displayName.validationError}</p>
     ) : null;
 
     let redirect = null;
@@ -166,8 +265,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onAuth: (email, password, isSignUp) =>
-      dispatch(actions.auth(email, password, isSignUp)),
+    onAuth: (email, password, displayName, isSignUp) =>
+      dispatch(actions.auth(email, password, displayName, isSignUp)),
     onSetRedirectPath: () => dispatch(actions.setAuthRedirectPath("/")),
   };
 };

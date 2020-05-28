@@ -1,5 +1,6 @@
 import * as actionTypes from "./actionTypes";
 import axios from "axios";
+import firebaseAxios from "../../firebaseAxios";
 
 export const authStart = () => {
   return {
@@ -7,11 +8,12 @@ export const authStart = () => {
   };
 };
 
-export const authSuccess = (token, userId) => {
+export const authSuccess = (token, userId, displayName) => {
   return {
     type: actionTypes.AUTH_SUCCESS,
     idToken: token,
     userId: userId,
+    displayName: displayName,
   };
 };
 
@@ -34,6 +36,7 @@ export const logout = () => {
   localStorage.removeItem("token");
   localStorage.removeItem("expirationDate");
   localStorage.removeItem("userID");
+  localStorage.removeItem("displayName");
   return {
     type: actionTypes.AUTH_LOGOUT,
   };
@@ -46,20 +49,35 @@ export const setAuthRedirectPath = (path) => {
   };
 };
 
-export const auth = (email, password, isSignUp) => {
+export const auth = (email, password, displayName, isSignUp) => {
   return (dispatch) => {
     dispatch(authStart());
-    const authData = {
+    const userData = {
+      displayName: displayName,
+      email: email,
+    };
+
+    let authData = {
       email: email,
       password: password,
+      displayName: displayName,
       returnSecureToken: true,
     };
+
     let url =
       "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyA8gGPPoETtgZc0vygcR2-ya0BYHDzQEIc";
+
     if (!isSignUp) {
       url =
         "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyA8gGPPoETtgZc0vygcR2-ya0BYHDzQEIc";
+
+      authData = {
+        email: email,
+        password: password,
+        returnSecureToken: true,
+      };
     }
+
     axios
       .post(url, authData)
       .then((response) => {
@@ -69,8 +87,20 @@ export const auth = (email, password, isSignUp) => {
         localStorage.setItem("token", response.data.idToken);
         localStorage.setItem("expirationDate", expirationDate);
         localStorage.setItem("userID", response.data.localId);
-        dispatch(authSuccess(response.data.idToken, response.data.localId));
-        dispatch(checkAuthTimeout(response.data.expiresIn));
+        localStorage.setItem("displayName", response.data.displayName);
+        firebaseAxios
+          .post('/users.json?uid="response.data.localId"', userData)
+          .then((updatedUserNodeSuccess) => {
+            dispatch(
+              authSuccess(
+                response.data.idToken,
+                response.data.localId,
+                response.data.displayName
+              )
+            );
+            dispatch(checkAuthTimeout(response.data.expiresIn));
+          })
+          .catch((error) => dispatch(authFail(error)));
       })
       .catch((error) => {
         dispatch(authFail(error.response.data.error));
@@ -89,7 +119,8 @@ export const authCheckState = () => {
         dispatch(logout());
       } else {
         const userID = localStorage.getItem("userID");
-        dispatch(authSuccess(token, userID));
+        const displayName = localStorage.getItem("displayName");
+        dispatch(authSuccess(token, userID, displayName));
         dispatch(
           checkAuthTimeout(
             (expirationDate.getTime() - new Date().getTime()) / 1000

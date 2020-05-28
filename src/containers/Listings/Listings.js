@@ -8,6 +8,8 @@ import firebaseAxios from "../../firebaseAxios";
 import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
 import classes from "./Listings.css";
 
+//TODO: handle no listing
+
 class Listings extends Component {
   state = {
     showFullListing: false,
@@ -16,6 +18,7 @@ class Listings extends Component {
   };
 
   //prevent re-rendering of listings caused by fetching of listings from firebase whenever the component is mounted
+  //going back from past post should fetch all listings, get around ?
   componentDidMount() {
     if (!this.props.isFilteredListing) {
       this.props.onFetchALLListingInit();
@@ -24,14 +27,15 @@ class Listings extends Component {
 
   /*
 0: date and time
-1: description
-2: delivery method
-3: location
-4: module code
-5: price
-6: book title
-7: unique key
-8: userID
+1: display name
+2: "description"
+3: "delivery method"
+4: "location"
+5: "module code"
+6: "price"
+7: "title"
+8: "unique key"
+9: "geyc7gjEeESmBZDnAX4yR4GKgxQ2"
 */
 
   showFullListingHandler = (event, listId) => {
@@ -52,19 +56,19 @@ class Listings extends Component {
     let listings = this.props.listingData.map((listing) => {
       return (
         <Listing
-          key={listing[7]}
+          key={listing[8]}
           showFullListing={this.state.showFullListing}
           isAuthenticated={this.props.isAuthenticated}
           history={this.props.history}
-          deliveryMethod={listing[2]}
-          location={listing[3]}
-          module={listing[4]}
-          price={listing[5]}
-          textbook={listing[6]}
-          identifier={listing[7]}
-          userId={listing[8]}
+          deliveryMethod={listing[3]}
+          location={listing[4]}
+          module={listing[5]}
+          price={listing[6]}
+          textbook={listing[7]}
+          identifier={listing[8]}
+          userId={listing[1]}
           onShowFullListing={(event) =>
-            this.showFullListingHandler(event, listing[7])
+            this.showFullListingHandler(event, listing[8])
           }
         />
       );
@@ -74,21 +78,21 @@ class Listings extends Component {
 
     if (this.state.showFullListing) {
       listings = this.props.listingData
-        .filter((listing) => listing[7] === this.state.fullListingID)
+        .filter((listing) => listing[8] === this.state.fullListingID)
         .map((listing) => {
           return (
             <Listing
-              key={listing[7]}
+              key={listing[8]}
               showFullListing={this.state.showFullListing}
               onHideFullListing={this.hideFullListingHandler}
-              description={listing[1]}
-              deliveryMethod={listing[2]}
-              location={listing[3]}
-              module={listing[4]}
-              price={listing[5]}
-              textbook={listing[6]}
-              identifier={listing[7]}
-              userId={listing[8]}
+              description={listing[2]}
+              deliveryMethod={listing[3]}
+              location={listing[4]}
+              module={listing[5]}
+              price={listing[6]}
+              textbook={listing[7]}
+              identifier={listing[8]}
+              userId={listing[1]}
             />
           );
         });
