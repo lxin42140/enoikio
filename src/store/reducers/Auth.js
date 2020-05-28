@@ -4,17 +4,24 @@ import { updateObject } from "../utility";
 const initialState = {
   token: null,
   userId: null,
+  displayName: null,
   error: null,
   loading: false,
-  authRedirectPath: "/"
+  authRedirectPath: "/",
 };
 
 const authStart = (state, action) => {
-  return updateObject(state, { error: null, loading: true });
+  return updateObject(state, {
+    error: null,
+    loading: true,
+  });
 };
 
 const authFail = (state, action) => {
-  return updateObject(state, { error: action.error, loading: false });
+  return updateObject(state, {
+    error: action.error,
+    loading: false,
+  });
 };
 
 const authSuccess = (state, action) => {
@@ -23,11 +30,19 @@ const authSuccess = (state, action) => {
     loading: false,
     token: action.idToken,
     userId: action.userId,
+    displayName: action.displayName,
   });
 };
 
 const authLogout = (state, action) => {
-  return updateObject(state, { token: null, userId: null });
+  return updateObject(state, {
+    token: null,
+    userId: null,
+    displayName: null,
+    error: null,
+    loading: false,
+    authRedirectPath: "/",
+  });
 };
 
 const setAuthRedirectPath = (state, action) => {

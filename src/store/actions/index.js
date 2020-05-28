@@ -13,4 +13,5 @@ export {
     logout,
     setAuthRedirectPath,
     authCheckState,
+    validateUserDisplayName,
 } from "./Auth";

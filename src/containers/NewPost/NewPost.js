@@ -77,7 +77,7 @@ class NewPost extends Component {
         valid: false,
         touched: false,
       },
-      Description: {
+      description: {
         elementType: "input",
         elementConfig: {
           type: "text",
@@ -145,7 +145,7 @@ class NewPost extends Component {
     const unique = this.props.userId + date + time;
     const formData = {};
     for (let key in this.state.dataForm) {
-      switch (formData[key]) {
+      switch (key) {
         case "module":
         case "textbook":
         case "location":
@@ -158,6 +158,7 @@ class NewPost extends Component {
     const postDetails = {
       postDetails: formData,
       userId: this.props.userId,
+      displayName: this.props.displayName,
       unique: unique,
       dateAndTime: date + "_" + time,
     };
@@ -246,6 +247,7 @@ const mapStateToProps = (state) => {
     imageUploaded: state.newPost.imageUploaded,
     userId: state.auth.userId,
     token: state.auth.token,
+    displayName: state.auth.displayName,
   };
 };
 

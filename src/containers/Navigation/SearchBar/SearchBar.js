@@ -88,12 +88,10 @@ class SearchBar extends Component {
     }
 
     let filterButton = (
-      <div className={classes.dropDown}>
         <span style={{ paddingRight: "20px" }}>
           <Button onClick={this.filterDropdownHandler}>Filter by</Button>
           <div className={classes.dropdownContent}>{dropDown}</div>
         </span>
-      </div>
     );
 
     let searchButton = (
