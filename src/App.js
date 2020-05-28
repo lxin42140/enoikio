@@ -4,12 +4,12 @@ import { connect } from "react-redux";
 
 import Layout from "./hoc/Layout/Layout";
 import asyncComponent from "./hoc/asyncComponent/asyncComponent";
-import Listings from "./containers/Listings/Listings";
+import Listings from "./containers/Listings/FullListings";
 import Logout from "../src/containers/Auth/Logout/Logout";
 import * as actions from "./store/actions/index";
 
 const asyncNewPost = asyncComponent(() => {
-  return import("../src/containers/NewPost/NewPost");
+  return import("./containers/NewPost/NewPost");
 });
 
 const asyncAuth = asyncComponent(() => {
@@ -17,8 +17,12 @@ const asyncAuth = asyncComponent(() => {
 });
 
 const asyncPostHistory = asyncComponent(() => {
-  return import("./containers/PostHistory/PostHistory")
-})
+  return import("./containers/PostHistory/PostHistory");
+});
+
+const asyncFilteredListings = asyncComponent(() => {
+  return import("./containers/Listings/FilteredListings");
+});
 
 class App extends Component {
   componentDidMount() {
@@ -29,6 +33,7 @@ class App extends Component {
     let routes = (
       <Switch>
         <Route path="/" exact component={Listings} />
+        <Route path="/searchResults" component={asyncFilteredListings} />
         <Route path="/auth" component={asyncAuth} />
         <Redirect to="/" />
       </Switch>
@@ -38,6 +43,7 @@ class App extends Component {
       routes = (
         <Switch>
           <Route path="/" exact component={Listings} />
+          <Route path="/searchResults" component={asyncFilteredListings} />
           <Route path="/new-post" component={asyncNewPost} />
           <Route path="/post-history" component={asyncPostHistory} />
           <Route path="/logout" component={Logout} />
@@ -59,6 +65,7 @@ const mapStateToProps = (state) => {
     isAuthenticated: state.auth.token !== null,
   };
 };
+
 const mapDispatchToProps = (dispatch) => {
   return {
     onTryAutoSignUp: () => dispatch(actions.authCheckState()),

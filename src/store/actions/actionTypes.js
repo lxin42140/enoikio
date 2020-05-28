@@ -1,10 +1,12 @@
-/*----------------------fetch listing----------------------*/
+/*----------------------fetch all listing----------------------*/
 export const FETCH_LISTING_INIT = "FETCH_LISTING_INIT";
 export const FETCH_LISTING_SUCCESS = "FETCH_LISTING_SUCCESS";
 export const FETCH_LISTING_FAIL = "FETCH_LISTING_FAIL";
-export const SEARCH_REQUEST = "SEARCH_REQUEST";
 
+/*--------------------fetch filtered listing-----------------*/
 export const FETCH_FILTERED_LISTINGS_INIT = "FETCH_FILTERED_LISTINGS_INIT";
+export const FETCH_FILTERED_LISTINGS_SUCCESS = "FETCH_FILTERED_LISTINGS_SUCCESS";
+export const FETCH_FILTERED_LISTINGS_FAIL = "FETCH_FILTERED_LISTINGS_FAIL";
 
 /*----------------------Submit new listing----------------------*/
 export const SUBMIT_NEW_LISTING_INIT = "SUBMIT_NEW_LISTING_INIT";

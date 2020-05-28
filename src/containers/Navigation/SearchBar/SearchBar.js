@@ -55,11 +55,19 @@ class SearchBar extends Component {
   };
 
   onCancelSearchHandler = (event) => {
+    this.props.onClick();
     if (this.state.userInput !== "") {
-      this.props.dispatchFetchAllListing();
       this.props.history.goBack();
     }
-    this.props.onClick();
+  };
+
+  onSearchHandler = (event) => {
+    if (this.state.userInput !== "") {
+      this.props.dispatchFetchFilteredListing(
+        this.state.filterType,
+        this.state.userInput.toLowerCase()
+      );
+    }
   };
 
   render() {
@@ -88,26 +96,16 @@ class SearchBar extends Component {
     }
 
     let filterButton = (
-        <span style={{ paddingRight: "20px" }}>
-          <Button onClick={this.filterDropdownHandler}>Filter by</Button>
-          <div className={classes.dropdownContent}>{dropDown}</div>
-        </span>
+      <span style={{ paddingRight: "20px" }}>
+        <Button onClick={this.filterDropdownHandler}>Filter by</Button>
+        <div className={classes.dropdownContent}>{dropDown}</div>
+      </span>
     );
 
     let searchButton = (
       <span style={{ paddingLeft: "20px" }}>
-        <Link to="/">
-          <Button
-            btnType="Important"
-            onClick={() =>
-              this.state.userInput !== ""
-                ? this.props.dispatchFetchFilteredListing(
-                    this.state.filterType,
-                    this.state.userInput
-                  )
-                : null
-            }
-          >
+        <Link to="/searchResults">
+          <Button btnType="Important" onClick={this.onSearchHandler}>
             Search
           </Button>
         </Link>
@@ -151,7 +149,6 @@ const mapDispatchToProps = (dispatch) => {
   return {
     dispatchFetchFilteredListing: (filterType, data) =>
       dispatch(actions.fetchFilteredListing(filterType, data)),
-    dispatchFetchAllListing: () => dispatch(actions.fetchAllListings()),
   };
 };
 

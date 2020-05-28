@@ -1,7 +1,10 @@
 export {
-    fetchFilteredListing,
     fetchAllListings
 } from './Listings'
+
+export {
+    fetchFilteredListing,
+} from './FilteredListing'
 
 export {
     submitNewPost,
@@ -9,9 +12,9 @@ export {
 } from './NewPost'
 
 export {
-    auth,
+    signIn,
+    signUp,
     logout,
     setAuthRedirectPath,
     authCheckState,
-    validateUserDisplayName,
 } from "./Auth";

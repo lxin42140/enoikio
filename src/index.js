@@ -8,19 +8,27 @@ import thunk from "redux-thunk";
 import "./index.css";
 import App from "./App";
 import registerServiceWorker from "./registerServiceWorker";
-import ListingReducer from './store/reducers/Listings';
-import newPostReducer from './store/reducers/newPost';
-import AuthReducer from './store/reducers/Auth';
+import ListingReducer from "./store/reducers/Listings";
+import newPostReducer from "./store/reducers/newPost";
+import AuthReducer from "./store/reducers/Auth";
+import filteredListingsReducer from "./store/reducers/FilteredListing";
 
 const rootReducer = combineReducers({
   listing: ListingReducer,
+  filteredListing: filteredListingsReducer,
   newPost: newPostReducer,
-  auth: AuthReducer
+  auth: AuthReducer,
 });
 
-const composeEnhancers = (process.env.NODE_ENV === 'development' ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : null) || compose;
+const composeEnhancers =
+  (process.env.NODE_ENV === "development"
+    ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+    : null) || compose;
 
-const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)));
+const store = createStore(
+  rootReducer,
+  composeEnhancers(applyMiddleware(thunk))
+);
 
 const app = (
   <Provider store={store}>
@@ -32,5 +40,3 @@ const app = (
 
 ReactDOM.render(app, document.getElementById("root"));
 registerServiceWorker();
-
-
