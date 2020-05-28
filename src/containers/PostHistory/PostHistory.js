@@ -13,7 +13,9 @@ class PostHistory extends Component {
   }
 
   componentWillUnmount() {
-    this.props.onFetchAllPosts()
+    if (!this.props.filteredListing) {
+      this.props.onFetchAllPosts();
+    }
   }
 
   render() {
@@ -26,6 +28,7 @@ const mapStateToProps = (state) => {
   return {
     listingData: state.listing.listings,
     loading: state.listing.loading,
+    filteredListing: state.listing.filteredListing,
     userID: state.auth.userId,
   };
 };
@@ -34,7 +37,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     onFetchUserPosts: (type, userID) =>
       dispatch(actions.fetchFilteredListing(type, userID)),
-    onFetchAllPosts: () => dispatch(actions.fetchAllListings())
+    onFetchAllPosts: () => dispatch(actions.fetchAllListings()),
   };
 };
 
