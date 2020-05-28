@@ -5,39 +5,30 @@ import Spinner from "../../components/UI/Spinner/Spinner";
 import firebaseAxios from "../../firebaseAxios";
 import * as actions from "../../store/actions/index";
 import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
-import Listings from "../Listings/Listings";
+import FilteredListings from "../Listings/FilteredListings";
 
 class PostHistory extends Component {
   componentDidMount() {
-    this.props.onFetchUserPosts("userID", this.props.userID);
-  }
-
-  componentWillUnmount() {
-    if (!this.props.filteredListing) {
-      this.props.onFetchAllPosts();
-    }
+    this.props.dispatchFetchUserPosts("userID", this.props.userID);
   }
 
   render() {
-    let history = this.props.loading ? <Spinner /> : <Listings />;
+    let history = this.props.loading ? <Spinner /> : <FilteredListings />;
     return <div>{history}</div>;
   }
 }
 
 const mapStateToProps = (state) => {
   return {
-    listingData: state.listing.listings,
-    loading: state.listing.loading,
-    filteredListing: state.listing.filteredListing,
+    loading: state.filteredListing.loading,
     userID: state.auth.userId,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onFetchUserPosts: (type, userID) =>
+    dispatchFetchUserPosts: (type, userID) =>
       dispatch(actions.fetchFilteredListing(type, userID)),
-    onFetchAllPosts: () => dispatch(actions.fetchAllListings()),
   };
 };
 

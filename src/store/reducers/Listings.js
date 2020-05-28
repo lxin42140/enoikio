@@ -5,7 +5,6 @@ const initialState = {
   listings: [],
   error: null,
   loading: false,
-  filteredListing: false,
 };
 
 const fetchListingSuccess = (state, listings) => {
@@ -17,19 +16,13 @@ const fetchListingFail = (state, error) => {
 };
 
 const fetchAllListingInit = (state, action) => {
-  return updateObject(state, { loading: true, filteredListing: false });
-};
-
-const fetchFilteredListingInit = (state, action) => {
-  return updateObject(state, { loading: true, filteredListing: true });
+  return updateObject(state, { loading: true });
 };
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.FETCH_LISTING_INIT:
       return fetchAllListingInit(state, action);
-    case actionTypes.FETCH_FILTERED_LISTINGS_INIT:
-      return fetchFilteredListingInit(state, action);
     case actionTypes.FETCH_LISTING_SUCCESS:
       return fetchListingSuccess(state, action.data);
     case actionTypes.FETCH_LISTING_FAIL:

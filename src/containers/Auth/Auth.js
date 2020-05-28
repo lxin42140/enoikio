@@ -130,10 +130,10 @@ class Auth extends Component {
       updatedControls.displayName.validated = false;
       updatedControls.displayName.valid = false;
     }
-    let valid =
-      updatedControls.email.valid &&
-      updatedControls.password.valid &&
-      updatedControls.displayName.valid;
+    let valid = updatedControls.email.valid && updatedControls.password.valid;
+    if (this.state.isSignUp) {
+      valid = valid && updatedControls.displayName.valid;
+    }
     this.setState({
       controls: updatedControls,
       valid: valid,
@@ -142,12 +142,18 @@ class Auth extends Component {
 
   submitHandler = (event) => {
     event.preventDefault();
-    this.props.onAuth(
-      this.state.controls.email.value,
-      this.state.controls.password.value,
-      this.state.controls.displayName.value,
-      this.state.isSignUp
-    );
+    if (this.state.isSignUp) {
+      this.props.dispatchSignUp(
+        this.state.controls.email.value,
+        this.state.controls.password.value,
+        this.state.controls.displayName.value
+      );
+    } else {
+      this.props.dispatchSignIn(
+        this.state.controls.email.value,
+        this.state.controls.password.value
+      );
+    }
   };
 
   switchAuthModeHandler = () => {
@@ -198,9 +204,8 @@ class Auth extends Component {
         );
       }
       return (
-        <React.Fragment>
+        <React.Fragment key={x.id}>
           <Input
-            key={x.id}
             elementType={x.config.elementType}
             elementConfig={x.config.elementConfig}
             value={x.config.value}
@@ -265,9 +270,11 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onAuth: (email, password, displayName, isSignUp) =>
-      dispatch(actions.auth(email, password, displayName, isSignUp)),
-    onSetRedirectPath: () => dispatch(actions.setAuthRedirectPath("/")),
+    dispatchSignUp: (email, password, displayName) =>
+      dispatch(actions.signUp(email, password, displayName)),
+    dispatchSignIn: (email, password) =>
+      dispatch(actions.signIn(email, password)),
+    dispatchSetRedirectPath: () => dispatch(actions.setAuthRedirectPath("/")),
   };
 };
 

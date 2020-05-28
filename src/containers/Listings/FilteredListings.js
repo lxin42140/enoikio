@@ -2,41 +2,16 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 
 import Listing from "./Listing/Listing";
-import * as actions from "../../store/actions/index";
 import Spinner from "../../components/UI/Spinner/Spinner";
 import firebaseAxios from "../../firebaseAxios";
 import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
 import classes from "./Listings.css";
 
-//TODO: handle no listing
-
-class Listings extends Component {
+class FilteredListings extends Component {
   state = {
     showFullListing: false,
     fullListingID: "",
-    reload: false,
   };
-
-  //prevent re-rendering of listings caused by fetching of listings from firebase whenever the component is mounted
-  //going back from past post should fetch all listings, get around ?
-  componentDidMount() {
-    if (!this.props.isFilteredListing) {
-      this.props.onFetchALLListingInit();
-    }
-  }
-
-  /*
-0: date and time
-1: display name
-2: "description"
-3: "delivery method"
-4: "location"
-5: "module code"
-6: "price"
-7: "title"
-8: "unique key"
-9: "geyc7gjEeESmBZDnAX4yR4GKgxQ2"
-*/
 
   showFullListingHandler = (event, listId) => {
     this.setState({
@@ -53,7 +28,7 @@ class Listings extends Component {
   };
 
   render() {
-    let listings = this.props.listingData.map((listing) => {
+    let listings = this.props.filteredListings.map((listing) => {
       return (
         <Listing
           key={listing[8]}
@@ -77,7 +52,7 @@ class Listings extends Component {
     //TODO: when showing only one post, other summarized posts of the same module should show on the right
 
     if (this.state.showFullListing) {
-      listings = this.props.listingData
+      listings = this.props.filteredListings
         .filter((listing) => listing[8] === this.state.fullListingID)
         .map((listing) => {
           return (
@@ -108,20 +83,12 @@ class Listings extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    listingData: state.listing.listings,
-    loading: state.listing.loading,
-    isFilteredListing: state.listing.filteredListing,
+    loading: state.filteredListing.loading,
+    filteredListings: state.filteredListing.filteredListing,
     isAuthenticated: state.auth.token !== null,
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    onFetchALLListingInit: () => dispatch(actions.fetchAllListings()),
-  };
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(withErrorHandler(Listings, firebaseAxios));
+export default connect(mapStateToProps)(
+  withErrorHandler(FilteredListings, firebaseAxios)
+);
