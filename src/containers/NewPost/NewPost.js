@@ -8,6 +8,7 @@ import * as actions from "../../store/actions/index";
 import Spinner from "../../components/UI/Spinner/Spinner";
 import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
 import firebaseAxios from "../../firebaseAxios";
+import Notification from '../../components/UI/Modal/Notification/Notification';
 
 class NewPost extends Component {
   state = {
@@ -78,7 +79,7 @@ class NewPost extends Component {
         touched: false,
       },
       Description: {
-        elementType: "input",
+        elementType: "textarea",
         elementConfig: {
           type: "text",
           placeholder: "Please enter any other information",
@@ -91,6 +92,9 @@ class NewPost extends Component {
     },
     imageAsFile: "",
     formIsValid: false,
+    confirmPost: null,
+    submitted: false,
+    closeModal: false
   };
 
   checkValidity(value, rules) {
@@ -164,16 +168,12 @@ class NewPost extends Component {
     this.props.onSubmitPost(postDetails, this.props.token);
     this.props.onSubmitPhoto(this.state.imageAsFile, unique);
     //TODO: include a submitted state used to ask the user whether to make another post or proceed to homepage
-    const refreshedForm = {
-      ...this.state.dataForm,
-    };
-    for (let element in refreshedForm) {
-      refreshedForm[element].value = "";
+
+    if (!this.props.error) {
+      this.setState({ confirmPost: true });
+    } else {
+      this.setState({ confirmPost: false });
     }
-    this.setState({
-      formIsValid: false,
-      dataForm: refreshedForm,
-    });
   };
 
   handleImageAsFile = (event) => {
@@ -187,6 +187,29 @@ class NewPost extends Component {
     }
     this.setState({ imageAsFile: image, formIsValid: formIsValid });
   };
+
+  modalClosed = () => {
+    this.setState({ closeModal: true, submitted: false });
+  }
+
+  confirmFormHandler = () => {
+    this.setState({ submitted: true, closeModal: false });
+  }
+
+  newFormHandler = () => {
+    const refreshedForm = {
+      ...this.state.dataForm,
+    };
+    for (let element in refreshedForm) {
+      refreshedForm[element].value = "";
+    }
+    this.setState({
+      formIsValid: false,
+      dataForm: refreshedForm,
+      submitted: false,
+      modalClosed: true
+    });
+  }
 
   render() {
     const formElementsArray = [];
@@ -214,27 +237,65 @@ class NewPost extends Component {
     });
 
     return (
-      <div className={classes.NewPost}>
-        <h4>{this.props.loading ? "Submitting..." : "Enter Rental Details"}</h4>
-        {this.props.loading ? (
-          <Spinner />
-        ) : (
-          <React.Fragment>
-            {form}
-            <br /> <br />
-            <form onSubmit={this.onSubmitHandler}>
-              <input
-                type="file"
-                accept=".png,.jpeg, .jpg"
-                onChange={this.handleImageAsFile}
-              />
-              <Button btnType="Important" disabled={!this.state.formIsValid}>
-                SUBMIT
-              </Button>
-            </form>
-          </React.Fragment>
-        )}
-      </div>
+      <React.Fragment>
+        {!this.state.submitted ? 
+        <div className={classes.NewPost}>
+          <h4>{this.props.loading ? "Submitting..." : "Enter Rental Details"}</h4>
+          {this.props.loading ? (
+              <Spinner />
+            ) : (
+                <React.Fragment>
+                  {form}
+                  <br /> <br />
+                    <input
+                      type="file"
+                      accept=".png,.jpeg, .jpg"
+                      onChange={this.handleImageAsFile}
+                    />
+                    <Button 
+                      btnType="Important" 
+                      onClick={this.confirmFormHandler} 
+                      disabled={!this.state.formIsValid}>
+                        SUBMIT
+                    </Button>
+                </React.Fragment>
+              )}
+        </div> : null}
+        {this.state.submitted && this.state.confirmPost === null ? 
+        <div>
+            <Notification
+              type="ListingSummary"
+              showModal={!this.state.closeModal}
+              modalClosed={this.modalClosed}
+              submit={this.onSubmitHandler}>
+              <h1>Confirm details:</h1>
+              <p>Module code: {this.state.dataForm.module.value}</p>
+              <p>Textbook: {this.state.dataForm.textbook.value}</p>
+              <p>Price: {this.state.dataForm.price.value}</p>
+              <p>Description: {this.state.dataForm.Description.value}</p>
+            </Notification>
+        </div> : null}
+        {this.state.confirmPost ?
+          <div>
+            <Notification
+              type="ListingSuccess"
+              newForm={this.newFormHandler}
+              showModal={!this.state.modalClosed}>
+              Successfully posted!
+            </Notification>
+          </div> : null}
+        {this.state.submitted && this.state.comfirmPost === false ? 
+          <div>
+            <Notification
+              type="ListingFail"
+              showModal={!this.state.modalClosed}
+              modalClosed={this.modalClosed}
+              newForm={this.newFormHandler}>
+              There is an error, please try again.
+            </Notification>
+          }
+        </div> : null}
+      </React.Fragment>
     );
   }
 }
@@ -244,6 +305,7 @@ const mapStateToProps = (state) => {
     loading: state.newPost.loading,
     imageUploading: state.newPost.uploadingImageLoading,
     imageUploaded: state.newPost.imageUploaded,
+    error: state.newPost.error,
     userId: state.auth.userId,
     token: state.auth.token,
   };
