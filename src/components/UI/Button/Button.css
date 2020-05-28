@@ -1,5 +1,5 @@
 .Button {
-    width:90px;
+    width: fit-content;
     height:25px;
     border-radius: 2em;
     cursor: pointer;
@@ -33,10 +33,10 @@
     }
 }
 
-.Button:first-of-type {
+/* .Button:first-of-type {
     margin-left: 0;
     padding-left: 0;
-}
+} */
 
 .Important {
     border-style: none;

@@ -9,10 +9,11 @@ class Modal extends Component {
         return nextProps.show !== this.props.show || nextProps.children !== this.props.children;
     }
 
+    // clicked={this.props.modalClosed}
     render () {
         return (
             <React.Fragment>
-                <Backdrop show={this.props.show} clicked={this.props.modalClosed} />
+                <Backdrop show={this.props.show} />
                 <div
                     className={classes.Modal}
                     style={{
