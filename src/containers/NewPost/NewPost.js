@@ -80,7 +80,7 @@ class NewPost extends Component {
         valid: false,
         touched: false,
       },
-      Description: {
+      description: {
         elementType: "textarea",
         elementConfig: {
           type: "text",
@@ -99,11 +99,13 @@ class NewPost extends Component {
 
   checkValidity(value, rules) {
     let isValid = true;
-    if (rules.required) {
-      isValid = value.trim() !== "" && isValid;
-    }
-    if (rules.maxLength) {
-      isValid = value.length <= rules.maxLength && isValid;
+    if (rules) {
+      if (rules.required) {
+        isValid = value.trim() !== "" && isValid;
+      }
+      if (rules.maxLength) {
+        isValid = value.length <= rules.maxLength && isValid;
+      }
     }
     return isValid;
   }
@@ -190,8 +192,10 @@ class NewPost extends Component {
     };
     for (let element in refreshedForm) {
       refreshedForm[element].value = "";
-      refreshedForm[element].valid = false;
       refreshedForm[element].touched = false;
+      if (refreshedForm[element].validation) {
+        refreshedForm[element].valid = false;
+      }
     }
     this.setState({
       dataForm: refreshedForm,
@@ -201,12 +205,8 @@ class NewPost extends Component {
     });
   };
 
-  hideModalHandler = () => {
-    this.setState({ showModal: false });
-  };
-
-  showModalHandler = () => {
-    this.setState({ showModal: true });
+  toggleModalHandler = () => {
+    this.setState((prevState) => ({ showModal: !prevState.showModal }));
   };
 
   render() {
@@ -254,7 +254,7 @@ class NewPost extends Component {
             />
             <Button
               btnType="Important"
-              onClick={this.showModalHandler}
+              onClick={this.toggleModalHandler}
               disabled={!this.state.formIsValid}
             >
               SUBMIT
@@ -275,15 +275,13 @@ class NewPost extends Component {
         <p>Textbook:《{this.state.dataForm.textbook.value}》</p>
         <p>Price: {this.state.dataForm.price.value}</p>
         <p>Delivery method: {this.state.dataForm.deliveryMethod.value}</p>
-        {this.state.dataForm.deliveryMethod.value === "meet-up" ? (
-          <p>Location: {this.state.dataForm.location.value}</p>
-        ) : null}
+        <p>Location: {this.state.dataForm.location.value}</p>
         <p>
           Description: <br />
-          {this.state.dataForm.Description.value}
+          {this.state.dataForm.description.value}
         </p>
         <div style={{ display: "flex", justifyContent: "center" }}>
-          <Button onClick={this.hideModalHandler}>Go back</Button>
+          <Button onClick={this.toggleModalHandler}>Go back</Button>
           <Button onClick={this.onSubmitHandler}>Submit</Button>
         </div>
       </Modal>

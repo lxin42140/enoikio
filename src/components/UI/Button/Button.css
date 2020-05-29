@@ -23,7 +23,8 @@
 }
 
 .Button:active {
-    top: 0.1em
+    top: 0.1em;
+    outline: none;
 }
 
 @media all and (max-width:30em) {
