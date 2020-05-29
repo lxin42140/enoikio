@@ -21,6 +21,12 @@ export const submitNewPostFail = (error) => {
   };
 };
 
+export const clearPostData = () => {
+  return {
+    type: actionTypes.CLEAR_NEW_POST_DATA
+  }
+}
+
 export const submitNewPost = (data, token) => {
   return (dispatch) => {
     dispatch(submitNewPostInit());

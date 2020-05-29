@@ -8,7 +8,8 @@ export {
 
 export {
     submitNewPost,
-    submitNewPhoto
+    submitNewPhoto,
+    clearPostData
 } from './NewPost'
 
 export {

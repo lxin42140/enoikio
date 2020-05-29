@@ -18,6 +18,8 @@ export const SUBMIT_NEW_PHOTO_INIT = "SUBMIT_NEW_PHOTO_INIT";
 export const SUBMIT_NEW_PHOTO_SUCCESS = "SUBMIT_NEW_PHOTO_SUCCESS";
 export const SUBMIT_NEW_PHOTO_FAIL = "SUBMIT_NEW_PHOTO_FAIL";
 
+export const CLEAR_NEW_POST_DATA = "CLEAR_NEW_POST_DATA"
+
 /*----------------------authentication----------------------*/
 export const AUTH_START = "AUTH_START";
 export const AUTH_SUCCESS = "AUTH_SUCCESS";
