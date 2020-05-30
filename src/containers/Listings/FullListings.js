@@ -13,8 +13,8 @@ import classes from "./Listings.css";
 /*
 0: date and time
 1: display name
-2: "description"
-3: "delivery method"
+2: "delivery method"
+3: "description"
 4: "location"
 5: "module code"
 6: "price"
@@ -55,7 +55,7 @@ class FullListings extends Component {
           showFullListing={this.state.showFullListing}
           isAuthenticated={this.props.isAuthenticated}
           history={this.props.history}
-          deliveryMethod={listing[3]}
+          deliveryMethod={listing[2]}
           location={listing[4]}
           module={listing[5]}
           price={listing[6]}
@@ -80,8 +80,8 @@ class FullListings extends Component {
               key={listing[8]}
               showFullListing={this.state.showFullListing}
               onHideFullListing={this.hideFullListingHandler}
-              description={listing[2]}
-              deliveryMethod={listing[3]}
+              description={listing[3]}
+              deliveryMethod={listing[2]}
               location={listing[4]}
               module={listing[5]}
               price={listing[6]}

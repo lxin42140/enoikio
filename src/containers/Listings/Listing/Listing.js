@@ -65,6 +65,7 @@ class Listing extends Component {
             <li>Location: {this.props.location}</li>
             {this.props.showFullListing ? (
               <li>
+                <br/>
                 Description: <br /> {this.props.description}
               </li>
             ) : null}

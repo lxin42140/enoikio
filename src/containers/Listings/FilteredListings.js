@@ -35,7 +35,7 @@ class FilteredListings extends Component {
           showFullListing={this.state.showFullListing}
           isAuthenticated={this.props.isAuthenticated}
           history={this.props.history}
-          deliveryMethod={listing[3]}
+          deliveryMethod={listing[2]}
           location={listing[4]}
           module={listing[5]}
           price={listing[6]}
@@ -60,8 +60,8 @@ class FilteredListings extends Component {
               key={listing[8]}
               showFullListing={this.state.showFullListing}
               onHideFullListing={this.hideFullListingHandler}
-              description={listing[2]}
-              deliveryMethod={listing[3]}
+              description={listing[3]}
+              deliveryMethod={listing[2]}
               location={listing[4]}
               module={listing[5]}
               price={listing[6]}

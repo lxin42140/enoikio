@@ -292,7 +292,9 @@ class NewPost extends Component {
         Successfully posted!
         <div style={{ display: "flex", justifyContent: "center" }}>
           <Link to="/">
-            <Button>Home</Button>
+            <Button onClick={() => this.props.dispatchClearNewPostData()}>
+              Home
+            </Button>
           </Link>
           <Button onClick={this.createNewFormHandler}>New Post</Button>
         </div>
