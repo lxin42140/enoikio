@@ -21,6 +21,13 @@ export const fetchListingFail = (error) => {
   };
 };
 
+export const fetchExpandedListing = (userid) => {
+  return {
+    type: actionTypes.FETCH_EXPANDED_LISTING,
+    uniqueid: userid
+  }
+}
+
 export const fetchAllListings = () => {
   return (dispatch) => {
     dispatch(fetchListingInit());

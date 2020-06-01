@@ -27,6 +27,10 @@
     outline: none;
 }
 
+.Button:focus {
+    outline: none;
+}
+
 @media all and (max-width:30em) {
     .Button {
         display: block;

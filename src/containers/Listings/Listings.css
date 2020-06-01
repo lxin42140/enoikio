@@ -5,5 +5,11 @@
     flex-wrap: wrap;
     line-height: 21px;
     text-size-adjust: 100%;
-    padding: 16px;
+    justify-content: flex-start;
+}
+
+@media (max-width: 616px) {
+    .Listings {
+        justify-content: center;
+    }
 }
