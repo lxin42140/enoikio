@@ -5,6 +5,7 @@ const initialState = {
   listings: [],
   error: null,
   loading: false,
+  expanded: null,
 };
 
 const fetchListingSuccess = (state, listings) => {
@@ -19,6 +20,10 @@ const fetchAllListingInit = (state, action) => {
   return updateObject(state, { loading: true });
 };
 
+const fetchExpandedListing = (state, userid) => {
+  return updateObject(state, { expanded: userid });
+}
+
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.FETCH_LISTING_INIT:
@@ -27,6 +32,8 @@ const reducer = (state = initialState, action) => {
       return fetchListingSuccess(state, action.data);
     case actionTypes.FETCH_LISTING_FAIL:
       return fetchListingFail(state, action.error);
+    case actionTypes.FETCH_EXPANDED_LISTING:
+      return fetchExpandedListing(state, action.uniqueid);
     default:
       return state;
   }

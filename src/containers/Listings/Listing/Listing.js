@@ -2,12 +2,15 @@ import React, { Component } from "react";
 
 import classes from "./Listing.css";
 import Button from "../../../components/UI/Button/Button";
+import * as actions from "../../../store/actions/index";
 import { storage } from "../../../firebase/firebase";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 import {
-  faWindowClose,
+  // faWindowClose,
   faHeart,
-  faExternalLinkAlt,
+  // faExternalLinkAlt,
 } from "@fortawesome/free-solid-svg-icons";
 
 class Listing extends Component {
@@ -42,6 +45,11 @@ class Listing extends Component {
     this.props.history.push("/auth");
   };
 
+  // expandListingHandler = (event) => {
+  //   this.props.history.push("/expanded-listing/" + this.props.identifier);
+  //   history.pushState(this.props, null, "/expanded-listing/" + this.props.identifier);
+  // }
+
   //TODO: support display of more than one image
   render() {
     let listing = (
@@ -65,7 +73,7 @@ class Listing extends Component {
             <li>Location: {this.props.location}</li>
             {this.props.showFullListing ? (
               <li>
-                <br/>
+                <br />
                 Description: <br /> {this.props.description}
               </li>
             ) : null}
@@ -76,13 +84,13 @@ class Listing extends Component {
       </React.Fragment>
     );
 
-    const style = this.props.showFullListing
-      ? classes.FullListing
-      : classes.Listing;
+    // const style = this.props.showFullListing
+    //   ? classes.FullListing
+    //   : classes.Listing;
 
     return (
-      <div className={style}>
-        {this.props.showFullListing ? (
+      <div className={classes.Listing}>
+        {/* {this.props.showFullListing ? (
           <FontAwesomeIcon
             icon={faWindowClose}
             style={{
@@ -102,18 +110,20 @@ class Listing extends Component {
             }}
             onClick={this.props.onShowFullListing}
           />
-        )}
+        )} */}
         {listing}
         <br />
 
         <div className={classes.Selection}>
           {this.props.isAuthenticated ? (
-            <Button btnType="Important">Rent now</Button>
+            <Link to={"expanded-listing/" + this.props.identifier} >
+              <Button btnType="Important" onClick={() => this.props.dispatchExpandedListing(this.props.identifier)}>Rent now</Button>
+            </Link>
           ) : (
-            <Button btnType="Important" onClick={this.onRedirectToAuth}>
-              Rent now
-            </Button>
-          )}
+              <Button btnType="Important" onClick={this.onRedirectToAuth}>
+                Rent now
+              </Button>
+            )}
           <FontAwesomeIcon icon={faHeart} style={{ color: "red" }} />
         </div>
       </div>
@@ -121,4 +131,10 @@ class Listing extends Component {
   }
 }
 
-export default Listing;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    dispatchExpandedListing: (userid) => dispatch(actions.fetchExpandedListing(userid))
+  }
+}
+
+export default connect(null, mapDispatchToProps)(Listing);

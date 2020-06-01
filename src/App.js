@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import Layout from "./hoc/Layout/Layout";
 import asyncComponent from "./hoc/asyncComponent/asyncComponent";
 import Listings from "./containers/Listings/FullListings";
+import ExpandedListing from "./containers/Listings/ExpandedListing/ExpandedListing";
 import Logout from "../src/containers/Auth/Logout/Logout";
 import * as actions from "./store/actions/index";
 
@@ -39,6 +40,7 @@ class App extends Component {
         <Route path="/" exact component={Listings} />
         <Route path="/searchResults" component={asyncFilteredListings} />
         <Route path="/auth" component={asyncAuth} />
+        <Route path="/expanded-listing" component={ExpandedListing} />
         <Redirect to="/" />
       </Switch>
     );
@@ -49,6 +51,7 @@ class App extends Component {
           <Route path="/" exact component={Listings} />
           <Route path="/searchResults" component={asyncFilteredListings} />
           <Route path="/new-post" component={asyncNewPost} />
+          <Route path="/expanded-listing" component={ExpandedListing} />
           <Route path="/post-history" component={asyncPostHistory} />
           <Route path="/chat" component={asyncChatBox}/>
           <Route path="/logout" component={Logout} />

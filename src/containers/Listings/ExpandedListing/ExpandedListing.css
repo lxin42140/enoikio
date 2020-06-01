@@ -1,0 +1,51 @@
+.ExpandedListing {
+    border: 1px solid #ccc;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    padding: 10px;
+}
+
+/*TODO: fix image size to relative, affects the dimensions of each listing*/
+.Image {
+    height: 400px;
+    vertical-align: top;
+    text-align: left;
+    margin: 20px;
+    width: 40%;
+    margin-top: 50px;
+}
+
+.Image img {
+    width: 100%;
+    object-fit: cover;
+}
+
+/* .Textbook {
+    color: black;
+    font-size: medium;
+    text-align: left;
+} */
+
+.Text {
+    margin: 20px;
+    width: 50%;
+}
+
+.Description {
+    font-size: 16px;
+    color: grey;
+    list-style: none;
+    padding-left: 0px;
+    display: block;
+    text-align: left;
+    line-height: 150%;
+} 
+
+
+
+.Button Button {
+    margin-left: 40px;
+    margin-right: 40px;
+}
