@@ -24,6 +24,10 @@ const asyncFilteredListings = asyncComponent(() => {
   return import("./containers/Listings/FilteredListings");
 });
 
+const asyncChatBox = asyncComponent(() => {
+  return import("./containers/Chat/ChatBox");
+});
+
 class App extends Component {
   componentDidMount() {
     this.props.onTryAutoSignUp();
@@ -46,6 +50,7 @@ class App extends Component {
           <Route path="/searchResults" component={asyncFilteredListings} />
           <Route path="/new-post" component={asyncNewPost} />
           <Route path="/post-history" component={asyncPostHistory} />
+          <Route path="/chat" component={asyncChatBox}/>
           <Route path="/logout" component={Logout} />
           <Redirect to="/" />
         </Switch>

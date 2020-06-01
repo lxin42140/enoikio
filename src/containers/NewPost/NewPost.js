@@ -137,6 +137,8 @@ class NewPost extends Component {
     this.setState({ dataForm: updatedDataForm, formIsValid: formIsValid });
   };
 
+  
+
   onSubmitHandler = (event) => {
     event.preventDefault();
     let today = new Date();
