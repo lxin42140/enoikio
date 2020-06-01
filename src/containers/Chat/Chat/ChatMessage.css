@@ -7,10 +7,12 @@
 .ChatName {
     font-weight: 600;
     padding-right: 5px;
+    float: left;
 }
 
 .ChatTimestamp {
     color: #999;
+    float: left;
 }
 
 /* .ChatImg {

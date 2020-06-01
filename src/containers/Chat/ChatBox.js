@@ -23,9 +23,6 @@ class ChatBox extends Component {
     CHAT_REF.orderByChild("UID")
       .equalTo(UID)
       .on("value", (snapShot) => {
-        if (!snapShot.exists) {
-          CHAT_REF.orderByChild("UID").equalTo(UID).off();
-        }
         snapShot.forEach((data) => {
           this.setState({
             chats: data.val().chatHistory,
@@ -37,9 +34,6 @@ class ChatBox extends Component {
     CHAT_REF.orderByChild("UID")
       .equalTo(UID_TWO)
       .on("value", (snapShot) => {
-        if (!snapShot.exists) {
-          CHAT_REF.orderByChild("UID").equalTo(UID_TWO).off();
-        }
         snapShot.forEach((data) => {
           this.setState({
             chats: data.val().chatHistory,
@@ -49,19 +43,19 @@ class ChatBox extends Component {
       });
   }
 
-  chatHistoryListener = (path) => {
-    database
-      .ref()
-      .child("chats")
-      .child(path)
-      .on("value", (snapShot) => {
-        snapShot.forEach((data) => {
-          this.setState({
-            chats: data.val(),
-          });
-        });
-      });
-  };
+  // chatHistoryListener = (path) => {
+  //   database
+  //     .ref()
+  //     .child("chats")
+  //     .child(path)
+  //     .on("value", (snapShot) => {
+  //       snapShot.forEach((data) => {
+  //         this.setState({
+  //           chats: data.val(),
+  //         });
+  //       });
+  //     });
+  // };
 
   inputChangeHandler = (event) => {
     this.setState({
@@ -102,7 +96,7 @@ class ChatBox extends Component {
         chatHistory: chatHistory,
         UID: UID,
       });
-      this.chatHistoryListener(pushMessageKey);
+      // this.chatHistoryListener(pushMessageKey);
       this.setState({
         message: "",
         chatListUID: pushMessageKey,
