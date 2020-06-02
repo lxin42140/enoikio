@@ -16,6 +16,10 @@ class ChatBox extends Component {
     chatListUID: "",
   };
 
+  componentDidUpdate() {
+    this.scrollToBottom();
+  }
+
   componentDidMount() {
     const UID = "userA" + "userB";
     const UID_TWO = "userB" + "userA";
@@ -25,10 +29,16 @@ class ChatBox extends Component {
       .equalTo(UID)
       .on("value", (snapShot) => {
         snapShot.forEach((data) => {
-          this.setState({
-            chats: data.val().chatHistory,
-            chatListUID: data.key,
-          });
+          if (this.state.chatListUID === "") {
+            this.setState({
+              chats: data.val().chatHistory,
+              chatListUID: data.key,
+            });
+          } else {
+            this.setState({
+              chats: data.val().chatHistory,
+            });
+          }
         });
       });
 
@@ -36,12 +46,24 @@ class ChatBox extends Component {
       .equalTo(UID_TWO)
       .on("value", (snapShot) => {
         snapShot.forEach((data) => {
-          this.setState({
-            chats: data.val().chatHistory,
-            chatListUID: data.key,
-          });
+          if (this.state.chatListUID === "") {
+            this.setState({
+              chats: data.val().chatHistory,
+              chatListUID: data.key,
+            });
+          } else {
+            this.setState({
+              chats: data.val().chatHistory,
+            });
+          }
         });
       });
+
+    this.scrollToBottom();
+  }
+
+  scrollToBottom() {
+    this.element.scrollIntoView({ behavior: "smooth" });
   }
 
   inputChangeHandler = (event) => {
@@ -110,6 +132,11 @@ class ChatBox extends Component {
                   // currentUser={this.props.displayName}
                 />
               ))}
+          <div
+            ref={(element) => {
+              this.element = element;
+            }}
+          />
         </div>
         <div className={classes.ChatBoxFooter}>
           <input
