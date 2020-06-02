@@ -39,3 +39,7 @@
     background: #fae2de;
     border-radius: 15px;
 }
+
+.Input:focus{
+    outline: none;
+}

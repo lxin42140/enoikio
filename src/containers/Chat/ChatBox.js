@@ -43,24 +43,16 @@ class ChatBox extends Component {
       });
   }
 
-  // chatHistoryListener = (path) => {
-  //   database
-  //     .ref()
-  //     .child("chats")
-  //     .child(path)
-  //     .on("value", (snapShot) => {
-  //       snapShot.forEach((data) => {
-  //         this.setState({
-  //           chats: data.val(),
-  //         });
-  //       });
-  //     });
-  // };
-
   inputChangeHandler = (event) => {
     this.setState({
       message: event.target.value,
     });
+  };
+
+  inputOnKeyDown = (event) => {
+    if (event.keyCode === 13) {
+      this.sendMessageHandler();
+    }
   };
 
   createTimeStamp = () => {
@@ -79,36 +71,37 @@ class ChatBox extends Component {
   };
 
   sendMessageHandler = (event) => {
-    const message = {
-      content: this.state.message,
-      sender: this.props.displayName,
-      timeStamp: this.createTimeStamp(),
-    };
+    if (this.state.message !== "") {
+      const message = {
+        content: this.state.message,
+        sender: this.props.displayName,
+        timeStamp: this.createTimeStamp(),
+      };
 
-    const chatHistory = Object.assign([], this.state.chats);
-    chatHistory.push(message);
+      const chatHistory = Object.assign([], this.state.chats);
+      chatHistory.push(message);
 
-    if (this.state.chats.length < 1) {
-      const UID = "userA" + "userB";
-      const chatRef = database.ref().child("chats");
-      const pushMessageKey = chatRef.push().key;
-      chatRef.child(pushMessageKey).set({
-        chatHistory: chatHistory,
-        UID: UID,
-      });
-      // this.chatHistoryListener(pushMessageKey);
-      this.setState({
-        message: "",
-        chatListUID: pushMessageKey,
-      });
-    } else {
-      database
-        .ref()
-        .child("chats/" + this.state.chatListUID)
-        .update({ chatHistory: chatHistory });
-      this.setState({
-        message: "",
-      });
+      if (this.state.chats.length < 1) {
+        const UID = "userA" + "userB";
+        const chatRef = database.ref().child("chats");
+        const pushMessageKey = chatRef.push().key;
+        chatRef.child(pushMessageKey).set({
+          chatHistory: chatHistory,
+          UID: UID,
+        });
+        this.setState({
+          message: "",
+          chatListUID: pushMessageKey,
+        });
+      } else {
+        database
+          .ref()
+          .child("chats/" + this.state.chatListUID)
+          .update({ chatHistory: chatHistory });
+        this.setState({
+          message: "",
+        });
+      }
     }
   };
 
@@ -127,16 +120,18 @@ class ChatBox extends Component {
                   displayName={message.sender}
                   message={message.content}
                   timeStamp={message.timeStamp.time}
+                  // currentUser={this.props.displayName}
                 />
               ))}
         </div>
         <div className={classes.ChatBoxFooter}>
-          <textarea
+          <input
             className={classes.Input}
             type="text"
             value={this.state.message}
             placeholder="Enter your message here"
             onChange={this.inputChangeHandler}
+            onKeyDown={this.inputOnKeyDown}
           />
           <span style={{ paddingLeft: "15px" }}>
             <Button onClick={this.sendMessageHandler}>Send</Button>

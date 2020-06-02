@@ -1,5 +1,7 @@
 .ChatInfo {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
     margin-bottom: 2px;
     font-size: 12px;
 }
@@ -7,12 +9,10 @@
 .ChatName {
     font-weight: 600;
     padding-right: 5px;
-    float: left;
 }
 
 .ChatTimestamp {
     color: #999;
-    float: left;
 }
 
 /* .ChatImg {
