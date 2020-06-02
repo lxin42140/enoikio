@@ -5,8 +5,8 @@ import Button from "../../../components/UI/Button/Button";
 import * as actions from "../../../store/actions/index";
 import { storage } from "../../../firebase/firebase";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 import {
   // faWindowClose,
   faHeart,
@@ -116,14 +116,21 @@ class Listing extends Component {
 
         <div className={classes.Selection}>
           {this.props.isAuthenticated ? (
-            <Link to={"expanded-listing/" + this.props.identifier} >
-              <Button btnType="Important" onClick={() => this.props.dispatchExpandedListing(this.props.identifier)}>Rent now</Button>
-            </Link>
-          ) : (
-              <Button btnType="Important" onClick={this.onRedirectToAuth}>
+            <Link to={"expanded-listing/" + this.props.identifier}>
+              <Button
+                btnType="Important"
+                onClick={() =>
+                  this.props.dispatchExpandedListing(this.props.identifier)
+                }
+              >
                 Rent now
               </Button>
-            )}
+            </Link>
+          ) : (
+            <Button btnType="Important" onClick={this.onRedirectToAuth}>
+              Rent now
+            </Button>
+          )}
           <FontAwesomeIcon icon={faHeart} style={{ color: "red" }} />
         </div>
       </div>
@@ -133,8 +140,9 @@ class Listing extends Component {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    dispatchExpandedListing: (userid) => dispatch(actions.fetchExpandedListing(userid))
-  }
-}
+    dispatchExpandedListing: (identifer) =>
+      dispatch(actions.fetchExpandedListing(identifer)),
+  };
+};
 
 export default connect(null, mapDispatchToProps)(Listing);

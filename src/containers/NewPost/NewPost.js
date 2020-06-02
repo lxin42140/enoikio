@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import moment from "moment";
 
 import classes from "./NewPost.css";
 import Input from "../../components/UI/Input/Input";
@@ -9,7 +10,6 @@ import * as actions from "../../store/actions/index";
 import Spinner from "../../components/UI/Spinner/Spinner";
 import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
 import firebaseAxios from "../../firebaseAxios";
-//import Notification from "../../components/UI/Modal/Notification/Notification";
 import Modal from "../../components/UI/Modal/Modal";
 
 class NewPost extends Component {
@@ -137,20 +137,11 @@ class NewPost extends Component {
     this.setState({ dataForm: updatedDataForm, formIsValid: formIsValid });
   };
 
-  
-
   onSubmitHandler = (event) => {
     event.preventDefault();
-    let today = new Date();
-    let date =
-      today.getFullYear() +
-      "-" +
-      (today.getMonth() + 1) +
-      "-" +
-      today.getDate();
-    let time =
-      today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-    const unique = this.props.userId + date + time;
+    const date = moment().format("DD-MM-YYYY");
+    const time = moment().format("HH:mm:ss");
+    const unique = this.props.userId + " " + date + " " + time;
     const formData = {};
     for (let key in this.state.dataForm) {
       switch (key) {
@@ -168,7 +159,8 @@ class NewPost extends Component {
       displayName: this.props.displayName,
       userId: this.props.userId,
       unique: unique,
-      dateAndTime: date + "_" + time,
+      date: date,
+      time: time,
     };
     this.props.dispatchSubmitPost(postDetails, this.props.token);
     this.props.dispatchSubmitPhoto(this.state.imageAsFile, unique);

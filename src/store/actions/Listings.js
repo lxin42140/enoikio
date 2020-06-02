@@ -21,12 +21,12 @@ export const fetchListingFail = (error) => {
   };
 };
 
-export const fetchExpandedListing = (userid) => {
+export const fetchExpandedListing = (identifer) => {
   return {
     type: actionTypes.FETCH_EXPANDED_LISTING,
-    uniqueid: userid
-  }
-}
+    identifer: identifer,
+  };
+};
 
 export const fetchAllListings = () => {
   return (dispatch) => {
