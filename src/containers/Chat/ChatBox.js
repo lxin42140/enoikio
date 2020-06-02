@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import moment from "moment";
 
 import classes from "./ChatBox.css";
 import ChatMessage from "./Chat/ChatMessage";
@@ -55,27 +56,13 @@ class ChatBox extends Component {
     }
   };
 
-  createTimeStamp = () => {
-    let today = new Date();
-    let date =
-      today.getFullYear() +
-      "-" +
-      (today.getMonth() + 1) +
-      "-" +
-      today.getDate();
-    let time = today.getHours() + ":" + today.getMinutes();
-    return {
-      date: date,
-      time: time,
-    };
-  };
-
   sendMessageHandler = (event) => {
     if (this.state.message !== "") {
       const message = {
         content: this.state.message,
         sender: this.props.displayName,
-        timeStamp: this.createTimeStamp(),
+        date: moment().format("DD-MM-YYYY"),
+        time: moment().format("HH:mm:ss"),
       };
 
       const chatHistory = Object.assign([], this.state.chats);
@@ -116,10 +103,10 @@ class ChatBox extends Component {
             ? "No messages"
             : this.state.chats.map((message) => (
                 <ChatMessage
-                  key={message.timeStamp}
+                  key={message.date + " " + message.time}
                   displayName={message.sender}
                   message={message.content}
-                  timeStamp={message.timeStamp.time}
+                  timeStamp={message.time}
                   // currentUser={this.props.displayName}
                 />
               ))}
