@@ -129,7 +129,7 @@ class ChatBox extends Component {
                   displayName={message.sender}
                   message={message.content}
                   timeStamp={message.time}
-                  // currentUser={this.props.displayName}
+                  currentUser={this.props.displayName}
                 />
               ))}
           <div

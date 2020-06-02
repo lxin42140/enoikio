@@ -71,3 +71,52 @@
     border-width: 6px;
     margin-top: -6px;
 }
+
+.ChatInfoSender {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-bottom: 2px;
+    font-size: 12px;
+}
+
+.ChatNameSender {
+    font-weight: 600;
+    padding-left: 5px;
+}
+
+.ChatTextSender {
+    display: block;
+    border-radius: 5px;
+    float: right;
+    position: relative;
+    padding: 5px 10px;
+    background: RGBA(0, 120, 254);
+    border: 1px solid RGBA(0, 120, 254);
+    margin: 5px 0 0 50px;
+    color: white;
+    max-width: max-content;
+}
+
+.ChatTextSender:after,
+.ChatTextSender:before {
+    position: absolute;
+    left: 100%;
+    top: 15px;
+    border: solid transparent;
+    border-left-color: RGBA(0, 120, 254);
+    content: ' ';
+    height: 0;
+    width: 0;
+    pointer-events: none;
+}
+
+.ChatTextSender:after {
+    border-width: 5px;
+    margin-top: -5px;
+}
+
+.ChatTextSender:before {
+    border-width: 6px;
+    margin-top: -6px;
+}
