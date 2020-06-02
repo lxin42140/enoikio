@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import moment from "moment";
 
 import classes from "./ChatBox.css";
-import ChatMessage from "./Chat/ChatMessage";
+import ChatMessage from "./ChatMessage/ChatMessage";
 import Button from "../../components/UI/Button/Button";
 import firebaseAxios from "../../firebaseAxios";
 import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
