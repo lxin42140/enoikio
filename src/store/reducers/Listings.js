@@ -32,7 +32,7 @@ const reducer = (state = initialState, action) => {
       return fetchListingSuccess(state, action.data);
     case actionTypes.FETCH_LISTING_FAIL:
       return fetchListingFail(state, action.error);
-    case actionTypes.FETCH_EXPANDED_LISTING:
+    case actionTypes.DISPLAY_EXPANDED_LISTING:
       return fetchExpandedListing(state, action.identifer);
     default:
       return state;

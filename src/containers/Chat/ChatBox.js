@@ -95,6 +95,8 @@ class ChatBox extends Component {
         const chatRef = database.ref().child("chats");
         const pushMessageKey = chatRef.push().key;
         chatRef.child(pushMessageKey).set({
+          userA: this.props.displayName,
+          UserB: this.props.userId,
           chatHistory: chatHistory,
           UID: UID,
         });

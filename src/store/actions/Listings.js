@@ -21,9 +21,9 @@ export const fetchListingFail = (error) => {
   };
 };
 
-export const fetchExpandedListing = (identifer) => {
+export const displayExpandedListing = (identifer) => {
   return {
-    type: actionTypes.FETCH_EXPANDED_LISTING,
+    type: actionTypes.DISPLAY_EXPANDED_LISTING,
     identifer: identifer,
   };
 };

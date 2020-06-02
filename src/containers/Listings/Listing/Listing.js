@@ -141,7 +141,7 @@ class Listing extends Component {
 const mapDispatchToProps = (dispatch) => {
   return {
     dispatchExpandedListing: (identifer) =>
-      dispatch(actions.fetchExpandedListing(identifer)),
+      dispatch(actions.displayExpandedListing(identifer)),
   };
 };
 

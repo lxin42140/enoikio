@@ -5,7 +5,6 @@ import { connect } from "react-redux";
 import Layout from "./hoc/Layout/Layout";
 import asyncComponent from "./hoc/asyncComponent/asyncComponent";
 import Listings from "./containers/Listings/FullListings";
-import ExpandedListing from "./containers/Listings/ExpandedListing/ExpandedListing";
 import Logout from "../src/containers/Auth/Logout/Logout";
 import * as actions from "./store/actions/index";
 
@@ -25,6 +24,10 @@ const asyncFilteredListings = asyncComponent(() => {
   return import("./containers/Listings/FilteredListings");
 });
 
+const asyncExpandedListing = asyncComponent(() => {
+  return import("./containers/Listings/ExpandedListing/ExpandedListing");
+});
+
 const asyncChatBox = asyncComponent(() => {
   return import("./containers/Chat/ChatBox");
 });
@@ -39,8 +42,8 @@ class App extends Component {
       <Switch>
         <Route path="/" exact component={Listings} />
         <Route path="/searchResults" component={asyncFilteredListings} />
+        <Route path="/expanded-listing" component={asyncExpandedListing} />
         <Route path="/auth" component={asyncAuth} />
-        <Route path="/expanded-listing" component={ExpandedListing} />
         <Redirect to="/" />
       </Switch>
     );
@@ -51,9 +54,9 @@ class App extends Component {
           <Route path="/" exact component={Listings} />
           <Route path="/searchResults" component={asyncFilteredListings} />
           <Route path="/new-post" component={asyncNewPost} />
-          <Route path="/expanded-listing" component={ExpandedListing} />
+          <Route path="/expanded-listing" component={asyncExpandedListing} />
           <Route path="/post-history" component={asyncPostHistory} />
-          <Route path="/chat" component={asyncChatBox}/>
+          <Route path="/chat" component={asyncChatBox} />
           <Route path="/logout" component={Logout} />
           <Redirect to="/" />
         </Switch>
@@ -71,6 +74,7 @@ class App extends Component {
 const mapStateToProps = (state) => {
   return {
     isAuthenticated: state.auth.token !== null,
+    displayName: state.auth.displayName,
   };
 };
 
