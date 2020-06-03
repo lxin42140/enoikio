@@ -1,0 +1,46 @@
+.friend {
+    height: 70px;
+    border-bottom: 1px solid #e7ebee;
+    position: relative;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.friend:hover {
+    background: #f1f4f6;
+    cursor: pointer;
+}
+
+.friend img {
+    width: 40px;
+    border-radius: 50%;
+    margin: 5px;
+    float: left;
+    padding-right: 5px;
+}
+
+.friend p {
+    width: 70%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.friend .status {
+    background: #26c281;
+    border-radius: 50%;
+    width: 9px;
+    height: 9px;
+    top: 31px;
+    right: 17px;
+}
+
+.friend .status.away {
+    background: #ffce54;
+}
+
+.friend .status.inactive {
+    background: #eaeef0;
+}

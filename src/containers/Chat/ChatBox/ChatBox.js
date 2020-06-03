@@ -3,11 +3,9 @@ import { connect } from "react-redux";
 import moment from "moment";
 
 import classes from "./ChatBox.css";
-import ChatMessage from "./ChatMessage/ChatMessage";
-import Button from "../../components/UI/Button/Button";
-import firebaseAxios from "../../firebaseAxios";
-import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
-import { database } from "../../firebase/firebase";
+import ChatMessage from "../ChatMessage/ChatMessage";
+import Button from "../../../components/UI/Button/Button";
+import { database } from "../../../firebase/firebase";
 
 class ChatBox extends Component {
   state = {
@@ -96,7 +94,7 @@ class ChatBox extends Component {
         const pushMessageKey = chatRef.push().key;
         chatRef.child(pushMessageKey).set({
           userA: this.props.displayName,
-          UserB: this.props.userId,
+          userB: "userB",
           chatHistory: chatHistory,
           UID: UID,
         });
@@ -120,7 +118,7 @@ class ChatBox extends Component {
     return (
       <div className={classes.ChatBox}>
         <div className={classes.ChatBoxHeader}>
-          <h3>Private Chat</h3>
+          <h4>Private Chat</h4>
         </div>
         <div className={classes.ChatBoxMessages}>
           {this.state.chats.length < 1
@@ -167,6 +165,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(
-  withErrorHandler(ChatBox, firebaseAxios)
-);
+export default connect(mapStateToProps)(ChatBox);

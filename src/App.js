@@ -28,8 +28,8 @@ const asyncExpandedListing = asyncComponent(() => {
   return import("./containers/Listings/ExpandedListing/ExpandedListing");
 });
 
-const asyncChatBox = asyncComponent(() => {
-  return import("./containers/Chat/ChatBox");
+const asyncChat = asyncComponent(() => {
+  return import("./containers/Chat/Chat");
 });
 
 class App extends Component {
@@ -56,7 +56,7 @@ class App extends Component {
           <Route path="/new-post" component={asyncNewPost} />
           <Route path="/expanded-listing" component={asyncExpandedListing} />
           <Route path="/post-history" component={asyncPostHistory} />
-          <Route path="/chat" component={asyncChatBox} />
+          <Route path="/chats" component={asyncChat} />
           <Route path="/logout" component={Logout} />
           <Redirect to="/" />
         </Switch>
@@ -74,7 +74,6 @@ class App extends Component {
 const mapStateToProps = (state) => {
   return {
     isAuthenticated: state.auth.token !== null,
-    displayName: state.auth.displayName,
   };
 };
 
