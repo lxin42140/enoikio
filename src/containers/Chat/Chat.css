@@ -10,7 +10,6 @@
 
 .ChatBox {
     background: #ffffff;
-    margin-bottom: 20px;
     width: 75%;
     height: 600px;
 }
@@ -18,10 +17,10 @@
 .ChatContacts {
     width: 290px;
     height: 600px;
-    background: #fff;
-    border-radius: 6px;
+    background: #ffffff;
     overflow-y: auto;
     overflow-x: hidden;
+    border-right: 2px solid #f4f4f4;
     /* box-shadow: 0 3px 5px 0 #ccc */
 }
 

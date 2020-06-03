@@ -22,13 +22,16 @@
 }
 
 .friend p {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
     width: 70%;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-.friend .status {
+/* .friend .status {
     background: #26c281;
     border-radius: 50%;
     width: 9px;
@@ -43,4 +46,4 @@
 
 .friend .status.inactive {
     background: #eaeef0;
-}
+} */

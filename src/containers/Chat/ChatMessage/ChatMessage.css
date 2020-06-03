@@ -46,7 +46,8 @@
     border: 1px solid #d2d6de;
     margin: 5px 0 0 50px;
     color: #444;
-    max-width: 50%;
+    max-width: 40%;
+    overflow-wrap: break-word;
     width: fit-content;
 }
 
@@ -96,7 +97,9 @@
     border: 1px solid RGBA(0, 120, 254);
     margin: 5px 0 0 50px;
     color: white;
-    max-width: 50%;
+    max-width: 40%;
+    overflow-wrap: break-word;
+    width: fit-content;
 }
 
 .ChatTextSender:after,

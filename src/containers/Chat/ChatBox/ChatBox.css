@@ -36,14 +36,14 @@
     background-color: #fff;
 }
 
-.Input {
+.input {
     border-style: none;
     padding: 10px;
-    width: 60%;
+    width: 90%;
     background: #fae2de;
     border-radius: 15px;
 }
 
-.Input:focus {
+.input:focus {
     outline: none;
 }

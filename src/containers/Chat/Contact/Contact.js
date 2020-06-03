@@ -4,7 +4,7 @@ import logo from "../../../assets/Logo/logo.png";
 
 const contact = (props) => {
   return (
-    <div className={classes.friend}>
+    <div className={classes.friend} onClick={props.onClick}>
       <img src={logo} alt="" />
       <p>
         <strong
@@ -12,10 +12,9 @@ const contact = (props) => {
             fontWeight: "600",
             fontSize: "15px",
             color: "#597a96",
-            float: "left",
           }}
         >
-          Miro Badev
+          {props.userName}
         </strong>
         <br />
         <span
@@ -23,13 +22,12 @@ const contact = (props) => {
             fontWeight: "400",
             fontSize: "13px",
             color: "#aab8c2",
-            float: "left",
           }}
         >
-          This is a test messsage sent from micro
+          {props.lastMessage}
         </span>
       </p>
-      <div className={classes.status}></div>
+      {/* <div className={classes.status}></div> */}
     </div>
   );
 };
