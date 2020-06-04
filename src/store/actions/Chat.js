@@ -44,7 +44,6 @@ export const fetchChats = () => {
       .ref()
       .child("chats")
       .on("child_added", (snapShot) => {
-        console.log("new child added");
         if (
           snapShot.val().userA === getState().auth.displayName ||
           snapShot.val().userB === getState().auth.displayName
@@ -116,6 +115,7 @@ export const goToChat = (chatDisplayName) => {
         userB: chatDisplayName,
         UID: UID,
       });
+      console.log("push message key", pushMessageKey);
       dispatch(fetchFullChat(pushMessageKey));
     } else {
       database
@@ -124,7 +124,7 @@ export const goToChat = (chatDisplayName) => {
         .orderByChild("userA")
         .equalTo(chatDisplayName)
         .once("value", (snapShot) => {
-          dispatch(fetchFullChat(snapShot.key));
+          snapShot.forEach((data) => dispatch(fetchFullChat(data.key)));
         });
 
       database
@@ -133,7 +133,7 @@ export const goToChat = (chatDisplayName) => {
         .orderByChild("userB")
         .equalTo(chatDisplayName)
         .once("value", (snapShot) => {
-          dispatch(fetchFullChat(snapShot.key));
+          snapShot.forEach((data) => dispatch(fetchFullChat(data.key)));
         });
     }
   };
