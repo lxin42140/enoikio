@@ -31,6 +31,9 @@ class FullListings extends Component {
 
   componentDidMount() {
     this.props.dispatchFetchAllListings();
+    if (this.props.chatInitialLoad) {
+      this.props.dispatchFetchChats();
+    }
   }
 
   // showFullListingHandler = (event, listId) => {
@@ -106,12 +109,14 @@ const mapStateToProps = (state) => {
     fullListings: state.listing.listings,
     loading: state.listing.loading,
     isAuthenticated: state.auth.token !== null,
+    chatInitialLoad: state.chat.initialLoad,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     dispatchFetchAllListings: () => dispatch(actions.fetchAllListings()),
+    dispatchFetchChats: () => dispatch(actions.fetchChats()),
   };
 };
 

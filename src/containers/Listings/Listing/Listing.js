@@ -25,6 +25,7 @@ class Listing extends Component {
   //3. heart icon remains as liked when the same user is logged in
 
   componentDidMount() {
+    
     if (this.state.image === "") {
       storage
         .ref("listingPictures/")
