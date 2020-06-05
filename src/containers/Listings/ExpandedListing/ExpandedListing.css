@@ -1,10 +1,16 @@
 .ExpandedListing {
     border: 1px solid #ccc;
-    height: auto;
+    height: 100%;
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
-    padding: 10px;
+    vertical-align: top;
+}
+
+.Images {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 
 /*TODO: fix image size to relative, affects the dimensions of each listing*/
@@ -12,25 +18,40 @@
     height: 400px;
     vertical-align: top;
     text-align: left;
-    margin: 20px;
-    width: 40%;
-    margin-top: 50px;
+    width: 70%;
 }
 
-.Image img {
-    width: 100%;
-    object-fit: cover;
+.ImageButton {
+    width: 10%;
+    outline: none;
+    border: none;
+    background-color: inherit;
 }
 
-/* .Textbook {
-    color: black;
-    font-size: medium;
-    text-align: left;
-} */
+.ImageButton:hover {
+    cursor: pointer;
+}
+
+.ImageButton:disabled {
+    opacity: 0.2;
+    cursor: no-drop;
+}
+
+.Left {
+    width: 50%;
+    margin: 10px;
+}
+
+.Right {
+    width: 50%;
+    margin: 10px;
+    display: flex;
+    flex-direction: row;
+}
 
 .Text {
     margin: 20px;
-    width: 50%;
+    width: 80%;
 }
 
 .Description {
@@ -43,9 +64,7 @@
     line-height: 150%;
 } 
 
-
-
 .Button Button {
-    margin-left: 40px;
-    margin-right: 40px;
+    margin-left: 20px;
+    margin-right: 20px;
 }
