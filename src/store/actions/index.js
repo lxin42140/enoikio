@@ -20,3 +20,9 @@ export {
     setAuthRedirectPath,
     authCheckState,
 } from "./Auth";
+
+export {
+    fetchChats,
+    fetchFullChat,
+    goToChat,
+} from "./Chat"

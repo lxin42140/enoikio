@@ -1,9 +1,11 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import { Link } from "react-router-dom";
+
 import classes from "./ExpandedListing.css";
 import { storage } from "../../../firebase/firebase";
 import Button from "../../../components/UI/Button/Button";
-
-import { connect } from "react-redux";
+import * as actions from "../../../store/actions/index";
 
 class ExpandedListing extends Component {
   state = {
@@ -108,7 +110,15 @@ class ExpandedListing extends Component {
             </ul>
           </div>
           <div className={classes.Button}>
-            <Button>Chat</Button>
+            <Link to="/chats">
+              <Button
+                onClick={() =>
+                  this.props.dispatchGoToChat(expandedListing[1])
+                }
+              >
+                Chat
+              </Button>
+            </Link>
             <Button>Rent Now</Button>
           </div>
         </div>
@@ -126,4 +136,10 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(ExpandedListing);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    dispatchGoToChat: (displayName) =>
+      dispatch(actions.goToChat(displayName)),
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(ExpandedListing);

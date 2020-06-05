@@ -9,15 +9,17 @@ import "./index.css";
 import App from "./App";
 import registerServiceWorker from "./registerServiceWorker";
 import ListingReducer from "./store/reducers/Listings";
-import newPostReducer from "./store/reducers/newPost";
+import NewPostReducer from "./store/reducers/newPost";
 import AuthReducer from "./store/reducers/Auth";
-import filteredListingsReducer from "./store/reducers/FilteredListing";
+import FilteredListingsReducer from "./store/reducers/FilteredListing";
+import ChatReducer from "./store/reducers/Chat";
 
 const rootReducer = combineReducers({
   listing: ListingReducer,
-  filteredListing: filteredListingsReducer,
-  newPost: newPostReducer,
+  filteredListing: FilteredListingsReducer,
+  newPost: NewPostReducer,
   auth: AuthReducer,
+  chat: ChatReducer,
 });
 
 const composeEnhancers =
