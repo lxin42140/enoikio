@@ -4,116 +4,128 @@ import { Link } from "react-router-dom";
 
 import classes from "./ExpandedListing.css";
 import { storage } from "../../../firebase/firebase";
-import Button from "../../../components/UI/Button/Button";
 import * as actions from "../../../store/actions/index";
+import Button from "../../../components/UI/Button/Button";
+import Spinner from '../../../components/UI/Spinner/Spinner';
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faWindowClose, faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 
 class ExpandedListing extends Component {
   state = {
-    image: "",
+    loading: true,
+    listing: null,
+    image: [],
+    imageIndex: 0,
     error: false,
   };
 
-  // let listing = (
-  //     <React.Fragment>
-  //         <div className={classes.Image}>
-  //             <img
-  //                 src={Image}
-  //                 alt=""
-  //             // className={classes.Image}
-  //             />
-  //         </div>
-  //         <div>
-  //             <div className={classes.Textbook}>
-  //                 <p>CS2030:《CS2030 is Bad》</p>
-  //             </div>
-  //             <div>
-  //                 <ul className={classes.Description}>
-  //                     <li>Price: $20.30 / month</li>
-  //                     <li>Delivery method: meet up</li>
-  //                     <li>Location: NUS i3</li>
-  //                     <li>
-  //                         <br />
-  //                     Description: <br /> CS2030 is a very bad module
-  //                     This module is a follow up to CS1010. It explores two modern programming paradigms,
-  //                     object-oriented programming and functional programming. Through a series of
-  //                     integrated assignments, students will learn to develop medium-scale
-  //                     software programs in the order of thousands of lines of code and tens of
-  //                     classes using objectoriented design principles and advanced programming constructs
-  //                     available in the two paradigms. Topics include objects and classes, composition,
-  //                     association, inheritance, interface, polymorphism, abstract classes, dynamic binding,
-  //                     lambda expression, effect-free programming, first class functions, closures,
-  //                     continuations, monad, etc.
-  //                 </li>
-  //                     <br />
-  //                     <li>Posted by: userABC</li>
-  //                 </ul>
-  //             </div>
-  //             <div className={classes.Button}>
-  //                 <Button>Chat</Button>
-  //                 <Button>Rent Now</Button>
-  //             </div>
-  //         </div>
-  //     </React.Fragment>
-  // );
-
   componentDidMount() {
-    if (this.state.image === "") {
-      storage
-        .ref("listingPictures/")
-        .child(this.props.identifer)
-        .getDownloadURL()
-        .then((url) => {
-          this.setState({
-            image: url,
+    //Something wrong here. Will get error when reloading expanded listing
+    let expandedListing;
+    if (this.state.listing === null) {
+      this.props.dispatchFetchAllListings();
+      expandedListing = this.props.listings.filter(
+        (listing) => ('?' + listing[10]) === this.props.location.search
+      )[0];
+    }
+
+    // Something also wrong here. Order of pictures always different due to async code?
+    let imageArray = [];
+    if (this.state.image.length === 0) {
+      for (let key = 0; key < expandedListing[2]; key++) {
+        storage
+          .ref()
+          .child(`listingPictures/${this.props.identifier}/${key}`)
+          .getDownloadURL()
+          .then((url) => {
+            imageArray.push(url);
+            key === expandedListing[2] - 1 ?
+              this.setState({
+                listing: expandedListing,
+                image: imageArray,
+                loading: false
+              }) : null;
+          })
+          .catch((error) => {
+            this.setState({ error: true });
           });
-        })
-        .catch((error) => {
-          this.setState({ error: true });
-        });
+      }
     }
   }
 
+  prevImageHandler = () => {
+    this.setState(prevState => {
+      return { imageIndex: prevState.imageIndex - 1 }
+    });
+  }
+
+  nextImageHandler = () => {
+    this.setState(prevState => {
+      return { imageIndex: prevState.imageIndex + 1 }
+    });
+  }
+
   render() {
-    const identifer = this.props.identifer;
-    let expandedListing = [...this.props.listings];
 
-    expandedListing = expandedListing.filter(
-      (listing) => listing[8] === identifer
-    )[0];
+    if (this.state.loading) {
+      return <Spinner />
+    }
 
-    let listing = (
+    const singleImage = <img
+      src={this.state.image[this.state.imageIndex]}
+      alt={this.state.error ? "Unable to load image" : "Loading image..."}
+      className={classes.Image} /> 
+
+    const image = this.state.image.length === 1 ?
+      singleImage :
+      <div className={classes.Images}>
+        <button 
+          onClick={this.prevImageHandler} 
+          disabled={this.state.imageIndex === 0}
+          className={classes.ImageButton}>
+            <FontAwesomeIcon
+              icon={faChevronLeft}
+              />
+        </button>
+        {singleImage}
+        <button 
+          onClick={this.nextImageHandler}
+          disabled={this.state.imageIndex === this.state.image.length - 1}
+          className={classes.ImageButton}>
+            <FontAwesomeIcon
+              icon={faChevronRight}
+              />
+        </button>
+      </div>;
+
+    const text = (
       <React.Fragment>
-        <div className={classes.Image}>
-          <img
-            src={this.state.image}
-            alt={this.state.error ? "Unable to load image" : "Loading image..."}
-          />
-        </div>
         <div className={classes.Text}>
           <div>
             <h1>
-              {expandedListing[5]}:《{expandedListing[7]}》
+              {this.state.listing[6]}:《{this.state.listing[8]}》
             </h1>
           </div>
 
           <div>
             <ul className={classes.Description}>
-              <li>Price: ${expandedListing[6]} / month</li>
-              <li>Delivery method: {expandedListing[2]}</li>
-              <li>Location: {expandedListing[4]}</li>
+              <li>Price: ${this.state.listing[7]} / month</li>
+              <li>Delivery method: {this.state.listing[3]}</li>
+              <li>Location: {this.state.listing[5]}</li>
               <li>
                 <br />
-                Description: <br /> {expandedListing[3]}
+                Description: <br /> {this.state.listing[4]}
               </li>
               <br />
-              <li>Posted by: {expandedListing[1]}</li>
+              <li>Posted by: {this.state.listing[1]}</li>
             </ul>
           </div>
           <div className={classes.Button}>
             <Link to="/chats">
               <Button
                 onClick={() =>
-                  this.props.dispatchGoToChat(expandedListing[1])
+                  this.props.dispatchGoToChat(this.state.listing[1])
                 }
               >
                 Chat
@@ -122,16 +134,32 @@ class ExpandedListing extends Component {
             <Button>Rent Now</Button>
           </div>
         </div>
+        <div>
+          <Link to="/">
+            <FontAwesomeIcon
+              icon={faWindowClose}
+              style={{
+                float: "right",
+                paddingLeft: "10px",
+                color: "#ff5138",
+              }} />
+          </Link>
+        </div>
       </React.Fragment>
     );
 
-    return <div className={classes.ExpandedListing}>{listing}</div>;
+    return (
+      <div className={classes.ExpandedListing}>
+        <div className={classes.Left}>{image}</div>
+        <div className={classes.Right}>{text}</div>
+      </div>
+    );
   }
 }
 
 const mapStateToProps = (state) => {
   return {
-    identifer: state.listing.expanded,
+    identifier: state.listing.expanded,
     listings: state.listing.listings,
   };
 };
@@ -140,6 +168,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     dispatchGoToChat: (displayName) =>
       dispatch(actions.goToChat(displayName)),
+      dispatchFetchAllListings: () => dispatch(actions.fetchAllListings()),
   };
 };
+
 export default connect(mapStateToProps, mapDispatchToProps)(ExpandedListing);

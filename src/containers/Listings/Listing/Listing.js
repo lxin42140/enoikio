@@ -5,17 +5,12 @@ import Button from "../../../components/UI/Button/Button";
 import * as actions from "../../../store/actions/index";
 import { storage } from "../../../firebase/firebase";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import {
-  // faWindowClose,
-  faHeart,
-  // faExternalLinkAlt,
-} from "@fortawesome/free-solid-svg-icons";
+import { faHeart } from "@fortawesome/free-solid-svg-icons";
 
 class Listing extends Component {
   state = {
-    image: "",
+    image: [],
     error: false,
   };
 
@@ -25,11 +20,13 @@ class Listing extends Component {
   //3. heart icon remains as liked when the same user is logged in
 
   componentDidMount() {
-    
-    if (this.state.image === "") {
+    if (this.state.image.length === 0) {
+      const child = this.props.numImages === 1 ?
+        `listingPictures/${this.props.identifier}` :
+        `listingPictures/${this.props.identifier}/0`
       storage
-        .ref("listingPictures/")
-        .child(this.props.identifier)
+        .ref()
+        .child(child)
         .getDownloadURL()
         .then((url) => {
           this.setState({
@@ -46,10 +43,12 @@ class Listing extends Component {
     this.props.history.push("/auth");
   };
 
-  // expandListingHandler = (event) => {
-  //   this.props.history.push("/expanded-listing/" + this.props.identifier);
-  //   history.pushState(this.props, null, "/expanded-listing/" + this.props.identifier);
-  // }
+  expandListingHandler = (identifier) => {
+    this.props.history.push({
+      pathname: '/expanded-listing',
+      search: '?' + identifier
+  });
+  }
 
   //TODO: support display of more than one image
   render() {
@@ -85,53 +84,27 @@ class Listing extends Component {
       </React.Fragment>
     );
 
-    // const style = this.props.showFullListing
-    //   ? classes.FullListing
-    //   : classes.Listing;
-
     return (
       <div className={classes.Listing}>
-        {/* {this.props.showFullListing ? (
-          <FontAwesomeIcon
-            icon={faWindowClose}
-            style={{
-              float: "right",
-              paddingLeft: "10px",
-              color: "#ff5138",
-            }}
-            onClick={this.props.onHideFullListing}
-          />
-        ) : (
-          <FontAwesomeIcon
-            icon={faExternalLinkAlt}
-            style={{
-              float: "right",
-              paddingLeft: "10px",
-              color: "#ff5138",
-            }}
-            onClick={this.props.onShowFullListing}
-          />
-        )} */}
         {listing}
         <br />
 
         <div className={classes.Selection}>
           {this.props.isAuthenticated ? (
-            <Link to={"expanded-listing/" + this.props.identifier}>
-              <Button
-                btnType="Important"
-                onClick={() =>
-                  this.props.dispatchExpandedListing(this.props.identifier)
-                }
-              >
-                Rent now
-              </Button>
-            </Link>
-          ) : (
-            <Button btnType="Important" onClick={this.onRedirectToAuth}>
+            <Button
+              btnType="Important"
+              onClick={() => {
+                this.props.dispatchExpandedListing(this.props.identifier)
+                this.expandListingHandler(this.props.identifier)
+              }}
+            >
               Rent now
             </Button>
-          )}
+          ) : (
+              <Button btnType="Important" onClick={this.onRedirectToAuth}>
+                Rent now
+              </Button>
+            )}
           <FontAwesomeIcon icon={faHeart} style={{ color: "red" }} />
         </div>
       </div>
@@ -141,8 +114,8 @@ class Listing extends Component {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    dispatchExpandedListing: (identifer) =>
-      dispatch(actions.displayExpandedListing(identifer)),
+    dispatchExpandedListing: (identifier) =>
+      dispatch(actions.displayExpandedListing(identifier)),
   };
 };
 

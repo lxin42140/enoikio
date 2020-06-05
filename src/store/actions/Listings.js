@@ -37,7 +37,7 @@ export const fetchAllListings = () => {
         const result = [];
         for (let post in response.data) {
           const postDetails = [];
-          for (let detail in response.data[post]) {
+          for (let detail in response.data[post]) { 
             if (detail === "postDetails") {
               for (let element in response.data[post][detail]) {
                 postDetails.push(response.data[post][detail][element]);

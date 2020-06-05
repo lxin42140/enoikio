@@ -55,31 +55,7 @@ export const submitNewPhotoSuccess = () => {
   };
 };
 
-// export const submitNewPhoto = (imageAsFile, identifier) => {
-//   return (dispatch) => {
-//     if (imageAsFile === "") {
-//       dispatch(
-//         submitNewPhotoFail(
-//           `not an image, the image file is a ${typeof imageAsFile}`
-//         )
-//       );
-//     } else {
-//       dispatch(submitNewPhotoInit());
-//       storage
-//         .ref(`/listingPictures/${identifier}`)
-//         .put(imageAsFile)
-//         .then(
-//           () => {
-//             dispatch(submitNewPhotoSuccess());
-//           },
-//           (error) => {
-//             dispatch(submitNewPhotoFail(error));
-//           }
-//         );
-//     }
-//   };
-// };
-
+//Getting a warning here. "Don't make functions within a loop"
 export const submitNewPhoto = (imageAsFile, identifier) => {
   return (dispatch) => {
     if (imageAsFile === "") {
@@ -91,14 +67,11 @@ export const submitNewPhoto = (imageAsFile, identifier) => {
     } else {
       dispatch(submitNewPhotoInit());
       let imageError = false;
-      for (let image in imageAsFile) {
+      for (let key in imageAsFile) {
         storage
-          .ref(`/listingPictures/${identifier}`)
-          .put(image)
+          .ref(`/listingPictures/${identifier}/${key}`)
+          .put(imageAsFile[key])  
           .then(
-            // () => {
-            //   dispatch(submitNewPhotoSuccess());
-            // },
             (error) => {
               imageError = true;
               dispatch(submitNewPhotoFail(error));
