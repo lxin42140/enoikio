@@ -1,6 +1,6 @@
 import React from "react";
 import classes from "./Contact.css";
-import logo from "../../../assets/Logo/logo.png";
+import logo from "../../../assets/Logo/Logo.png";
 
 const contact = (props) => {
   return (
