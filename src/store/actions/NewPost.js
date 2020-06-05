@@ -55,6 +55,31 @@ export const submitNewPhotoSuccess = () => {
   };
 };
 
+// export const submitNewPhoto = (imageAsFile, identifier) => {
+//   return (dispatch) => {
+//     if (imageAsFile === "") {
+//       dispatch(
+//         submitNewPhotoFail(
+//           `not an image, the image file is a ${typeof imageAsFile}`
+//         )
+//       );
+//     } else {
+//       dispatch(submitNewPhotoInit());
+//       storage
+//         .ref(`/listingPictures/${identifier}`)
+//         .put(imageAsFile)
+//         .then(
+//           () => {
+//             dispatch(submitNewPhotoSuccess());
+//           },
+//           (error) => {
+//             dispatch(submitNewPhotoFail(error));
+//           }
+//         );
+//     }
+//   };
+// };
+
 export const submitNewPhoto = (imageAsFile, identifier) => {
   return (dispatch) => {
     if (imageAsFile === "") {
@@ -65,17 +90,24 @@ export const submitNewPhoto = (imageAsFile, identifier) => {
       );
     } else {
       dispatch(submitNewPhotoInit());
-      storage
-        .ref(`/listingPictures/${identifier}`)
-        .put(imageAsFile)
-        .then(
-          () => {
-            dispatch(submitNewPhotoSuccess());
-          },
-          (error) => {
-            dispatch(submitNewPhotoFail(error));
-          }
-        );
+      let imageError = false;
+      for (let image in imageAsFile) {
+        storage
+          .ref(`/listingPictures/${identifier}`)
+          .put(image)
+          .then(
+            // () => {
+            //   dispatch(submitNewPhotoSuccess());
+            // },
+            (error) => {
+              imageError = true;
+              dispatch(submitNewPhotoFail(error));
+            }
+          );
+      }
+      if (!imageError) {
+        dispatch(submitNewPhotoSuccess());
+      }
     }
   };
 };

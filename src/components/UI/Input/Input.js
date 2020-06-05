@@ -9,6 +9,9 @@ const input = (props) => {
   if (props.touched && !props.valid && props.shouldValidate) {
     inputClasses.push(classes.Invalid);
     validationError = <p>Enter a valid field</p>;
+  } else if (props.elementType === 'textarea') {
+    inputClasses.push(classes.Textarea);
+
   }
 
   switch (props.elementType) {
@@ -29,6 +32,7 @@ const input = (props) => {
           className={inputClasses.join(" ")}
           {...props.elementConfig}
           value={props.value}
+          rows="5"
         />
       );
       break;

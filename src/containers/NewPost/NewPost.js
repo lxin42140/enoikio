@@ -92,7 +92,8 @@ class NewPost extends Component {
         touched: false,
       },
     },
-    imageAsFile: "",
+    // imageAsFile: "",
+    imageAsFile: [],
     formIsValid: false,
     showModal: false,
   };
@@ -128,7 +129,8 @@ class NewPost extends Component {
     for (let inputIdentifiers in updatedDataForm) {
       if (
         !updatedDataForm[inputIdentifiers].valid ||
-        this.state.imageAsFile === ""
+        // this.state.imageAsFile === ""
+        this.state.imageAsFile.length === 0
       ) {
         formIsValid = false;
         break;
@@ -168,7 +170,14 @@ class NewPost extends Component {
   };
 
   handleImageAsFile = (event) => {
-    const image = event.target.files[0];
+    const images = event.target.files;
+    
+    let imageArray = [...this.state.imageAsFile];
+    for (let image in images) {
+        imageArray.push(images[image]);
+    }
+    imageArray = imageArray.slice(0, imageArray.length - 2);
+    
     let formIsValid = true;
     for (let element in this.state.dataForm) {
       if (!this.state.dataForm[element].valid) {
@@ -176,7 +185,7 @@ class NewPost extends Component {
         break;
       }
     }
-    this.setState({ imageAsFile: image, formIsValid: formIsValid });
+    this.setState({ imageAsFile: imageArray, formIsValid: formIsValid });
   };
 
   createNewFormHandler = () => {
@@ -244,6 +253,7 @@ class NewPost extends Component {
             <input
               type="file"
               accept=".png,.jpeg, .jpg"
+              multiple
               onChange={this.handleImageAsFile}
             />
             <Button

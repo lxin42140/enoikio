@@ -13,6 +13,10 @@
     margin-bottom: 8px;
 }
 
+.Textarea {
+    resize: none;
+}
+
 .InputElement {
     outline: none;
     border: 1px solid #fff;
