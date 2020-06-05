@@ -96,6 +96,7 @@ class NewPost extends Component {
     imageAsFile: [],
     formIsValid: false,
     showModal: false,
+    numberOfImages: 0,
   };
 
   checkValidity(value, rules) {
@@ -129,7 +130,6 @@ class NewPost extends Component {
     for (let inputIdentifiers in updatedDataForm) {
       if (
         !updatedDataForm[inputIdentifiers].valid ||
-        // this.state.imageAsFile === ""
         this.state.imageAsFile.length === 0
       ) {
         formIsValid = false;
@@ -163,6 +163,7 @@ class NewPost extends Component {
       unique: unique,
       date: date,
       time: time,
+      numberOfImages: this.state.numberOfImages
     };
     this.props.dispatchSubmitPost(postDetails, this.props.token);
     this.props.dispatchSubmitPhoto(this.state.imageAsFile, unique);
@@ -173,11 +174,12 @@ class NewPost extends Component {
     const images = event.target.files;
     
     let imageArray = [...this.state.imageAsFile];
+
     for (let image in images) {
         imageArray.push(images[image]);
     }
     imageArray = imageArray.slice(0, imageArray.length - 2);
-    
+
     let formIsValid = true;
     for (let element in this.state.dataForm) {
       if (!this.state.dataForm[element].valid) {
@@ -185,7 +187,11 @@ class NewPost extends Component {
         break;
       }
     }
-    this.setState({ imageAsFile: imageArray, formIsValid: formIsValid });
+    const numImages = imageArray.length;
+    this.setState({ 
+      imageAsFile: imageArray,
+      numberOfImages: numImages, 
+      formIsValid: formIsValid });
   };
 
   createNewFormHandler = () => {
