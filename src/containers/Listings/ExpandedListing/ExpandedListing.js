@@ -22,35 +22,32 @@ class ExpandedListing extends Component {
 
   componentDidMount() {
     //Something wrong here. Will get error when reloading expanded listing
-    let expandedListing;
+    // let expandedListing;
     if (this.state.listing === null) {
-      this.props.dispatchFetchAllListings();
-      expandedListing = this.props.listings.filter(
-        (listing) => ('?' + listing[10]) === this.props.location.search
-      )[0];
+      this.setState({listing: this.props.listing})
     }
 
     // Something also wrong here. Order of pictures always different due to async code?
     let imageArray = [];
     if (this.state.image.length === 0) {
-      for (let key = 0; key < expandedListing[2]; key++) {
-        storage
-          .ref()
-          .child(`listingPictures/${this.props.identifier}/${key}`)
-          .getDownloadURL()
-          .then((url) => {
-            imageArray.push(url);
-            key === expandedListing[2] - 1 ?
-              this.setState({
-                listing: expandedListing,
-                image: imageArray,
-                loading: false
-              }) : null;
+      storage
+        .ref()
+        .child(`listingPictures/${this.props.listing[10]}`)
+        .listAll()
+        .then(result => {
+          result.items.forEach(image => {
+            image.getDownloadURL().then(url => {
+              imageArray.push(url);
+            })
           })
-          .catch((error) => {
-            this.setState({ error: true });
-          });
-      }
+        })
+        .then(this.setState({image: imageArray}))
+        .then(this.setState({loading: false}))
+        .catch(error => {
+          console.log(error);
+        }) 
+        //This will result in different order of pictures everytime
+        // this.setState({image: imageArray, loading: false})
     }
   }
 
@@ -159,8 +156,8 @@ class ExpandedListing extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    identifier: state.listing.expanded,
-    listings: state.listing.listings,
+    listing: state.listing.expandedListingDetail,
+    
   };
 };
 

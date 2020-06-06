@@ -38,10 +38,28 @@ class Listing extends Component {
     this.props.history.push("/auth");
   };
 
-  expandListingHandler = (identifier) => {
+  expandListingHandler = () => {
+
+    const data = [
+      this.props.date,
+      this.props.userId,
+      this.props.numImages,
+      this.props.deliveryMethod,
+      this.props.description,
+      this.props.location,
+      this.props.module,
+      this.props.price,
+      this.props.textbook,
+      this.props.time,
+      this.props.identifier,
+      this.props.code,
+    ]
+
+    this.props.dispatchExpandedListing(data);
+
     this.props.history.push({
       pathname: "/expanded-listing",
-      search: "?" + identifier,
+      search: "?" + this.props.identifier,
     });
   };
 
@@ -87,10 +105,7 @@ class Listing extends Component {
           {this.props.isAuthenticated ? (
             <Button
               btnType="Important"
-              onClick={() => {
-                this.props.dispatchExpandedListing(this.props.identifier);
-                this.expandListingHandler(this.props.identifier);
-              }}
+              onClick={this.expandListingHandler}
             >
               Rent now
             </Button>
@@ -108,8 +123,8 @@ class Listing extends Component {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    dispatchExpandedListing: (identifier) =>
-      dispatch(actions.displayExpandedListing(identifier)),
+    dispatchExpandedListing: (listing) =>
+      dispatch(actions.displayExpandedListing(listing)),
   };
 };
 

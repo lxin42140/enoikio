@@ -42,14 +42,18 @@ class FullListings extends Component {
           key={listing[10]}
           isAuthenticated={this.props.isAuthenticated}
           history={this.props.history}
+          date={listing[0]}
+          userId={listing[1]}
+          numImages={listing[2]}
           deliveryMethod={listing[3]}
+          description={listing[4]}
           location={listing[5]}
           module={listing[6]}
           price={listing[7]}
           textbook={listing[8]}
+          time={listing[9]}
           identifier={listing[10]}
-          userId={listing[1]}
-          numImages={listing[2]}
+          code={listing[11]}
         />
       );
     });

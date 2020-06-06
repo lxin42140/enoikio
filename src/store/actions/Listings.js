@@ -1,5 +1,6 @@
 import * as actionTypes from "./actionTypes";
 import axios from "../../firebaseAxios";
+import { storage } from '../../firebase/firebase';
 
 export const fetchListingInit = () => {
   return {
@@ -21,12 +22,46 @@ export const fetchListingFail = (error) => {
   };
 };
 
-export const displayExpandedListing = (identifer) => {
+// export const recordExpandedListing = (listing) => {
+//   return {
+//     type: actionTypes.RECORD_EXPANDED_LISTING,
+//     listing: listing,
+//   };
+// };
+
+export const displayExpandedListing = (listing) => {
   return {
     type: actionTypes.DISPLAY_EXPANDED_LISTING,
-    identifer: identifer,
+    listing: listing
   };
 };
+
+// export const fetchExpandedListing = (listing) => {
+
+//   return (dispatch) => {
+//   storage
+//     .ref()
+//     .child(`listingPictures/${listing[10]}`)
+//     .listAll()
+//     .then(result => {
+//       const imageArray = [];
+//       result.items.forEach(image => {
+//         image.getDownloadURL().then(url => {
+//           imageArray.push(url);
+//         })
+//       })
+//       dispatch(displayExpandedListingImage(imageArray));
+//       console.log(imageArray);
+//     })
+//     .catch(error => {
+//       console.log(error);
+//     })   
+//   }
+//   // return (dispatch) => {
+//   //   dispatch(displayExpandedListing(listing, imageArray))
+//   // }
+// }
+
 
 export const fetchAllListings = () => {
   return (dispatch) => {
@@ -37,7 +72,7 @@ export const fetchAllListings = () => {
         const result = [];
         for (let post in response.data) {
           const postDetails = [];
-          for (let detail in response.data[post]) { 
+          for (let detail in response.data[post]) {
             if (detail === "postDetails") {
               for (let element in response.data[post][detail]) {
                 postDetails.push(response.data[post][detail][element]);
