@@ -7,6 +7,7 @@ import asyncComponent from "./hoc/asyncComponent/asyncComponent";
 import Listings from "./containers/Listings/FullListings";
 import Logout from "../src/containers/Auth/Logout/Logout";
 import * as actions from "./store/actions/index";
+import Comments from './containers/Comments/Comments';
 
 const asyncNewPost = asyncComponent(() => {
   return import("./containers/NewPost/NewPost");
@@ -44,6 +45,7 @@ class App extends Component {
         <Route path="/searchResults" component={asyncFilteredListings} />
         <Route path="/expanded-listing" component={asyncExpandedListing} />
         <Route path="/auth" component={asyncAuth} />
+        <Route path="/comments" component={Comments} />
         <Redirect to="/" />
       </Switch>
     );

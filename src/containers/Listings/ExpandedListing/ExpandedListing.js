@@ -7,7 +7,6 @@ import { storage } from "../../../firebase/firebase";
 import * as actions from "../../../store/actions/index";
 import Button from "../../../components/UI/Button/Button";
 import Spinner from '../../../components/UI/Spinner/Spinner';
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWindowClose, faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 
@@ -21,6 +20,11 @@ class ExpandedListing extends Component {
   };
 
   componentDidMount() {
+    /**
+     * Comments 
+     */
+
+    
     //Something wrong here. Will get error when reloading expanded listing
     let expandedListing;
     if (this.state.listing === null) {
