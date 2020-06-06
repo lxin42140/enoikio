@@ -1,0 +1,63 @@
+.Comments {
+    box-shadow: 0 3px 5px 0 #ccc;
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+}
+
+.CommentMessages {
+    padding-left: 10px;
+    list-style-type: none;
+}
+
+.li {
+    display: list-item;
+}
+
+.NewComment {
+    padding: 10px 0 20px 0;
+    display: flex;
+    align-items: center;
+}
+
+.textarea {
+    padding-left: 10px;
+    border-style: none;
+    width: 90%;
+}
+
+.textarea:focus {
+    outline: none;
+}
+
+.LoadReviews:link,
+.LoadReviews:visited {
+    color: #999;
+    text-decoration: none;
+    font-size: 16px;
+    line-height: 20px;
+    float: left;
+    padding-top: 10px;
+}
+
+.LoadReviews:hover,
+.LoadReviews:active {
+    color: rgb(42, 139, 91);
+    text-decoration: underline;
+}
+
+.AuthPrompt:link,
+.AuthPrompt:visited {
+    text-decoration: none;
+    font-size: 16px;
+    line-height: 20px;
+    text-align: center;
+    color: #fdb2a7;
+    padding-bottom: 15px;
+}
+
+.AuthPrompt:hover,
+.AuthPrompt:active {
+    color: #ff5138;
+    text-decoration: underline;
+}

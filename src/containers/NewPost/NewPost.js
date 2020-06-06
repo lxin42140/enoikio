@@ -159,11 +159,11 @@ class NewPost extends Component {
     const postDetails = {
       postDetails: formData,
       displayName: this.props.displayName,
-      userId: this.props.userId,
       unique: unique,
       date: date,
       time: time,
-      numberOfImages: this.state.numberOfImages
+      numberOfImages: this.state.numberOfImages,
+      status: "available",
     };
     this.props.dispatchSubmitPost(postDetails, this.props.token);
     this.props.dispatchSubmitPhoto(this.state.imageAsFile, unique);
@@ -172,11 +172,11 @@ class NewPost extends Component {
 
   handleImageAsFile = (event) => {
     const images = event.target.files;
-    
+
     let imageArray = [...this.state.imageAsFile];
 
     for (let image in images) {
-        imageArray.push(images[image]);
+      imageArray.push(images[image]);
     }
     imageArray = imageArray.slice(0, imageArray.length - 2);
 
@@ -188,10 +188,11 @@ class NewPost extends Component {
       }
     }
     const numImages = imageArray.length;
-    this.setState({ 
+    this.setState({
       imageAsFile: imageArray,
-      numberOfImages: numImages, 
-      formIsValid: formIsValid });
+      numberOfImages: numImages,
+      formIsValid: formIsValid,
+    });
   };
 
   createNewFormHandler = () => {

@@ -6,10 +6,13 @@ import classes from "./ExpandedListing.css";
 import { storage } from "../../../firebase/firebase";
 import * as actions from "../../../store/actions/index";
 import Button from "../../../components/UI/Button/Button";
-import Spinner from '../../../components/UI/Spinner/Spinner';
-
+import Spinner from "../../../components/UI/Spinner/Spinner";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faWindowClose, faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
+import {
+  faWindowClose,
+  faChevronLeft,
+  faChevronRight,
+} from "@fortawesome/free-solid-svg-icons";
 
 class ExpandedListing extends Component {
   state = {
@@ -21,6 +24,10 @@ class ExpandedListing extends Component {
   };
 
   componentDidMount() {
+    /**
+     * Comments
+     */
+
     //Something wrong here. Will get error when reloading expanded listing
     // let expandedListing;
     if (this.state.listing === null) {
@@ -52,49 +59,52 @@ class ExpandedListing extends Component {
   }
 
   prevImageHandler = () => {
-    this.setState(prevState => {
-      return { imageIndex: prevState.imageIndex - 1 }
+    this.setState((prevState) => {
+      return { imageIndex: prevState.imageIndex - 1 };
     });
-  }
+  };
 
   nextImageHandler = () => {
-    this.setState(prevState => {
-      return { imageIndex: prevState.imageIndex + 1 }
+    this.setState((prevState) => {
+      return { imageIndex: prevState.imageIndex + 1 };
     });
-  }
+  };
 
   render() {
-
     if (this.state.loading) {
-      return <Spinner />
+      return <Spinner />;
     }
 
-    const singleImage = <img
-      src={this.state.image[this.state.imageIndex]}
-      alt={this.state.error ? "Unable to load image" : "Loading image..."}
-      className={classes.Image} /> 
+    const singleImage = (
+      <img
+        src={this.state.image[this.state.imageIndex]}
+        alt={this.state.error ? "Unable to load image" : "Loading image..."}
+        className={classes.Image}
+      />
+    );
 
-    const image = this.state.image.length === 1 ?
-      singleImage :
-      <div className={classes.Images}>
-        <button 
-          onClick={this.prevImageHandler} 
-          disabled={this.state.imageIndex === 0}
-          className={classes.ImageButton}>
-            <FontAwesomeIcon
-              icon={faChevronLeft}
-              />
-        </button>
-        {singleImage}
-        <button 
-          onClick={this.nextImageHandler}
-          disabled={this.state.imageIndex === this.state.image.length - 1}
-          className={classes.ImageButton}>
-            <FontAwesomeIcon
-              icon={faChevronRight}
-              />
-        </button>
-      </div>;
+    const image =
+      this.state.image.length === 1 ? (
+        singleImage
+      ) : (
+        <div className={classes.Images}>
+          <button
+            onClick={this.prevImageHandler}
+            disabled={this.state.imageIndex === 0}
+            className={classes.ImageButton}
+          >
+            <FontAwesomeIcon icon={faChevronLeft} />
+          </button>
+          {singleImage}
+          <button
+            onClick={this.nextImageHandler}
+            disabled={this.state.imageIndex === this.state.image.length - 1}
+            className={classes.ImageButton}
+          >
+            <FontAwesomeIcon icon={faChevronRight} />
+          </button>
+        </div>
+      );
 
     const text = (
       <React.Fragment>
@@ -119,16 +129,27 @@ class ExpandedListing extends Component {
             </ul>
           </div>
           <div className={classes.Button}>
-            <Link to="/chats">
-              <Button
-                onClick={() =>
-                  this.props.dispatchGoToChat(this.state.listing[1])
-                }
-              >
-                Chat
-              </Button>
-            </Link>
-            <Button>Rent Now</Button>
+            {this.props.isAuthenticated ? (
+              <Link to="/chats">
+                <Button
+                  onClick={() =>
+                    this.props.dispatchGoToChat(this.state.listing[1])
+                  }
+                >
+                  Chat
+                </Button>
+              </Link>
+            ) : (
+              <Link to="/auth">
+                <Button
+                  onClick={() =>
+                    this.props.dispatchGoToChat(this.state.listing[1])
+                  }
+                >
+                  Chat
+                </Button>
+              </Link>
+            )}
           </div>
         </div>
         <div>
@@ -139,7 +160,8 @@ class ExpandedListing extends Component {
                 float: "right",
                 paddingLeft: "10px",
                 color: "#ff5138",
-              }} />
+              }}
+            />
           </Link>
         </div>
       </React.Fragment>
@@ -157,15 +179,14 @@ class ExpandedListing extends Component {
 const mapStateToProps = (state) => {
   return {
     listing: state.listing.expandedListingDetail,
-    
+    isAuthenticated: state.auth.token !== null,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    dispatchGoToChat: (displayName) =>
-      dispatch(actions.goToChat(displayName)),
-      dispatchFetchAllListings: () => dispatch(actions.fetchAllListings()),
+    dispatchGoToChat: (displayName) => dispatch(actions.goToChat(displayName)),
+    dispatchFetchAllListings: () => dispatch(actions.fetchAllListings()),
   };
 };
 

@@ -52,7 +52,6 @@ class Listing extends Component {
       this.props.textbook,
       this.props.time,
       this.props.identifier,
-      this.props.code,
     ]
 
     this.props.dispatchExpandedListing(data);
@@ -67,7 +66,7 @@ class Listing extends Component {
     let listing = (
       <React.Fragment>
         <div className={classes.Textbook}>
-          <p>
+          <p style={{ textAlign: "center"}}>
             {this.props.module}:《{this.props.textbook}》
           </p>
         </div>
@@ -80,15 +79,10 @@ class Listing extends Component {
         </div>
         <div>
           <ul className={classes.Description}>
+            <li>Status: {this.props.status}</li>
             <li>Price: ${this.props.price} / month</li>
             <li>Delivery method: {this.props.deliveryMethod}</li>
             <li>Location: {this.props.location}</li>
-            {this.props.showFullListing ? (
-              <li>
-                <br />
-                Description: <br /> {this.props.description}
-              </li>
-            ) : null}
             <br />
             <li>Posted by: {this.props.userId}</li>
           </ul>
@@ -100,20 +94,13 @@ class Listing extends Component {
       <div className={classes.Listing}>
         {listing}
         <br />
-
         <div className={classes.Selection}>
-          {this.props.isAuthenticated ? (
             <Button
               btnType="Important"
               onClick={this.expandListingHandler}
             >
               Rent now
-            </Button>
-          ) : (
-            <Button btnType="Important" onClick={this.onRedirectToAuth}>
-              Rent now
-            </Button>
-          )}
+            </Button> 
           <FontAwesomeIcon icon={faHeart} style={{ color: "red" }} />
         </div>
       </div>
