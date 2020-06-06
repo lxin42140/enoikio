@@ -17,16 +17,19 @@ const comment = (props) => {
       </div>
       <div className={classes.CommentContent}>
         <div className={classes.CommentInfo}>
-          <span className={classes.CommentName}>User A</span>
-          <span className={classes.CommentTimestamp}>14:40</span>
+          <span className={classes.CommentName}>{props.sender}</span>
+          <span className={classes.CommentTimestamp}>{props.time}</span>
         </div>
         <div
           style={{ textAlign: "left", paddingBottom: "5px", fontSize: "10px" }}
         >
-          <FontAwesomeIcon icon={faStar} style={{ color: "#ff5138" }} />
+          <div>
+            {/* {props.numStars.map((star) => (
+              <FontAwesomeIcon icon={faStar} style={{ color: "#ff5138" }} />
+            ))} */}
+          </div>
         </div>
-
-        <div className={classes.CommentText}>Test comment</div>
+        <div className={classes.CommentText}>{props.content}</div>
       </div>
     </div>
   );

@@ -6,7 +6,7 @@ import * as classes from "./Comments.css";
 import Comment from "../../components/Comment/Comment";
 import Button from "../../components/UI/Button/Button";
 import { database } from "../../firebase/firebase";
-import { faStar } from "@fortawesome/free-solid-svg-icons";
+import { faStar, faWindowClose } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 class Comments extends Component {
@@ -29,26 +29,34 @@ class Comments extends Component {
     });
   };
 
+  closeReviewHandler = (event) => {
+    this.props.history.goBack();
+  };
+
   submitCommentHandler = (event) => {
-    if (this.state.message !== "") {
-      const message = {
-        content: this.state.message,
-        sender: this.props.displayName,
-        date: moment().format("DD-MM-YYYY"),
-        time: moment().format("HH:mm:ss"),
-      };
-
-      const commentHistory = Object.assign([], this.props.comments);
-      commentHistory.push(message);
-
-      database
-        .ref()
-        .child("chats/" + this.props.fullChatUID)
-        .update({ comments: commentHistory });
-      this.setState({
-        message: "",
-      });
+    const numStars = [];
+    for (let i = 0; i < this.state.numStars; i++) {
+      numStars.push(i);
     }
+    const message = {
+      content: this.state.message,
+      numStars: numStars,
+      sender: this.props.displayName,
+      date: moment().format("DD-MM-YYYY"),
+      time: moment().format("HH:mm:ss"),
+    };
+
+    const commentHistory = Object.assign([], this.props.comments);
+    commentHistory.push(message);
+
+    database
+      .ref()
+      .child("listings/" + this.props.identifier)
+      .update({ comments: commentHistory });
+
+    this.setState({
+      message: "",
+    });
   };
 
   render() {
@@ -116,6 +124,15 @@ class Comments extends Component {
     );
     return (
       <div className={classes.Comments}>
+        <FontAwesomeIcon
+          icon={faWindowClose}
+          style={{
+            alignSelf: "flex-end",
+            padding: "10px",
+            color: "#ff5138",
+          }}
+          onClick={this.closeReviewHandler}
+        />
         <p
           style={{
             fontSize: "20px",
@@ -151,7 +168,7 @@ class Comments extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    isAuthenticated: true,
+    isAuthenticated: state.auth.token !== null,
   };
 };
 
