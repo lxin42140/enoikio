@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 
 import classes from "./ExpandedListing.css";
-import { storage } from "../../../firebase/firebase";
 import * as actions from "../../../store/actions/index";
 import Button from "../../../components/UI/Button/Button";
 import Spinner from "../../../components/UI/Spinner/Spinner";
@@ -16,47 +15,8 @@ import {
 
 class ExpandedListing extends Component {
   state = {
-    loading: true,
-    listing: null,
-    image: [],
     imageIndex: 0,
-    error: false,
   };
-
-  componentDidMount() {
-    /**
-     * Comments
-     */
-
-    //Something wrong here. Will get error when reloading expanded listing
-    // let expandedListing;
-    if (this.state.listing === null) {
-      this.setState({listing: this.props.listing})
-    }
-
-    // Something also wrong here. Order of pictures always different due to async code?
-    let imageArray = [];
-    if (this.state.image.length === 0) {
-      storage
-        .ref()
-        .child(`listingPictures/${this.props.listing[10]}`)
-        .listAll()
-        .then(result => {
-          result.items.forEach(image => {
-            image.getDownloadURL().then(url => {
-              imageArray.push(url);
-            })
-          })
-        })
-        .then(this.setState({image: imageArray}))
-        .then(this.setState({loading: false}))
-        .catch(error => {
-          console.log(error);
-        }) 
-        //This will result in different order of pictures everytime
-        // this.setState({image: imageArray, loading: false})
-    }
-  }
 
   prevImageHandler = () => {
     this.setState((prevState) => {
@@ -71,20 +31,24 @@ class ExpandedListing extends Component {
   };
 
   render() {
-    if (this.state.loading) {
+    if (this.props.expandedListingLoading) {
       return <Spinner />;
     }
 
     const singleImage = (
       <img
-        src={this.state.image[this.state.imageIndex]}
-        alt={this.state.error ? "Unable to load image" : "Loading image..."}
+        src={this.props.expandedListing.imageURL[this.state.imageIndex]}
+        alt={
+          this.props.expandedListing.imageURL[this.state.imageIndex] === "error"
+            ? "Unable to load image"
+            : "Loading image..."
+        }
         className={classes.Image}
       />
     );
 
     const image =
-      this.state.image.length === 1 ? (
+      this.props.expandedListing.imageURL.length === 1 ? (
         singleImage
       ) : (
         <div className={classes.Images}>
@@ -98,7 +62,10 @@ class ExpandedListing extends Component {
           {singleImage}
           <button
             onClick={this.nextImageHandler}
-            disabled={this.state.imageIndex === this.state.image.length - 1}
+            disabled={
+              this.state.imageIndex ===
+              this.props.expandedListing.imageURL.length - 1
+            }
             className={classes.ImageButton}
           >
             <FontAwesomeIcon icon={faChevronRight} />
@@ -111,21 +78,32 @@ class ExpandedListing extends Component {
         <div className={classes.Text}>
           <div>
             <h1>
-              {this.state.listing[6]}:《{this.state.listing[8]}》
+              {this.props.expandedListing.postDetails.module}:《
+              {this.props.expandedListing.postDetails.textbook}》
             </h1>
           </div>
 
           <div>
             <ul className={classes.Description}>
-              <li>Price: ${this.state.listing[7]} / month</li>
-              <li>Delivery method: {this.state.listing[3]}</li>
-              <li>Location: {this.state.listing[5]}</li>
+              <li>
+                Price: ${this.props.expandedListing.postDetails.price} / month
+              </li>
+              <li>
+                Delivery method:{" "}
+                {this.props.expandedListing.postDetails.deliveryMethod}
+              </li>
+              <li>
+                Location: {this.props.expandedListing.postDetails.location}
+              </li>
               <li>
                 <br />
-                Description: <br /> {this.state.listing[4]}
+                Description: <br />{" "}
+                {this.props.expandedListing.postDetails.description}
               </li>
               <br />
-              <li>Posted by: {this.state.listing[1]}</li>
+              <li>
+                Posted by: {this.props.expandedListing.postDetails.displayName}
+              </li>
             </ul>
           </div>
           <div className={classes.Button}>
@@ -133,7 +111,9 @@ class ExpandedListing extends Component {
               <Link to="/chats">
                 <Button
                   onClick={() =>
-                    this.props.dispatchGoToChat(this.state.listing[1])
+                    this.props.dispatchGoToChat(
+                      this.props.expandedListing.displayName
+                    )
                   }
                 >
                   Chat
@@ -141,13 +121,7 @@ class ExpandedListing extends Component {
               </Link>
             ) : (
               <Link to="/auth">
-                <Button
-                  onClick={() =>
-                    this.props.dispatchGoToChat(this.state.listing[1])
-                  }
-                >
-                  Chat
-                </Button>
+                <Button>Chat</Button>
               </Link>
             )}
           </div>
@@ -178,7 +152,8 @@ class ExpandedListing extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    listing: state.listing.expandedListingDetail,
+    expandedListing: state.listing.expandedListing,
+    expandedListingLoading: state.listing.expandedListingLoading,
     isAuthenticated: state.auth.token !== null,
   };
 };

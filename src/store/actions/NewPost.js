@@ -23,9 +23,9 @@ export const submitNewPostFail = (error) => {
 
 export const clearPostData = () => {
   return {
-    type: actionTypes.CLEAR_NEW_POST_DATA
-  }
-}
+    type: actionTypes.CLEAR_NEW_POST_DATA,
+  };
+};
 
 export const submitNewPost = (data, token) => {
   return (dispatch) => {
@@ -55,7 +55,6 @@ export const submitNewPhotoSuccess = () => {
   };
 };
 
-//Getting a warning here. "Don't make functions within a loop"
 export const submitNewPhoto = (imageAsFile, identifier) => {
   return (dispatch) => {
     if (imageAsFile === "") {
@@ -66,21 +65,20 @@ export const submitNewPhoto = (imageAsFile, identifier) => {
       );
     } else {
       dispatch(submitNewPhotoInit());
-      let imageError = false;
-      for (let key in imageAsFile) {
-        storage
-          .ref(`/listingPictures/${identifier}/${key}`)
-          .put(imageAsFile[key])  
-          .then(
-            (error) => {
-              imageError = true;
-              dispatch(submitNewPhotoFail(error));
-            }
-          );
-      }
-      if (!imageError) {
-        dispatch(submitNewPhotoSuccess());
-      }
+      submitPhoto(imageAsFile, identifier, 0).then(() =>
+        dispatch(submitNewPhotoSuccess(), (error) =>
+          dispatch(submitNewPhotoFail(error))
+        )
+      );
     }
   };
 };
+
+async function submitPhoto(imageAsFile, identifier, key) {
+  while (key < imageAsFile.length) {
+    await storage
+      .ref(`/listingPictures/${identifier}/${key}`)
+      .put(imageAsFile[key]);
+    key += 1;
+  }
+}

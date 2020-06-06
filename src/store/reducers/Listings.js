@@ -5,8 +5,8 @@ const initialState = {
   listings: [],
   error: null,
   loading: false,
-  expandedListingDetail: null,
-  expandedListingImage: null,
+  expandedListing: null,
+  expandedListingLoading: false,
 };
 
 const fetchListingSuccess = (state, listings) => {
@@ -21,13 +21,16 @@ const fetchAllListingInit = (state, action) => {
   return updateObject(state, { loading: true });
 };
 
-// const fetchExpandedListing = (state, image) => {
-//   return updateObject(state, { expandedListingImage: image});
-// };
+const setExpandedListingInit = (state, action) => {
+  return updateObject(state, { expandedListingLoading: true });
+};
 
-const fetchExpandedListing = (state, listing) => {
-  return updateObject(state, { expandedListingDetail: listing });
-}
+const setExpandedListing = (state, expandedListing) => {
+  return updateObject(state, {
+    expandedListing: expandedListing,
+    expandedListingLoading: false,
+  });
+};
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
@@ -37,10 +40,10 @@ const reducer = (state = initialState, action) => {
       return fetchListingSuccess(state, action.data);
     case actionTypes.FETCH_LISTING_FAIL:
       return fetchListingFail(state, action.error);
-    // case actionTypes.RECORD_EXPANDED_LISTING:
-    //   return recordExpandedListing(state, action.listing);
-    case actionTypes.DISPLAY_EXPANDED_LISTING:
-      return fetchExpandedListing(state, action.listing);
+    case actionTypes.SET_EXPANDED_LISTING_INIT:
+      return setExpandedListingInit(state, action);
+    case actionTypes.SET_EXPANDED_LISTING:
+      return setExpandedListing(state, action.expandedListing);
     default:
       return state;
   }

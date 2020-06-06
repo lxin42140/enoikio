@@ -39,22 +39,7 @@ class Listing extends Component {
   };
 
   expandListingHandler = () => {
-
-    const data = [
-      this.props.date,
-      this.props.userId,
-      this.props.numImages,
-      this.props.deliveryMethod,
-      this.props.description,
-      this.props.location,
-      this.props.module,
-      this.props.price,
-      this.props.textbook,
-      this.props.time,
-      this.props.identifier,
-    ]
-
-    this.props.dispatchExpandedListing(data);
+    this.props.dispatchExpandedListing(this.props.identifier);
 
     this.props.history.push({
       pathname: "/expanded-listing",
@@ -66,7 +51,7 @@ class Listing extends Component {
     let listing = (
       <React.Fragment>
         <div className={classes.Textbook}>
-          <p style={{ textAlign: "center"}}>
+          <p style={{ textAlign: "center" }}>
             {this.props.module}:《{this.props.textbook}》
           </p>
         </div>
@@ -95,12 +80,9 @@ class Listing extends Component {
         {listing}
         <br />
         <div className={classes.Selection}>
-            <Button
-              btnType="Important"
-              onClick={this.expandListingHandler}
-            >
-              Rent now
-            </Button> 
+          <Button btnType="Important" onClick={this.expandListingHandler}>
+            Rent now
+          </Button>
           <FontAwesomeIcon icon={faHeart} style={{ color: "red" }} />
         </div>
       </div>
@@ -110,8 +92,8 @@ class Listing extends Component {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    dispatchExpandedListing: (listing) =>
-      dispatch(actions.displayExpandedListing(listing)),
+    dispatchExpandedListing: (identifier) =>
+      dispatch(actions.fetchExpandedListing(identifier)),
   };
 };
 

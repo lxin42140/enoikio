@@ -1,6 +1,6 @@
 import * as actionTypes from "./actionTypes";
 // import axios from "../../firebaseAxios";
-// import { storage } from '../../firebase/firebase';
+import { storage } from "../../firebase/firebase";
 import { database } from "../../firebase/firebase";
 
 export const fetchListingInit = () => {
@@ -23,10 +23,16 @@ export const fetchListingFail = (error) => {
   };
 };
 
-export const displayExpandedListing = (listing) => {
+export const setExpandedListing = (expandedListing) => {
   return {
-    type: actionTypes.DISPLAY_EXPANDED_LISTING,
-    listing: listing
+    type: actionTypes.SET_EXPANDED_LISTING,
+    expandedListing: expandedListing,
+  };
+};
+
+export const setExpandedListingInit = () => {
+  return {
+    type: actionTypes.SET_EXPANDED_LISTING_INIT,
   };
 };
 
@@ -46,7 +52,7 @@ export const fetchAllListings = () => {
           unique: snapShot.val().unique,
           userId: snapShot.val().userId,
           postDetails: snapShot.val().postDetails,
-          status: snapShot.val().status
+          status: snapShot.val().status,
         };
         result.push(listing);
         result.reverse();
@@ -54,3 +60,32 @@ export const fetchAllListings = () => {
       });
   };
 };
+
+export const fetchExpandedListing = (identifier) => {
+  return (dispatch, getState) => {
+    dispatch(setExpandedListingInit());
+    const expandedListing = getState().listing.listings.filter(
+      (listing) => listing.unique === identifier
+    )[0];
+    getDownloadURL(expandedListing.numberOfImages, identifier, 0).then(
+      (imageURL) => {
+        expandedListing.imageURL = imageURL;
+        dispatch(setExpandedListing(expandedListing));
+      }
+    );
+  };
+};
+
+async function getDownloadURL(numImage, identifier, key) {
+  const imageURL = [];
+  while (key < numImage) {
+    await storage
+      .ref("/listingPictures/" + identifier)
+      .child("" + key)
+      .getDownloadURL()
+      .then((url) => imageURL.push(url))
+      .catch((error) => imageURL.push("error"));
+    key += 1;
+  }
+  return imageURL;
+}
