@@ -15,6 +15,8 @@
 
 .Textarea {
     resize: none;
+    word-wrap: break-word;
+    user-select: contain;
 }
 
 .InputElement {
@@ -23,7 +25,6 @@
     background-color: white;
     font: inherit;
     padding: 6px 10px;
-    width: 100%;
     box-sizing: border-box;
 }
 
