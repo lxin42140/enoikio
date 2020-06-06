@@ -8,28 +8,8 @@ import firebaseAxios from "../../firebaseAxios";
 import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
 import classes from "./Listings.css";
 
-//TODO: handle no listing
-
-//UPDATE: INCLUDED NUMBER OF IMAGES
-/*
-0: date
-1: display name
-2: number of images
-3: "delivery method"
-4: "description"
-5: "location"
-6: "module code"
-7: "price"
-8: "title"
-9: "time"
-10: "unique key"
-11: "geyc7gjEeESmBZDnAX4yR4GKgxQ2"
-*/
-
 class FullListings extends Component {
-
   componentDidMount() {
-    this.props.dispatchFetchAllListings();
     if (this.props.chatInitialLoad) {
       this.props.dispatchFetchChats();
     }
@@ -39,17 +19,17 @@ class FullListings extends Component {
     let listings = this.props.fullListings.map((listing) => {
       return (
         <Listing
-          key={listing[10]}
-          isAuthenticated={this.props.isAuthenticated}
           history={this.props.history}
-          deliveryMethod={listing[3]}
-          location={listing[5]}
-          module={listing[6]}
-          price={listing[7]}
-          textbook={listing[8]}
-          identifier={listing[10]}
-          userId={listing[1]}
-          numImages={listing[2]}
+          key={listing.unique}
+          identifier={listing.unique}
+          userId={listing.displayName}
+          status={listing.status}
+          deliveryMethod={listing.postDetails.deliveryMethod}
+          location={listing.postDetails.location}
+          module={listing.postDetails.module}
+          price={listing.postDetails.price}
+          textbook={listing.postDetails.textbook}
+          numImages={listing.numberOfImages}
         />
       );
     });
@@ -66,14 +46,12 @@ const mapStateToProps = (state) => {
   return {
     fullListings: state.listing.listings,
     loading: state.listing.loading,
-    isAuthenticated: state.auth.token !== null,
     chatInitialLoad: state.chat.initialLoad,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    dispatchFetchAllListings: () => dispatch(actions.fetchAllListings()),
     dispatchFetchChats: () => dispatch(actions.fetchChats()),
   };
 };

@@ -58,6 +58,7 @@ class Listing extends Component {
         </div>
         <div>
           <ul className={classes.Description}>
+            <li>Status: {this.props.status}</li>
             <li>Price: ${this.props.price} / month</li>
             <li>Delivery method: {this.props.deliveryMethod}</li>
             <li>Location: {this.props.location}</li>

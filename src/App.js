@@ -7,7 +7,7 @@ import asyncComponent from "./hoc/asyncComponent/asyncComponent";
 import Listings from "./containers/Listings/FullListings";
 import Logout from "../src/containers/Auth/Logout/Logout";
 import * as actions from "./store/actions/index";
-import Comments from './containers/Comments/Comments';
+import Comments from "./containers/Comments/Comments";
 
 const asyncNewPost = asyncComponent(() => {
   return import("./containers/NewPost/NewPost");
@@ -36,6 +36,7 @@ const asyncChat = asyncComponent(() => {
 class App extends Component {
   componentDidMount() {
     this.props.onTryAutoSignUp();
+    this.props.dispatchFetchAllListings();
   }
 
   render() {
@@ -82,6 +83,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     onTryAutoSignUp: () => dispatch(actions.authCheckState()),
+    dispatchFetchAllListings: () => dispatch(actions.fetchAllListings()),
   };
 };
 

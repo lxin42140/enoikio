@@ -1,5 +1,5 @@
 import * as actionTypes from "./actionTypes";
-import axios from "../../firebaseAxios";
+import { database } from "../../firebase/firebase";
 
 export const fetchListingInit = () => {
   return {
@@ -29,30 +29,26 @@ export const displayExpandedListing = (identifer) => {
 };
 
 export const fetchAllListings = () => {
-  return (dispatch) => {
+  return (dispatch, getState) => {
     dispatch(fetchListingInit());
-    axios
-      .get('/listings.json?orderBy="dateAndTime"')
-      .then((response) => {
-        const result = [];
-        for (let post in response.data) {
-          const postDetails = [];
-          for (let detail in response.data[post]) { 
-            if (detail === "postDetails") {
-              for (let element in response.data[post][detail]) {
-                postDetails.push(response.data[post][detail][element]);
-              }
-            } else {
-              postDetails.push(response.data[post][detail]);
-            }
-          }
-          result.push(postDetails);
-        }
+    database
+      .ref()
+      .child("listings")
+      .on("child_added", (snapShot) => {
+        const result = Object.assign([], getState().listing.listings);
+        const listing = {
+          date: snapShot.val().date,
+          displayName: snapShot.val().displayName,
+          numberOfImages: snapShot.val().numberOfImages,
+          time: snapShot.val().time,
+          unique: snapShot.val().unique,
+          userId: snapShot.val().userId,
+          postDetails: snapShot.val().postDetails,
+          status: snapShot.val().status
+        };
+        result.push(listing);
         result.reverse();
         dispatch(fetchListingSuccess(result));
-      })
-      .catch((error) => {
-        dispatch(fetchListingFail(error));
       });
   };
 };
