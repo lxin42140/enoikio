@@ -26,7 +26,6 @@
 
 .Listing:hover {
     box-shadow: 0 0 5px 2px #d3d3d3;
-    cursor: pointer;
 }
 
 .Listing li {

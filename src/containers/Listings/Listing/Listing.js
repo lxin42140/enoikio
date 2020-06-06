@@ -34,10 +34,6 @@ class Listing extends Component {
       });
   }
 
-  onRedirectToAuth = (event) => {
-    this.props.history.push("/auth");
-  };
-
   expandListingHandler = (identifier) => {
     this.props.history.push({
       pathname: "/expanded-listing",
@@ -65,12 +61,6 @@ class Listing extends Component {
             <li>Price: ${this.props.price} / month</li>
             <li>Delivery method: {this.props.deliveryMethod}</li>
             <li>Location: {this.props.location}</li>
-            {this.props.showFullListing ? (
-              <li>
-                <br />
-                Description: <br /> {this.props.description}
-              </li>
-            ) : null}
             <br />
             <li>Posted by: {this.props.userId}</li>
           </ul>
@@ -82,23 +72,16 @@ class Listing extends Component {
       <div className={classes.Listing}>
         {listing}
         <br />
-
         <div className={classes.Selection}>
-          {this.props.isAuthenticated ? (
-            <Button
-              btnType="Important"
-              onClick={() => {
-                this.props.dispatchExpandedListing(this.props.identifier);
-                this.expandListingHandler(this.props.identifier);
-              }}
-            >
-              Rent now
-            </Button>
-          ) : (
-            <Button btnType="Important" onClick={this.onRedirectToAuth}>
-              Rent now
-            </Button>
-          )}
+          <Button
+            btnType="Important"
+            onClick={() => {
+              this.props.dispatchExpandedListing(this.props.identifier);
+              this.expandListingHandler(this.props.identifier);
+            }}
+          >
+            Rent now
+          </Button>
           <FontAwesomeIcon icon={faHeart} style={{ color: "red" }} />
         </div>
       </div>

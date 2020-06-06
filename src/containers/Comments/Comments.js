@@ -15,7 +15,9 @@ class Comments extends Component {
     numStars: 0,
   };
 
-  componentDidMount() {}
+  componentDidMount() {
+    
+  }
 
   inputChangeHandler = (event) => {
     this.setState({
