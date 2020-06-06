@@ -10,7 +10,7 @@ import { faHeart } from "@fortawesome/free-solid-svg-icons";
 
 class Listing extends Component {
   state = {
-    image: [],
+    image: "",
     error: false,
   };
 
@@ -20,23 +20,18 @@ class Listing extends Component {
   //3. heart icon remains as liked when the same user is logged in
 
   componentDidMount() {
-    if (this.state.image.length === 0) {
-      const child = this.props.numImages === 1 ?
-        `listingPictures/${this.props.identifier}` :
-        `listingPictures/${this.props.identifier}/0`
-      storage
-        .ref()
-        .child(child)
-        .getDownloadURL()
-        .then((url) => {
-          this.setState({
-            image: url,
-          });
-        })
-        .catch((error) => {
-          this.setState({ error: true });
+    storage
+      .ref("/listingPictures/" + this.props.identifier)
+      .child("0")
+      .getDownloadURL()
+      .then((url) => {
+        this.setState({
+          image: url,
         });
-    }
+      })
+      .catch((error) => {
+        this.setState({ error: true });
+      });
   }
 
   onRedirectToAuth = (event) => {
@@ -45,10 +40,10 @@ class Listing extends Component {
 
   expandListingHandler = (identifier) => {
     this.props.history.push({
-      pathname: '/expanded-listing',
-      search: '?' + identifier
-  });
-  }
+      pathname: "/expanded-listing",
+      search: "?" + identifier,
+    });
+  };
 
   //TODO: support display of more than one image
   render() {
@@ -94,17 +89,17 @@ class Listing extends Component {
             <Button
               btnType="Important"
               onClick={() => {
-                this.props.dispatchExpandedListing(this.props.identifier)
-                this.expandListingHandler(this.props.identifier)
+                this.props.dispatchExpandedListing(this.props.identifier);
+                this.expandListingHandler(this.props.identifier);
               }}
             >
               Rent now
             </Button>
           ) : (
-              <Button btnType="Important" onClick={this.onRedirectToAuth}>
-                Rent now
-              </Button>
-            )}
+            <Button btnType="Important" onClick={this.onRedirectToAuth}>
+              Rent now
+            </Button>
+          )}
           <FontAwesomeIcon icon={faHeart} style={{ color: "red" }} />
         </div>
       </div>
