@@ -2,11 +2,12 @@ import * as actionTypes from "../actions/actionTypes";
 import { updateObject } from "../utility";
 
 const initialState = {
+  initialLoad: true,
+  fetchChatContactsLoading: false,
   chatContacts: [],
   existingChatNames: [],
   fullChat: [],
   fullChatUID: "",
-  initialLoad: true,
   fullChatLoading: false,
   recipient: "",
 };
@@ -14,6 +15,7 @@ const initialState = {
 const fetchChatContactsInit = (state, action) => {
   return updateObject(state, {
     initialLoad: false,
+    fetchChatContactsLoading: true,
   });
 };
 
@@ -21,11 +23,15 @@ const fetchChatContactsSuccess = (state, action) => {
   return updateObject(state, {
     chatContacts: action.chatContacts,
     existingChatNames: action.existingChatNames,
+    fetchChatContactsLoading: false,
   });
 };
 
 const fetchFullChatInit = (state, action) => {
-  return updateObject(state, { fullChatLoading: true });
+  return updateObject(state, {
+    fullChatLoading: true,
+    fetchChatContactsLoading: false,
+  });
 };
 
 const fetchFullChatInitSuccess = (state, action) => {
