@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 
 import classes from "./Chat.css";
-import Contact from "./Contact/Contact";
+import Contact from "../../components/Chat/Contact/Contact";
 import ChatBox from "./ChatBox/ChatBox";
 import * as actions from "../../store/actions/index";
 import Spinner from "../../components/UI/Spinner/Spinner";

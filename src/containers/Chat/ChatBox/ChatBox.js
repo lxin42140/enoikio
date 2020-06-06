@@ -3,11 +3,11 @@ import { connect } from "react-redux";
 import moment from "moment";
 
 import classes from "./ChatBox.css";
-import ChatMessage from "../ChatMessage/ChatMessage";
 import Button from "../../../components/UI/Button/Button";
 import { database } from "../../../firebase/firebase";
 import * as actions from "../../../store/actions/index";
 import Spinner from "../../../components/UI/Spinner/Spinner";
+import ChatMessage from "../../../components/Chat/ChatMessage/ChatMessage";
 
 class ChatBox extends Component {
   state = {
