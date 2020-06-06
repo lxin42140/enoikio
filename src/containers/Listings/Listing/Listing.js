@@ -45,7 +45,7 @@ class Listing extends Component {
     let listing = (
       <React.Fragment>
         <div className={classes.Textbook}>
-          <p>
+          <p style={{ textAlign: "center"}}>
             {this.props.module}:《{this.props.textbook}》
           </p>
         </div>
