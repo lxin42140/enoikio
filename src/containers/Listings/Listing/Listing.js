@@ -45,7 +45,6 @@ class Listing extends Component {
     });
   };
 
-  //TODO: support display of more than one image
   render() {
     let listing = (
       <React.Fragment>
@@ -54,7 +53,7 @@ class Listing extends Component {
             {this.props.module}:《{this.props.textbook}》
           </p>
         </div>
-        <div style={{ textAlign: "center" }}>
+        <div style={{ textAlign: "center", height: "200px" }}>
           <img
             src={this.state.image}
             alt={this.state.error ? "Unable to load image" : "Loading image..."}
