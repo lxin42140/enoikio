@@ -1,10 +1,12 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
 import classes from "./NavigationItems.css";
 import NavigationItem from "./NavigationItem/NavigationItem";
 import SearchBar from "../../../containers/Navigation/SearchBar/SearchBar";
+import * as actions from "../../../store/actions/index";
 
 class NavigationItems extends Component {
   state = {
@@ -25,7 +27,12 @@ class NavigationItems extends Component {
             Home
           </NavigationItem>
           <NavigationItem link="/new-post">New Post</NavigationItem>
-          <NavigationItem link="/post-history">Past Posts</NavigationItem>
+          <NavigationItem
+            link="/post-history"
+            onClick={() => this.props.setFilterTerm()}
+          >
+            Past Posts
+          </NavigationItem>
           <NavigationItem link="/chats">Chats</NavigationItem>
           <NavigationItem link="/logout">Log out</NavigationItem>
           <FontAwesomeIcon
@@ -85,4 +92,9 @@ class NavigationItems extends Component {
   }
 }
 
-export default NavigationItems;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setFilterTerm: () => dispatch(actions.filterListings("displayName", "")),
+  };
+};
+export default connect(null, mapDispatchToProps)(NavigationItems);

@@ -1,5 +1,4 @@
 import * as actionTypes from "./actionTypes";
-// import axios from "../../firebaseAxios";
 import { storage } from "../../firebase/firebase";
 import { database } from "../../firebase/firebase";
 
@@ -36,6 +35,14 @@ export const setExpandedListingInit = () => {
   };
 };
 
+export const filterListings = (filterType, searchObject) => {
+  return {
+    type: actionTypes.FILTER_LISTINGS,
+    filterType: filterType,
+    searchObject: searchObject,
+  };
+};
+
 export const fetchAllListings = () => {
   return (dispatch, getState) => {
     dispatch(fetchListingInit());
@@ -54,7 +61,7 @@ export const fetchAllListings = () => {
           postDetails: snapShot.val().postDetails,
           status: snapShot.val().status,
           comments: snapShot.val().comments,
-          key: snapShot.key
+          key: snapShot.key,
         };
         result.push(listing);
         result.reverse();

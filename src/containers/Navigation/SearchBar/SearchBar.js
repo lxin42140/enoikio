@@ -27,10 +27,10 @@ class SearchBar extends Component {
   changeFilterHandler = (filter) => {
     let placeHolder = "";
     switch (filter) {
-      case "module":
+      case "moduleCode":
         placeHolder = "module code";
         break;
-      case "title":
+      case "textbook":
         placeHolder = "textbook title";
         break;
       default:
@@ -63,7 +63,7 @@ class SearchBar extends Component {
 
   onSearchHandler = (event) => {
     if (this.state.userInput !== "") {
-      this.props.dispatchFetchFilteredListing(
+      this.props.setFilterTerm(
         this.state.filterType,
         this.state.userInput.toLowerCase()
       );
@@ -83,12 +83,12 @@ class SearchBar extends Component {
           />
           <DropDown
             icon={faBook}
-            onClick={() => this.changeFilterHandler("title")}
+            onClick={() => this.changeFilterHandler("textbook")}
             text={"book title"}
           />
           <DropDown
             icon={faUniversity}
-            onClick={() => this.changeFilterHandler("module")}
+            onClick={() => this.changeFilterHandler("moduleCode")}
             text={"module code"}
           />
         </React.Fragment>
@@ -147,8 +147,7 @@ class SearchBar extends Component {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    dispatchFetchFilteredListing: (filterType, data) =>
-      dispatch(actions.fetchFilteredListing(filterType, data)),
+    setFilterTerm: (filterType, object) => dispatch(actions.filterListings(filterType, object)),
   };
 };
 

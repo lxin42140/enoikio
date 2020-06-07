@@ -11,12 +11,10 @@ import registerServiceWorker from "./registerServiceWorker";
 import ListingReducer from "./store/reducers/Listings";
 import NewPostReducer from "./store/reducers/newPost";
 import AuthReducer from "./store/reducers/Auth";
-import FilteredListingsReducer from "./store/reducers/FilteredListing";
 import ChatReducer from "./store/reducers/Chat";
 
 const rootReducer = combineReducers({
   listing: ListingReducer,
-  filteredListing: FilteredListingsReducer,
   newPost: NewPostReducer,
   auth: AuthReducer,
   chat: ChatReducer,

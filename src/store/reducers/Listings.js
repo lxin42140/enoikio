@@ -7,6 +7,8 @@ const initialState = {
   loading: false,
   expandedListing: null,
   expandedListingLoading: false,
+  filterType: "",
+  searchObject: "",
 };
 
 const fetchListingSuccess = (state, listings) => {
@@ -32,6 +34,13 @@ const setExpandedListing = (state, expandedListing) => {
   });
 };
 
+const filterListings = (state, filterType, searchObject) => {
+  return updateObject(state, {
+    filterType: filterType,
+    searchObject: searchObject,
+  });
+};
+
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.FETCH_LISTING_INIT:
@@ -44,6 +53,8 @@ const reducer = (state = initialState, action) => {
       return setExpandedListingInit(state, action);
     case actionTypes.SET_EXPANDED_LISTING:
       return setExpandedListing(state, action.expandedListing);
+    case actionTypes.FILTER_LISTINGS:
+      return filterListings(state, action.filterType, action.searchObject);
     default:
       return state;
   }

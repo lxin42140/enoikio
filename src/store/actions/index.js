@@ -1,11 +1,12 @@
 export {
     fetchAllListings,
-    fetchExpandedListing
+    fetchExpandedListing,
+    filterListings
 } from './Listings'
 
-export {
-    fetchFilteredListing,
-} from './FilteredListing'
+// export {
+//     fetchFilteredListing,
+// } from './FilteredListing'
 
 export {
     submitNewPost,
