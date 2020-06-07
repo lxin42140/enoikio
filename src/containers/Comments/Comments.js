@@ -1,22 +1,40 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 import moment from "moment";
 
 import * as classes from "./Comments.css";
 import Comment from "../../components/Comment/Comment";
 import Button from "../../components/UI/Button/Button";
 import { database } from "../../firebase/firebase";
-import { faStar, faWindowClose } from "@fortawesome/free-solid-svg-icons";
+import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 class Comments extends Component {
   state = {
     message: "",
     numStars: 0,
+    comments: [],
   };
 
   componentDidMount() {
-    
+    if (this.state.comments.length < 1 && this.props.comments !== undefined) {
+      this.setState({
+        comments: this.props.comments,
+      });
+    }
+
+    database
+      .ref()
+      .child("listings")
+      .child(this.props.identifier)
+      .on("value", (snapShot) => {
+        const comments = Object.assign([], snapShot.val().comments);
+        comments.reverse();
+        this.setState({
+          comments: comments,
+        });
+      });
   }
 
   inputChangeHandler = (event) => {
@@ -31,10 +49,6 @@ class Comments extends Component {
     });
   };
 
-  closeReviewHandler = (event) => {
-    this.props.history.goBack();
-  };
-
   submitCommentHandler = (event) => {
     const numStars = [];
     for (let i = 0; i < this.state.numStars; i++) {
@@ -46,25 +60,31 @@ class Comments extends Component {
       sender: this.props.displayName,
       date: moment().format("DD-MM-YYYY"),
       time: moment().format("HH:mm:ss"),
+      key:
+        this.props.displayName +
+        moment().format("HH:mm:ss") +
+        moment().format("DD-MM-YYYY"),
     };
 
-    const commentHistory = Object.assign([], this.props.comments);
+    const commentHistory = Object.assign([], this.state.comments);
     commentHistory.push(message);
 
     database
       .ref()
-      .child("listings/" + this.props.identifier)
+      .child("listings")
+      .child(this.props.identifier)
       .update({ comments: commentHistory });
 
     this.setState({
       message: "",
+      numStars: 0,
     });
   };
 
   render() {
     let commentInput = (
       <div>
-        <p style={{ margin: "5px 0 5px 10px", textAlign: "center" }}>
+        <p style={{ margin: "10px 0 5px 10px", textAlign: "center" }}>
           Write your review
         </p>
         <div style={{ textAlign: "left", paddingLeft: "10px" }}>
@@ -124,45 +144,47 @@ class Comments extends Component {
         </div>
       </div>
     );
+
+    let reviews = this.state.comments.map((comment) => (
+      <li key={comment.key}>
+        <Comment
+          sender={comment.sender}
+          date={comment.date}
+          time={comment.time}
+          numStars={comment.numStars}
+          content={comment.content}
+        />
+      </li>
+    ));
+
     return (
       <div className={classes.Comments}>
-        <FontAwesomeIcon
-          icon={faWindowClose}
-          style={{
-            alignSelf: "flex-end",
-            padding: "10px",
-            color: "#ff5138",
-          }}
-          onClick={this.closeReviewHandler}
-        />
+        {this.props.isAuthenticated ? (
+          commentInput
+        ) : (
+          <Link to="/auth" className={classes.AuthPrompt}>
+            <a>Sign in or sign up to leave a review</a>
+          </Link>
+        )}
         <p
           style={{
+            margin: "0",
+            paddingTop: "5px",
             fontSize: "20px",
             lineHeight: "28px",
             textAlign: "left",
             paddingLeft: "10px",
+            borderTop: "1px solid #f0f1f1",
           }}
         >
-          Reviews for UserA
+          {this.state.comments.length < 1 ? "No Reviews" : "Reviews"}
         </p>
         <ul className={classes.CommentMessages}>
-          <li>
-            <Comment />
-          </li>
-          <li>
-            <Comment />
-          </li>
-          <a href="/" className={classes.LoadReviews}>
+          {reviews}
+          {/* <a href="/" className={classes.LoadReviews}>
             Read more reviews
-          </a>
+          </a> */}
         </ul>
-        {this.props.isAuthenticated ? (
-          commentInput
-        ) : (
-          <a href="/auth" className={classes.AuthPrompt}>
-            Sign in or sign up to leave a review
-          </a>
-        )}
       </div>
     );
   }
@@ -171,6 +193,7 @@ class Comments extends Component {
 const mapStateToProps = (state) => {
   return {
     isAuthenticated: state.auth.token !== null,
+    displayName: state.auth.displayName,
   };
 };
 

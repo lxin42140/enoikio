@@ -6,6 +6,7 @@ import classes from "./ExpandedListing.css";
 import * as actions from "../../../store/actions/index";
 import Button from "../../../components/UI/Button/Button";
 import Spinner from "../../../components/UI/Spinner/Spinner";
+import Comments from "../../Comments/Comments";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faWindowClose,
@@ -73,39 +74,32 @@ class ExpandedListing extends Component {
         </div>
       );
 
-    const text = (
+    const listingInformation = (
       <React.Fragment>
-        <div className={classes.Text}>
-          <div>
-            <h1>
-              {this.props.expandedListing.postDetails.module}:《
-              {this.props.expandedListing.postDetails.textbook}》
-            </h1>
-          </div>
-
-          <div>
-            <ul className={classes.Description}>
-              <li>
-                Price: ${this.props.expandedListing.postDetails.price} / month
-              </li>
-              <li>
-                Delivery method:{" "}
-                {this.props.expandedListing.postDetails.deliveryMethod}
-              </li>
-              <li>
-                Location: {this.props.expandedListing.postDetails.location}
-              </li>
-              <li>
-                <br />
-                Description: <br />{" "}
-                {this.props.expandedListing.postDetails.description}
-              </li>
+        <div className={classes.listingDetails}>
+          <h1>
+            {this.props.expandedListing.postDetails.module}:《
+            {this.props.expandedListing.postDetails.textbook}》
+          </h1>
+          <ul className={classes.Description}>
+            <li>
+              Price: ${this.props.expandedListing.postDetails.price} / month
+            </li>
+            <li>
+              Delivery method:
+              {this.props.expandedListing.postDetails.deliveryMethod}
+            </li>
+            <li>Location: {this.props.expandedListing.postDetails.location}</li>
+            <li>
               <br />
-              <li>
-                Posted by: {this.props.expandedListing.postDetails.displayName}
-              </li>
-            </ul>
-          </div>
+              Description: <br />
+              {this.props.expandedListing.postDetails.description}
+            </li>
+            <br />
+            <li>
+              Posted by: {this.props.expandedListing.postDetails.displayName}
+            </li>
+          </ul>
           <div className={classes.Button}>
             {this.props.isAuthenticated ? (
               <Link to="/chats">
@@ -126,25 +120,28 @@ class ExpandedListing extends Component {
             )}
           </div>
         </div>
-        <div>
-          <Link to="/">
-            <FontAwesomeIcon
-              icon={faWindowClose}
-              style={{
-                float: "right",
-                paddingLeft: "10px",
-                color: "#ff5138",
-              }}
-            />
-          </Link>
-        </div>
+        <Link to="/">
+          <FontAwesomeIcon
+            icon={faWindowClose}
+            style={{
+              color: "#ff5138",
+              paddingRight: "5px",
+            }}
+          />
+        </Link>
       </React.Fragment>
     );
 
     return (
       <div className={classes.ExpandedListing}>
-        <div className={classes.Left}>{image}</div>
-        <div className={classes.Right}>{text}</div>
+        <div className={classes.ExpandedListingContent}>
+          <div className={classes.ImageContent}>{image}</div>
+          <div className={classes.TextContent}>{listingInformation}</div>
+        </div>
+        <Comments
+          comments={this.props.expandedListing.comments}
+          identifier={this.props.expandedListing.key}
+        />
       </div>
     );
   }

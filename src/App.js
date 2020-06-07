@@ -5,9 +5,7 @@ import { connect } from "react-redux";
 import Layout from "./hoc/Layout/Layout";
 import asyncComponent from "./hoc/asyncComponent/asyncComponent";
 import Listings from "./containers/Listings/FullListings";
-import Logout from "../src/containers/Auth/Logout/Logout";
 import * as actions from "./store/actions/index";
-import Comments from "./containers/Comments/Comments";
 
 const asyncNewPost = asyncComponent(() => {
   return import("./containers/NewPost/NewPost");
@@ -33,10 +31,15 @@ const asyncChat = asyncComponent(() => {
   return import("./containers/Chat/Chat");
 });
 
+const asyncLogOut = asyncComponent(() => {
+  return import("../src/containers/Auth/Logout/Logout");
+});
+
 class App extends Component {
   componentDidMount() {
     this.props.onTryAutoSignUp();
     this.props.dispatchFetchAllListings();
+    this.props.history.push("/");
   }
 
   render() {
@@ -46,7 +49,6 @@ class App extends Component {
         <Route path="/searchResults" component={asyncFilteredListings} />
         <Route path="/expanded-listing" component={asyncExpandedListing} />
         <Route path="/auth" component={asyncAuth} />
-        <Route path="/comments" component={Comments} />
         <Redirect to="/" />
       </Switch>
     );
@@ -60,7 +62,7 @@ class App extends Component {
           <Route path="/expanded-listing" component={asyncExpandedListing} />
           <Route path="/post-history" component={asyncPostHistory} />
           <Route path="/chats" component={asyncChat} />
-          <Route path="/logout" component={Logout} />
+          <Route path="/logout" component={asyncLogOut} />
           <Redirect to="/" />
         </Switch>
       );

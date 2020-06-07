@@ -53,6 +53,8 @@ export const fetchAllListings = () => {
           userId: snapShot.val().userId,
           postDetails: snapShot.val().postDetails,
           status: snapShot.val().status,
+          comments: snapShot.val().comments,
+          key: snapShot.key
         };
         result.push(listing);
         result.reverse();

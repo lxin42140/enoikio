@@ -1,5 +1,5 @@
 .Comments {
-    box-shadow: 0 3px 5px 0 #ccc;
+    /* box-shadow: 0 3px 5px 0 #ccc; */
     display: flex;
     flex-direction: column;
     flex: 1 1 auto;
@@ -15,7 +15,7 @@
 }
 
 .NewComment {
-    padding: 10px 0 20px 0;
+    padding: 10px 0 10px 0;
     display: flex;
     align-items: center;
 }
@@ -30,30 +30,13 @@
     outline: none;
 }
 
-.LoadReviews:link,
-.LoadReviews:visited {
+.AuthPrompt:link,
+.AuthPrompt:visited {
     color: #999;
     text-decoration: none;
     font-size: 16px;
     line-height: 20px;
-    float: left;
-    padding-top: 10px;
-}
-
-.LoadReviews:hover,
-.LoadReviews:active {
-    color: rgb(42, 139, 91);
-    text-decoration: underline;
-}
-
-.AuthPrompt:link,
-.AuthPrompt:visited {
-    text-decoration: none;
-    font-size: 16px;
-    line-height: 20px;
-    text-align: center;
-    color: #fdb2a7;
-    padding-bottom: 15px;
+    padding: 5px 0 5px 0;
 }
 
 .AuthPrompt:hover,

@@ -1,10 +1,21 @@
 .ExpandedListing {
-    border: 1px solid #ccc;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 3px 5px 0 #ccc;
+}
+
+.ExpandedListingContent {
     height: 100%;
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
     vertical-align: top;
+    border-bottom: 2px solid #f0f1f1;
+}
+
+.ImageContent {
+    width: 50%;
+    margin: 10px;
 }
 
 .Images {
@@ -18,7 +29,7 @@
     height: 400px;
     vertical-align: top;
     text-align: left;
-    width: 70%;
+    width: 90%;
 }
 
 .ImageButton {
@@ -37,21 +48,17 @@
     cursor: no-drop;
 }
 
-.Left {
-    width: 50%;
-    margin: 10px;
+.TextContent {
+    width:50%;
+    display:flex;
+    justify-content: flex-end;
 }
 
-.Right {
-    width: 50%;
-    margin: 10px;
+.listingDetails {
+    width: 90%;
     display: flex;
-    flex-direction: row;
-}
-
-.Text {
-    margin: 20px;
-    width: 80%;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .Description {
@@ -64,7 +71,6 @@
     line-height: 150%;
 } 
 
-.Button Button {
-    margin-left: 20px;
-    margin-right: 20px;
+.Button {
+    padding-bottom: 5px;
 }
