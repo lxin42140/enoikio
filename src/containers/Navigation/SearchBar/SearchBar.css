@@ -1,22 +1,76 @@
 .Searchbar {
     flex: 1;
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: flex-end;
 }
 
-.input {
-    width: 30%;
-    font-size: medium;
+.filter {
+    background-color: #ffcdc5;
+    width: 10%;
+    height: 70%;
+}
+
+.arrowDown {
+    color: rgb(95, 95, 95);
+    font-size: small;
+    padding-right: 15px;
+    border-right: 1px solid rgb(126, 125, 125);
+    cursor: pointer;
+}
+
+.button {
+    color: rgb(126, 125, 125);
+    border-style: none;
+    width: fit-content;
+    cursor: pointer;
     text-align: center;
-    background-color: #fdb2a7;
+    background-color: #ffcdc5;
+    height: 100%;
+    font-size: 0.9em;
+    padding: 5px
+}
+
+.button:active,
+.button:focus {
+    outline: none;
+}
+
+.searchBox {
+    background-color: #ffcdc5;
+    width: 35%;
+    height: 70%;
+    display: flex;
+    align-items: center;
+}
+
+.searchIcon {
+    color: rgb(170, 170, 170);
+}
+
+.searchIcon:active,
+.searchIcon:hover {
+    color: #fd8673;
+}
+
+.input {
+    background-color: #ffcdc5;
+    font-size: medium;
+    text-align: start;
     border-style: none;
     color: white;
-    border-bottom: 2px solid black;
+    height: 100%;
+    padding: 0;
+    width: 90%;
+}
+
+.input:focus {
+    outline: none
 }
 
 .input::placeholder {
-    color:white;
+    color: white;
 }
 
 .dropdownContent {
@@ -25,4 +79,11 @@
     background-color: #f1f1f1;
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 1;
+}
+
+.closeIcon {
+    color: white;
+    font-size: 1.2rem;
+    float: right;
+    padding: 20px;
 }

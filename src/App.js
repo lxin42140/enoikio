@@ -16,7 +16,7 @@ const asyncAuth = asyncComponent(() => {
 });
 
 const asyncPostHistory = asyncComponent(() => {
-  return import("./containers/PostHistory/PostHistory");
+  return import("./containers/Listings/FilteredListings");
 });
 
 const asyncFilteredListings = asyncComponent(() => {
