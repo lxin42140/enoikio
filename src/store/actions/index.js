@@ -1,7 +1,8 @@
 export {
     fetchAllListings,
     fetchExpandedListing,
-    filterListings
+    filterListings,
+    toggleFavouriteListing,
 } from './Listings'
 
 // export {

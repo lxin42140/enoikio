@@ -158,7 +158,6 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     dispatchGoToChat: (displayName) => dispatch(actions.goToChat(displayName)),
-    dispatchFetchAllListings: () => dispatch(actions.fetchAllListings()),
   };
 };
 

@@ -15,9 +15,9 @@ const asyncAuth = asyncComponent(() => {
   return import("./containers/Auth/Auth");
 });
 
-const asyncPostHistory = asyncComponent(() => {
-  return import("./containers/PostHistory/PostHistory");
-});
+// const asyncPostHistory = asyncComponent(() => {
+//   return import("./containers/PostHistory/PostHistory");
+// });
 
 const asyncFilteredListings = asyncComponent(() => {
   return import("./containers/Listings/FilteredListings");
@@ -60,7 +60,7 @@ class App extends Component {
           <Route path="/searchResults" component={asyncFilteredListings} />
           <Route path="/new-post" component={asyncNewPost} />
           <Route path="/expanded-listing" component={asyncExpandedListing} />
-          <Route path="/post-history" component={asyncPostHistory} />
+          {/* <Route path="/post-history" component={asyncPostHistory} /> */}
           <Route path="/chats" component={asyncChat} />
           <Route path="/logout" component={asyncLogOut} />
           <Redirect to="/" />
