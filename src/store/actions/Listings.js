@@ -43,6 +43,11 @@ export const filterListings = (filterType, searchObject) => {
   };
 };
 
+export const setFilterListings = (filterType, searchObject) => {
+  return (dispatch) => {
+    dispatch(filterListings(filterType, searchObject));
+  };
+};
 
 export const fetchAllListings = () => {
   return (dispatch, getState) => {
@@ -73,26 +78,21 @@ export const fetchAllListings = () => {
 };
 
 export const toggleFavouriteListing = (displayName, node, type) => {
-
   return (dispatch, getState) => {
-    const currLikedUsers = 
-      getState().listing.listings.filter(listing => 
-        listing.key === node)[0]
-        .likedUsers
+    const currLikedUsers = getState().listing.listings.filter(
+      (listing) => listing.key === node
+    )[0].likedUsers;
     if (type === "LIKE") {
       currLikedUsers.push(displayName);
     } else {
       const indexOfUser = currLikedUsers.indexOf(displayName);
       currLikedUsers.splice(indexOfUser, 1);
     }
-    database
-      .ref()
-      .child(`/listings/${node}`)
-      .update({
-        "likedUsers" : currLikedUsers
-      })
-  }
-}
+    database.ref().child(`/listings/${node}`).update({
+      likedUsers: currLikedUsers,
+    });
+  };
+};
 
 export const fetchExpandedListing = (identifier) => {
   return (dispatch, getState) => {

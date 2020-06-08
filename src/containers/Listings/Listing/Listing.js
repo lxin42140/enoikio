@@ -16,16 +16,16 @@ class Listing extends Component {
   };
 
   componentDidMount() {
-
     if (this.props.isAuthenticated) {
       //check whether the user is in the list that likes the post
       //if yes, setstate to true
-      const likedUser = this.props.likedUsers.filter(name => 
-        name === this.props.displayName)
+      const likedUser = this.props.likedUsers.filter(
+        (name) => name === this.props.displayName
+      );
       if (likedUser.length !== 0 && likedUser[0] === this.props.displayName) {
-        this.setState({liked: true})
+        this.setState({ liked: true });
       } else {
-        this.setState({liked: false})
+        this.setState({ liked: false });
       }
     }
 
@@ -62,23 +62,31 @@ class Listing extends Component {
   //3. heart icon remains as liked when the same user is logged in
 
   toggleLikePostHandler = () => {
-
     if (this.state.liked) {
       //remove the name from the list
-      this.props.dispatchFavouriteListing(this.props.displayName, this.props.node, "UNLIKE");
+      this.props.dispatchFavouriteListing(
+        this.props.displayName,
+        this.props.node,
+        "UNLIKE"
+      );
     } else {
       //if authenticated, add the name into the list
       if (this.props.isAuthenticated) {
-        this.props.dispatchFavouriteListing(this.props.displayName, this.props.node, "LIKE");
-      } else { //else, bring him to auth page
+        this.props.dispatchFavouriteListing(
+          this.props.displayName,
+          this.props.node,
+          "LIKE"
+        );
+      } else {
+        //else, bring him to auth page
         this.props.history.push("/auth");
       }
     }
 
-    this.setState(prevState => {
-      return {liked: !prevState.liked}
+    this.setState((prevState) => {
+      return { liked: !prevState.liked };
     });
-  }
+  };
 
   render() {
     let listing = (
@@ -109,9 +117,9 @@ class Listing extends Component {
     );
 
     const heartStyle = [classes.Icon];
-     this.state.liked ? 
-      heartStyle.push(classes.Enabled) :
-      heartStyle.push(classes.Disabled);
+    this.state.liked
+      ? heartStyle.push(classes.Enabled)
+      : heartStyle.push(classes.Disabled);
 
     return (
       <div className={classes.Listing}>
@@ -121,10 +129,11 @@ class Listing extends Component {
           <Button btnType="Important" onClick={this.expandListingHandler}>
             Rent now
           </Button>
-          <FontAwesomeIcon 
-            icon={faHeart} 
-            className={heartStyle.join(' ')}
-            onClick={this.toggleLikePostHandler} />
+          <FontAwesomeIcon
+            icon={faHeart}
+            className={heartStyle.join(" ")}
+            onClick={this.toggleLikePostHandler}
+          />
         </div>
       </div>
     );
@@ -134,7 +143,7 @@ class Listing extends Component {
 const mapStateToProps = (state) => {
   return {
     isAuthenticated: state.auth.token !== null,
-    displayName: state.auth.displayName
+    displayName: state.auth.displayName,
   };
 };
 
@@ -142,7 +151,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     dispatchExpandedListing: (identifier) =>
       dispatch(actions.fetchExpandedListing(identifier)),
-    dispatchFavouriteListing: (name, node, type) => 
+    dispatchFavouriteListing: (name, node, type) =>
       dispatch(actions.toggleFavouriteListing(name, node, type)),
   };
 };

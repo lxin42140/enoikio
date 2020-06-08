@@ -1,30 +1,18 @@
 export {
-    fetchAllListings,
-    fetchExpandedListing,
-    filterListings,
-    toggleFavouriteListing,
-} from './Listings'
+  fetchAllListings,
+  fetchExpandedListing,
+  setFilterListings,
+  toggleFavouriteListing,
+} from "./Listings";
 
-// export {
-//     fetchFilteredListing,
-// } from './FilteredListing'
+export { submitNewPost, submitNewPhoto, clearPostData } from "./NewPost";
 
 export {
-    submitNewPost,
-    submitNewPhoto,
-    clearPostData
-} from './NewPost'
-
-export {
-    signIn,
-    signUp,
-    logout,
-    setAuthRedirectPath,
-    authCheckState,
+  signIn,
+  signUp,
+  logout,
+  setAuthRedirectPath,
+  authCheckState,
 } from "./Auth";
 
-export {
-    fetchChats,
-    fetchFullChat,
-    goToChat,
-} from "./Chat"
+export { fetchChats, fetchFullChat, goToChat } from "./Chat";

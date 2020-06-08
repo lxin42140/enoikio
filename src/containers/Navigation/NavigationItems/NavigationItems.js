@@ -29,11 +29,16 @@ class NavigationItems extends Component {
           <NavigationItem link="/new-post">New Post</NavigationItem>
           <NavigationItem
             link="/post-history"
-            onClick={() => this.props.setFilterTerm()}
+            onClick={() => this.props.setFilterTerm("displayName")}
           >
             Past Posts
           </NavigationItem>
-          <NavigationItem link="/liked-listings">Favourites</NavigationItem>
+          <NavigationItem
+            link="/liked-listings"
+            onClick={() => this.props.setFilterTerm("favorites")}
+          >
+            Favorites
+          </NavigationItem>
           <NavigationItem link="/chats">Chats</NavigationItem>
           <NavigationItem link="/logout">Log out</NavigationItem>
           <FontAwesomeIcon
@@ -95,7 +100,8 @@ class NavigationItems extends Component {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setFilterTerm: () => dispatch(actions.filterListings("displayName", "")),
+    setFilterTerm: (filterType) =>
+      dispatch(actions.setFilterListings(filterType, "")),
   };
 };
 export default connect(null, mapDispatchToProps)(NavigationItems);

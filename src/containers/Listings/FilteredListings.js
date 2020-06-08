@@ -7,19 +7,62 @@ import classes from "./Listings.css";
 class FilteredListings extends Component {
   state = {
     filteredListings: [],
+    filterType: "",
   };
 
+  componentDidUpdate() {
+    if (this.props.filterType !== this.state.filterType) {
+      this.filter();
+    }
+  }
+
   componentDidMount() {
-    switch (this.props.filterTerm) {
+    if (this.props.filterType !== this.state.filterType) {
+      this.filter();
+    }
+  }
+
+  filter = () => {
+    let filteredListings = [];
+    switch (this.props.filterType) {
       case "favorites":
+        filteredListings = this.props.listings.filter((listing) => {
+          for (let user in listing.likedUsers) {
+            if (listing.likedUsers[user] === this.props.displayName) {
+              return true;
+            }
+          }
+          return false;
+        });
+        break;
       case "displayName":
+        filteredListings = this.props.listings.filter(
+          (listing) => listing.displayName === this.props.displayName
+        );
+        break;
       case "textbook":
+        filteredListings = this.props.listings.filter(
+          (listing) => listing.postDetails.textbook === this.props.searchObject
+        );
+        break;
       case "moduleCode":
+        filteredListings = this.props.listings.filter(
+          (listing) => listing.postDetails.module === this.props.searchObject
+        );
+        break;
       case "location":
+        filteredListings = this.props.listings.filter(
+          (listing) => listing.postDetails.location === this.props.searchObject
+        );
+        break;
       default:
         break;
     }
-  }
+    this.setState({
+      filteredListings: filteredListings,
+      filterType: this.props.filterType,
+    });
+  };
 
   render() {
     let listings = this.state.filteredListings.map((listing) => {
@@ -36,11 +79,10 @@ class FilteredListings extends Component {
           price={listing.postDetails.price}
           textbook={listing.postDetails.textbook}
           numImages={listing.numberOfImages}
+          likedUsers={listing.likedUsers}
         />
       );
     });
-
-    //TODO: when showing only one post, other summarized posts of the same module should show on the right
 
     return <div className={classes.Listings}>{listings}</div>;
   }
@@ -48,9 +90,10 @@ class FilteredListings extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    filterTerm: state.listing.filterTerm,
     listings: state.listing.listings,
+    filterType: state.listing.filterType,
     searchObject: state.listing.searchObject,
+    displayName: state.auth.displayName,
   };
 };
 

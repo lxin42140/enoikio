@@ -142,7 +142,7 @@ class SearchBar extends Component {
 const mapDispatchToProps = (dispatch) => {
   return {
     setFilterTerm: (filterType, object) =>
-      dispatch(actions.filterListings(filterType, object)),
+      dispatch(actions.setFilterListings(filterType, object)),
   };
 };
 
