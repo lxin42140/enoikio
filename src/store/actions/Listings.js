@@ -43,6 +43,7 @@ export const filterListings = (filterType, searchObject) => {
   };
 };
 
+
 export const fetchAllListings = () => {
   return (dispatch, getState) => {
     dispatch(fetchListingInit());
@@ -62,6 +63,7 @@ export const fetchAllListings = () => {
           status: snapShot.val().status,
           comments: snapShot.val().comments,
           key: snapShot.key,
+          likedUsers: snapShot.val().likedUsers,
         };
         result.push(listing);
         result.reverse();
@@ -69,6 +71,28 @@ export const fetchAllListings = () => {
       });
   };
 };
+
+export const toggleFavouriteListing = (displayName, node, type) => {
+
+  return (dispatch, getState) => {
+    const currLikedUsers = 
+      getState().listing.listings.filter(listing => 
+        listing.key === node)[0]
+        .likedUsers
+    if (type === "LIKE") {
+      currLikedUsers.push(displayName);
+    } else {
+      const indexOfUser = currLikedUsers.indexOf(displayName);
+      currLikedUsers.splice(indexOfUser, 1);
+    }
+    database
+      .ref()
+      .child(`/listings/${node}`)
+      .update({
+        "likedUsers" : currLikedUsers
+      })
+  }
+}
 
 export const fetchExpandedListing = (identifier) => {
   return (dispatch, getState) => {

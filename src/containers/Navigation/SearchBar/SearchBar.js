@@ -35,7 +35,7 @@ class SearchBar extends Component {
         placeHolder = "textbook title";
         break;
       default:
-        placeHolder = "preferred location";
+        placeHolder = "location";
         break;
     }
     this.setState({
@@ -52,7 +52,7 @@ class SearchBar extends Component {
   };
 
   onChangeHandler = (event) => {
-    this.setState({ userInput: event.target.value });
+    this.setState({ userInput: event.target.value, showFilterDropDown: false });
   };
 
   onCancelSearchHandler = (event) => {
@@ -92,6 +92,10 @@ class SearchBar extends Component {
       </React.Fragment>
     );
 
+    if (!this.state.showFilterDropDown) {
+      dropDown = null;
+    }
+
     const placeHolder =
       "Enter the " + this.state.placeHolder + " to start searching...";
 
@@ -104,12 +108,7 @@ class SearchBar extends Component {
               icon={faChevronDown}
               className={classes.arrowDown}
             />
-            <div
-              show={this.state.showFilterDropDown}
-              className={classes.dropdownContent}
-            >
-              {dropDown}
-            </div>
+            <div className={classes.dropdownContent}>{dropDown}</div>
           </div>
           <div className={classes.searchBox}>
             <input
@@ -124,6 +123,7 @@ class SearchBar extends Component {
                 <FontAwesomeIcon
                   icon={faSearch}
                   className={classes.searchIcon}
+                  style={{ paddingRight: "10px" }}
                 />
               </Link>
             </div>

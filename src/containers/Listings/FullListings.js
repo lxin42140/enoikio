@@ -30,6 +30,8 @@ class FullListings extends Component {
           price={listing.postDetails.price}
           textbook={listing.postDetails.textbook}
           numImages={listing.numberOfImages}
+          node={listing.key}
+          likedUsers={listing.likedUsers}
         />
       );
     });

@@ -33,6 +33,7 @@ class NavigationItems extends Component {
           >
             Past Posts
           </NavigationItem>
+          <NavigationItem link="/liked-listings">Favourites</NavigationItem>
           <NavigationItem link="/chats">Chats</NavigationItem>
           <NavigationItem link="/logout">Log out</NavigationItem>
           <FontAwesomeIcon
