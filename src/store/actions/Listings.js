@@ -1,6 +1,4 @@
 import * as actionTypes from "./actionTypes";
-import * as firebase from "firebase/app";
-import 'firebase/firestore';
 import { storage } from "../../firebase/firebase";
 import { database } from "../../firebase/firebase";
 
@@ -95,23 +93,6 @@ export const toggleFavouriteListing = (displayName, node, type) => {
       })
   }
 }
-
-// export const unlikeListing = (displayName, node) => {
-//   return (dispatch, getState) => {
-//     const currLikedUsers = 
-//       getState().listing.listings.filter(listing => 
-//         listing.key === node)[0]
-//         .likedUsers
-//     const indexOfUser = currLikedUsers.indexOf(displayName);
-//     currLikedUsers.splice(indexOfUser, 1);
-//     database
-//       .ref()
-//       .child(`/listings/${node}`)
-//       .update({
-//         "likedUsers" : currLikedUsers
-//       })
-//   }
-// }
 
 export const fetchExpandedListing = (identifier) => {
   return (dispatch, getState) => {
