@@ -339,7 +339,7 @@ class Offer extends Component {
       .child("listings/" + this.state.interestedListing.key)
       .update({
         offers: newOffers,
-        status: "Available",
+        status: "available",
       });
   };
 

@@ -141,7 +141,7 @@ class NewPost extends Component {
 
   onSubmitHandler = (event) => {
     event.preventDefault();
-    const date = moment().format("DD-MM-YYYY");
+    const date = moment().format("DD/MM/YYYY");
     const time = moment().format("HH:mm:ss");
     const unique = this.props.userId + " " + date + " " + time;
     const formData = {};

@@ -94,28 +94,34 @@ class ExpandedListing extends Component {
             <li>
               Price: ${this.props.expandedListing.postDetails.price} / month
             </li>
+            <li>Status: {this.props.expandedListing.status}</li>
             <li>
               Delivery method:
               {this.props.expandedListing.postDetails.deliveryMethod}
             </li>
             <li>Location: {this.props.expandedListing.postDetails.location}</li>
-            <li>
-              <br />
-              Description: <br />
-              {this.props.expandedListing.postDetails.description}
-            </li>
+            {this.props.expandedListing.postDetails.description ? (
+              <React.Fragment>
+                <li>
+                  <br />
+                  Description: <br />
+                  {this.props.expandedListing.postDetails.description}
+                </li>
+              </React.Fragment>
+            ) : null}
             <br />
             <li>Posted by: {this.props.expandedListing.displayName}</li>
+            <li>Posted on: {this.props.expandedListing.date}</li>
           </ul>
           <div className={classes.Button}>
             {this.props.isAuthenticated ? (
               this.props.expandedListing.displayName ===
               this.props.displayName ? null : (
-                <Button onClick={this.onChatHandler}>Chat</Button>
+                <Button onClick={this.onChatHandler}>Chat to make offer</Button>
               )
             ) : (
               <Link to="/auth">
-                <Button>Chat</Button>
+                <Button>Chat to make offer</Button>
               </Link>
             )}
           </div>
