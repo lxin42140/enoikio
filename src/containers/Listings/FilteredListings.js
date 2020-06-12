@@ -80,6 +80,9 @@ class FilteredListings extends Component {
           textbook={listing.postDetails.textbook}
           numImages={listing.numberOfImages}
           likedUsers={listing.likedUsers}
+          node={listing.key}
+          editable={listing.displayName === this.props.displayName &&
+            this.props.filterType === "displayName"}
         />
       );
     });
