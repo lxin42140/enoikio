@@ -21,6 +21,7 @@ class FullListings extends Component {
         <Listing
           history={this.props.history}
           key={listing.unique}
+          date={listing.date}
           identifier={listing.unique}
           userId={listing.displayName}
           status={listing.status}

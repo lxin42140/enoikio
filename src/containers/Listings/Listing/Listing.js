@@ -130,16 +130,24 @@ class Listing extends Component {
               {this.props.status === "available" ? (
                 <p style={{ margin: "0px" }}>Status: {this.props.status}</p>
               ) : (
+<<<<<<< HEAD
                   <p style={{ margin: "0px" }}>
                     Status: <br /> {this.props.status}
                   </p>
                 )}
+=======
+                <p style={{ margin: "0px" }}>
+                  Status: <br /> {this.props.status}
+                </p>
+              )}
+>>>>>>> 622a733200eb2024a654caa05e9bbfe9f8d6c8aa
             </li>
             <li>Price: ${this.props.price} / month</li>
             <li>Delivery method: {this.props.deliveryMethod}</li>
             <li>Location: {this.props.location}</li>
             <br />
             <li>Posted by: {this.props.userId}</li>
+            <li>Posted on: {this.props.date}</li>
           </ul>
         </div>
       </React.Fragment>
