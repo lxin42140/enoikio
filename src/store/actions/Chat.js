@@ -37,6 +37,14 @@ export const fetchFullChatHistorySuccess = (fullChat) => {
   };
 };
 
+export const updateChatContacts = (updatedChatNames, updatedChatContacts) => {
+  return {
+    type: actionTypes.UPDATE_CHAT_CONTACTS,
+    updatedChatNames: updatedChatNames,
+    updatedChatContacts: updatedChatContacts,
+  };
+};
+
 export const fetchChats = () => {
   return (dispatch, getState) => {
     dispatch(fetchChatContactsInit());
@@ -79,6 +87,36 @@ export const fetchChats = () => {
   };
 };
 
+export const removeEmptyChat = () => {
+  return (dispatch, getState) => {
+    const fullChat = getState().chat.fullChat;
+    const fullChatUID = getState().chat.fullChatUID;
+    const recipient = getState().chat.recipient;
+    let updatedChatNames = Object.assign([], getState().chat.existingChatNames);
+    const chatContacts = getState().chat.chatContacts;
+    if (fullChat.length < 1 && chatContacts.length > 0) {
+      const updatedChatContacts = chatContacts.filter((contact) => {
+        if (contact.userName !== recipient) {
+          return true;
+        }
+        updatedChatNames = updatedChatNames.filter(
+          (name) => name !== recipient
+        );
+        return false;
+      });
+
+      database
+        .ref()
+        .child("chats")
+        .child(fullChatUID)
+        .remove()
+        .then((response) => {
+          dispatch(updateChatContacts(updatedChatNames, updatedChatContacts));
+        });
+    }
+  };
+};
+
 export const fetchFullChat = (chatUID) => {
   return (dispatch, getState) => {
     dispatch(fetchFullChatInit());
@@ -87,18 +125,20 @@ export const fetchFullChat = (chatUID) => {
       .child("chats")
       .child(chatUID)
       .on("value", (snapShot) => {
-        let fullChat = snapShot.val().chatHistory;
-        if (!fullChat) {
-          fullChat = [];
-        }
-        let recipient = snapShot.val().userA;
-        if (recipient === getState().auth.displayName) {
-          recipient = snapShot.val().userB;
-        }
-        if (getState().chat.fullChatUID !== snapShot.key) {
-          dispatch(fetchFullChatInitSuccess(fullChat, chatUID, recipient));
-        } else {
-          dispatch(fetchFullChatHistorySuccess(fullChat));
+        if (snapShot.exists()) {
+          let fullChat = snapShot.val().chatHistory;
+          if (!fullChat) {
+            fullChat = [];
+          }
+          let recipient = snapShot.val().userA;
+          if (recipient === getState().auth.displayName) {
+            recipient = snapShot.val().userB;
+          }
+          if (getState().chat.fullChatUID !== snapShot.key) {
+            dispatch(fetchFullChatInitSuccess(fullChat, chatUID, recipient));
+          } else {
+            dispatch(fetchFullChatHistorySuccess(fullChat));
+          }
         }
       });
   };
@@ -115,8 +155,6 @@ export const goToChat = (chatDisplayName) => {
         userB: chatDisplayName,
         UID: UID,
       });
-      console.log("push message key", pushMessageKey);
-      dispatch(fetchFullChat(pushMessageKey));
     } else {
       database
         .ref()

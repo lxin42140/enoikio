@@ -10,7 +10,7 @@ import classes from "./Listings.css";
 
 class FullListings extends Component {
   componentDidMount() {
-    if (this.props.chatInitialLoad) {
+    if (this.props.isAuthenticated && this.props.chatInitialLoad) {
       this.props.dispatchFetchChats();
     }
   }
@@ -21,7 +21,7 @@ class FullListings extends Component {
         <Listing
           history={this.props.history}
           key={listing.unique}
-          identifier={listing.unique} 
+          identifier={listing.unique}
           userId={listing.displayName}
           status={listing.status}
           deliveryMethod={listing.postDetails.deliveryMethod}
@@ -49,6 +49,7 @@ const mapStateToProps = (state) => {
     fullListings: state.listing.listings,
     loading: state.listing.loading,
     chatInitialLoad: state.chat.initialLoad,
+    isAuthenticated: state.auth.token !== null,
   };
 };
 

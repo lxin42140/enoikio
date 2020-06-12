@@ -49,6 +49,7 @@
     max-width: 40%;
     overflow-wrap: break-word;
     width: fit-content;
+    text-align: start;
 }
 
 .ChatText:after,
@@ -100,6 +101,7 @@
     max-width: 40%;
     overflow-wrap: break-word;
     width: fit-content;
+    text-align: start;
 }
 
 .ChatTextSender:after,

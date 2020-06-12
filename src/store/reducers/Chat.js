@@ -50,6 +50,13 @@ const fetchFullChatHistorySuccess = (state, action) => {
   });
 };
 
+const updateContactNames = (state, action) => {
+  return updateObject(state, {
+    chatContacts: action.updatedChatContacts,
+    existingChatNames: action.updatedChatNames,
+  });
+};
+
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.FETCH_CHAT_CONTACTS_INIT:
@@ -62,6 +69,8 @@ const reducer = (state = initialState, action) => {
       return fetchFullChatInitSuccess(state, action);
     case actionTypes.FETCH_FULL_CHAT_HISTORY_SUCCESS:
       return fetchFullChatHistorySuccess(state, action);
+    case actionTypes.UPDATE_CHAT_CONTACTS:
+      return updateContactNames(state, action);
     default:
       return state;
   }

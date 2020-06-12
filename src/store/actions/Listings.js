@@ -43,9 +43,47 @@ export const filterListings = (filterType, searchObject) => {
   };
 };
 
+export const interestedListing = (interestedListing) => {
+  return {
+    type: actionTypes.SET_INTERESTED_LISTING,
+    interestedListing: interestedListing,
+  };
+};
+
+export const clearInterestedListing = () => {
+  return {
+    type: actionTypes.CLEAR_INTERESTED_LISTING,
+  };
+};
+
 export const setFilterListings = (filterType, searchObject) => {
   return (dispatch) => {
     dispatch(filterListings(filterType, searchObject));
+  };
+};
+
+export const emptyInterestedListing = () => {
+  return (dispatch) => {
+    dispatch(clearInterestedListing());
+  };
+};
+
+export const setInterestedListing = (listing) => {
+  return (dispatch) => {
+    storage
+      .ref("/listingPictures/" + listing.unique)
+      .child("0")
+      .getDownloadURL()
+      .then((url) => {
+        const result = {
+          textBook: listing.postDetails.textbook,
+          price: listing.postDetails.price,
+          displayName: listing.displayName,
+          url: url,
+          key: listing.key,
+        };
+        dispatch(interestedListing(result));
+      });
   };
 };
 
@@ -74,23 +112,6 @@ export const fetchAllListings = () => {
         result.reverse();
         dispatch(fetchListingSuccess(result));
       });
-  };
-};
-
-export const toggleFavouriteListing = (displayName, node, type) => {
-  return (dispatch, getState) => {
-    const currLikedUsers = getState().listing.listings.filter(
-      (listing) => listing.key === node
-    )[0].likedUsers;
-    if (type === "LIKE") {
-      currLikedUsers.push(displayName);
-    } else {
-      const indexOfUser = currLikedUsers.indexOf(displayName);
-      currLikedUsers.splice(indexOfUser, 1);
-    }
-    database.ref().child(`/listings/${node}`).update({
-      likedUsers: currLikedUsers,
-    });
   };
 };
 

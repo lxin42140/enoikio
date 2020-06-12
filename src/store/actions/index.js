@@ -2,7 +2,8 @@ export {
   fetchAllListings,
   fetchExpandedListing,
   setFilterListings,
-  toggleFavouriteListing,
+  setInterestedListing,
+  emptyInterestedListing
 } from "./Listings";
 
 export { submitNewPost, submitNewPhoto, clearPostData } from "./NewPost";
@@ -15,4 +16,4 @@ export {
   authCheckState,
 } from "./Auth";
 
-export { fetchChats, fetchFullChat, goToChat } from "./Chat";
+export { fetchChats, fetchFullChat, goToChat, removeEmptyChat} from "./Chat";

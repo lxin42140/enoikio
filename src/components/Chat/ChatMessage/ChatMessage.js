@@ -43,7 +43,15 @@ const ChatMessage = (props) => {
     <div className={classes.ChatMessage}>
       <div className={[chatInfo, "clearfix"].join(" ")}>{chatInfoSpans}</div>
       <FontAwesomeIcon icon={faUserGraduate} style={iconStyle} />
-      <div className={chatText}>{props.message}</div>
+      <div className={chatText}>
+        {props.type !== "NORMAL" ? (
+          <p style={{ color: "black" }}>
+            <b>{props.message}</b>
+          </p>
+        ) : (
+          props.message
+        )}
+      </div>
     </div>
   );
 };

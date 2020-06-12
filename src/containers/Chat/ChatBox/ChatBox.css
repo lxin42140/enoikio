@@ -6,7 +6,9 @@
 
 .ChatBoxHeader {
     color: #444;
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     padding-bottom: 5px;
     border-bottom: 2px solid #f4f4f4;
 }

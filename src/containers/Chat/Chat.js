@@ -5,38 +5,45 @@ import classes from "./Chat.css";
 import Contact from "../../components/Chat/Contact/Contact";
 import ChatBox from "./ChatBox/ChatBox";
 import * as actions from "../../store/actions/index";
-import Spinner from "../../components/UI/Spinner/Spinner";
 
 class Chat extends Component {
+  state = {
+    initialLoad: true,
+  };
+
+  componentWillUnmount() {
+    this.props.dispatchRemoveEmptyChats();
+    this.props.dispatchClearInterestedListing();
+  }
+
+  onSelectChatHandler = (ChatUID) => {
+    this.props.dispatchFetchFullChat(ChatUID);
+    this.setState({
+      initialLoad: false,
+    });
+  };
   render() {
     return (
       <div className={classes.Chat}>
         <div className={classes.ChatContacts}>
-          {this.props.fetchChatContactsLoading ? (
-            <Spinner />
-          ) : (
-            this.props.chatContacts.map((contact) => {
-              return (
-                <Contact
-                  key={contact.userName}
-                  userName={contact.userName}
-                  lastMessage={contact.lastMessage}
-                  onClick={() => this.props.dispatchFetchFullChat(contact.UID)}
-                />
-              );
-            })
-          )}
-          {/* <div className={classes.Search}>
-            <input
-              type="text"
-              className={classes.SearchField}
-              value="Search contacts..."
-            />
-          </div> */}
+          {this.props.chatContacts.map((contact) => {
+            return (
+              <Contact
+                key={contact.userName}
+                userName={contact.userName}
+                lastMessage={contact.lastMessage}
+                onClick={() => this.onSelectChatHandler(contact.UID)}
+              />
+            );
+          })}
           <h4 style={{ color: "#444" }}>Chat Contacts</h4>
         </div>
         <div className={classes.ChatBox}>
-          <ChatBox />
+          {this.state.initialLoad ? (
+            <p style={{ color: "#aab8c2" }}>Please select to send a message</p>
+          ) : (
+            <ChatBox />
+          )}
         </div>
       </div>
     );
@@ -45,11 +52,8 @@ class Chat extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    isAuthenticated: state.auth.token !== null,
-    token: state.auth.token,
-    displayName: state.auth.displayName,
     chatContacts: state.chat.chatContacts,
-    fetchChatContactsLoading: state.chat.fetchChatContactsLoading,
+    interestedListing: state.listing.interestedListing,
   };
 };
 
@@ -57,6 +61,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     dispatchFetchFullChat: (chatUID) =>
       dispatch(actions.fetchFullChat(chatUID)),
+    dispatchClearInterestedListing: () =>
+      dispatch(actions.emptyInterestedListing()),
+    dispatchRemoveEmptyChats: () => dispatch(actions.removeEmptyChat()),
   };
 };
 

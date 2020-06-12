@@ -2,12 +2,12 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import moment from "moment";
 
+import { database } from "../../../firebase/firebase";
 import classes from "./ChatBox.css";
 import Button from "../../../components/UI/Button/Button";
-import { database } from "../../../firebase/firebase";
-import * as actions from "../../../store/actions/index";
 import Spinner from "../../../components/UI/Spinner/Spinner";
 import ChatMessage from "../../../components/Chat/ChatMessage/ChatMessage";
+import Offer from "../Offer/Offer";
 
 class ChatBox extends Component {
   state = {
@@ -40,9 +40,10 @@ class ChatBox extends Component {
 
   sendMessageHandler = (event) => {
     if (this.state.message !== "") {
-      const message = {
+      let message = {
         content: this.state.message,
         sender: this.props.displayName,
+        type: "NORMAL",
         date: moment().format("DD-MM-YYYY"),
         time: moment().format("HH:mm:ss"),
       };
@@ -54,6 +55,7 @@ class ChatBox extends Component {
         .ref()
         .child("chats/" + this.props.fullChatUID)
         .update({ chatHistory: chatHistory });
+
       this.setState({
         message: "",
       });
@@ -66,15 +68,15 @@ class ChatBox extends Component {
         <div className={classes.ChatBoxHeader}>
           <h4>{this.props.recipient}</h4>
         </div>
+        <Offer />
         <div className={classes.ChatBoxMessages}>
-          {this.props.fullChat.length < 1 ? (
-            <p style={{ color: "#aab8c2" }}>Please select to send a message</p>
-          ) : this.props.fullChatLoading ? (
+          {this.props.fullChatLoading ? (
             <Spinner />
           ) : (
             this.props.fullChat.map((message) => (
               <ChatMessage
                 key={message.date + " " + message.time}
+                type={message.type}
                 displayName={message.sender}
                 message={message.content}
                 timeStamp={message.time}
@@ -112,9 +114,6 @@ class ChatBox extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    isAuthenticated: state.auth.token !== null,
-    token: state.auth.token,
-    uid: state.auth.userId,
     displayName: state.auth.displayName,
     fullChat: state.chat.fullChat,
     fullChatUID: state.chat.fullChatUID,
@@ -123,11 +122,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    dispatchFetchFullChat: (chatUID) =>
-      dispatch(actions.fetchFullChat(chatUID)),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(ChatBox);
+export default connect(mapStateToProps)(ChatBox);

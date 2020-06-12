@@ -31,6 +31,15 @@ class ExpandedListing extends Component {
     });
   };
 
+  onChatHandler = (event) => {
+    this.props.dispatchGoToChat(this.props.expandedListing.displayName);
+    this.props.dispatchSetInterestedListing(this.props.expandedListing);
+    this.props.history.push({
+      pathname: "/chats",
+      search: "?" + this.props.expandedListing.displayName,
+    });
+  };
+
   render() {
     if (this.props.expandedListingLoading) {
       return <Spinner />;
@@ -96,23 +105,14 @@ class ExpandedListing extends Component {
               {this.props.expandedListing.postDetails.description}
             </li>
             <br />
-            <li>
-              Posted by: {this.props.expandedListing.postDetails.displayName}
-            </li>
+            <li>Posted by: {this.props.expandedListing.displayName}</li>
           </ul>
           <div className={classes.Button}>
             {this.props.isAuthenticated ? (
-              <Link to="/chats">
-                <Button
-                  onClick={() =>
-                    this.props.dispatchGoToChat(
-                      this.props.expandedListing.displayName
-                    )
-                  }
-                >
-                  Chat
-                </Button>
-              </Link>
+              this.props.expandedListing.displayName ===
+              this.props.displayName ? null : (
+                <Button onClick={this.onChatHandler}>Chat</Button>
+              )
             ) : (
               <Link to="/auth">
                 <Button>Chat</Button>
@@ -152,12 +152,15 @@ const mapStateToProps = (state) => {
     expandedListing: state.listing.expandedListing,
     expandedListingLoading: state.listing.expandedListingLoading,
     isAuthenticated: state.auth.token !== null,
+    displayName: state.auth.displayName,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     dispatchGoToChat: (displayName) => dispatch(actions.goToChat(displayName)),
+    dispatchSetInterestedListing: (listing) =>
+      dispatch(actions.setInterestedListing(listing)),
   };
 };
 

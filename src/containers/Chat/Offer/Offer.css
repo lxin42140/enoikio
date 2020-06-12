@@ -1,0 +1,45 @@
+.InterestedListing {
+    display: flex;
+    border-bottom: 2px solid #f4f4f4;
+}
+
+.InterestedListingDetails {
+    padding-top: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    max-width: 50%;
+    color: #2c2c2d,
+}
+
+.Buttons {
+    align-self: center;
+    margin-left: auto;
+    padding-right: 5px;
+}
+
+.image {
+    flex: none;
+    object-fit: cover;
+    width: 48px;
+    height: 48px;
+    border-radius: 4px;
+}
+
+.Popup {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.OfferInput {
+    border: none;
+    width: 40%;
+    border-bottom: 2px solid red;
+}
+
+.OfferInput:focus {
+    outline: none;
+}

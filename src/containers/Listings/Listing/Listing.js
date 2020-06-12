@@ -1,12 +1,12 @@
 import React, { Component } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { connect } from "react-redux";
+import { faHeart } from "@fortawesome/free-solid-svg-icons";
 
 import classes from "./Listing.css";
 import Button from "../../../components/UI/Button/Button";
 import * as actions from "../../../store/actions/index";
-import { storage } from "../../../firebase/firebase";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { connect } from "react-redux";
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import { storage, database } from "../../../firebase/firebase";
 
 class Listing extends Component {
   state = {
@@ -16,36 +16,39 @@ class Listing extends Component {
   };
 
   componentDidMount() {
-    if (this.props.isAuthenticated) {
-      //check whether the user is in the list that likes the post
-      //if yes, setstate to true
-      const likedUser = this.props.likedUsers.filter(
-        (name) => name === this.props.displayName
-      );
-      if (likedUser.length !== 0 && likedUser[0] === this.props.displayName) {
-        this.setState({ liked: true });
-      } else {
-        this.setState({ liked: false });
-      }
-    }
-
     storage
       .ref("/listingPictures/" + this.props.identifier)
       .child("0")
       .getDownloadURL()
       .then((url) => {
-        this.setState({
-          image: url,
-        });
+        if (this.props.isAuthenticated) {
+          const likedUser = this.props.likedUsers.filter(
+            (name) => name === this.props.displayName
+          );
+          if (
+            likedUser.length !== 0 &&
+            likedUser[0] === this.props.displayName
+          ) {
+            this.setState({
+              liked: true,
+              image: url,
+            });
+          } else {
+            this.setState({
+              liked: false,
+              image: url,
+            });
+          }
+        } else {
+          this.setState({
+            image: url,
+          });
+        }
       })
       .catch((error) => {
         this.setState({ error: true });
       });
   }
-
-  // onRedirectToAuth = (event) => {
-  //   this.props.history.push("/auth");
-  // };
 
   expandListingHandler = () => {
     this.props.dispatchExpandedListing(this.props.identifier);
@@ -56,36 +59,43 @@ class Listing extends Component {
     });
   };
 
-  //TODO: add onclick handler that supports likes,
-  //1. when clicked, trigger heart icon to change color from lighter to darker, and number of heart counts increase by 1
-  //2. change should be uploaded to data base in the background
-  //3. heart icon remains as liked when the same user is logged in
-
   toggleLikePostHandler = () => {
-    if (this.state.liked) {
-      //remove the name from the list
-      this.props.dispatchFavouriteListing(
-        this.props.displayName,
-        this.props.node,
-        "UNLIKE"
-      );
+    if (!this.props.isAuthenticated) {
+      this.props.history.push("/auth");
     } else {
-      //if authenticated, add the name into the list
-      if (this.props.isAuthenticated) {
-        this.props.dispatchFavouriteListing(
-          this.props.displayName,
-          this.props.node,
-          "LIKE"
-        );
+      const currLikedUsers = this.props.listings.filter(
+        (listing) => listing.key === this.props.node
+      )[0].likedUsers;
+
+      if (this.state.liked) {
+        const indexOfUser = currLikedUsers.indexOf(this.props.displayName);
+        currLikedUsers.splice(indexOfUser, 1);
+        database
+          .ref()
+          .child(`/listings/${this.props.node}`)
+          .update({
+            likedUsers: currLikedUsers,
+          })
+          .then((res) => {
+            this.setState({
+              liked: false,
+            });
+          });
       } else {
-        //else, bring him to auth page
-        this.props.history.push("/auth");
+        currLikedUsers.push(this.props.displayName);
+        database
+          .ref()
+          .child(`/listings/${this.props.node}`)
+          .update({
+            likedUsers: currLikedUsers,
+          })
+          .then((res) => {
+            this.setState({
+              liked: true,
+            });
+          });
       }
     }
-
-    this.setState((prevState) => {
-      return { liked: !prevState.liked };
-    });
   };
 
   render() {
@@ -105,7 +115,10 @@ class Listing extends Component {
         </div>
         <div>
           <ul className={classes.Description}>
-            <li>Status: {this.props.status}</li>
+            <li>
+              Status: <br />
+              {this.props.status}
+            </li>
             <li>Price: ${this.props.price} / month</li>
             <li>Delivery method: {this.props.deliveryMethod}</li>
             <li>Location: {this.props.location}</li>
@@ -144,6 +157,7 @@ const mapStateToProps = (state) => {
   return {
     isAuthenticated: state.auth.token !== null,
     displayName: state.auth.displayName,
+    listings: state.listing.listings,
   };
 };
 
@@ -151,8 +165,6 @@ const mapDispatchToProps = (dispatch) => {
   return {
     dispatchExpandedListing: (identifier) =>
       dispatch(actions.fetchExpandedListing(identifier)),
-    dispatchFavouriteListing: (name, node, type) =>
-      dispatch(actions.toggleFavouriteListing(name, node, type)),
   };
 };
 
