@@ -35,6 +35,10 @@ const setExpandedListing = (state, expandedListing) => {
   });
 };
 
+const clearExpandedListing = (state, action) => {
+  return updateObject(state, { expandedListing: null })
+}
+
 const filterListings = (state, filterType, searchObject) => {
   return updateObject(state, {
     filterType: filterType,
@@ -66,6 +70,8 @@ const reducer = (state = initialState, action) => {
       return setExpandedListingInit(state, action);
     case actionTypes.SET_EXPANDED_LISTING:
       return setExpandedListing(state, action.expandedListing);
+    case actionTypes.CLEAR_EXPANDED_LISTING:
+      return clearExpandedListing(state, action);
     case actionTypes.FILTER_LISTINGS:
       return filterListings(state, action.filterType, action.searchObject);
     case actionTypes.SET_INTERESTED_LISTING:

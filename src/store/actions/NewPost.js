@@ -1,6 +1,6 @@
 import * as actionTypes from "./actionTypes";
 import axios from "../../firebaseAxios";
-import { storage } from "../../firebase/firebase";
+import { storage, database } from "../../firebase/firebase";
 
 export const submitNewPostInit = () => {
   return {
@@ -36,6 +36,17 @@ export const submitNewPost = (data, token) => {
       .catch((error) => submitNewPostFail(error));
   };
 };
+
+export const editPost = (edittedPost, node) => {
+  return (dispatch) => {
+    dispatch(submitNewPostInit());
+    database
+      .ref()
+      .child(`/listings/${node}`)
+      .update({postDetails: edittedPost})
+      .then(dispatch(submitNewPostSuccess()))
+  }
+}
 
 export const submitNewPhotoInit = () => {
   return {

@@ -7,6 +7,7 @@ export const FETCH_LISTING_FAIL = "FETCH_LISTING_FAIL";
 export const FILTER_LISTINGS = "FILTER_LISTINGS";
 export const SET_EXPANDED_LISTING_INIT = "SET_EXPANDED_LISTING_INIT"
 export const SET_EXPANDED_LISTING = "SET_EXPANDED_LISTING"
+export const CLEAR_EXPANDED_LISTING = "CLEAR_EXPANDED_LISTING"
 
 /*--------------------set interested listing-----------------*/
 export const SET_INTERESTED_LISTING = "SET_INTERESTED_LISTING"

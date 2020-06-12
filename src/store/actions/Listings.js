@@ -55,6 +55,11 @@ export const clearInterestedListing = () => {
     type: actionTypes.CLEAR_INTERESTED_LISTING,
   };
 };
+export const clearExpandedListing = () => {
+  return {
+    type: actionTypes.CLEAR_EXPANDED_LISTING
+  }
+}
 
 export const setFilterListings = (filterType, searchObject) => {
   return (dispatch) => {

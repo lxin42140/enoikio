@@ -7,12 +7,14 @@ import classes from "./Listing.css";
 import Button from "../../../components/UI/Button/Button";
 import * as actions from "../../../store/actions/index";
 import { storage, database } from "../../../firebase/firebase";
+import { Link } from 'react-router-dom';
 
 class Listing extends Component {
   state = {
     image: "",
     error: false,
     liked: false,
+    numberOfLikes: 0,
   };
 
   componentDidMount() {
@@ -32,16 +34,19 @@ class Listing extends Component {
             this.setState({
               liked: true,
               image: url,
+              numberOfLikes: this.props.likedUsers.length,
             });
           } else {
             this.setState({
               liked: false,
               image: url,
+              numberOfLikes: this.props.likedUsers.length,
             });
           }
         } else {
           this.setState({
             image: url,
+            numberOfLikes: this.props.likedUsers.length,
           });
         }
       })
@@ -77,9 +82,10 @@ class Listing extends Component {
             likedUsers: currLikedUsers,
           })
           .then((res) => {
-            this.setState({
+            this.setState((prevState) => ({
               liked: false,
-            });
+              numberOfLikes: prevState.numberOfLikes - 1,
+            }));
           });
       } else {
         currLikedUsers.push(this.props.displayName);
@@ -90,13 +96,18 @@ class Listing extends Component {
             likedUsers: currLikedUsers,
           })
           .then((res) => {
-            this.setState({
+            this.setState(prevState => ({
               liked: true,
-            });
+              numberOfLikes: prevState.numberOfLikes + 1,
+            }));
           });
       }
     }
   };
+
+  editListingHandler = () => {
+    this.props.dispatchEditListing(this.props.identifier);
+  }
 
   render() {
     let listing = (
@@ -116,8 +127,13 @@ class Listing extends Component {
         <div>
           <ul className={classes.Description}>
             <li>
-              Status: <br />
-              {this.props.status}
+              {this.props.status === "available" ? (
+                <p style={{ margin: "0px" }}>Status: {this.props.status}</p>
+              ) : (
+                  <p style={{ margin: "0px" }}>
+                    Status: <br /> {this.props.status}
+                  </p>
+                )}
             </li>
             <li>Price: ${this.props.price} / month</li>
             <li>Delivery method: {this.props.deliveryMethod}</li>
@@ -142,11 +158,18 @@ class Listing extends Component {
           <Button btnType="Important" onClick={this.expandListingHandler}>
             Rent now
           </Button>
+          {this.props.editable ?
+            <Link to="/new-post">
+              <Button btnType="Important" onClick={this.editListingHandler}>
+                Edit
+              </Button>
+            </Link> : null}
           <FontAwesomeIcon
             icon={faHeart}
             className={heartStyle.join(" ")}
             onClick={this.toggleLikePostHandler}
           />
+          {this.state.numberOfLikes}
         </div>
       </div>
     );
@@ -164,6 +187,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     dispatchExpandedListing: (identifier) =>
+      dispatch(actions.fetchExpandedListing(identifier)),
+    dispatchEditListing: (identifier) =>
       dispatch(actions.fetchExpandedListing(identifier)),
   };
 };

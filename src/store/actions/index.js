@@ -1,12 +1,13 @@
 export {
   fetchAllListings,
   fetchExpandedListing,
+  clearExpandedListing,
   setFilterListings,
   setInterestedListing,
   emptyInterestedListing
 } from "./Listings";
 
-export { submitNewPost, submitNewPhoto, clearPostData } from "./NewPost";
+export { submitNewPost, submitNewPhoto, clearPostData, editPost } from "./NewPost";
 
 export {
   signIn,
