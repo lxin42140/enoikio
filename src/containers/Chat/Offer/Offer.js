@@ -124,8 +124,17 @@ class Offer extends Component {
    * 3) Total duration of rental cannot exceed one year i.e. 365 days
    */
   dateValidation = () => {
-    let startDateIsValid = moment(this.state.startRental).isValid();
-    let endDateIsValid = moment(this.state.endRental).isValid();
+    const dateFormat = "DD/MM/YYYY";
+    let startDateIsValid = moment(
+      this.state.startRental,
+      dateFormat,
+      true
+    ).isValid();
+    let endDateIsValid = moment(
+      this.state.endRental,
+      dateFormat,
+      true
+    ).isValid();
 
     let startRentalDate = Number(this.state.startRental.split("/").join(""));
     let endRentalDate = Number(this.state.endRental.split("/").join(""));
