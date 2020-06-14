@@ -70,6 +70,7 @@ class FilteredListings extends Component {
         <Listing
           history={this.props.history}
           key={listing.unique}
+          date={listing.date}
           identifier={listing.unique}
           userId={listing.displayName}
           status={listing.status}
@@ -79,10 +80,8 @@ class FilteredListings extends Component {
           price={listing.postDetails.price}
           textbook={listing.postDetails.textbook}
           numImages={listing.numberOfImages}
-          likedUsers={listing.likedUsers}
           node={listing.key}
-          editable={listing.displayName === this.props.displayName &&
-            this.props.filterType === "displayName"}
+          likedUsers={listing.likedUsers}
         />
       );
     });

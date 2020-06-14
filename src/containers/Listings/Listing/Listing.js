@@ -173,30 +173,33 @@ class Listing extends Component {
         {listing}
         <br />
         <div className={classes.Selection}>
-          <Button btnType="Important" onClick={this.expandListingHandler}>
-            Rent now
-          </Button>
-          {this.props.editable ? (
+          {this.props.userId === this.props.displayName ? (
             <Link to="/new-post">
               <Button btnType="Important" onClick={this.editListingHandler}>
                 Edit
               </Button>
             </Link>
-          ) : null}
-          <FontAwesomeIcon
-            icon={faHeart}
-            className={heartStyle.join(" ")}
-            onClick={this.toggleLikePostHandler}
-          />
-          <p
-            style={{
-              margin: "0px 0px 0px -40px",
-              color: "#ccc",
-              fontSize: "small",
-            }}
-          >
-            {this.state.numberOfLikes + " likes"}
-          </p>
+          ) : (
+            <Button btnType="Important" onClick={this.expandListingHandler}>
+              Rent now
+            </Button>
+          )}
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <FontAwesomeIcon
+              icon={faHeart}
+              className={heartStyle.join(" ")}
+              onClick={this.toggleLikePostHandler}
+            />
+            <p
+              style={{
+                paddingLeft: "5px",
+                color: "#ccc",
+                fontSize: "small",
+              }}
+            >
+              {this.state.numberOfLikes + " likes"}
+            </p>
+          </div>
         </div>
       </div>
     );
