@@ -7,7 +7,7 @@ import classes from "./Listing.css";
 import Button from "../../../components/UI/Button/Button";
 import * as actions from "../../../store/actions/index";
 import { storage, database } from "../../../firebase/firebase";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 class Listing extends Component {
   state = {
@@ -96,7 +96,7 @@ class Listing extends Component {
             likedUsers: currLikedUsers,
           })
           .then((res) => {
-            this.setState(prevState => ({
+            this.setState((prevState) => ({
               liked: true,
               numberOfLikes: prevState.numberOfLikes + 1,
             }));
@@ -107,7 +107,7 @@ class Listing extends Component {
 
   editListingHandler = () => {
     this.props.dispatchEditListing(this.props.identifier);
-  }
+  };
 
   render() {
     let listing = (
@@ -128,19 +128,36 @@ class Listing extends Component {
           <ul className={classes.Description}>
             <li>
               {this.props.status === "available" ? (
-                <p style={{ margin: "0px" }}>Status: {this.props.status}</p>
+                <p style={{ margin: "0px" }}>
+                  <b>Status: </b>
+                  {this.props.status}
+                </p>
               ) : (
-                  <p style={{ margin: "0px" }}>
-                    Status: <br /> {this.props.status}
-                  </p>
-                )}
+                <p style={{ margin: "0px" }}>
+                  <b>Status: </b> <br /> {this.props.status}
+                </p>
+              )}
             </li>
-            <li>Price: ${this.props.price} / month</li>
-            <li>Delivery method: {this.props.deliveryMethod}</li>
-            <li>Location: {this.props.location}</li>
+            <li>
+              <b>Price: </b>${this.props.price} / month
+            </li>
+            <li>
+              <b>Delivery method: </b>
+              {this.props.deliveryMethod}
+            </li>
+            <li>
+              <b>Location: </b>
+              {this.props.location}
+            </li>
             <br />
-            <li>Posted by: {this.props.userId}</li>
-            <li>Posted on: {this.props.date}</li>
+            <li>
+              <b>Posted by: </b>
+              {this.props.userId}
+            </li>
+            <li>
+              <b>Posted on: </b>
+              {this.props.date}
+            </li>
           </ul>
         </div>
       </React.Fragment>
@@ -159,18 +176,27 @@ class Listing extends Component {
           <Button btnType="Important" onClick={this.expandListingHandler}>
             Rent now
           </Button>
-          {this.props.editable ?
+          {this.props.editable ? (
             <Link to="/new-post">
               <Button btnType="Important" onClick={this.editListingHandler}>
                 Edit
               </Button>
-            </Link> : null}
+            </Link>
+          ) : null}
           <FontAwesomeIcon
             icon={faHeart}
             className={heartStyle.join(" ")}
             onClick={this.toggleLikePostHandler}
           />
-          {this.state.numberOfLikes}
+          <p
+            style={{
+              margin: "0px 0px 0px -40px",
+              color: "#ccc",
+              fontSize: "small",
+            }}
+          >
+            {this.state.numberOfLikes + " likes"}
+          </p>
         </div>
       </div>
     );

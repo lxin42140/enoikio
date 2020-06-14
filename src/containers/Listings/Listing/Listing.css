@@ -1,16 +1,16 @@
 /*TODO: fix listing size to relative*/
 .Listing {
-    background-color: white;
+    /* background-color: white; */
+    display: flex;
+    flex-direction: column;
     width: 250px;
-    height: 600px;
+    height: 580px;
     overflow-y: auto;
     border: 1px solid #ccc;
     padding: 8px;
     box-sizing: border-box;
     margin: 10px;
-    margin-top: 0px;
-    text-align: left;
-
+    text-align: left
 }
 
 .FullListing {
@@ -49,12 +49,13 @@
     color: grey;
     list-style: none;
     padding-left: 0px;
-} 
+}
 
 .Selection {
     display: flex;
     justify-content: space-around;
     align-items: center;
+    margin-top: auto;
 }
 
 .Icon {
