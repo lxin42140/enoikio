@@ -1,6 +1,8 @@
 .Button {
     width: fit-content;
-    height:25px;
+    box-sizing: content-box;
+    min-width: 50px;
+    height: 25px;
     border-radius: 2em;
     cursor: pointer;
     padding: auto;
@@ -44,7 +46,7 @@
 
 .Important {
     border-style: none;
-    background-color: #ff745f; 
+    background-color: #ff745f;
     color: white;
 }
 

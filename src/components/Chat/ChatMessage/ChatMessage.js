@@ -2,8 +2,7 @@ import React from "react";
 import moment from "moment";
 
 import classes from "./ChatMessage.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUserGraduate } from "@fortawesome/free-solid-svg-icons";
+import profileImage from "../../../assets/Images/chats/profile";
 
 const ChatMessage = (props) => {
   let chatInfo = classes.ChatInfo;
@@ -19,7 +18,6 @@ const ChatMessage = (props) => {
     </React.Fragment>
   );
   let iconStyle = {
-    borderRadius: "50%",
     float: "left",
     width: "40px",
     height: "40px",
@@ -40,7 +38,6 @@ const ChatMessage = (props) => {
       </React.Fragment>
     );
     iconStyle = {
-      borderRadius: "50%",
       float: "right",
       width: "40px",
       height: "40px",
@@ -51,7 +48,7 @@ const ChatMessage = (props) => {
   return (
     <div className={classes.ChatMessage}>
       <div className={[chatInfo, "clearfix"].join(" ")}>{chatInfoSpans}</div>
-      <FontAwesomeIcon icon={faUserGraduate} style={iconStyle} />
+      <img src={profileImage} alt="profile" style={iconStyle} />
       <div className={chatText}>
         {props.type !== "NORMAL" ? (
           <p style={{ color: "black" }}>

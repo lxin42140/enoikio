@@ -1,6 +1,5 @@
 /*TODO: fix listing size to relative*/
 .Listing {
-    /* background-color: white; */
     display: flex;
     flex-direction: column;
     width: 250px;

@@ -16,6 +16,14 @@ class FullListings extends Component {
   }
 
   render() {
+    if (this.props.loading) {
+      return <Spinner />;
+    }
+
+    if (this.props.fullListings.length < 1) {
+      return <h3>Oops..No available listings</h3>;
+    }
+
     let listings = this.props.fullListings.map((listing) => {
       return (
         <Listing
@@ -36,10 +44,6 @@ class FullListings extends Component {
         />
       );
     });
-
-    if (this.props.loading) {
-      listings = <Spinner />;
-    }
 
     return <div className={classes.Listings}>{listings}</div>;
   }

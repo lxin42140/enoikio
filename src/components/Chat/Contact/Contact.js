@@ -1,13 +1,11 @@
 import React from "react";
 import classes from "./Contact.css";
+import profileImage from "../../../assets/Images/chats/profile";
 
 const contact = (props) => {
   return (
     <div className={classes.friend} onClick={props.onClick}>
-      <img
-        src="https://media.karousell.com/media/photos/profiles/2020/03/07/heiiieiieiie_1583567636.jpg"
-        alt=""
-      />
+      <img src={profileImage} alt="profile" />
       <p>
         <strong
           style={{

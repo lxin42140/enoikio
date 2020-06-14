@@ -65,6 +65,10 @@ class FilteredListings extends Component {
   };
 
   render() {
+    if (this.state.filteredListings.length < 1) {
+      return <h3>Oops..No available listings</h3>;
+    }
+
     let listings = this.state.filteredListings.map((listing) => {
       return (
         <Listing
