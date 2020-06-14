@@ -4,10 +4,15 @@ export {
   clearExpandedListing,
   setFilterListings,
   setInterestedListing,
-  emptyInterestedListing
+  emptyInterestedListing,
 } from "./Listings";
 
-export { submitNewPost, submitNewPhoto, clearPostData, editPost } from "./NewPost";
+export {
+  submitNewPost,
+  submitNewPhoto,
+  clearPostData,
+  editPost,
+} from "./NewPost";
 
 export {
   signIn,
@@ -17,4 +22,4 @@ export {
   authCheckState,
 } from "./Auth";
 
-export { fetchChats, fetchFullChat, goToChat, removeEmptyChat} from "./Chat";
+export { fetchChats, fetchFullChat, removeEmptyChat } from "./Chat";

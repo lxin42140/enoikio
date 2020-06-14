@@ -96,15 +96,15 @@ class NewPost extends Component {
     uploadImageError: false,
     formIsValid: false,
     showModal: false,
-    editting: false,
+    editing: false,
     initialEdit: true,
   };
 
   componentDidMount() {
     if (this.props.editListingLoading) {
-      this.setState({ editting: true });
+      this.setState({ editing: true });
     } else {
-      this.setState({ initialEdit: false })
+      this.setState({ initialEdit: false });
       this.props.dispatchRemoveExpandListing();
     }
   }
@@ -123,21 +123,26 @@ class NewPost extends Component {
   }
 
   inputChangedHandler = (event, formElement) => {
-
     let updatedDataForm = {};
-    if (this.state.editting && this.state.initialEdit) {
-
-      const form = ["module", "textbook", "price", "deliveryMethod", "location", "description"]
+    if (this.state.editing && this.state.initialEdit) {
+      const form = [
+        "module",
+        "textbook",
+        "price",
+        "deliveryMethod",
+        "location",
+        "description",
+      ];
       for (let data in form) {
         const object = this.state.dataForm[form[data]];
-        object.value = this.props.editListing.postDetails[form[data]]
-        object.valid = true
-        updatedDataForm[form[data]] = object
+        object.value = this.props.editListing.postDetails[form[data]];
+        object.valid = true;
+        updatedDataForm[form[data]] = object;
       }
     } else {
       updatedDataForm = {
-        ...this.state.dataForm
-      }
+        ...this.state.dataForm,
+      };
     }
 
     const updatedFormElement = {
@@ -155,15 +160,15 @@ class NewPost extends Component {
       if (!updatedDataForm[inputIdentifiers].valid) {
         formIsValid = false;
         break;
-      } else if (!this.state.editting && this.state.imageAsFile.length === 0) {
+      } else if (!this.state.editing && this.state.imageAsFile.length === 0) {
         formIsValid = false;
         break;
       }
     }
-    this.setState({ 
-      dataForm: updatedDataForm, 
-      formIsValid: formIsValid, 
-      initialEdit: false 
+    this.setState({
+      dataForm: updatedDataForm,
+      formIsValid: formIsValid,
+      initialEdit: false,
     });
   };
 
@@ -192,11 +197,11 @@ class NewPost extends Component {
       time: time,
       numberOfImages: this.state.imageAsFile.length,
       status: "available",
-      likedUsers: ['none']
+      likedUsers: ["none"],
     };
-    this.state.editting ? 
-    this.props.dispatchEditPost(formData, this.props.editListing.key) : 
-    this.props.dispatchSubmitPost(postDetails, this.props.token);
+    this.state.editing
+      ? this.props.dispatchEditPost(formData, this.props.editListing.key)
+      : this.props.dispatchSubmitPost(postDetails, this.props.token);
     this.props.dispatchSubmitPhoto(this.state.imageAsFile, unique);
     this.setState({ showModal: false });
   };
@@ -205,8 +210,8 @@ class NewPost extends Component {
     let images = event.target.files;
 
     let imageArray = [...this.state.imageAsFile];
-    
-    //check whether images uploaded is same as any file in the state already 
+
+    //check whether images uploaded is same as any file in the state already
     for (let uploadedImage in images) {
       let diffImage = true;
       for (let currImage in imageArray) {
@@ -222,7 +227,7 @@ class NewPost extends Component {
     imageArray = imageArray.slice(0, imageArray.length - 2);
 
     if (imageArray.length > 3) {
-      this.setState({ uploadImageError: true })
+      this.setState({ uploadImageError: true });
     } else {
       let formIsValid = true;
       for (let element in this.state.dataForm) {
@@ -242,11 +247,11 @@ class NewPost extends Component {
   };
 
   removeImageHandler = (imageName) => {
-    let imageArray; 
+    let imageArray;
     // if (this.props.editListing.imageURL.length === this.state.imageAsFile.length) {
     //   imageArray = this.props.editListing.imageURL;
-    // } else {      
-      imageArray = [...this.state.imageAsFile];
+    // } else {
+    imageArray = [...this.state.imageAsFile];
     // }
     for (let image in imageArray) {
       if (imageArray[image].name === imageName) {
@@ -254,8 +259,8 @@ class NewPost extends Component {
         break;
       }
     }
-    this.setState({ imageAsFile: imageArray })
-  }
+    this.setState({ imageAsFile: imageArray });
+  };
 
   createNewFormHandler = () => {
     this.props.dispatchClearNewPostData();
@@ -283,20 +288,27 @@ class NewPost extends Component {
 
   render() {
     if (this.props.editListingLoading) {
-      return <Spinner />
+      return <Spinner />;
     }
 
     const formElementsArray = [];
-    if (this.state.editting && this.state.initialEdit) {
-      const form = ["module", "textbook", "price", "deliveryMethod", "location", "description"]
+    if (this.state.editing && this.state.initialEdit) {
+      const form = [
+        "module",
+        "textbook",
+        "price",
+        "deliveryMethod",
+        "location",
+        "description",
+      ];
       for (let key in form) {
         formElementsArray.push({
           id: form[key],
           config: {
             ...this.state.dataForm[form[key]],
-            value: this.props.editListing.postDetails[form[key]]
-          }
-        })
+            value: this.props.editListing.postDetails[form[key]],
+          },
+        });
       }
     } else {
       for (let key in this.state.dataForm) {
@@ -323,21 +335,21 @@ class NewPost extends Component {
     });
 
     let imageList;
-    if (this.state.editting && this.state.initialEdit) {
+    if (this.state.editing && this.state.initialEdit) {
       imageList = this.props.editListing.imageURL;
-    } else if (!this.state.editting || ! this.state.initialEdit) {
-      imageList = this.state.imageAsFile
+    } else if (!this.state.editing || !this.state.initialEdit) {
+      imageList = this.state.imageAsFile;
     }
 
     let displayImageList;
-    if (!this.state.editting) {
-      displayImageList = imageList.map(image => {
+    if (!this.state.editing) {
+      displayImageList = imageList.map((image) => {
         return (
           <div key={image.name}>
-            <p>
-              {image.name}
-            </p>
-            <Button onClick={() => this.removeImageHandler(image.name)}>Remove</Button>
+            <p>{image.name}</p>
+            <Button onClick={() => this.removeImageHandler(image.name)}>
+              Remove
+            </Button>
           </div>
         );
       });
@@ -348,42 +360,45 @@ class NewPost extends Component {
         <h4>
           {this.props.uploadingImage || this.props.uploadingPost
             ? "Submitting..."
-            :
-          this.state.editting ? "Edit Rental Details" : "Enter Rental Details"}
+            : this.state.editing
+            ? "Edit Rental Details"
+            : "Enter Rental Details"}
         </h4>
         {this.props.uploadingImage || this.props.uploadingPost ? (
           <Spinner />
         ) : (
-            <React.Fragment>
-              {form}
-              <br />
-              {!this.state.editting ? 
-                <React.Fragment>
-                  <div style={{marginBottom: "10px"}}>
-                    <input
-                      type="file"
-                      accept=".png,.jpeg, .jpg"
-                      multiple
-                      style={{ width: "95px" }}
-                      onChange={this.handleImageAsFile}
-                      disabled={this.state.imageAsFile.length >= 3}
-                    />
-                  </div>
-                  <div>
-                    {displayImageList}
-                  </div>
-                  <p style={{color: 'red'}}>{this.state.uploadImageError ? "Please select a maximum of 3 images" : null}</p>
-                </React.Fragment>
-              : null}
-              <Button
-                btnType="Important"
-                onClick={this.toggleModalHandler}
-                disabled={!this.state.formIsValid}
-              >
-                SUBMIT
+          <React.Fragment>
+            {form}
+            <br />
+            {!this.state.editing ? (
+              <React.Fragment>
+                <div style={{ marginBottom: "10px" }}>
+                  <input
+                    type="file"
+                    accept=".png,.jpeg, .jpg"
+                    multiple
+                    style={{ width: "95px" }}
+                    onChange={this.handleImageAsFile}
+                    disabled={this.state.imageAsFile.length >= 3}
+                  />
+                </div>
+                <div>{displayImageList}</div>
+                <p style={{ color: "red" }}>
+                  {this.state.uploadImageError
+                    ? "Please select a maximum of 3 images"
+                    : null}
+                </p>
+              </React.Fragment>
+            ) : null}
+            <Button
+              btnType="Important"
+              onClick={this.toggleModalHandler}
+              disabled={!this.state.formIsValid}
+            >
+              SUBMIT
             </Button>
-            </React.Fragment>
-          )}
+          </React.Fragment>
+        )}
       </div>
     );
 
@@ -412,7 +427,7 @@ class NewPost extends Component {
 
     let successPost = (
       <Modal show={this.props.postUploaded && this.props.imageUploaded}>
-        {this.state.editting ? "Succesfully editted!" : "Successfully posted!"}
+        {this.state.editing ? "Successfully edited!" : "Successfully posted!"}
         <div style={{ display: "flex", justifyContent: "center" }}>
           <Link to="/">
             <Button onClick={() => this.props.dispatchClearNewPostData()}>
@@ -454,12 +469,10 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(actions.submitNewPost(newPost, token)),
     dispatchSubmitPhoto: (imageAsFile, identifier) =>
       dispatch(actions.submitNewPhoto(imageAsFile, identifier)),
-    dispatchClearNewPostData: () =>
-      dispatch(actions.clearPostData()),
-    dispatchRemoveExpandListing: () =>
-      dispatch(actions.clearExpandedListing()),
-    dispatchEditPost: (edittedPost, node) => 
-      dispatch(actions.editPost(edittedPost, node)),
+    dispatchClearNewPostData: () => dispatch(actions.clearPostData()),
+    dispatchRemoveExpandListing: () => dispatch(actions.clearExpandedListing()),
+    dispatchEditPost: (editedPost, node) =>
+      dispatch(actions.editPost(editedPost, node)),
   };
 };
 

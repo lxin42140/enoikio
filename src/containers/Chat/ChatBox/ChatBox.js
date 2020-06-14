@@ -12,6 +12,7 @@ import Offer from "../Offer/Offer";
 class ChatBox extends Component {
   state = {
     message: "",
+    date: "",
   };
 
   componentDidUpdate() {
@@ -44,7 +45,7 @@ class ChatBox extends Component {
         content: this.state.message,
         sender: this.props.displayName,
         type: "NORMAL",
-        date: moment().format("DD-MM-YYYY"),
+        date: moment().format("DD/MM/YYYY"),
         time: moment().format("HH:mm:ss"),
       };
 
@@ -68,7 +69,10 @@ class ChatBox extends Component {
         <div className={classes.ChatBoxHeader}>
           <h4>{this.props.recipient}</h4>
         </div>
-        <Offer />
+        <Offer
+          fullChat={this.props.fullChat}
+          fullChatUID={this.props.fullChatUID}
+        />
         <div className={classes.ChatBoxMessages}>
           {this.props.fullChatLoading ? (
             <Spinner />
@@ -79,7 +83,8 @@ class ChatBox extends Component {
                 type={message.type}
                 displayName={message.sender}
                 message={message.content}
-                timeStamp={message.time}
+                date={message.date}
+                time={message.time}
                 currentUser={this.props.displayName}
               />
             ))

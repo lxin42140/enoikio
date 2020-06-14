@@ -37,13 +37,13 @@ export const submitNewPost = (data, token) => {
   };
 };
 
-export const editPost = (edittedPost, node) => {
+export const editPost = (editedPost, node) => {
   return (dispatch) => {
     dispatch(submitNewPostInit());
     database
       .ref()
       .child(`/listings/${node}`)
-      .update({postDetails: edittedPost})
+      .update({postDetails: editedPost})
       .then(dispatch(submitNewPostSuccess()))
   }
 }

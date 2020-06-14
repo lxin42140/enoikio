@@ -14,6 +14,7 @@ class Offer extends Component {
     endRental: "",
     interestedListing: "",
     offerType: "",
+    fullChatUID: "",
     showPopUp: false,
     isListingOwner: false,
   };
@@ -24,21 +25,55 @@ class Offer extends Component {
     );
     let lastOffer = offerMessages[offerMessages.length - 1];
     if (
+      this.state.fullChatUID === this.props.fullChatUID &&
       this.state.offerType !== "FIRST_OFFER" &&
       lastOffer &&
       this.state.offerType !== lastOffer.type
     ) {
-      let isListingOwner = false;
-      if (lastOffer.interestedListing.displayName === this.props.displayName) {
-        isListingOwner = true;
-      }
       this.setState({
-        isListingOwner: isListingOwner,
+        isListingOwner: this.isListingOwner(lastOffer),
         interestedListing: lastOffer.interestedListing,
         priceOffer: lastOffer.price,
         startRental: lastOffer.startRental,
         endRental: lastOffer.endRental,
         offerType: lastOffer.type,
+      });
+    } else if (
+      this.state.fullChatUID !== this.props.fullChatUID &&
+      this.props.interestedListing &&
+      (this.props.fullChat.length < 1 || offerMessages.length < 1)
+    ) {
+      this.setState({
+        isListingOwner:
+          this.props.interestedListing.displayName === this.props.displayName,
+        interestedListing: this.props.interestedListing,
+        fullChatUID: this.props.fullChatUID,
+        offerType: "FIRST_OFFER",
+        priceOffer: "",
+        startRental: "",
+        endRental: "",
+      });
+    } else if (this.state.fullChatUID !== this.props.fullChatUID && lastOffer) {
+      this.setState({
+        isListingOwner: this.isListingOwner(lastOffer),
+        interestedListing: lastOffer.interestedListing,
+        fullChatUID: this.props.fullChatUID,
+
+        priceOffer: lastOffer.price,
+        startRental: lastOffer.startRental,
+        endRental: lastOffer.endRental,
+        offerType: lastOffer.type,
+      });
+    } else if (this.state.fullChatUID !== this.props.fullChatUID) {
+      this.setState({
+        priceOffer: "",
+        startRental: "",
+        endRental: "",
+        interestedListing: "",
+        offerType: "",
+        fullChatUID: this.props.fullChatUID,
+        showPopUp: false,
+        isListingOwner: false,
       });
     }
   }
@@ -48,34 +83,33 @@ class Offer extends Component {
       (message) => message.type !== "NORMAL"
     );
     let lastOffer = offerMessages[offerMessages.length - 1];
-    if (this.props.fullChat.length < 1 || offerMessages.length < 1) {
+    if (
+      this.props.interestedListing &&
+      (this.props.fullChat.length < 1 || offerMessages.length < 1)
+    ) {
       this.setState({
+        isListingOwner:
+          this.props.interestedListing.displayName === this.props.displayName,
         interestedListing: this.props.interestedListing,
+        fullChatUID: this.props.fullChatUID,
         offerType: "FIRST_OFFER",
       });
     } else if (
-      this.props.interestedListing !== null &&
+      this.props.interestedListing &&
       lastOffer &&
       lastOffer.interestedListing.key !== this.props.interestedListing.key
     ) {
-      let isListingOwner = false;
-      if (lastOffer.interestedListing.displayName === this.props.displayName) {
-        isListingOwner = true;
-      }
       this.setState({
-        isListingOwner: isListingOwner,
+        isListingOwner: this.isListingOwner(lastOffer),
         interestedListing: this.props.interestedListing,
+        fullChatUID: this.props.fullChatUID,
         offerType: "FIRST_OFFER",
       });
     } else if (lastOffer) {
-      let isListingOwner = false;
-
-      if (lastOffer.interestedListing.displayName === this.props.displayName) {
-        isListingOwner = true;
-      }
       this.setState({
-        isListingOwner: isListingOwner,
+        isListingOwner: this.isListingOwner(lastOffer),
         interestedListing: lastOffer.interestedListing,
+        fullChatUID: this.props.fullChatUID,
         priceOffer: lastOffer.price,
         startRental: lastOffer.startRental,
         endRental: lastOffer.endRental,
@@ -83,6 +117,14 @@ class Offer extends Component {
       });
     }
   }
+
+  isListingOwner = (lastOffer) => {
+    let isListingOwner = false;
+    if (lastOffer.interestedListing.displayName === this.props.displayName) {
+      isListingOwner = true;
+    }
+    return isListingOwner;
+  };
 
   priceOfferOnChange = (event) => {
     this.setState({
@@ -219,7 +261,7 @@ class Offer extends Component {
         price: this.state.priceOffer,
         startRental: this.state.startRental,
         endRental: this.state.endRental,
-        date: moment().format("DD-MM-YYYY"),
+        date: moment().format("DD/MM/YYYY"),
         time: moment().format("HH:mm:ss"),
       };
 
@@ -251,7 +293,7 @@ class Offer extends Component {
       price: this.state.priceOffer,
       startRental: this.state.startRental,
       endRental: this.state.endRental,
-      date: moment().format("DD-MM-YYYY"),
+      date: moment().format("DD/MM/YYYY"),
       time: moment().format("HH:mm:ss"),
     };
 
@@ -281,7 +323,7 @@ class Offer extends Component {
       price: this.state.priceOffer,
       startRental: this.state.startRental,
       endRental: this.state.endRental,
-      date: moment().format("DD-MM-YYYY"),
+      date: moment().format("DD/MM/YYYY"),
       time: moment().format("HH:mm:ss"),
     };
 
@@ -321,7 +363,7 @@ class Offer extends Component {
       price: this.state.priceOffer,
       startRental: this.state.startRental,
       endRental: this.state.endRental,
-      date: moment().format("DD-MM-YYYY"),
+      date: moment().format("DD/MM/YYYY"),
       time: moment().format("HH:mm:ss"),
     };
 
@@ -353,6 +395,10 @@ class Offer extends Component {
   };
 
   render() {
+    if (this.state.interestedListing === "") {
+      return null;
+    }
+
     let offerPopUp = (
       <Modal show={this.state.showPopUp}>
         <div className={classes.Popup}>
@@ -398,7 +444,6 @@ class Offer extends Component {
     );
 
     let buttons;
-
     if (this.state.isListingOwner) {
       switch (this.state.offerType) {
         case "MADE_OFFER":
@@ -508,9 +553,6 @@ const mapStateToProps = (state) => {
   return {
     interestedListing: state.listing.interestedListing,
     displayName: state.auth.displayName,
-    fullChat: state.chat.fullChat,
-    fullChatUID: state.chat.fullChatUID,
-    fullChatLoading: state.chat.fullChatLoading,
     recipient: state.chat.recipient,
   };
 };

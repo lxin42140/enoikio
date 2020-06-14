@@ -22,6 +22,7 @@ class Chat extends Component {
       initialLoad: false,
     });
   };
+
   render() {
     return (
       <div className={classes.Chat}>
@@ -39,7 +40,11 @@ class Chat extends Component {
           <h4 style={{ color: "#444" }}>Chat Contacts</h4>
         </div>
         <div className={classes.ChatBox}>
-          {this.state.initialLoad ? (
+          {this.state.initialLoad && this.props.chatContacts.length < 1 ? (
+            <p style={{ color: "#aab8c2" }}>
+              Please make an offer to start chatting
+            </p>
+          ) : this.state.initialLoad ? (
             <p style={{ color: "#aab8c2" }}>Please select to send a message</p>
           ) : (
             <ChatBox />

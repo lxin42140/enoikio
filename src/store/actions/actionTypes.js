@@ -2,6 +2,7 @@
 export const FETCH_LISTING_INIT = "FETCH_LISTING_INIT";
 export const FETCH_LISTING_SUCCESS = "FETCH_LISTING_SUCCESS";
 export const FETCH_LISTING_FAIL = "FETCH_LISTING_FAIL";
+export const UPDATE_LISTING = "UPDATE_LISTING";
 
 /*--------------------fetch filtered listing-----------------*/
 export const FILTER_LISTINGS = "FILTER_LISTINGS";
@@ -36,6 +37,7 @@ export const SET_AUTH_REDIRECT = "SET_AUTH_REDIRECT";
 /*----------------------Chat----------------------*/
 export const FETCH_CHAT_CONTACTS_INIT = "FETCH_CHAT_CONTACTS_INIT";
 export const FETCH_CHAT_CONTACTS_SUCCESS = "FETCH_CHAT_CONTACTS_SUCCESS";
+export const NO_CHATS = "NO_CHATS";
 export const FETCH_FULL_CHAT_INIT = "FETCH_FULL_CHAT_INIT";
 export const FETCH_FULL_CHAT_INIT_SUCCESS = "FETCH_FULL_CHAT_INIT_SUCCESS";
 export const FETCH_FULL_CHAT_HISTORY_SUCCESS =

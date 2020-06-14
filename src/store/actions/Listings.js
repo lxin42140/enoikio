@@ -57,9 +57,9 @@ export const clearInterestedListing = () => {
 };
 export const clearExpandedListing = () => {
   return {
-    type: actionTypes.CLEAR_EXPANDED_LISTING
-  }
-}
+    type: actionTypes.CLEAR_EXPANDED_LISTING,
+  };
+};
 
 export const setFilterListings = (filterType, searchObject) => {
   return (dispatch) => {
@@ -70,6 +70,13 @@ export const setFilterListings = (filterType, searchObject) => {
 export const emptyInterestedListing = () => {
   return (dispatch) => {
     dispatch(clearInterestedListing());
+  };
+};
+
+export const updateListing = (updatedListing) => {
+  return {
+    type: actionTypes.UPDATE_LISTING,
+    updatedListing: updatedListing,
   };
 };
 
@@ -99,20 +106,43 @@ export const fetchAllListings = () => {
       .ref()
       .child("listings")
       .on("child_added", (snapShot) => {
-        const result = Object.assign([], getState().listing.listings);
+        let result = Object.assign([], getState().listing.listings);
+        const key = snapShot.key;
+
         const listing = {
-          date: snapShot.val().date,
-          displayName: snapShot.val().displayName,
-          numberOfImages: snapShot.val().numberOfImages,
-          time: snapShot.val().time,
+          key: key,
           unique: snapShot.val().unique,
           userId: snapShot.val().userId,
+          displayName: snapShot.val().displayName,
+          date: snapShot.val().date,
+          time: snapShot.val().time,
           postDetails: snapShot.val().postDetails,
+          numberOfImages: snapShot.val().numberOfImages,
           status: snapShot.val().status,
           comments: snapShot.val().comments,
-          key: snapShot.key,
           likedUsers: snapShot.val().likedUsers,
         };
+
+        database
+          .ref()
+          .child("listings")
+          .child(key)
+          .on("child_changed", (snapShot) => {
+            if (
+              snapShot.val() === "available" ||
+              (typeof snapShot.val() === String &&
+                snapShot.val().split(" ")[0] === "loaned") ||
+              snapShot.val() === "sold"
+            ) {
+              let updatedListing = Object.assign(
+                [],
+                getState().listing.listings
+              ).filter((listing) => listing.key === key)[0];
+              updatedListing.status = snapShot.val();
+              dispatch(updateListing(updatedListing));
+            }
+          });
+
         result.push(listing);
         result.reverse();
         dispatch(fetchListingSuccess(result));

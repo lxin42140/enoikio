@@ -36,8 +36,8 @@ const setExpandedListing = (state, expandedListing) => {
 };
 
 const clearExpandedListing = (state, action) => {
-  return updateObject(state, { expandedListing: null })
-}
+  return updateObject(state, { expandedListing: null });
+};
 
 const filterListings = (state, filterType, searchObject) => {
   return updateObject(state, {
@@ -58,12 +58,23 @@ const clearInterestedListing = (state, action) => {
   });
 };
 
+const updateListing = (state, updatedListing) => {
+  const updatedListings = Object.assign([], state.listings).map((listing) =>
+    listing.key === updatedListing.key ? updatedListing : listing
+  );
+  return updateObject(state, {
+    listings: updatedListings,
+  });
+};
+
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.FETCH_LISTING_INIT:
       return fetchAllListingInit(state, action);
     case actionTypes.FETCH_LISTING_SUCCESS:
       return fetchListingSuccess(state, action.data);
+    case actionTypes.UPDATE_LISTING:
+      return updateListing(state, action.updatedListing);
     case actionTypes.FETCH_LISTING_FAIL:
       return fetchListingFail(state, action.error);
     case actionTypes.SET_EXPANDED_LISTING_INIT:

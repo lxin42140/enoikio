@@ -1,4 +1,5 @@
 import React from "react";
+import moment from "moment";
 
 import classes from "./ChatMessage.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -10,7 +11,11 @@ const ChatMessage = (props) => {
   let chatInfoSpans = (
     <React.Fragment>
       <span className={classes.ChatName}>{props.displayName}</span>
-      <span className={classes.ChatTimestamp}>{props.timeStamp}</span>
+      <span className={classes.ChatTimestamp}>
+        {props.date === moment().format("DD/MM/YYYY")
+          ? props.time
+          : props.date + " " + props.time}
+      </span>
     </React.Fragment>
   );
   let iconStyle = {
@@ -26,7 +31,11 @@ const ChatMessage = (props) => {
     chatText = classes.ChatTextSender;
     chatInfoSpans = (
       <React.Fragment>
-        <span className={classes.ChatTimestamp}>{props.timeStamp}</span>
+        <span className={classes.ChatTimestamp}>
+          {props.date === moment().format("DD/MM/YYYY")
+            ? props.time
+            : props.date + " " + props.time}
+        </span>
         <span className={classes.ChatNameSender}>{props.displayName}</span>
       </React.Fragment>
     );

@@ -7,6 +7,7 @@ import * as actions from "../../../store/actions/index";
 import Button from "../../../components/UI/Button/Button";
 import Spinner from "../../../components/UI/Spinner/Spinner";
 import Comments from "../../Comments/Comments";
+import { database } from "../../../firebase/firebase";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faWindowClose,
@@ -31,13 +32,31 @@ class ExpandedListing extends Component {
     });
   };
 
-  onChatHandler = (event) => {
-    this.props.dispatchGoToChat(this.props.expandedListing.displayName);
+  onChatHandler = (chatDisplayName) => {
     this.props.dispatchSetInterestedListing(this.props.expandedListing);
-    this.props.history.push({
-      pathname: "/chats",
-      search: "?" + this.props.expandedListing.displayName,
-    });
+    if (this.props.existingChatNames.indexOf(chatDisplayName) < 0) {
+      const UID = this.props.displayName + chatDisplayName;
+      const chatRef = database.ref().child("chats");
+      const pushMessageKey = chatRef.push().key;
+      chatRef
+        .child(pushMessageKey)
+        .set({
+          userA: this.props.displayName,
+          userB: chatDisplayName,
+          UID: UID,
+        })
+        .then((res) => {
+          this.props.history.push({
+            pathname: "/chats",
+            search: "?" + this.props.expandedListing.displayName,
+          });
+        });
+    } else {
+      this.props.history.push({
+        pathname: "/chats",
+        search: "?" + this.props.expandedListing.displayName,
+      });
+    }
   };
 
   render() {
@@ -117,7 +136,13 @@ class ExpandedListing extends Component {
             {this.props.isAuthenticated ? (
               this.props.expandedListing.displayName ===
               this.props.displayName ? null : (
-                <Button onClick={this.onChatHandler}>Chat to make offer</Button>
+                <Button
+                  onClick={() =>
+                    this.onChatHandler(this.props.expandedListing.displayName)
+                  }
+                >
+                  Chat to make offer
+                </Button>
               )
             ) : (
               <Link to="/auth">
@@ -159,12 +184,12 @@ const mapStateToProps = (state) => {
     expandedListingLoading: state.listing.expandedListingLoading,
     isAuthenticated: state.auth.token !== null,
     displayName: state.auth.displayName,
+    existingChatNames: state.chat.existingChatNames,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    dispatchGoToChat: (displayName) => dispatch(actions.goToChat(displayName)),
     dispatchSetInterestedListing: (listing) =>
       dispatch(actions.setInterestedListing(listing)),
   };

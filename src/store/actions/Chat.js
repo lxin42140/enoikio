@@ -60,26 +60,22 @@ export const fetchChats = () => {
           const chatContacts = getState().chat.chatContacts;
           let lastMessage = "";
           let chatSummary = null;
+          let userName = snapShot.val().userA;
+
           if (snapShot.val().chatHistory) {
             lastMessage = snapShot.val().chatHistory[
               snapShot.val().chatHistory.length - 1
             ].content;
           }
-          if (snapShot.val().userA !== getState().auth.displayName) {
-            chatSummary = {
-              UID: snapShot.key,
-              userName: snapShot.val().userA,
-              lastMessage: lastMessage,
-            };
-            existingChatNames.push(snapShot.val().userA);
-          } else {
-            chatSummary = {
-              UID: snapShot.key,
-              userName: snapShot.val().userB,
-              lastMessage: lastMessage,
-            };
-            existingChatNames.push(snapShot.val().userB);
+          if (userName === getState().auth.displayName) {
+            userName = snapShot.val().userB;
           }
+          chatSummary = {
+            UID: snapShot.key,
+            userName: userName,
+            lastMessage: lastMessage,
+          };
+          existingChatNames.push(userName);
           chatContacts.push(chatSummary);
           dispatch(fetchChatContactsSuccess(chatContacts, existingChatNames));
         }
@@ -94,7 +90,7 @@ export const removeEmptyChat = () => {
     const recipient = getState().chat.recipient;
     let updatedChatNames = Object.assign([], getState().chat.existingChatNames);
     const chatContacts = getState().chat.chatContacts;
-    if (fullChat.length < 1 && chatContacts.length > 0) {
+    if (fullChat.length < 1 && fullChatUID) {
       const updatedChatContacts = chatContacts.filter((contact) => {
         if (contact.userName !== recipient) {
           return true;
@@ -141,38 +137,5 @@ export const fetchFullChat = (chatUID) => {
           }
         }
       });
-  };
-};
-
-export const goToChat = (chatDisplayName) => {
-  return (dispatch, getState) => {
-    if (getState().chat.existingChatNames.indexOf(chatDisplayName) < 0) {
-      const UID = getState().auth.displayName + chatDisplayName;
-      const chatRef = database.ref().child("chats");
-      const pushMessageKey = chatRef.push().key;
-      chatRef.child(pushMessageKey).set({
-        userA: getState().auth.displayName,
-        userB: chatDisplayName,
-        UID: UID,
-      });
-    } else {
-      database
-        .ref()
-        .child("chats")
-        .orderByChild("userA")
-        .equalTo(chatDisplayName)
-        .once("value", (snapShot) => {
-          snapShot.forEach((data) => dispatch(fetchFullChat(data.key)));
-        });
-
-      database
-        .ref()
-        .child("chats")
-        .orderByChild("userB")
-        .equalTo(chatDisplayName)
-        .once("value", (snapShot) => {
-          snapShot.forEach((data) => dispatch(fetchFullChat(data.key)));
-        });
-    }
   };
 };
