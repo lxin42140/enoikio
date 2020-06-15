@@ -7,11 +7,12 @@ export {
   emptyInterestedListing,
 } from "./Listings";
 
-export {
-  submitNewPost,
-  submitNewPhoto,
-  clearPostData,
-  editPost,
+export { 
+  submitNewPost, 
+  submitNewPhoto, 
+  submitEdittedPhoto, 
+  clearPostData, 
+  editPost 
 } from "./NewPost";
 
 export {

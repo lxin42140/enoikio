@@ -55,6 +55,7 @@ const mapStateToProps = (state) => {
     loading: state.listing.loading,
     chatInitialLoad: state.chat.initialLoad,
     isAuthenticated: state.auth.token !== null,
+    displayName: state.auth.displayName,
   };
 };
 

@@ -20,7 +20,7 @@ class Listing extends Component {
   componentDidMount() {
     storage
       .ref("/listingPictures/" + this.props.identifier)
-      .child("0")
+      .child("0/0")
       .getDownloadURL()
       .then((url) => {
         if (this.props.isAuthenticated) {
@@ -106,8 +106,8 @@ class Listing extends Component {
   };
 
   editListingHandler = () => {
-    this.props.dispatchEditListing(this.props.identifier);
-  };
+    this.props.dispatchExpandedListing(this.props.identifier);
+  }
 
   render() {
     let listing = (
@@ -133,10 +133,10 @@ class Listing extends Component {
                   {this.props.status}
                 </p>
               ) : (
-                <p style={{ margin: "0px" }}>
-                  <b>Status: </b> <br /> {this.props.status}
-                </p>
-              )}
+                  <p style={{ margin: "0px" }}>
+                    Status: <br /> {this.props.status}
+                  </p>
+                )}
             </li>
             <li>
               <b>Price: </b>${this.props.price} / month
@@ -174,7 +174,7 @@ class Listing extends Component {
         <br />
         <div className={classes.Selection}>
           {this.props.userId === this.props.displayName ? (
-            <Link to="/new-post">
+            <Link to="/edit-post">
               <Button btnType="Important" onClick={this.editListingHandler}>
                 Edit
               </Button>
@@ -197,7 +197,7 @@ class Listing extends Component {
                 fontSize: "small",
               }}
             >
-              {this.state.numberOfLikes + " likes"}
+              {this.state.numberOfLikes + (this.state.numberOfLikes < 2 ? " like" : " likes")}
             </p>
           </div>
         </div>
@@ -217,8 +217,6 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     dispatchExpandedListing: (identifier) =>
-      dispatch(actions.fetchExpandedListing(identifier)),
-    dispatchEditListing: (identifier) =>
       dispatch(actions.fetchExpandedListing(identifier)),
   };
 };
