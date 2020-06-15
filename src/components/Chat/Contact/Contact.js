@@ -3,8 +3,12 @@ import classes from "./Contact.css";
 import profileImage from "../../../assets/Images/chats/profile";
 
 const contact = (props) => {
+  let style = null;
+  if (props.recipient && props.recipient === props.userName) {
+    style = { background: "#f1f4f6" };
+  }
   return (
-    <div className={classes.friend} onClick={props.onClick}>
+    <div className={classes.friend} onClick={props.onClick} style={style}>
       <img src={profileImage} alt="profile" />
       <p>
         <strong

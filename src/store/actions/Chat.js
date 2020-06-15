@@ -45,6 +45,12 @@ export const updateChatContacts = (updatedChatNames, updatedChatContacts) => {
   };
 };
 
+export const resetRecipient = () => {
+  return {
+    type: actionTypes.RESET_RECIPIENT,
+  };
+};
+
 export const fetchChats = () => {
   return (dispatch, getState) => {
     dispatch(fetchChatContactsInit());
@@ -83,7 +89,11 @@ export const fetchChats = () => {
   };
 };
 
-export const removeEmptyChat = () => {
+/**
+ * If a chat has no chat history, remove specific chat from firebase and update contact list in chat redux store
+ * Reset recipient in chat redux store
+ */
+export const chatCleanUp = () => {
   return (dispatch, getState) => {
     const fullChat = getState().chat.fullChat;
     const fullChatUID = getState().chat.fullChatUID;
@@ -109,6 +119,8 @@ export const removeEmptyChat = () => {
         .then((response) => {
           dispatch(updateChatContacts(updatedChatNames, updatedChatContacts));
         });
+    } else {
+      dispatch(resetRecipient());
     }
   };
 };

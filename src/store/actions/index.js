@@ -22,4 +22,4 @@ export {
   authCheckState,
 } from "./Auth";
 
-export { fetchChats, fetchFullChat, removeEmptyChat } from "./Chat";
+export { fetchChats, fetchFullChat, chatCleanUp } from "./Chat";

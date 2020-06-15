@@ -12,7 +12,7 @@ class Chat extends Component {
   };
 
   componentWillUnmount() {
-    this.props.dispatchRemoveEmptyChats();
+    this.props.dispatchChatCleanUp();
     this.props.dispatchClearInterestedListing();
   }
 
@@ -33,6 +33,7 @@ class Chat extends Component {
                 key={contact.userName}
                 userName={contact.userName}
                 lastMessage={contact.lastMessage}
+                recipient={this.props.recipient}
                 onClick={() => this.onSelectChatHandler(contact.UID)}
               />
             );
@@ -59,6 +60,7 @@ const mapStateToProps = (state) => {
   return {
     chatContacts: state.chat.chatContacts,
     interestedListing: state.listing.interestedListing,
+    recipient: state.chat.recipient,
   };
 };
 
@@ -68,7 +70,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(actions.fetchFullChat(chatUID)),
     dispatchClearInterestedListing: () =>
       dispatch(actions.emptyInterestedListing()),
-    dispatchRemoveEmptyChats: () => dispatch(actions.removeEmptyChat()),
+    dispatchChatCleanUp: () => dispatch(actions.chatCleanUp()),
   };
 };
 
