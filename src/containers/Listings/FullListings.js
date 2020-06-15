@@ -9,7 +9,7 @@ import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
 import classes from "./Listings.css";
 
 class FullListings extends Component {
-  componentDidMount() {
+  componentDidUpdate() {
     if (this.props.isAuthenticated && this.props.chatInitialLoad) {
       this.props.dispatchFetchChats();
     }

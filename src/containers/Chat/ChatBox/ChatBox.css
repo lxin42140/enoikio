@@ -1,7 +1,7 @@
 .ChatBox {
     display: flex;
     flex-direction: column;
-    max-height: 550px;
+    height: 550px;
 }
 
 .ChatBoxHeader {
@@ -22,7 +22,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 3px;
+    margin: auto 3px 0px 3px;
     border-top: 2px solid #f4f4f4;
     padding: 5px 10px;
     background-color: #fff;
