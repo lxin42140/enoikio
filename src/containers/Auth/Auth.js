@@ -8,6 +8,7 @@ import classes from "./Auth.css";
 import * as actions from "../../store/actions/index";
 import Spinner from "../../components/UI/Spinner/Spinner";
 import firebaseAxios from "../../firebaseAxios";
+// import auth from "../../firebase/firebase"
 
 class Auth extends Component {
   state = {
