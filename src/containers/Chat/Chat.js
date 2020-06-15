@@ -12,7 +12,12 @@ class Chat extends Component {
   };
 
   componentWillUnmount() {
-    this.props.dispatchChatCleanUp();
+    this.props.dispatchChatCleanUp(
+      this.props.fullChat,
+      this.props.fullChatUID,
+      this.props.recipient,
+      this.props.chatContacts
+    );
     this.props.dispatchClearInterestedListing();
   }
 
@@ -50,7 +55,12 @@ class Chat extends Component {
               Select a conversation to read from the list on the left.
             </h3>
           ) : (
-            <ChatBox />
+            <ChatBox
+              fullChat={this.props.fullChat}
+              fullChatUID={this.props.fullChatUID}
+              displayName={this.props.displayName}
+              fullChatLoading={this.props.fullChatLoading}
+            />
           )}
         </div>
       </div>
@@ -62,7 +72,12 @@ const mapStateToProps = (state) => {
   return {
     chatContacts: state.chat.chatContacts,
     interestedListing: state.listing.interestedListing,
+    displayName: state.auth.displayName,
+
     recipient: state.chat.recipient,
+    fullChat: state.chat.fullChat,
+    fullChatUID: state.chat.fullChatUID,
+    fullChatLoading: state.chat.fullChatLoading,
   };
 };
 
@@ -72,7 +87,10 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(actions.fetchFullChat(chatUID)),
     dispatchClearInterestedListing: () =>
       dispatch(actions.emptyInterestedListing()),
-    dispatchChatCleanUp: () => dispatch(actions.chatCleanUp()),
+    dispatchChatCleanUp: (fullChat, fullChatUID, recipient, chatContacts) =>
+      dispatch(
+        actions.chatCleanUp(fullChat, fullChatUID, recipient, chatContacts)
+      ),
   };
 };
 

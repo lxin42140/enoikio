@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
+// import { connect } from "react-redux";
 import moment from "moment";
 
 import { database } from "../../../firebase/firebase";
@@ -117,14 +117,4 @@ class ChatBox extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    displayName: state.auth.displayName,
-    fullChat: state.chat.fullChat,
-    fullChatUID: state.chat.fullChatUID,
-    fullChatLoading: state.chat.fullChatLoading,
-    recipient: state.chat.recipient,
-  };
-};
-
-export default connect(mapStateToProps)(ChatBox);
+export default ChatBox;

@@ -93,14 +93,10 @@ export const fetchChats = () => {
  * If a chat has no chat history, remove specific chat from firebase and update contact list in chat redux store
  * Reset recipient in chat redux store
  */
-export const chatCleanUp = () => {
+export const chatCleanUp = (fullChat, fullChatUID, recipient, chatContacts) => {
   return (dispatch, getState) => {
-    const fullChat = getState().chat.fullChat;
-    const fullChatUID = getState().chat.fullChatUID;
-    const recipient = getState().chat.recipient;
-    let updatedChatNames = Object.assign([], getState().chat.existingChatNames);
-    const chatContacts = getState().chat.chatContacts;
     if (fullChat.length < 1 && fullChatUID) {
+      let updatedChatNames = getState().chat.existingChatNames;
       const updatedChatContacts = chatContacts.filter((contact) => {
         if (contact.userName !== recipient) {
           return true;

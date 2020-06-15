@@ -282,6 +282,37 @@ class Offer extends Component {
     }
   };
 
+  onInterestedOffer = (event) => {
+    const interestedListing = Object.assign({}, this.state.interestedListing);
+
+    let message = {
+      content: "I'm interest in《" + interestedListing.textBook + "》",
+      type: "INTERESTED_OFFER",
+      interestedListing: interestedListing,
+      sender: this.props.displayName,
+      price: this.state.priceOffer,
+      startRental: this.state.startRental,
+      endRental: this.state.endRental,
+      date: moment().format("DD/MM/YYYY"),
+      time: moment().format("HH:mm:ss"),
+    };
+
+    const chatHistory = Object.assign([], this.props.fullChat);
+    chatHistory.push(message);
+
+    database
+      .ref()
+      .child("chats/" + this.props.fullChatUID)
+      .update({
+        chatHistory: chatHistory,
+      })
+      .then((res) => {
+        this.setState({
+          offerType: "INTERESTED_OFFER",
+        });
+      });
+  };
+
   onCancelOffer = (event) => {
     const interestedListing = Object.assign({}, this.state.interestedListing);
 
@@ -461,6 +492,9 @@ class Offer extends Component {
         case "CANCELLED_OFFER":
           buttons = <p style={{ margin: "5px" }}>No offers made</p>;
           break;
+        case "INTERESTED_OFFER":
+          buttons = <p style={{ margin: "5px" }}>Indicated interest</p>;
+          break;
         case "ACCEPTED_OFFER":
           buttons = (
             <React.Fragment>
@@ -510,6 +544,18 @@ class Offer extends Component {
           );
           break;
         case "FIRST_OFFER":
+          buttons = (
+            <React.Fragment>
+              <Button btnType="Important" onClick={this.onShowPopUpHandler}>
+                Make offer
+              </Button>
+              <Button onClick={this.onInterestedOffer}>
+                <span style={{ fontSize: "small" }}>I'm interested!</span>
+              </Button>
+            </React.Fragment>
+          );
+          break;
+        case "INTERESTED_OFFER":
           buttons = (
             <Button btnType="Important" onClick={this.onShowPopUpHandler}>
               Make offer
