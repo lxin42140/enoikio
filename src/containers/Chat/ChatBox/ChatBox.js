@@ -12,7 +12,6 @@ import Offer from "../Offer/Offer";
 class ChatBox extends Component {
   state = {
     message: "",
-    date: "",
   };
 
   componentDidUpdate() {
@@ -102,7 +101,7 @@ class ChatBox extends Component {
                 className={classes.input}
                 type="text"
                 value={this.state.message}
-                placeholder="Enter your message here"
+                placeholder="Type your message here..."
                 onChange={this.inputChangeHandler}
                 onKeyDown={this.inputOnKeyDown}
               />
