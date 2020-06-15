@@ -21,25 +21,27 @@ export const fetchChatContactsSuccess = (chatContacts, existingChatNames) => {
   };
 };
 
-export const fetchFullChatInitSuccess = (fullChat, fullChatUID, recipient) => {
+export const fetchFullChatInitSuccess = (
+  fullChat,
+  fullChatUID,
+  recipient,
+  lastMessage
+) => {
   return {
     type: actionTypes.FETCH_FULL_CHAT_INIT_SUCCESS,
     fullChat: fullChat,
     fullChatUID: fullChatUID,
     recipient: recipient,
+    lastMessage: lastMessage,
   };
 };
 
-export const fetchFullChatHistorySuccess = (fullChat) => {
+export const removeEmptyChatContacts = (
+  updatedChatNames,
+  updatedChatContacts
+) => {
   return {
-    type: actionTypes.FETCH_FULL_CHAT_HISTORY_SUCCESS,
-    fullChat: fullChat,
-  };
-};
-
-export const updateChatContacts = (updatedChatNames, updatedChatContacts) => {
-  return {
-    type: actionTypes.UPDATE_CHAT_CONTACTS,
+    type: actionTypes.REMOVE_EMPTY_CHAT_CONTACTS,
     updatedChatNames: updatedChatNames,
     updatedChatContacts: updatedChatContacts,
   };
@@ -89,38 +91,6 @@ export const fetchChats = () => {
   };
 };
 
-/**
- * If a chat has no chat history, remove specific chat from firebase and update contact list in chat redux store
- * Reset recipient in chat redux store
- */
-export const chatCleanUp = (fullChat, fullChatUID, recipient, chatContacts) => {
-  return (dispatch, getState) => {
-    if (fullChat.length < 1 && fullChatUID) {
-      let updatedChatNames = getState().chat.existingChatNames;
-      const updatedChatContacts = chatContacts.filter((contact) => {
-        if (contact.userName !== recipient) {
-          return true;
-        }
-        updatedChatNames = updatedChatNames.filter(
-          (name) => name !== recipient
-        );
-        return false;
-      });
-
-      database
-        .ref()
-        .child("chats")
-        .child(fullChatUID)
-        .remove()
-        .then((response) => {
-          dispatch(updateChatContacts(updatedChatNames, updatedChatContacts));
-        });
-    } else {
-      dispatch(resetRecipient());
-    }
-  };
-};
-
 export const fetchFullChat = (chatUID) => {
   return (dispatch, getState) => {
     dispatch(fetchFullChatInit());
@@ -131,15 +101,55 @@ export const fetchFullChat = (chatUID) => {
       .on("value", (snapShot) => {
         if (snapShot.exists()) {
           let fullChat = snapShot.val().chatHistory;
-          if (!fullChat) {
+          let lastMessage = "";
+
+          if (fullChat) {
+            lastMessage = fullChat[fullChat.length - 1].content;
+          } else {
             fullChat = [];
           }
+
           let recipient = snapShot.val().userA;
           if (recipient === getState().auth.displayName) {
             recipient = snapShot.val().userB;
           }
-          dispatch(fetchFullChatInitSuccess(fullChat, chatUID, recipient));
+
+          dispatch(
+            fetchFullChatInitSuccess(fullChat, chatUID, recipient, lastMessage)
+          );
         }
       });
   };
 };
+
+/**
+ * If a chat has no chat history, remove specific chat from firebase and update contact list in chat redux store
+ * Reset recipient in chat redux store
+ */
+export const chatCleanUp = (chatContacts) => {
+  return (dispatch, getState) => {
+    let updatedChatNames = getState().chat.existingChatNames;
+    let updatedChatContacts = chatContacts;
+
+    updatedChatContacts = updatedChatContacts.filter((chatSummary) => {
+      if (chatSummary.lastMessage === "") {
+        removeChat(chatSummary.UID);
+        updatedChatNames = updatedChatNames.filter(
+          (name) => name !== chatSummary.userName
+        );
+        return false;
+      }
+      return true;
+    });
+
+    if (chatContacts.length === updatedChatContacts.length) {
+      dispatch(resetRecipient());
+    } else {
+      dispatch(removeEmptyChatContacts(updatedChatNames, updatedChatContacts));
+    }
+  };
+};
+
+async function removeChat(fullChatUID) {
+  database.ref().child("chats").child(fullChatUID).remove();
+}

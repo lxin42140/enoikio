@@ -35,18 +35,22 @@ const fetchFullChatInit = (state, action) => {
 };
 
 const fetchFullChatInitSuccess = (state, action) => {
+  const chatContacts = state.chatContacts.map((chatSummary) => {
+    if (
+      chatSummary.UID === action.fullChatUID &&
+      chatSummary.lastMessage !== action.lastMessage
+    ) {
+      chatSummary.lastMessage = action.lastMessage;
+      return chatSummary;
+    }
+    return chatSummary;
+  });
   return updateObject(state, {
     fullChat: action.fullChat,
     fullChatUID: action.fullChatUID,
     fullChatLoading: false,
     recipient: action.recipient,
-  });
-};
-
-const fetchFullChatHistorySuccess = (state, action) => {
-  return updateObject(state, {
-    fullChat: action.fullChat,
-    fullChatLoading: false,
+    chatContacts: chatContacts,
   });
 };
 
@@ -74,9 +78,7 @@ const reducer = (state = initialState, action) => {
       return fetchFullChatInit(state, action);
     case actionTypes.FETCH_FULL_CHAT_INIT_SUCCESS:
       return fetchFullChatInitSuccess(state, action);
-    case actionTypes.FETCH_FULL_CHAT_HISTORY_SUCCESS:
-      return fetchFullChatHistorySuccess(state, action);
-    case actionTypes.UPDATE_CHAT_CONTACTS:
+    case actionTypes.REMOVE_EMPTY_CHAT_CONTACTS:
       return updateContacts(state, action);
     case actionTypes.RESET_RECIPIENT:
       return resetRecipient(state, action);

@@ -12,12 +12,7 @@ class Chat extends Component {
   };
 
   componentWillUnmount() {
-    this.props.dispatchChatCleanUp(
-      this.props.fullChat,
-      this.props.fullChatUID,
-      this.props.recipient,
-      this.props.chatContacts
-    );
+    this.props.dispatchChatCleanUp(this.props.chatContacts);
     this.props.dispatchClearInterestedListing();
   }
 
@@ -88,10 +83,8 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(actions.fetchFullChat(chatUID)),
     dispatchClearInterestedListing: () =>
       dispatch(actions.emptyInterestedListing()),
-    dispatchChatCleanUp: (fullChat, fullChatUID, recipient, chatContacts) =>
-      dispatch(
-        actions.chatCleanUp(fullChat, fullChatUID, recipient, chatContacts)
-      ),
+    dispatchChatCleanUp: (chatContacts) =>
+      dispatch(actions.chatCleanUp(chatContacts)),
   };
 };
 
