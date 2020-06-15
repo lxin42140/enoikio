@@ -286,7 +286,7 @@ class Offer extends Component {
     const interestedListing = Object.assign({}, this.state.interestedListing);
 
     let message = {
-      content: "I'm interest in《" + interestedListing.textBook + "》",
+      content: "I'm interested in《" + interestedListing.textBook + "》",
       type: "INTERESTED_OFFER",
       interestedListing: interestedListing,
       sender: this.props.displayName,

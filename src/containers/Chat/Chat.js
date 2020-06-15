@@ -56,10 +56,11 @@ class Chat extends Component {
             </h3>
           ) : (
             <ChatBox
+              fullChatLoading={this.props.fullChatLoading}
               fullChat={this.props.fullChat}
               fullChatUID={this.props.fullChatUID}
               displayName={this.props.displayName}
-              fullChatLoading={this.props.fullChatLoading}
+              recipient={this.props.recipient}
             />
           )}
         </div>

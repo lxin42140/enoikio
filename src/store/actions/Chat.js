@@ -138,11 +138,7 @@ export const fetchFullChat = (chatUID) => {
           if (recipient === getState().auth.displayName) {
             recipient = snapShot.val().userB;
           }
-          if (getState().chat.fullChatUID !== snapShot.key) {
-            dispatch(fetchFullChatInitSuccess(fullChat, chatUID, recipient));
-          } else {
-            dispatch(fetchFullChatHistorySuccess(fullChat));
-          }
+          dispatch(fetchFullChatInitSuccess(fullChat, chatUID, recipient));
         }
       });
   };
