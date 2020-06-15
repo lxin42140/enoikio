@@ -42,11 +42,13 @@ class Chat extends Component {
         </div>
         <div className={classes.ChatBox}>
           {this.state.initialLoad && this.props.chatContacts.length < 1 ? (
-            <p style={{ color: "#aab8c2" }}>
-              Please make an offer to start chatting
-            </p>
+            <h3 style={{ color: "#aab8c2" }}>
+              Make an offer to start chatting.
+            </h3>
           ) : this.state.initialLoad ? (
-            <p style={{ color: "#aab8c2" }}>Please select to send a message</p>
+            <h3 style={{ color: "#aab8c2" }}>
+              Select a conversation to read from the list on the left.
+            </h3>
           ) : (
             <ChatBox />
           )}

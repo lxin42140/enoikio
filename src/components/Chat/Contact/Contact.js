@@ -5,7 +5,7 @@ import profileImage from "../../../assets/Images/chats/profile";
 const contact = (props) => {
   let style = null;
   if (props.recipient && props.recipient === props.userName) {
-    style = { background: "#f1f4f6" };
+    style = { background: "#f1f4f6", borderLeft: "3px solid #fd8673" };
   }
   return (
     <div className={classes.friend} onClick={props.onClick} style={style}>
