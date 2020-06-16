@@ -1,9 +1,7 @@
 import React, { Component } from "react";
-import axios from "axios";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 
-import withErrorHandler from "../../../hoc/withErrorHandler/withErrorHandler";
 import classes from "./SearchBar.css";
 import * as actions from "../../../store/actions/index";
 import DropDown from "./Dropdown/DropDown";
@@ -149,4 +147,4 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(
   null,
   mapDispatchToProps
-)(withErrorHandler(SearchBar, axios));
+)(SearchBar);

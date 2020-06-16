@@ -208,7 +208,7 @@ class Listing extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    isAuthenticated: state.auth.token !== null,
+    isAuthenticated: state.auth.user !== null,
     displayName: state.auth.displayName,
     listings: state.listing.listings,
   };

@@ -1,6 +1,5 @@
 import * as actionTypes from "./actionTypes";
-import axios from "axios";
-import firebaseAxios from "../../firebaseAxios";
+import { database, auth } from "../../firebase/firebase";
 
 export const authStart = () => {
   return {
@@ -8,12 +7,13 @@ export const authStart = () => {
   };
 };
 
-export const authSuccess = (token, userId, displayName) => {
+export const authSuccess = (user) => {
   return {
     type: actionTypes.AUTH_SUCCESS,
-    idToken: token,
-    userId: userId,
-    displayName: displayName,
+    user: user,
+    displayName: user.displayName,
+    photoURL: user.photoURL,
+    email: user.email,
   };
 };
 
@@ -24,19 +24,7 @@ export const authFail = (error) => {
   };
 };
 
-export const checkAuthTimeout = (expirationTime) => {
-  return (dispatch) => {
-    setTimeout(() => {
-      dispatch(logout());
-    }, Number(expirationTime) * 1000);
-  };
-};
-
 export const logout = () => {
-  localStorage.removeItem("token");
-  localStorage.removeItem("expirationDate");
-  localStorage.removeItem("userID");
-  localStorage.removeItem("displayName");
   return {
     type: actionTypes.AUTH_LOGOUT,
   };
@@ -49,48 +37,29 @@ export const setAuthRedirectPath = (path) => {
   };
 };
 
-export const signUp = (email, password, displayName) => {
+export const sentEmailConfirmation = () => {
+  return {
+    type: actionTypes.SENT_EMAIL_CONFIRMATION,
+  };
+};
+
+export const passwordResetSuccess = () => {
+  return {
+    type: actionTypes.PASSWORD_RESET,
+  };
+};
+
+export const passwordReset = (email) => {
   return (dispatch) => {
     dispatch(authStart());
-    const authData = {
-      email: email,
-      password: password,
-      displayName: displayName,
-      returnSecureToken: true,
-    };
-    const userData = {
-      displayName: displayName,
-      email: email,
-    };
-    axios
-      .post(
-        "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyA8gGPPoETtgZc0vygcR2-ya0BYHDzQEIc",
-        authData
-      )
-      .then((response) => {
-        const expirationDate = new Date(
-          new Date().getTime() + response.data.expiresIn * 1000
-        );
-        localStorage.setItem("token", response.data.idToken);
-        localStorage.setItem("expirationDate", expirationDate);
-        localStorage.setItem("userID", response.data.localId);
-        localStorage.setItem("displayName", response.data.displayName);
-        firebaseAxios
-          .post('/users.json?uid="response.data.localId"', userData)
-          .then((updatedUserNodeSuccess) => {
-            dispatch(
-              authSuccess(
-                response.data.idToken,
-                response.data.localId,
-                response.data.displayName
-              )
-            );
-            dispatch(checkAuthTimeout(response.data.expiresIn));
-          })
-          .catch((error) => dispatch(authFail(error)));
+    auth
+      .sendPasswordResetEmail(email)
+      .then((res) => {
+        dispatch(passwordResetSuccess());
       })
       .catch((error) => {
-        dispatch(authFail(error.response.data.error));
+        const message = error.message.split("-").join(" ");
+        dispatch(authFail(message));
       });
   };
 };
@@ -98,58 +67,97 @@ export const signUp = (email, password, displayName) => {
 export const signIn = (email, password) => {
   return (dispatch) => {
     dispatch(authStart());
-    const authData = {
-      email: email,
-      password: password,
-      returnSecureToken: true,
-    };
-    axios
-      .post(
-        "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyA8gGPPoETtgZc0vygcR2-ya0BYHDzQEIc",
-        authData
-      )
-      .then((response) => {
-        const expirationDate = new Date(
-          new Date().getTime() + response.data.expiresIn * 1000
-        );
-        localStorage.setItem("token", response.data.idToken);
-        localStorage.setItem("expirationDate", expirationDate);
-        localStorage.setItem("userID", response.data.localId);
-        localStorage.setItem("displayName", response.data.displayName);
-        dispatch(
-          authSuccess(
-            response.data.idToken,
-            response.data.localId,
-            response.data.displayName
-          )
-        );
-        dispatch(checkAuthTimeout(response.data.expiresIn));
+    auth
+      .signInWithEmailAndPassword(email, password)
+      .then((user) => {
+        if (user.user.emailVerified) {
+          dispatch(authSuccess(user.user));
+        } else {
+          dispatch(authFail("Please verify email"));
+        }
       })
       .catch((error) => {
-        dispatch(authFail(error.response.data.error));
+        const message = error.message.split("-").join(" ");
+        dispatch(authFail(message));
       });
   };
 };
 
-export const authCheckState = () => {
+export const signUp = (email, password, displayName) => {
   return (dispatch) => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      dispatch(logout());
-    } else {
-      const expirationDate = new Date(localStorage.getItem("expirationDate"));
-      if (expirationDate < new Date()) {
-        dispatch(logout());
+    dispatch(authStart());
+    updateDisplayNames(displayName).then((error) => {
+      if (error) {
+        dispatch(authFail(error));
       } else {
-        const userID = localStorage.getItem("userID");
-        const displayName = localStorage.getItem("displayName");
-        dispatch(authSuccess(token, userID, displayName));
-        dispatch(
-          checkAuthTimeout(
-            (expirationDate.getTime() - new Date().getTime()) / 1000
-          )
-        );
+        auth
+          .createUserWithEmailAndPassword(email, password)
+          .then((user) => {
+            user.user.updateProfile({
+              displayName: displayName,
+            });
+            const actionCodeSettings = {
+              url: "http://localhost:3000/auth",
+            };
+            return user.user
+              .sendEmailVerification(actionCodeSettings)
+              .then((res) => {
+                dispatch(sentEmailConfirmation());
+              });
+          })
+          .catch((error) => {
+            const message = error.message.split("-").join(" ");
+            database
+              .ref()
+              .child("displayNames")
+              .once("value", (snapShot) => {
+                snapShot.forEach((data) => {
+                  const displayNames = Object.assign(
+                    [],
+                    data.val().displayNames
+                  );
+                  displayNames.pop();
+                  database
+                    .ref()
+                    .child("displayNames")
+                    .child(data.key)
+                    .update({ displayNames: displayNames })
+                    .then((res) => dispatch(authFail(message)));
+                });
+              });
+          });
       }
-    }
+    });
   };
 };
+
+async function updateDisplayNames(displayName) {
+  let error = null;
+  displayName = displayName.toLowerCase().split(" ").join("");
+  await database
+    .ref()
+    .child("displayNames")
+    .once("value", (snapShot) => {
+      if (snapShot.exists()) {
+        snapShot.forEach((data) => {
+          const displayNames = Object.assign([], data.val().displayNames);
+          displayNames.push(displayName);
+          database
+            .ref()
+            .child("displayNames")
+            .child(data.key)
+            .update({ displayNames: displayNames });
+        });
+      } else {
+        const nodeKey = database.ref().child("displayNames").push().key;
+        const displayNames = [displayName];
+        database
+          .ref()
+          .child("displayNames")
+          .child(nodeKey)
+          .set({ displayNames: displayNames });
+      }
+    })
+    .catch((error) => (error = error.message));
+  return error;
+}

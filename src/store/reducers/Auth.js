@@ -2,25 +2,50 @@ import * as actions from "../actions/actionTypes";
 import { updateObject } from "../utility";
 
 const initialState = {
-  token: null,
-  userId: null,
-  displayName: null,
+  displayName: "",
+  photoURL: "",
+  email: "",
+  user: null,
   error: null,
   loading: false,
+  sentEmailVerification: false,
+  passwordReset: false,
   authRedirectPath: "/",
 };
 
 const authStart = (state, action) => {
   return updateObject(state, {
+    displayName: "",
+    photoURL: "",
+    email: "",
+    user: null,
     error: null,
+    sentEmailVerification: false,
+    passwordReset: false,
+    authRedirectPath: "/",
     loading: true,
   });
+};
+
+const sentEmailConfirmation = (state, action) => {
+  return updateObject(state, { sentEmailVerification: true, loading: false });
+};
+
+const passwordReset = (state, action) => {
+  return updateObject(state, { passwordReset: true, loading: false });
 };
 
 const authFail = (state, action) => {
   return updateObject(state, {
     error: action.error,
     loading: false,
+    displayName: "",
+    photoURL: "",
+    email: "",
+    user: null,
+    sentEmailVerification: false,
+    passwordReset: false,
+    authRedirectPath: "/",
   });
 };
 
@@ -28,19 +53,25 @@ const authSuccess = (state, action) => {
   return updateObject(state, {
     error: null,
     loading: false,
-    token: action.idToken,
-    userId: action.userId,
+    user: action.user,
     displayName: action.displayName,
+    photoURL: action.photoURL,
+    email: action.email,
+    sentEmailVerification: false,
+    passwordReset: false,
   });
 };
 
 const authLogout = (state, action) => {
   return updateObject(state, {
-    token: null,
-    userId: null,
-    displayName: null,
+    displayName: "",
+    photoURL: "",
+    email: "",
+    user: null,
     error: null,
     loading: false,
+    sentEmailVerification: false,
+    passwordReset: false,
     authRedirectPath: "/",
   });
 };
@@ -59,8 +90,12 @@ const reducer = (state = initialState, action) => {
       return authSuccess(state, action);
     case actions.AUTH_LOGOUT:
       return authLogout(state, action);
-    case action.SET_AUTH_REDIRECT:
+    case actions.SET_AUTH_REDIRECT:
       return setAuthRedirectPath(state, action);
+    case actions.SENT_EMAIL_CONFIRMATION:
+      return sentEmailConfirmation(state, action);
+    case actions.PASSWORD_RESET:
+      return passwordReset(state, action);
     default:
       return state;
   }

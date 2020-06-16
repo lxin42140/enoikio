@@ -182,7 +182,7 @@ const mapStateToProps = (state) => {
   return {
     expandedListing: state.listing.expandedListing,
     expandedListingLoading: state.listing.expandedListingLoading,
-    isAuthenticated: state.auth.token !== null,
+    isAuthenticated: state.auth.user !== null,
     displayName: state.auth.displayName,
     existingChatNames: state.chat.existingChatNames,
   };

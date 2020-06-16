@@ -1,6 +1,5 @@
 import * as actionTypes from "./actionTypes";
-import { storage } from "../../firebase/firebase";
-import { database } from "../../firebase/firebase";
+import { database, storage} from "../../firebase/firebase";
 
 export const fetchListingInit = () => {
   return {

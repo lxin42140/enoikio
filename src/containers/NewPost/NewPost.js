@@ -8,8 +8,6 @@ import Input from "../../components/UI/Input/Input";
 import Button from "../../components/UI/Button/Button";
 import * as actions from "../../store/actions/index";
 import Spinner from "../../components/UI/Spinner/Spinner";
-import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
-import firebaseAxios from "../../firebaseAxios";
 import Modal from "../../components/UI/Modal/Modal";
 
 class NewPost extends Component {
@@ -176,7 +174,7 @@ class NewPost extends Component {
     event.preventDefault();
     const date = moment().format("DD/MM/YYYY");
     const time = moment().format("HH:mm:ss");
-    const unique = this.props.userId + Date.now();
+    const unique = this.props.displayName + Date.now();
     const formData = {};
     for (let key in this.state.dataForm) {
       switch (key) {
@@ -201,7 +199,7 @@ class NewPost extends Component {
     };
     this.state.editing
       ? this.props.dispatchEditPost(formData, this.props.editListing.key)
-      : this.props.dispatchSubmitPost(postDetails, this.props.token);
+      : this.props.dispatchSubmitPost(postDetails);
     this.props.dispatchSubmitPhoto(this.state.imageAsFile, unique);
     this.setState({ showModal: false });
   };
@@ -248,11 +246,7 @@ class NewPost extends Component {
 
   removeImageHandler = (imageName) => {
     let imageArray;
-    // if (this.props.editListing.imageURL.length === this.state.imageAsFile.length) {
-    //   imageArray = this.props.editListing.imageURL;
-    // } else {
     imageArray = [...this.state.imageAsFile];
-    // }
     for (let image in imageArray) {
       if (imageArray[image].name === imageName) {
         imageArray.splice(image, 1);
@@ -455,9 +449,7 @@ const mapStateToProps = (state) => {
     postUploaded: state.newPost.postUploaded,
     uploadingImage: state.newPost.uploadingImage,
     imageUploaded: state.newPost.imageUploaded,
-    userId: state.auth.userId,
     displayName: state.auth.displayName,
-    token: state.auth.token,
     editListing: state.listing.expandedListing,
     editListingLoading: state.listing.expandedListingLoading,
   };
@@ -465,8 +457,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    dispatchSubmitPost: (newPost, token) =>
-      dispatch(actions.submitNewPost(newPost, token)),
+    dispatchSubmitPost: (newPost) => dispatch(actions.submitNewPost(newPost)),
     dispatchSubmitPhoto: (imageAsFile, identifier) =>
       dispatch(actions.submitNewPhoto(imageAsFile, identifier)),
     dispatchClearNewPostData: () => dispatch(actions.clearPostData()),
@@ -476,7 +467,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(withErrorHandler(NewPost, firebaseAxios));
+export default connect(mapStateToProps, mapDispatchToProps)(NewPost);

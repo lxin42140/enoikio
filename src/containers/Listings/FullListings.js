@@ -4,8 +4,6 @@ import { connect } from "react-redux";
 import Listing from "./Listing/Listing";
 import * as actions from "../../store/actions/index";
 import Spinner from "../../components/UI/Spinner/Spinner";
-import firebaseAxios from "../../firebaseAxios";
-import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
 import classes from "./Listings.css";
 
 class FullListings extends Component {
@@ -54,7 +52,7 @@ const mapStateToProps = (state) => {
     fullListings: state.listing.listings,
     loading: state.listing.loading,
     chatInitialLoad: state.chat.initialLoad,
-    isAuthenticated: state.auth.token !== null,
+    isAuthenticated: state.auth.user !== null,
   };
 };
 
@@ -67,4 +65,4 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(withErrorHandler(FullListings, firebaseAxios));
+)(FullListings);

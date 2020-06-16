@@ -33,7 +33,6 @@ const asyncLogOut = asyncComponent(() => {
 
 class App extends Component {
   componentDidMount() {
-    this.props.onTryAutoSignUp();
     this.props.dispatchFetchAllListings();
     this.props.history.push("/");
   }
@@ -75,13 +74,13 @@ class App extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    isAuthenticated: state.auth.token !== null,
+    isAuthenticated: state.auth.user !== null,
+    user:state.auth.user
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onTryAutoSignUp: () => dispatch(actions.authCheckState()),
     dispatchFetchAllListings: () => dispatch(actions.fetchAllListings()),
   };
 };

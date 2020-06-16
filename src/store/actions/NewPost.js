@@ -1,5 +1,4 @@
 import * as actionTypes from "./actionTypes";
-import axios from "../../firebaseAxios";
 import { storage, database } from "../../firebase/firebase";
 
 export const submitNewPostInit = () => {
@@ -27,12 +26,14 @@ export const clearPostData = () => {
   };
 };
 
-export const submitNewPost = (data, token) => {
+export const submitNewPost = (data) => {
   return (dispatch) => {
     dispatch(submitNewPostInit());
-    axios
-      .post("/listings.json?auth=" + token, data)
-      .then((response) => dispatch(submitNewPostSuccess()))
+    database
+      .ref()
+      .child("listings")
+      .push(data)
+      .then((res) => dispatch(submitNewPostSuccess()))
       .catch((error) => submitNewPostFail(error));
   };
 };
@@ -43,10 +44,10 @@ export const editPost = (editedPost, node) => {
     database
       .ref()
       .child(`/listings/${node}`)
-      .update({postDetails: editedPost})
-      .then(dispatch(submitNewPostSuccess()))
-  }
-}
+      .update({ postDetails: editedPost })
+      .then(dispatch(submitNewPostSuccess()));
+  };
+};
 
 export const submitNewPhotoInit = () => {
   return {

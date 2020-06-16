@@ -8,10 +8,27 @@
     box-sizing: border-box;
 }
 
-.Input{
+.Input {
     display: flex;
     flex-flow: column;
     text-align: center;
+}
+
+.Selections {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: small;
+    margin-bottom: 10px;
+}
+
+.Selections a {
+    padding: 0 10px
+}
+
+.Selections a:hover {
+    cursor: pointer;
+    color: #dd5641;
 }
 
 @media (min-width: 600px) {

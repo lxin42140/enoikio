@@ -192,7 +192,7 @@ class Comments extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    isAuthenticated: state.auth.token !== null,
+    isAuthenticated: state.auth.user !== null,
     displayName: state.auth.displayName,
   };
 };

@@ -7,8 +7,7 @@ import Input from "../../components/UI/Input/Input";
 import classes from "./Auth.css";
 import * as actions from "../../store/actions/index";
 import Spinner from "../../components/UI/Spinner/Spinner";
-import firebaseAxios from "../../firebaseAxios";
-import auth from "../../firebase/firebase"
+import { database } from "../../firebase/firebase";
 
 class Auth extends Component {
   state = {
@@ -54,8 +53,44 @@ class Auth extends Component {
         value: "",
       },
     },
-    isSignUp: true,
     valid: false,
+    isSignUp: false,
+    isSignIn: true,
+    isResetPassword: false,
+  };
+
+  componentDidUpdate() {
+    if (this.props.sentEmailVerification && this.state.isSignUp) {
+      this.setState({
+        isSignUp: false,
+        isSignIn: true,
+        isResetPassword: false,
+      });
+    }
+  }
+
+  toggleSignUpHandler = () => {
+    this.setState({
+      isSignUp: true,
+      isSignIn: false,
+      isResetPassword: false,
+    });
+  };
+
+  toggleSignInHandler = () => {
+    this.setState({
+      isSignUp: false,
+      isSignIn: true,
+      isResetPassword: false,
+    });
+  };
+
+  toggleResetHandler = () => {
+    this.setState({
+      isSignUp: false,
+      isSignIn: false,
+      isResetPassword: true,
+    });
   };
 
   checkValidation(value, rules) {
@@ -76,27 +111,50 @@ class Auth extends Component {
   }
 
   validateDisplayName = (event) => {
-    const displayName = this.state.controls.displayName.value;
+    const displayName = this.state.controls.displayName.value
+      .toLowerCase()
+      .split(" ")
+      .join("");
     if (displayName !== "") {
-      const query = 'orderBy="displayName"&equalTo="' + displayName + '"';
-      firebaseAxios
-        .get("/users.json?".concat(query))
-        .then((response) => {
-          this.setState((prevState) => ({
-            ...prevState,
-            controls: {
-              ...prevState.controls,
-              displayName: {
-                ...prevState.controls.displayName,
-                valid: Object.keys(response.data).length === 0,
-                validated: true,
+      database
+        .ref()
+        .child("displayNames")
+        .once("value", (snapShot) => {
+          if (snapShot.exists()) {
+            snapShot.forEach((data) => {
+              this.setState((prevState) => ({
+                ...prevState,
+                controls: {
+                  ...prevState.controls,
+                  displayName: {
+                    ...prevState.controls.displayName,
+                    valid: data.val().displayNames.indexOf(displayName) < 0,
+                    validated: true,
+                  },
+                },
+                valid:
+                  prevState.controls.email.valid &&
+                  prevState.controls.password.valid &&
+                  data.val().displayNames.indexOf(displayName) < 0,
+              }));
+            });
+          } else {
+            this.setState((prevState) => ({
+              ...prevState,
+              controls: {
+                ...prevState.controls,
+                displayName: {
+                  ...prevState.controls.displayName,
+                  valid: true,
+                  validated: true,
+                },
               },
-            },
-            valid:
-              prevState.controls.email.valid &&
-              prevState.controls.password.valid &&
-              Object.keys(response.data).length === 0,
-          }));
+              valid:
+                prevState.controls.email.valid &&
+                prevState.controls.password.valid &&
+                true,
+            }));
+          }
         })
         .catch((error) => {
           this.setState((prevState) => ({
@@ -105,7 +163,7 @@ class Auth extends Component {
               ...prevState.controls,
               displayName: {
                 ...prevState.controls.displayName,
-                validationError: error,
+                validationError: error.message,
               },
             },
             valid: false,
@@ -157,20 +215,24 @@ class Auth extends Component {
     }
   };
 
-  switchAuthModeHandler = () => {
-    this.setState((prevState) => {
-      return {
-        isSignUp: !prevState.isSignUp,
-      };
-    });
+  resetEmailHandler = (event) => {
+    event.preventDefault();
+    this.props.dispatchResetPassword(this.state.controls.email.value);
+    this.toggleSignInHandler();
   };
 
   render() {
     const formElementArray = [];
+
     for (let key in this.state.controls) {
-      if (key === "displayName" && !this.state.isSignUp) {
+      if (
+        (key === "displayName" && this.state.isSignIn) || //sign in
+        ((key === "displayName" || key === "password") && //password reset
+          this.state.isResetPassword)
+      ) {
         continue;
       }
+
       formElementArray.push({
         id: key,
         config: this.state.controls[key],
@@ -189,6 +251,12 @@ class Auth extends Component {
           validationMessage = (
             <p style={{ color: "red", fontWeight: "bold" }}>
               Name already exists!
+            </p>
+          );
+        } else if (x.config.validationError) {
+          validationMessage = (
+            <p style={{ color: "red", fontWeight: "bold" }}>
+              {x.config.validationError}
             </p>
           );
         }
@@ -220,41 +288,97 @@ class Auth extends Component {
       );
     });
 
-    const content = this.props.loading ? (
+    const formContent = this.props.loading ? (
       <Spinner />
     ) : (
-      <div>
+      <div style={{ paddingBottom: "15px" }}>
         {form}
-        <Button
-          btnType="Important"
-          disabled={!this.state.valid}
-          onClick={this.submitHandler}
-        >
-          {this.state.isSignUp ? "Sign up now" : "Sign in now"}
-        </Button>
+        {this.state.isResetPassword ? (
+          <Button
+            btnType="Important"
+            disabled={!this.state.controls.email.valid}
+            onClick={this.resetEmailHandler}
+          >
+            Send reset email
+          </Button>
+        ) : (
+          <Button
+            btnType="Important"
+            disabled={!this.state.valid}
+            onClick={this.submitHandler}
+          >
+            {this.state.isSignUp ? "Sign up now" : "Sign in"}
+          </Button>
+        )}
       </div>
     );
 
-    const errorMessage = this.props.error ? (
-      <p>{this.props.error.message}</p>
-    ) : this.state.controls.displayName.validationError ? (
-      <p>{this.state.controls.displayName.validationError}</p>
-    ) : null;
+    let message = null;
+    if (this.props.error) {
+      message = (
+        <p style={{ color: "red", fontSize: "small" }}>{this.props.error}</p>
+      );
+    } else if (this.state.controls.displayName.validationError) {
+      message = (
+        <p style={{ color: "red", fontSize: "small" }}>
+          {this.state.controls.displayName.validationError}
+        </p>
+      );
+    } else if (this.props.sentEmailVerification) {
+      message = (
+        <p style={{ color: "green" }}>
+          A verification email has been sent. Please verify your email and sign
+          in again.
+        </p>
+      );
+    } else if (this.props.passwordReset) {
+      message = <p style={{ color: "green" }}>A reset email has been sent.</p>;
+    }
 
     let redirect = null;
     if (this.props.isAuthenticated) {
       redirect = <Redirect to={this.props.authRedirect} />;
     }
 
+    let buttons = (
+      <div className={classes.Selections}>
+        <a onClick={this.toggleSignUpHandler}>
+          No account? <b>Create one for free!</b>
+        </a>
+        <a onClick={this.toggleResetHandler}>Reset password</a>
+      </div>
+    );
+
+    if (this.state.isSignUp) {
+      buttons = (
+        <div className={classes.Selections}>
+          <a onClick={this.toggleSignInHandler}>
+            Have an account? <b>Sign in!</b>
+          </a>
+          <a onClick={this.toggleResetHandler}>Reset password</a>
+        </div>
+      );
+    }
+
+    if (this.state.isResetPassword) {
+      buttons = (
+        <div className={classes.Selections}>
+          <a onClick={this.toggleSignInHandler}>
+            Have an account? <b>Sign in!</b>
+          </a>
+          <a onClick={this.toggleSignUpHandler}>
+            No account? <b>Create one for free!</b>
+          </a>
+        </div>
+      );
+    }
+
     return (
       <div className={classes.Auth}>
         {redirect}
-        {errorMessage}
-        {content}
-        <br />
-        <Button onClick={this.switchAuthModeHandler}>
-          {this.state.isSignUp ? "Sign in ?" : "Sign up ?"}
-        </Button>
+        {message}
+        {formContent}
+        {buttons}
       </div>
     );
   }
@@ -264,8 +388,10 @@ const mapStateToProps = (state) => {
   return {
     loading: state.auth.loading,
     error: state.auth.error,
-    isAuthenticated: state.auth.token !== null,
+    isAuthenticated: state.auth.user !== null,
     authRedirect: state.auth.authRedirectPath,
+    sentEmailVerification: state.auth.sentEmailVerification,
+    passwordReset: state.auth.passwordReset,
   };
 };
 
@@ -275,7 +401,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(actions.signUp(email, password, displayName)),
     dispatchSignIn: (email, password) =>
       dispatch(actions.signIn(email, password)),
-    dispatchSetRedirectPath: () => dispatch(actions.setAuthRedirectPath("/")),
+    dispatchResetPassword: (email) => dispatch(actions.passwordReset(email)),
   };
 };
 

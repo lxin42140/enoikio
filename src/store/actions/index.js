@@ -18,8 +18,8 @@ export {
   signIn,
   signUp,
   logout,
+  passwordReset,
   setAuthRedirectPath,
-  authCheckState,
 } from "./Auth";
 
 export { fetchChats, fetchFullChat, chatCleanUp } from "./Chat";
