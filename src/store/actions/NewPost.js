@@ -88,9 +88,66 @@ export const submitNewPhoto = (imageAsFile, identifier) => {
 
 async function submitPhoto(imageAsFile, identifier, key) {
   while (key < imageAsFile.length) {
-    await storage
+    const imageRef = storage
       .ref(`/listingPictures/${identifier}/${key}`)
+      .child(`/${key}`)
+
+    await imageRef
       .put(imageAsFile[key]);
+
+    const metadata = {
+      customMetadata: {
+        'name': imageAsFile[key].name,
+        'index': key,
+      }
+    }
+    imageRef
+      .updateMetadata(metadata)
+      .then(metadata => console.log(metadata));
+    key += 1;
+  }
+}
+
+export const submitEdittedPhoto = (imageAsFile, identifier) => {
+  return (dispatch) => {
+    if (imageAsFile === "") {
+      dispatch(
+        submitNewPhotoFail(
+          `not an image, the image file is a ${typeof imageAsFile}`
+        )
+      );
+    } else {
+      dispatch(submitNewPhotoInit());
+      editPhoto(imageAsFile, identifier, 0).then(() =>
+        dispatch(submitNewPhotoSuccess(), (error) =>
+          dispatch(submitNewPhotoFail(error))
+        )
+      );
+    }
+  };
+};
+
+async function editPhoto(imageAsFile, identifier, key) {
+  while (key < imageAsFile.length) {
+    const imageRef = storage
+      .ref(`/listingPictures/${identifier}/${key}`)
+      .child(`/${key}`)
+  
+    if (imageAsFile[key] === null) {
+      imageRef.delete()
+      .catch(error => console.log(error))
+    } else if (typeof imageAsFile[key] !== "string") {
+      await imageRef.put(imageAsFile[key]);
+      const metadata = {
+        customMetadata: {
+          'name': imageAsFile[key].name,
+          'index': key,
+        }
+      }
+      await imageRef
+        .updateMetadata(metadata)
+        .then(metadata => console.log(metadata));
+    }
     key += 1;
   }
 }

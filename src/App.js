@@ -11,6 +11,10 @@ const asyncNewPost = asyncComponent(() => {
   return import("./containers/NewPost/NewPost");
 });
 
+const asyncEditPost = asyncComponent(() => {
+  return import ("./containers/NewPost/EditPost");
+});
+
 const asyncAuth = asyncComponent(() => {
   return import("./containers/Auth/Auth");
 });
@@ -54,6 +58,7 @@ class App extends Component {
           <Route path="/" exact component={Listings} />
           <Route path="/searchResults" component={asyncFilteredListings} />
           <Route path="/new-post" component={asyncNewPost} />
+          <Route path="/edit-post" component={asyncEditPost} />
           <Route path="/expanded-listing" component={asyncExpandedListing} />
           <Route path="/post-history" component={asyncFilteredListings} />
           <Route path="/liked-listings" component={asyncFilteredListings} />

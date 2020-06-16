@@ -66,9 +66,9 @@ class ExpandedListing extends Component {
 
     const singleImage = (
       <img
-        src={this.props.expandedListing.imageURL[this.state.imageIndex]}
+        src={this.props.expandedListing.imageURL[this.state.imageIndex].url}
         alt={
-          this.props.expandedListing.imageURL[this.state.imageIndex] === "error"
+          this.props.expandedListing.imageURL[this.state.imageIndex].url === "error"
             ? "Unable to load image"
             : "Loading image..."
         }
