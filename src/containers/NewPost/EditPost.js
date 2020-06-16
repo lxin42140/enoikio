@@ -181,7 +181,6 @@ class EditPost extends Component {
 		if (imageArray.filter(image => image !== null).length + images.length > 3) {
 			this.setState({ uploadImageError: true })
 		} else {
-			console.log(imageArray)
 			for (let key in imageArray) {
 				if (images.length === 0) {
 					break;

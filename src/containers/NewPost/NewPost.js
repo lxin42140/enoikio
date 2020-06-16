@@ -164,7 +164,7 @@ class NewPost extends Component {
       time: time,
       numberOfImages: this.state.numberOfImages,
       status: "available",
-      likedUsers: ["none"],
+      likedUsers: [],
     };
     this.props.dispatchSubmitPost(postDetails, this.props.token);
     this.props.dispatchSubmitPhoto(this.state.imageAsFile, unique);

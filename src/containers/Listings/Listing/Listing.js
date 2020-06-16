@@ -14,13 +14,21 @@ class Listing extends Component {
     image: "",
     error: false,
     liked: false,
-    numberOfLikes: 0,
+    likedUsers: [],
   };
 
   componentDidMount() {
+    let currLikedUsers = this.props.listings.filter(
+      (listing) => listing.key === this.props.node
+    )[0].likedUsers;
+
+    if (!currLikedUsers) {
+      currLikedUsers = [];
+    }
+
     storage
       .ref("/listingPictures/" + this.props.identifier)
-      .child("0/0")
+      .child("/0/0")
       .getDownloadURL()
       .then((url) => {
         if (this.props.isAuthenticated) {
@@ -34,25 +42,36 @@ class Listing extends Component {
             this.setState({
               liked: true,
               image: url,
-              numberOfLikes: this.props.likedUsers.length,
+              likedUsers: currLikedUsers,
             });
           } else {
             this.setState({
               liked: false,
               image: url,
-              numberOfLikes: this.props.likedUsers.length,
+              likedUsers: currLikedUsers,
             });
           }
         } else {
           this.setState({
             image: url,
-            numberOfLikes: this.props.likedUsers.length,
+            likedUsers: currLikedUsers,
           });
         }
       })
       .catch((error) => {
         this.setState({ error: true });
       });
+  }
+
+  componentDidUpdate(prevState) {
+    if (prevState.liked !== this.state.liked) {
+      database
+        .ref()
+        .child(`/listings/${this.props.node}`)
+        .update({
+          likedUsers: this.state.likedUsers,
+        })
+    }
   }
 
   expandListingHandler = () => {
@@ -68,39 +87,23 @@ class Listing extends Component {
     if (!this.props.isAuthenticated) {
       this.props.history.push("/auth");
     } else {
-      const currLikedUsers = this.props.listings.filter(
-        (listing) => listing.key === this.props.node
-      )[0].likedUsers;
+      let currLikedUsers = [...this.state.likedUsers];
 
       if (this.state.liked) {
         const indexOfUser = currLikedUsers.indexOf(this.props.displayName);
         currLikedUsers.splice(indexOfUser, 1);
-        database
-          .ref()
-          .child(`/listings/${this.props.node}`)
-          .update({
-            likedUsers: currLikedUsers,
-          })
-          .then((res) => {
-            this.setState((prevState) => ({
-              liked: false,
-              numberOfLikes: prevState.numberOfLikes - 1,
-            }));
-          });
+
+        this.setState({
+          liked: false,
+          likedUsers: currLikedUsers,
+        });
+
       } else {
         currLikedUsers.push(this.props.displayName);
-        database
-          .ref()
-          .child(`/listings/${this.props.node}`)
-          .update({
-            likedUsers: currLikedUsers,
-          })
-          .then((res) => {
-            this.setState((prevState) => ({
-              liked: true,
-              numberOfLikes: prevState.numberOfLikes + 1,
-            }));
-          });
+        this.setState({
+          liked: true,
+          likedUsers: currLikedUsers,
+        });
       }
     }
   };
@@ -180,10 +183,10 @@ class Listing extends Component {
               </Button>
             </Link>
           ) : (
-            <Button btnType="Important" onClick={this.expandListingHandler}>
-              Rent now
-            </Button>
-          )}
+              <Button btnType="Important" onClick={this.expandListingHandler}>
+                Rent now
+              </Button>
+            )}
           <div style={{ display: "flex", alignItems: "center" }}>
             <FontAwesomeIcon
               icon={faHeart}
@@ -197,7 +200,7 @@ class Listing extends Component {
                 fontSize: "small",
               }}
             >
-              {this.state.numberOfLikes + (this.state.numberOfLikes < 2 ? " like" : " likes")}
+              {this.state.likedUsers.length + (this.state.likedUsers.length < 2 ? " like" : " likes")}
             </p>
           </div>
         </div>
