@@ -108,7 +108,7 @@ async function submitPhoto(imageAsFile, identifier, key) {
   }
 }
 
-export const submitEdittedPhoto = (imageAsFile, identifier) => {
+export const submitEditedPhoto = (imageAsFile, identifier) => {
   return (dispatch) => {
     if (imageAsFile === "") {
       dispatch(

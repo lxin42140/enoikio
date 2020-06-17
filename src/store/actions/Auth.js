@@ -1,5 +1,5 @@
 import * as actionTypes from "./actionTypes";
-import { database, auth } from "../../firebase/firebase";
+import firebase, { database, auth } from "../../firebase/firebase";
 
 export const authStart = () => {
   return {
@@ -68,13 +68,15 @@ export const signIn = (email, password) => {
   return (dispatch) => {
     dispatch(authStart());
     auth
-      .signInWithEmailAndPassword(email, password)
-      .then((user) => {
-        if (user.user.emailVerified) {
-          dispatch(authSuccess(user.user));
-        } else {
-          dispatch(authFail("Please verify email"));
-        }
+      .setPersistence(firebase.auth.Auth.Persistence.SESSION)
+      .then((res) => {
+        return auth.signInWithEmailAndPassword(email, password).then((user) => {
+          if (user.user.emailVerified) {
+            dispatch(authSuccess(user.user));
+          } else {
+            dispatch(authFail("Please verify email"));
+          }
+        });
       })
       .catch((error) => {
         const message = error.message.split("-").join(" ");

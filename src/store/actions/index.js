@@ -10,7 +10,7 @@ export {
 export { 
   submitNewPost, 
   submitNewPhoto, 
-  submitEdittedPhoto, 
+  submitEditedPhoto, 
   clearPostData, 
   editPost 
 } from "./NewPost";
