@@ -117,6 +117,35 @@ class ExpandedListing extends Component {
         </div>
       );
 
+    let selections = (
+      <Link to="/auth">
+        <Button>Chat to make offer</Button>
+      </Link>
+    );
+
+    if (
+      this.props.isAuthenticated &&
+      this.props.expandedListing.displayName === this.props.displayName
+    ) {
+      selections = (
+        <React.Fragment>
+          <Link to="/edit-post">
+            <Button btnType="Important">Edit</Button>
+          </Link>
+        </React.Fragment>
+      );
+    } else if (this.props.isAuthenticated) {
+      selections = (
+        <Button
+          onClick={() =>
+            this.onChatHandler(this.props.expandedListing.displayName)
+          }
+        >
+          Chat to make offer
+        </Button>
+      );
+    }
+
     const listingInformation = (
       <React.Fragment>
         <div className={classes.listingDetails}>
@@ -147,24 +176,7 @@ class ExpandedListing extends Component {
             <li>Posted by: {this.props.expandedListing.displayName}</li>
             <li>Posted on: {this.props.expandedListing.date}</li>
           </ul>
-          <div className={classes.Button}>
-            {this.props.isAuthenticated ? (
-              this.props.expandedListing.displayName ===
-              this.props.displayName ? null : (
-                <Button
-                  onClick={() =>
-                    this.onChatHandler(this.props.expandedListing.displayName)
-                  }
-                >
-                  Chat to make offer
-                </Button>
-              )
-            ) : (
-              <Link to="/auth">
-                <Button>Chat to make offer</Button>
-              </Link>
-            )}
-          </div>
+          <div className={classes.Selection}>{selections}</div>
         </div>
         <Link to="/">
           <FontAwesomeIcon

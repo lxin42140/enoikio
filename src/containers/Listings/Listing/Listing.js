@@ -4,10 +4,8 @@ import { connect } from "react-redux";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
 
 import classes from "./Listing.css";
-import Button from "../../../components/UI/Button/Button";
 import * as actions from "../../../store/actions/index";
 import { storage, database } from "../../../firebase/firebase";
-import { Link } from "react-router-dom";
 
 class Listing extends Component {
   state = {
@@ -28,7 +26,8 @@ class Listing extends Component {
 
     storage
       .ref("/listingPictures/" + this.props.identifier)
-      .child("/0/0")
+      .child("0")
+      .child("0")
       .getDownloadURL()
       .then((url) => {
         this.setState({
@@ -96,10 +95,6 @@ class Listing extends Component {
     }
   };
 
-  editListingHandler = () => {
-    this.props.dispatchExpandedListing(this.props.identifier);
-  };
-
   render() {
     let listing = (
       <React.Fragment>
@@ -161,39 +156,32 @@ class Listing extends Component {
 
     return (
       <div className={classes.Listing}>
-        {listing}
-        <br />
-        <div className={classes.Selection}>
-          {this.props.userId === this.props.displayName ? (
-            <Link to="/edit-post">
-              <Button btnType="Important" onClick={this.editListingHandler}>
-                Edit
-              </Button>
-            </Link>
-          ) : (
-            <Button btnType="Important" onClick={this.expandListingHandler}>
-              Rent now
-            </Button>
-          )}
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <FontAwesomeIcon
-              icon={faHeart}
-              className={heartStyle.join(" ")}
-              onClick={this.toggleLikePostHandler}
-            />
-            <p
-              style={{
-                paddingLeft: "5px",
-                color: "#ccc",
-                fontSize: "small",
-              }}
-            >
-              {this.state.likedUsers.length +
-                (this.state.likedUsers.length < 2 ? " like" : " likes")}
-            </p>
-          </div>
+        <div onClick={this.expandListingHandler} style={{ cursor: "pointer" }}>
+          {listing}
+          <br />
+        </div>
+        <div
+          style={{ display: "flex", alignItems: "center", marginTop: "-20px" }}
+        >
+          <FontAwesomeIcon
+            icon={faHeart}
+            className={heartStyle.join(" ")}
+            onClick={this.toggleLikePostHandler}
+          />
+          <p
+            style={{
+              paddingLeft: "5px",
+              color: "#ccc",
+              fontSize: "small",
+              margin: "0",
+            }}
+          >
+            {this.state.likedUsers.length +
+              (this.state.likedUsers.length < 2 ? " like" : " likes")}
+          </p>
         </div>
       </div>
+      // </div>
     );
   }
 }

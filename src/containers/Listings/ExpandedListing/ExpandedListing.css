@@ -71,6 +71,10 @@
     line-height: 150%;
 } 
 
-.Button {
+.Selection {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: auto;
     padding-bottom: 5px;
 }

@@ -84,6 +84,7 @@ export const setInterestedListing = (listing) => {
     storage
       .ref("/listingPictures/" + listing.unique)
       .child("0")
+      .child("0")
       .getDownloadURL()
       .then((url) => {
         const result = {
