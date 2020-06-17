@@ -2,17 +2,10 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 
 import Listing from "./Listing/Listing";
-import * as actions from "../../store/actions/index";
 import Spinner from "../../components/UI/Spinner/Spinner";
 import classes from "./Listings.css";
 
 class FullListings extends Component {
-  componentDidUpdate() {
-    if (this.props.isAuthenticated && this.props.chatInitialLoad) {
-      this.props.dispatchFetchChats();
-    }
-  }
-
   render() {
     if (this.props.loading) {
       return <Spinner />;
@@ -51,15 +44,8 @@ const mapStateToProps = (state) => {
   return {
     fullListings: state.listing.listings,
     loading: state.listing.loading,
-    chatInitialLoad: state.chat.initialLoad,
     isAuthenticated: state.auth.user !== null,
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    dispatchFetchChats: () => dispatch(actions.fetchChats()),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(FullListings);
+export default connect(mapStateToProps)(FullListings);

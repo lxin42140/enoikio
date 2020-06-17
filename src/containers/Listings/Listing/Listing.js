@@ -181,7 +181,6 @@ class Listing extends Component {
           </p>
         </div>
       </div>
-      // </div>
     );
   }
 }

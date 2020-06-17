@@ -9,22 +9,8 @@ import * as actions from "../../store/actions/index";
 class Chat extends Component {
   state = {
     initialLoad: true,
-    chatContactLength: 0,
   };
 
-  componentDidMount() {
-    this.setState({
-      chatContactLength: this.props.chatContacts.length,
-    });
-  }
-
-  componentDidUpdate() {
-    if (this.props.chatContacts.length !== this.state.chatContactLength) {
-      this.setState({
-        chatContactLength: this.props.chatContacts.length,
-      });
-    }
-  }
   componentWillUnmount() {
     this.props.dispatchChatCleanUp(this.props.chatContacts);
     this.props.dispatchClearInterestedListing();
@@ -55,7 +41,7 @@ class Chat extends Component {
           <h4 style={{ color: "#444" }}>Chat Contacts</h4>
         </div>
         <div className={classes.ChatBox}>
-          {this.state.initialLoad && this.state.chatContactLength < 1 ? (
+          {this.state.initialLoad && this.props.chatContacts.length < 1 ? (
             <h3 style={{ color: "#aab8c2" }}>
               Make an offer to start chatting.
             </h3>

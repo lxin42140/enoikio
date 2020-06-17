@@ -12,7 +12,7 @@ const asyncNewPost = asyncComponent(() => {
 });
 
 const asyncEditPost = asyncComponent(() => {
-  return import ("./containers/NewPost/EditPost");
+  return import("./containers/NewPost/EditPost");
 });
 
 const asyncAuth = asyncComponent(() => {
@@ -39,6 +39,12 @@ class App extends Component {
   componentDidMount() {
     this.props.dispatchFetchAllListings();
     this.props.history.push("/");
+  }
+
+  componentDidUpdate() {
+    if (this.props.isAuthenticated && this.props.chatInitialLoad) {
+      this.props.dispatchFetchChats();
+    }
   }
 
   render() {
@@ -80,13 +86,14 @@ class App extends Component {
 const mapStateToProps = (state) => {
   return {
     isAuthenticated: state.auth.user !== null,
-    user:state.auth.user
+    chatInitialLoad: state.chat.initialLoad,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     dispatchFetchAllListings: () => dispatch(actions.fetchAllListings()),
+    dispatchFetchChats: () => dispatch(actions.fetchChats()),
   };
 };
 

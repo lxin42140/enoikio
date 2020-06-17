@@ -142,8 +142,28 @@ export const fetchAllListings = () => {
             } else if (snapShot.key === "likedUsers") {
               updatedListing.likedUsers = snapShot.val();
               dispatch(updateListing(updatedListing));
+            } else if (snapShot.key === "comments") {
+              updatedListing.comments = snapShot.val();
+              dispatch(updateListing(updatedListing));
             }
           });
+
+        if (!snapShot.val().comments) {
+          database
+            .ref()
+            .child("listings")
+            .child(key)
+            .on("child_added", (snapShot) => {
+              if (snapShot.key === "comments") {
+                let updatedListing = Object.assign(
+                  [],
+                  getState().listing.listings
+                ).filter((listing) => listing.key === key)[0];
+                updatedListing.comments = snapShot.val();
+                dispatch(updateListing(updatedListing));
+              }
+            });
+        }
 
         result.push(listing);
         result.reverse();

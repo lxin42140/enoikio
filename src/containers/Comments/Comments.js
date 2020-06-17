@@ -60,10 +60,7 @@ class Comments extends Component {
       sender: this.props.displayName,
       date: moment().format("DD-MM-YYYY"),
       time: moment().format("HH:mm:ss"),
-      key:
-        this.props.displayName +
-        moment().format("HH:mm:ss") +
-        moment().format("DD-MM-YYYY"),
+      key: this.props.displayName + Date.now(),
     };
 
     const commentHistory = Object.assign([], this.state.comments);
@@ -73,12 +70,13 @@ class Comments extends Component {
       .ref()
       .child("listings")
       .child(this.props.identifier)
-      .update({ comments: commentHistory });
-
-    this.setState({
-      message: "",
-      numStars: 0,
-    });
+      .update({ comments: commentHistory })
+      .then((res) => {
+        this.setState({
+          message: "",
+          numStars: 0,
+        });
+      });
   };
 
   render() {
@@ -179,12 +177,7 @@ class Comments extends Component {
         >
           {this.state.comments.length < 1 ? "No Reviews" : "Reviews"}
         </p>
-        <ul className={classes.CommentMessages}>
-          {reviews}
-          {/* <a href="/" className={classes.LoadReviews}>
-            Read more reviews
-          </a> */}
-        </ul>
+        <ul className={classes.CommentMessages}>{reviews}</ul>
       </div>
     );
   }
