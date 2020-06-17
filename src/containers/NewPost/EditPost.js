@@ -270,6 +270,19 @@ class EditPost extends Component {
   };
 
   render() {
+    if (this.props.error) {
+      return (
+        <Modal show={true}>
+          <p style={{ color: "red" }}>{this.props.error}</p>;
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <Link to="/">
+              <Button>Home</Button>
+            </Link>
+          </div>
+        </Modal>
+      );
+    }
+
     if (this.props.editListingLoading) {
       return <Spinner />;
     } else if (this.state.initialEdit) {
@@ -416,6 +429,7 @@ class EditPost extends Component {
 
 const mapStateToProps = (state) => {
   return {
+    error: state.newPost.error,
     editListing: state.listing.expandedListing,
     editListingLoading: state.listing.expandedListingLoading,
     uploadingPost: state.newPost.uploadingPost,
