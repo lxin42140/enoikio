@@ -26,29 +26,6 @@ export const clearPostData = () => {
   };
 };
 
-export const submitNewPost = (data) => {
-  return (dispatch) => {
-    dispatch(submitNewPostInit());
-    database
-      .ref()
-      .child("listings")
-      .push(data)
-      .then((res) => dispatch(submitNewPostSuccess()))
-      .catch((error) => submitNewPostFail(error));
-  };
-};
-
-export const editPost = (editedPost, node) => {
-  return (dispatch) => {
-    dispatch(submitNewPostInit());
-    database
-      .ref()
-      .child(`/listings/${node}`)
-      .update({ postDetails: editedPost })
-      .then(dispatch(submitNewPostSuccess()));
-  };
-};
-
 export const submitNewPhotoInit = () => {
   return {
     type: actionTypes.SUBMIT_NEW_PHOTO_INIT,
@@ -67,6 +44,36 @@ export const submitNewPhotoSuccess = () => {
   };
 };
 
+export const submitNewPost = (data) => {
+  return (dispatch) => {
+    dispatch(submitNewPostInit());
+    database
+      .ref()
+      .child("listings")
+      .push(data)
+      .then((res) => dispatch(submitNewPostSuccess()))
+      .catch((error) => {
+        const message = error.message.split("-").join(" ");
+        dispatch(submitNewPostFail(message));
+      });
+  };
+};
+
+export const editPost = (editedPost, node) => {
+  return (dispatch) => {
+    dispatch(submitNewPostInit());
+    database
+      .ref()
+      .child(`/listings/${node}`)
+      .update({ postDetails: editedPost })
+      .then(dispatch(submitNewPostSuccess()))
+      .catch((error) => {
+        const message = error.message.split("-").join(" ");
+        dispatch(submitNewPostFail(message));
+      });
+  };
+};
+
 export const submitNewPhoto = (imageAsFile, identifier) => {
   return (dispatch) => {
     if (imageAsFile === "") {
@@ -77,35 +84,40 @@ export const submitNewPhoto = (imageAsFile, identifier) => {
       );
     } else {
       dispatch(submitNewPhotoInit());
-      submitPhoto(imageAsFile, identifier, 0).then(() =>
-        dispatch(submitNewPhotoSuccess(), (error) =>
-          dispatch(submitNewPhotoFail(error))
-        )
-      );
+      submitPhoto(imageAsFile, identifier, 0).then((error) => {
+        if (error) {
+          dispatch(submitNewPostFail(error));
+        } else {
+          dispatch(submitNewPhotoSuccess());
+        }
+      });
     }
   };
 };
 
 async function submitPhoto(imageAsFile, identifier, key) {
+  let error = null;
   while (key < imageAsFile.length) {
     const imageRef = storage
       .ref(`/listingPictures/${identifier}/${key}`)
       .child(`/${key}`)
+      .catch((error) => (error = error.message.split("-").join(" ")));
 
-    await imageRef
-      .put(imageAsFile[key]);
+    await imageRef.put(imageAsFile[key]);
 
     const metadata = {
       customMetadata: {
-        'name': imageAsFile[key].name,
-        'index': key,
-      }
-    }
+        name: imageAsFile[key].name,
+        index: key,
+      },
+    };
     imageRef
       .updateMetadata(metadata)
-      .then(metadata => console.log(metadata));
+      .catch((error) => (error = error.message.split("-").join(" ")));
+
     key += 1;
   }
+  return error;
 }
 
 export const submitEditedPhoto = (imageAsFile, identifier) => {
@@ -118,36 +130,40 @@ export const submitEditedPhoto = (imageAsFile, identifier) => {
       );
     } else {
       dispatch(submitNewPhotoInit());
-      editPhoto(imageAsFile, identifier, 0).then(() =>
-        dispatch(submitNewPhotoSuccess(), (error) =>
-          dispatch(submitNewPhotoFail(error))
-        )
-      );
+      editPhoto(imageAsFile, identifier, 0).then((error) => {
+        if (error) {
+          dispatch(submitNewPhotoFail(error));
+        } else {
+          dispatch(submitNewPhotoSuccess());
+        }
+      });
     }
   };
 };
 
 async function editPhoto(imageAsFile, identifier, key) {
+  let error = null;
   while (key < imageAsFile.length) {
     const imageRef = storage
       .ref(`/listingPictures/${identifier}/${key}`)
       .child(`/${key}`)
-  
+      .catch((error) => (error = error.message.split("-").join(" ")));
+
     if (imageAsFile[key] === null) {
-      imageRef.delete()
-      .catch(error => console.log(error))
+      imageRef.delete().catch((error) => console.log(error));
     } else if (typeof imageAsFile[key] !== "string") {
       await imageRef.put(imageAsFile[key]);
       const metadata = {
         customMetadata: {
-          'name': imageAsFile[key].name,
-          'index': key,
-        }
-      }
+          name: imageAsFile[key].name,
+          index: key,
+        },
+      };
       await imageRef
         .updateMetadata(metadata)
-        .then(metadata => console.log(metadata));
+        .catch((error) => (error = error.message.split("-").join(" ")));
     }
     key += 1;
   }
+  return error;
 }

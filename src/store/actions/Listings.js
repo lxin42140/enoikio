@@ -1,5 +1,5 @@
 import * as actionTypes from "./actionTypes";
-import { database, storage} from "../../firebase/firebase";
+import { database, storage } from "../../firebase/firebase";
 
 export const fetchListingInit = () => {
   return {
@@ -94,6 +94,10 @@ export const setInterestedListing = (listing) => {
           key: listing.key,
         };
         dispatch(interestedListing(result));
+      })
+      .catch((error) => {
+        const message = error.message.split("-").join(" ");
+        dispatch(fetchListingFail(message));
       });
   };
 };
@@ -145,6 +149,10 @@ export const fetchAllListings = () => {
         result.push(listing);
         result.reverse();
         dispatch(fetchListingSuccess(result));
+      })
+      .catch((error) => {
+        const message = error.message.split("-").join(" ");
+        dispatch(fetchListingFail(message));
       });
   };
 };
@@ -159,6 +167,10 @@ export const fetchExpandedListing = (identifier) => {
       (imageURL) => {
         expandedListing.imageURL = imageURL;
         dispatch(setExpandedListing(expandedListing));
+      },
+      (error) => {
+        const message = error.message.split("-").join(" ");
+        dispatch(fetchListingFail(message));
       }
     );
   };
@@ -167,13 +179,11 @@ export const fetchExpandedListing = (identifier) => {
 async function getDownloadURL(numImage, identifier, key) {
   const imageURL = [];
   while (key < numImage) {
-
-    const ref = storage
-      .ref(`/listingPictures/${identifier}/${key}`)
+    const ref = storage.ref(`/listingPictures/${identifier}/${key}`);
 
     const image = await ref.listAll();
     if (image.items.length === 0) {
-      imageURL.push(null)
+      imageURL.push(null);
       key += 1;
       continue;
     }
@@ -182,17 +192,16 @@ async function getDownloadURL(numImage, identifier, key) {
     await ref
       .child("" + key)
       .getDownloadURL()
-      .then(url => link = url)
-      .catch((error) => console.log(error));
-    
+      .then((url) => (link = url));
+
     let imageName;
     await ref
       .child("" + key)
       .getMetadata()
-      .then(data => imageName = data.customMetadata.name)
-    
-      imageURL.push({url: link, name: imageName})
-      
+      .then((data) => (imageName = data.customMetadata.name));
+
+    imageURL.push({ url: link, name: imageName });
+
     key += 1;
   }
   return imageURL;

@@ -160,6 +160,6 @@ async function updateDisplayNames(displayName) {
           .set({ displayNames: displayNames });
       }
     })
-    .catch((error) => (error = error.message));
+    .catch((error) => (error = error.message.split("-").join(" ")));
   return error;
 }

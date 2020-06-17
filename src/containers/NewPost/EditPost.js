@@ -416,7 +416,7 @@ class EditPost extends Component {
 
 const mapStateToProps = (state) => {
   return {
-	editListing: state.listing.expandedListing,
+    editListing: state.listing.expandedListing,
     editListingLoading: state.listing.expandedListingLoading,
     uploadingPost: state.newPost.uploadingPost,
     postUploaded: state.newPost.postUploaded,

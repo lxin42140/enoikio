@@ -1,4 +1,5 @@
 import * as actionTypes from "../actions/actionTypes";
+import { updateObject } from "../utility";
 
 const initialState = {
   uploadingPost: false,
@@ -8,31 +9,72 @@ const initialState = {
   error: null,
 };
 
+const submitNewPhotoInit = (state, action) => {
+  return updateObject(state, {
+    uploadingImage: true,
+  });
+};
+
+const submitNewPhotoSuccess = (state, action) => {
+  return updateObject(state, {
+    uploadingImage: false,
+    imageUploaded: true,
+  });
+};
+
+const submitNewListingInit = (state, action) => {
+  return updateObject(state, {
+    uploadingPost: true,
+  });
+};
+
+const submitNewListingSuccess = (state, action) => {
+  return updateObject(state, {
+    uploadingPost: false,
+    postUploaded: true,
+  });
+};
+
+const submitNewPhotoFail = (state, action) => {
+  return updateObject(state, {
+    error: action.error,
+    uploadingImage: false,
+  });
+};
+
+const submitNewListingFail = (state, action) => {
+  return updateObject(state, {
+    error: action.error,
+    uploadingPost: false,
+  });
+};
+
+const clearNewPostData = (state, action) => {
+  return updateObject(state, {
+    uploadingPost: false,
+    postUploaded: false,
+    uploadingImage: false,
+    imageUploaded: false,
+    error: null,
+  });
+};
+
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.SUBMIT_NEW_PHOTO_INIT:
-      return { ...state, uploadingImage: true };
+      return submitNewPhotoInit(state, action);
     case actionTypes.SUBMIT_NEW_LISTING_INIT:
-      return { ...state, uploadingPost: true };
-
+      return submitNewListingInit(state, action);
     case actionTypes.SUBMIT_NEW_PHOTO_SUCCESS:
-      return { ...state, uploadingImage: false, imageUploaded: true };
+      return submitNewPhotoSuccess(state, action);
     case actionTypes.SUBMIT_NEW_LISTING_SUCCESS:
-      return { ...state, uploadingPost: false, postUploaded: true };
-
+      return submitNewListingSuccess(state, action);
     case actionTypes.SUBMIT_NEW_PHOTO_FAIL:
-      return { ...state, error: action.error, uploadingImage: false };
+      return submitNewPhotoFail(state, action);
     case actionTypes.SUBMIT_NEW_LISTING_FAIL:
-      return { ...state, error: action.error, uploadingPost: false };
-
+      return submitNewListingFail(state, action);
     case actionTypes.CLEAR_NEW_POST_DATA:
-      return {
-        uploadingPost: false,
-        postUploaded: false,
-        uploadingImage: false,
-        imageUploaded: false,
-        error: null,
-      };
+      return clearNewPostData(state, action);
     default:
       return state;
   }
