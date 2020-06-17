@@ -174,7 +174,7 @@ class NewPost extends Component {
 
     let imageArray = [...this.state.imageAsFile];
 
-    //check whether images uploaded is same as any file in the state already 
+    //check whether images uploaded is same as any file in the state already
     for (let uploadedImage in images) {
       let diffImage = true;
       for (let currImage in imageArray) {
@@ -214,13 +214,13 @@ class NewPost extends Component {
 
     for (let image in imageArray) {
       if (imageArray[image] === imageName) {
-        imageArray.splice(image, 1)
+        imageArray.splice(image, 1);
         break;
       }
     }
     const length = imageArray.length;
-    this.setState({ imageAsFile: imageArray, numberOfImages: length })
-  }
+    this.setState({ imageAsFile: imageArray, numberOfImages: length });
+  };
 
   createNewFormHandler = () => {
     this.props.dispatchClearNewPostData();
@@ -247,6 +247,18 @@ class NewPost extends Component {
   };
 
   render() {
+    if (this.props.error) {
+      return (
+        <Modal show={true}>
+          <p style={{ color: "red" }}>{this.props.error}</p>;
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <Link to="/">
+              <Button>Home</Button>
+            </Link>
+          </div>
+        </Modal>
+      );
+    }
     const formElementsArray = [];
 
     for (let key in this.state.dataForm) {
@@ -275,8 +287,16 @@ class NewPost extends Component {
       return (
         <div
           key={image.name}
-          style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
-          <p style={{ paddingRight: "10px", textAlign: "center" }}>{image.name}</p>
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <p style={{ paddingRight: "10px", textAlign: "center" }}>
+            {image.name}
+          </p>
           <Button onClick={() => this.removeImageHandler(image)}>Remove</Button>
         </div>
       );
@@ -292,32 +312,31 @@ class NewPost extends Component {
         {this.props.uploadingImage || this.props.uploadingPost ? (
           <Spinner />
         ) : (
-            <React.Fragment>
-              {form}
-              <br />
-              <div className={classes.ImageText}>
-                {displayImageList}
-              </div>
-              <p style={{ color: 'red' }}>{this.state.uploadImageError ?
-                "Please select a maximum of 3 images" :
-                null}
-              </p>
-              <div style={{ marginBottom: "10px" }}>
-                <input
-                  type="file"
-                  accept=".png,.jpeg, .jpg"
-                  multiple
-                  style={{ width: "95px" }}
-                  onChange={this.handleImageAsFile}
-                  disabled={this.state.numberOfImages >= 3}
-                />
-              </div>
-              <Button
-                btnType="Important"
-                onClick={this.toggleModalHandler}
-                disabled={!this.state.formIsValid}
-              >
-                SUBMIT
+          <React.Fragment>
+            {form}
+            <br />
+            <div className={classes.ImageText}>{displayImageList}</div>
+            <p style={{ color: "red" }}>
+              {this.state.uploadImageError
+                ? "Please select a maximum of 3 images"
+                : null}
+            </p>
+            <div style={{ marginBottom: "10px" }}>
+              <input
+                type="file"
+                accept=".png,.jpeg, .jpg"
+                multiple
+                style={{ width: "95px" }}
+                onChange={this.handleImageAsFile}
+                disabled={this.state.numberOfImages >= 3}
+              />
+            </div>
+            <Button
+              btnType="Important"
+              onClick={this.toggleModalHandler}
+              disabled={!this.state.formIsValid}
+            >
+              SUBMIT
             </Button>
           </React.Fragment>
         )}
@@ -373,6 +392,7 @@ class NewPost extends Component {
 
 const mapStateToProps = (state) => {
   return {
+    error: state.newPost.error,
     uploadingPost: state.newPost.uploadingPost,
     postUploaded: state.newPost.postUploaded,
     uploadingImage: state.newPost.uploadingImage,

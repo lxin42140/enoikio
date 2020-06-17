@@ -22,6 +22,10 @@ class FullListings extends Component {
       return <h3>Oops..No available listings</h3>;
     }
 
+    if (this.props.error) {
+      return <h3 style={{ color: "red" }}>{this.props.error}</h3>;
+    }
+
     let listings = this.props.fullListings.map((listing) => {
       return (
         <Listing
@@ -49,6 +53,7 @@ class FullListings extends Component {
 
 const mapStateToProps = (state) => {
   return {
+    error: state.listing.error,
     fullListings: state.listing.listings,
     loading: state.listing.loading,
     chatInitialLoad: state.chat.initialLoad,
@@ -62,7 +67,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(FullListings);
+export default connect(mapStateToProps, mapDispatchToProps)(FullListings);

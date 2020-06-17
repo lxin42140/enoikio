@@ -65,12 +65,9 @@ class Listing extends Component {
 
   componentDidUpdate(prevState) {
     if (prevState.liked !== this.state.liked) {
-      database
-        .ref()
-        .child(`/listings/${this.props.node}`)
-        .update({
-          likedUsers: this.state.likedUsers,
-        })
+      database.ref().child(`/listings/${this.props.node}`).update({
+        likedUsers: this.state.likedUsers,
+      });
     }
   }
 
@@ -97,7 +94,6 @@ class Listing extends Component {
           liked: false,
           likedUsers: currLikedUsers,
         });
-
       } else {
         currLikedUsers.push(this.props.displayName);
         this.setState({
@@ -110,7 +106,7 @@ class Listing extends Component {
 
   editListingHandler = () => {
     this.props.dispatchExpandedListing(this.props.identifier);
-  }
+  };
 
   render() {
     let listing = (
@@ -136,10 +132,10 @@ class Listing extends Component {
                   {this.props.status}
                 </p>
               ) : (
-                  <p style={{ margin: "0px" }}>
-                    Status: <br /> {this.props.status}
-                  </p>
-                )}
+                <p style={{ margin: "0px" }}>
+                  Status: <br /> {this.props.status}
+                </p>
+              )}
             </li>
             <li>
               <b>Price: </b>${this.props.price} / month
@@ -183,10 +179,10 @@ class Listing extends Component {
               </Button>
             </Link>
           ) : (
-              <Button btnType="Important" onClick={this.expandListingHandler}>
-                Rent now
-              </Button>
-            )}
+            <Button btnType="Important" onClick={this.expandListingHandler}>
+              Rent now
+            </Button>
+          )}
           <div style={{ display: "flex", alignItems: "center" }}>
             <FontAwesomeIcon
               icon={faHeart}
@@ -200,7 +196,8 @@ class Listing extends Component {
                 fontSize: "small",
               }}
             >
-              {this.state.likedUsers.length + (this.state.likedUsers.length < 2 ? " like" : " likes")}
+              {this.state.likedUsers.length +
+                (this.state.likedUsers.length < 2 ? " like" : " likes")}
             </p>
           </div>
         </div>
