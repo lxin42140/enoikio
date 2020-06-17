@@ -18,7 +18,7 @@ export {
 export {
   signIn,
   signUp,
-  logout,
+  signOut,
   passwordReset,
   setAuthRedirectPath,
 } from "./Auth";

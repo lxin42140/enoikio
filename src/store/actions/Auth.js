@@ -49,6 +49,12 @@ export const passwordResetSuccess = () => {
   };
 };
 
+export const signOut = () => {
+  return (dispatch) => {
+    auth.signOut().then((res) => dispatch(logout()));
+  };
+};
+
 export const passwordReset = (email) => {
   return (dispatch) => {
     dispatch(authStart());

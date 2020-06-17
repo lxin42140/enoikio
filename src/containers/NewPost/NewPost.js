@@ -125,7 +125,7 @@ class NewPost extends Component {
     updatedFormElement.touched = true;
     updatedDataForm[inputIdentifier] = updatedFormElement;
     let formIsValid = true;
-    for (let inputIdentifiers in updatedDataForm) {
+    for (let inputIdentifiers in updatedDataForm) { 
       if (
         !updatedDataForm[inputIdentifiers].valid ||
         this.state.imageAsFile.length === 0
