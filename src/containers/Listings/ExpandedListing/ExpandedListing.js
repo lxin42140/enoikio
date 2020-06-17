@@ -7,7 +7,7 @@ import * as actions from "../../../store/actions/index";
 import Button from "../../../components/UI/Button/Button";
 import Spinner from "../../../components/UI/Spinner/Spinner";
 import Comments from "../../Comments/Comments";
-import Modal from "../../../components/UI/Modal/Modal";
+// import Modal from "../../../components/UI/Modal/Modal";
 import { database } from "../../../firebase/firebase";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -65,18 +65,18 @@ class ExpandedListing extends Component {
       return <Spinner />;
     }
 
-    if (this.props.error) {
-      return (
-        <Modal show={true}>
-          <p style={{ color: "red" }}>{this.props.error}</p>;
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <Link to="/">
-              <Button>Home</Button>
-            </Link>
-          </div>
-        </Modal>
-      );
-    }
+    // if (this.props.error) {
+    //   return (
+    //     <Modal show={true}>
+    //       <p style={{ color: "red" }}>{this.props.error}</p>;
+    //       <div style={{ display: "flex", justifyContent: "center" }}>
+    //         <Link to="/">
+    //           <Button>Home</Button>
+    //         </Link>
+    //       </div>
+    //     </Modal>
+    //   );
+    // }
 
     const singleImage = (
       <img
@@ -195,7 +195,7 @@ class ExpandedListing extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    error: state.listing.error,
+    // error: state.listing.error,
     expandedListing: state.listing.expandedListing,
     expandedListingLoading: state.listing.expandedListingLoading,
     isAuthenticated: state.auth.user !== null,

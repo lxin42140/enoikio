@@ -78,11 +78,11 @@ export const signIn = (email, password) => {
       .setPersistence(firebase.auth.Auth.Persistence.SESSION)
       .then((res) => {
         return auth.signInWithEmailAndPassword(email, password).then((user) => {
-          if (user.user.emailVerified) {
-            dispatch(authSuccess(user.user));
-          } else {
-            dispatch(authFail("Please verify email"));
-          }
+          // if (user.user.emailVerified) {
+          dispatch(authSuccess(user.user));
+          // } else {
+          //   dispatch(authFail("Please verify email"));
+          // }
         });
       })
       .catch((error) => {

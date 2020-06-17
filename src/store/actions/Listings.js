@@ -131,17 +131,15 @@ export const fetchAllListings = () => {
           .child("listings")
           .child(key)
           .on("child_changed", (snapShot) => {
-            if (
-              snapShot.val() === "available" ||
-              (typeof snapShot.val() === String &&
-                snapShot.val().split(" ")[0] === "loaned") ||
-              snapShot.val() === "sold"
-            ) {
-              let updatedListing = Object.assign(
-                [],
-                getState().listing.listings
-              ).filter((listing) => listing.key === key)[0];
+            let updatedListing = Object.assign(
+              [],
+              getState().listing.listings
+            ).filter((listing) => listing.key === key)[0];
+            if (snapShot.key === "status") {
               updatedListing.status = snapShot.val();
+              dispatch(updateListing(updatedListing));
+            } else if (snapShot.key === "likedUsers") {
+              updatedListing.likedUsers = snapShot.val();
               dispatch(updateListing(updatedListing));
             }
           });
@@ -149,10 +147,6 @@ export const fetchAllListings = () => {
         result.push(listing);
         result.reverse();
         dispatch(fetchListingSuccess(result));
-      })
-      .catch((error) => {
-        const message = error.message.split("-").join(" ");
-        dispatch(fetchListingFail(message));
       });
   };
 };

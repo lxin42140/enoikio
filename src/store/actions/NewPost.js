@@ -59,20 +59,20 @@ export const submitNewPost = (data) => {
   };
 };
 
-export const editPost = (editedPost, node) => {
+export const editPost = (editedDetails, node) => {
   return (dispatch) => {
     dispatch(submitNewPostInit());
     database
       .ref()
       .child(`/listings/${node}`)
-      .update({ postDetails: editedPost })
+      .set(editedDetails)
       .then(dispatch(submitNewPostSuccess()))
       .catch((error) => {
         const message = error.message.split("-").join(" ");
         dispatch(submitNewPostFail(message));
       });
   };
-};
+}
 
 export const submitNewPhoto = (imageAsFile, identifier) => {
   return (dispatch) => {
@@ -101,9 +101,10 @@ async function submitPhoto(imageAsFile, identifier, key) {
     const imageRef = storage
       .ref(`/listingPictures/${identifier}/${key}`)
       .child(`/${key}`)
-      .catch((error) => (error = error.message.split("-").join(" ")));
 
-    await imageRef.put(imageAsFile[key]);
+    await imageRef
+      .put(imageAsFile[key])
+      .catch((error) => (error = error.message.split("-").join(" ")));
 
     const metadata = {
       customMetadata: {
@@ -147,12 +148,15 @@ async function editPhoto(imageAsFile, identifier, key) {
     const imageRef = storage
       .ref(`/listingPictures/${identifier}/${key}`)
       .child(`/${key}`)
-      .catch((error) => (error = error.message.split("-").join(" ")));
 
     if (imageAsFile[key] === null) {
-      imageRef.delete().catch((error) => console.log(error));
+      imageRef
+        .delete()
+        .catch((error) => (error = error.message.split("-").join(" ")));
     } else if (typeof imageAsFile[key] !== "string") {
-      await imageRef.put(imageAsFile[key]);
+      await imageRef
+        .put(imageAsFile[key])
+        .catch((error) => (error = error.message.split("-").join(" ")));
       const metadata = {
         customMetadata: {
           name: imageAsFile[key].name,

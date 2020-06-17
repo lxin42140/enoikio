@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 
 import Listing from "./Listing/Listing";
 import classes from "./Listings.css";
-import Modal from "../../components/UI/Modal/Modal";
-import Button from "../../components/UI/Button/Button";
+// import Modal from "../../components/UI/Modal/Modal";
+// import Button from "../../components/UI/Button/Button";
 
 class FilteredListings extends Component {
   state = {
@@ -72,19 +72,6 @@ class FilteredListings extends Component {
       return <h3>Oops..No available listings</h3>;
     }
 
-    if (this.props.error) {
-      return (
-        <Modal show={true}>
-          <p style={{ color: "red" }}>{this.props.error}</p>;
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <Link to="/">
-              <Button>Home</Button>
-            </Link>
-          </div>
-        </Modal>
-      );
-    }
-
     let listings = this.state.filteredListings.map((listing) => {
       return (
         <Listing
@@ -112,7 +99,6 @@ class FilteredListings extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    error: state.listing.error,
     listings: state.listing.listings,
     filterType: state.listing.filterType,
     searchObject: state.listing.searchObject,

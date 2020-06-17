@@ -31,42 +31,34 @@ class Listing extends Component {
       .child("/0/0")
       .getDownloadURL()
       .then((url) => {
-        if (this.props.isAuthenticated) {
-          const likedUser = this.props.likedUsers.filter(
-            (name) => name === this.props.displayName
-          );
-          if (
-            likedUser.length !== 0 &&
-            likedUser[0] === this.props.displayName
-          ) {
-            this.setState({
-              liked: true,
-              image: url,
-              likedUsers: currLikedUsers,
-            });
-          } else {
-            this.setState({
-              liked: false,
-              image: url,
-              likedUsers: currLikedUsers,
-            });
-          }
-        } else {
-          this.setState({
-            image: url,
-            likedUsers: currLikedUsers,
-          });
-        }
+        this.setState({
+          image: url,
+        });
       })
       .catch((error) => {
         this.setState({ error: true });
       });
+
+    if (this.props.isAuthenticated && this.props.likedUsers) {
+      const likedUser = this.props.likedUsers.filter(
+        (name) => name === this.props.displayName
+      )[0];
+      this.setState({
+        liked: likedUser && likedUser === this.props.displayName,
+        likedUsers: currLikedUsers,
+      });
+    } else {
+      this.setState({
+        likedUsers: currLikedUsers,
+      });
+    }
   }
 
   componentDidUpdate(prevState) {
     if (prevState.liked !== this.state.liked) {
-      database.ref().child(`/listings/${this.props.node}`).update({
-        likedUsers: this.state.likedUsers,
+      const likedUsers = Object.assign([], this.state.likedUsers);
+      database.ref().child("listings").child(this.props.node).update({
+        likedUsers: likedUsers,
       });
     }
   }
