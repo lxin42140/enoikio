@@ -16,6 +16,26 @@ class FullListings extends Component {
     }
 
     let listings = this.props.fullListings.map((listing) => {
+      if (listing.postDetails.deliveryMethod === "mail") {
+        return (
+          <Listing
+            history={this.props.history}
+            key={listing.unique}
+            date={listing.date}
+            identifier={listing.unique}
+            userId={listing.displayName}
+            status={listing.status}
+            deliveryMethod={listing.postDetails.deliveryMethod}
+            listingType={listing.postDetails.listingType}
+            module={listing.postDetails.module}
+            price={listing.postDetails.price}
+            textbook={listing.postDetails.textbook}
+            numImages={listing.numberOfImages}
+            node={listing.key}
+            likedUsers={listing.likedUsers}
+          />
+        );
+      }
       return (
         <Listing
           history={this.props.history}
@@ -25,6 +45,7 @@ class FullListings extends Component {
           userId={listing.displayName}
           status={listing.status}
           deliveryMethod={listing.postDetails.deliveryMethod}
+          listingType={listing.postDetails.listingType}
           location={listing.postDetails.location}
           module={listing.postDetails.module}
           price={listing.postDetails.price}

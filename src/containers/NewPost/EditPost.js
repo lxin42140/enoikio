@@ -98,6 +98,10 @@ class EditPost extends Component {
     initialImageChange: true,
   };
 
+  componentWillUnmount() {
+    this.props.dispatchClearExpandedListing();
+  }
+
   checkValidity(value, rules) {
     let isValid = true;
     if (rules) {
@@ -447,6 +451,8 @@ const mapDispatchToProps = (dispatch) => {
     dispatchClearNewPostData: () => dispatch(actions.clearPostData()),
     dispatchEditPost: (editedPost, node) =>
       dispatch(actions.editPost(editedPost, node)),
+    dispatchClearExpandedListing: () =>
+      dispatch(actions.clearExpandedListing()),
   };
 };
 

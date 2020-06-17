@@ -36,7 +36,10 @@ const setExpandedListing = (state, expandedListing) => {
 };
 
 const clearExpandedListing = (state, action) => {
-  return updateObject(state, { expandedListing: null });
+  return updateObject(state, {
+    expandedListing: null,
+    expandedListingLoading: false,
+  });
 };
 
 const filterListings = (state, filterType, searchObject) => {

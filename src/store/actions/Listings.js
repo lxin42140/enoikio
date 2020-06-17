@@ -49,20 +49,16 @@ export const interestedListing = (interestedListing) => {
   };
 };
 
-export const clearInterestedListing = () => {
-  return {
-    type: actionTypes.CLEAR_INTERESTED_LISTING,
-  };
-};
-export const clearExpandedListing = () => {
-  return {
-    type: actionTypes.CLEAR_EXPANDED_LISTING,
-  };
-};
-
 export const setFilterListings = (filterType, searchObject) => {
   return (dispatch) => {
     dispatch(filterListings(filterType, searchObject));
+  };
+};
+
+export const updateListing = (updatedListing) => {
+  return {
+    type: actionTypes.UPDATE_LISTING,
+    updatedListing: updatedListing,
   };
 };
 
@@ -72,10 +68,15 @@ export const emptyInterestedListing = () => {
   };
 };
 
-export const updateListing = (updatedListing) => {
+export const clearInterestedListing = () => {
   return {
-    type: actionTypes.UPDATE_LISTING,
-    updatedListing: updatedListing,
+    type: actionTypes.CLEAR_INTERESTED_LISTING,
+  };
+};
+
+export const clearExpandedListing = () => {
+  return {
+    type: actionTypes.CLEAR_EXPANDED_LISTING,
   };
 };
 
@@ -95,11 +96,11 @@ export const setInterestedListing = (listing) => {
           key: listing.key,
         };
         dispatch(interestedListing(result));
-      })
-      .catch((error) => {
-        const message = error.message.split("-").join(" ");
-        dispatch(fetchListingFail(message));
       });
+    // .catch((error) => {
+    //   const message = error.message.split("-").join(" ");
+    //   dispatch(fetchListingFail(message));
+    // });
   };
 };
 
@@ -112,7 +113,6 @@ export const fetchAllListings = () => {
       .on("child_added", (snapShot) => {
         let result = Object.assign([], getState().listing.listings);
         const key = snapShot.key;
-
         const listing = {
           key: key,
           unique: snapShot.val().unique,
@@ -126,7 +126,6 @@ export const fetchAllListings = () => {
           comments: snapShot.val().comments,
           likedUsers: snapShot.val().likedUsers,
         };
-
         database
           .ref()
           .child("listings")
@@ -182,11 +181,11 @@ export const fetchExpandedListing = (identifier) => {
       (imageURL) => {
         expandedListing.imageURL = imageURL;
         dispatch(setExpandedListing(expandedListing));
-      },
-      (error) => {
-        const message = error.message.split("-").join(" ");
-        dispatch(fetchListingFail(message));
       }
+      // (error) => {
+      //   const message = error.message.split("-").join(" ");
+      //   dispatch(fetchListingFail(message));
+      // }
     );
   };
 };
@@ -194,28 +193,29 @@ export const fetchExpandedListing = (identifier) => {
 async function getDownloadURL(numImage, identifier, key) {
   const imageURL = [];
   while (key < numImage) {
+    console.log(imageURL);
     const ref = storage
       .ref()
       .child("listingPictures")
       .child(identifier)
-      .child(key);
+      .child("" + key);
 
     const image = await ref.listAll();
     if (image.items.length === 0) {
-      imageURL.push(null);
+      await imageURL.push(null);
       key += 1;
       continue;
     }
 
     let link;
     await ref
-      .child(key)
+      .child("" + key)
       .getDownloadURL()
       .then((url) => (link = url));
 
     let imageName;
     await ref
-      .child(key)
+      .child("" + key)
       .getMetadata()
       .then((data) => (imageName = data.customMetadata.name));
 

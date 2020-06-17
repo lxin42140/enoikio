@@ -60,6 +60,22 @@ class Listing extends Component {
         likedUsers: likedUsers,
       });
     }
+
+    if (!this.state.error && this.state.image === "") {
+      storage
+        .ref("/listingPictures/" + this.props.identifier)
+        .child("0")
+        .child("0")
+        .getDownloadURL()
+        .then((url) => {
+          this.setState({
+            image: url,
+          });
+        })
+        .catch((error) => {
+          this.setState({ error: true });
+        });
+    }
   }
 
   expandListingHandler = () => {
@@ -113,6 +129,9 @@ class Listing extends Component {
         <div>
           <ul className={classes.Description}>
             <li>
+            <b>Type: </b>{this.props.listingType}
+            </li>
+            <li>
               {this.props.status === "available" ? (
                 <p style={{ margin: "0px" }}>
                   <b>Status: </b>
@@ -124,17 +143,25 @@ class Listing extends Component {
                 </p>
               )}
             </li>
-            <li>
-              <b>Price: </b>${this.props.price} / month
-            </li>
+            {this.props.listingType === "Rent" ? (
+              <li>
+                <b>Price: </b>${this.props.price} / month
+              </li>
+            ) : (
+              <li>
+                <b>Price: </b>${this.props.price}
+              </li>
+            )}
             <li>
               <b>Delivery method: </b>
               {this.props.deliveryMethod}
             </li>
-            <li>
-              <b>Location: </b>
-              {this.props.location}
-            </li>
+            {this.props.deliveryMethod === "mail" ? null : (
+              <li>
+                <b>Location: </b>
+                {this.props.location}
+              </li>
+            )}
             <br />
             <li>
               <b>Posted by: </b>
@@ -156,12 +183,15 @@ class Listing extends Component {
 
     return (
       <div className={classes.Listing}>
-        <div onClick={this.expandListingHandler} style={{ cursor: "pointer" }}>
+        <div
+          onClick={this.expandListingHandler}
+          style={{ cursor: "pointer", marginBottom: "-30px" }}
+        >
           {listing}
           <br />
         </div>
         <div
-          style={{ display: "flex", alignItems: "center", marginTop: "-20px" }}
+          style={{ display: "flex", alignItems: "center", marginTop: "auto" }}
         >
           <FontAwesomeIcon
             icon={faHeart}

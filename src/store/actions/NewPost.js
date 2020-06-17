@@ -100,12 +100,14 @@ async function submitPhoto(imageAsFile, identifier, key) {
   let error = null;
   while (key < imageAsFile.length) {
     const imageRef = storage
-      .ref(`/listingPictures/${identifier}/${key}`)
-      .child(`/${key}`);
+      .ref()
+      .child("listingPictures")
+      .child(identifier)
+      .child("" + key);
 
     await imageRef
       .put(imageAsFile[key])
-      .catch((error) => (error = error.message.split("-").join(" ")));
+      // .catch((error) => (error = error.message.split("-").join(" ")));
 
     const metadata = {
       customMetadata: {
@@ -115,7 +117,7 @@ async function submitPhoto(imageAsFile, identifier, key) {
     };
     imageRef
       .updateMetadata(metadata)
-      .catch((error) => (error = error.message.split("-").join(" ")));
+      // .catch((error) => (error = error.message.split("-").join(" ")));
 
     key += 1;
   }
@@ -147,17 +149,19 @@ async function editPhoto(imageAsFile, identifier, key) {
   let error = null;
   while (key < imageAsFile.length) {
     const imageRef = storage
-      .ref(`/listingPictures/${identifier}/${key}`)
-      .child(`/${key}`);
+      .ref()
+      .child("listingPictures")
+      .child(identifier)
+      .child("" + key);
 
     if (imageAsFile[key] === null) {
-      imageRef
+      await imageRef
         .delete()
-        .catch((error) => (error = error.message.split("-").join(" ")));
+        // .catch((error) => (error = error.message.split("-").join(" ")));
     } else if (typeof imageAsFile[key] !== "string") {
       await imageRef
         .put(imageAsFile[key])
-        .catch((error) => (error = error.message.split("-").join(" ")));
+        // .catch((error) => (error = error.message.split("-").join(" ")));
       const metadata = {
         customMetadata: {
           name: imageAsFile[key].name,
@@ -166,7 +170,7 @@ async function editPhoto(imageAsFile, identifier, key) {
       };
       await imageRef
         .updateMetadata(metadata)
-        .catch((error) => (error = error.message.split("-").join(" ")));
+        // .catch((error) => (error = error.message.split("-").join(" ")));
     }
     key += 1;
   }

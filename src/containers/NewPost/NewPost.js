@@ -17,7 +17,7 @@ class NewPost extends Component {
         elementType: "input",
         elementConfig: {
           type: "text",
-          placeholder: "Module Code",
+          placeholder: "Module code",
         },
         value: "",
         validation: {
@@ -31,7 +31,7 @@ class NewPost extends Component {
         elementType: "input",
         elementConfig: {
           type: "text",
-          placeholder: "Title of Textbook",
+          placeholder: "Title of textbook",
         },
         value: "",
         validation: {
@@ -40,18 +40,37 @@ class NewPost extends Component {
         valid: false,
         touched: false,
       },
-      price: {
+      listingType: {
+        elementType: "select",
+        elementConfig: {
+          options: [
+            { value: "rent", displayValue: "Rent" },
+            { value: "sell", displayValue: "Sell" },
+          ],
+        },
+        value: "rent",
+        validation: false,
+        valid: true,
+      },
+      rentalPrice: {
         elementType: "input",
         elementConfig: {
           type: "number",
-          placeholder: "Rent Price (per month)",
+          placeholder: "Rent price (per month)",
         },
         value: "",
-        validation: {
-          required: true,
+        validation: false,
+        valid: true,
+      },
+      sellingPrice: {
+        elementType: "input",
+        elementConfig: {
+          type: "number",
+          placeholder: "Selling price",
         },
-        valid: false,
-        touched: false,
+        value: "",
+        validation: false,
+        valid: true,
       },
       deliveryMethod: {
         elementType: "select",
@@ -72,11 +91,8 @@ class NewPost extends Component {
           placeholder: "Pick-up location",
         },
         value: "",
-        validation: {
-          required: true,
-        },
-        valid: false,
-        touched: false,
+        validation: false,
+        valid: true,
       },
       description: {
         elementType: "textarea",
@@ -87,7 +103,6 @@ class NewPost extends Component {
         value: "",
         validation: false,
         valid: true,
-        touched: false,
       },
     },
     imageAsFile: [],
@@ -147,13 +162,33 @@ class NewPost extends Component {
       switch (key) {
         case "module":
         case "textbook":
-        case "location":
           formData[key] = this.state.dataForm[key].value.toLowerCase();
+          break;
+        case "deliveryMethod":
+          formData[key] = this.state.dataForm[key].value;
+          if (this.state.dataForm[key].value === "meet-up") {
+            formData[
+              "location"
+            ] = this.state.dataForm.location.value.toLowerCase();
+          }
+          break;
+        case "listingType":
+          formData[key] = this.state.dataForm[key].value;
+          if (this.state.dataForm[key].value === "Rent") {
+            formData["price"] = this.state.dataForm.rentalPrice.value;
+          } else {
+            formData["price"] = this.state.dataForm.sellingPrice.value;
+          }
+          break;
+        case "rentalPrice":
+        case "sellingPrice":
+        case "location":
           break;
         default:
           formData[key] = this.state.dataForm[key].value;
       }
     }
+
     const postDetails = {
       postDetails: formData,
       displayName: this.props.displayName,
@@ -229,16 +264,20 @@ class NewPost extends Component {
     };
     for (let element in refreshedForm) {
       refreshedForm[element].value = "";
-      refreshedForm[element].touched = false;
+      if (refreshedForm[element].touched) {
+        refreshedForm[element].touched = false;
+      }
       if (refreshedForm[element].validation) {
         refreshedForm[element].valid = false;
       }
     }
+
     this.setState({
-      dataForm: refreshedForm,
       imageAsFile: [],
       formIsValid: false,
       showModal: false,
+      numberOfImages: 0,
+      uploadImageError: false,
     });
   };
 
@@ -250,6 +289,16 @@ class NewPost extends Component {
     const formElementsArray = [];
 
     for (let key in this.state.dataForm) {
+      if (
+        (key === "location" &&
+          this.state.dataForm.deliveryMethod.value === "mail") ||
+        (key === "rentalPrice" &&
+          this.state.dataForm.listingType.value === "sell") ||
+        (key === "sellingPrice" &&
+          this.state.dataForm.listingType.value === "rent")
+      ) {
+        continue;
+      }
       formElementsArray.push({
         id: key,
         config: this.state.dataForm[key],
@@ -338,15 +387,41 @@ class NewPost extends Component {
     let postSummary = (
       <Modal show={this.state.showModal}>
         <h1>Confirm listing details:</h1>
-        <p>Module code: {this.state.dataForm.module.value}</p>
-        <p>Textbook:《{this.state.dataForm.textbook.value}》</p>
-        <p>Price: {this.state.dataForm.price.value}</p>
-        <p>Delivery method: {this.state.dataForm.deliveryMethod.value}</p>
-        <p>Location: {this.state.dataForm.location.value}</p>
         <p>
-          Description: <br />
-          {this.state.dataForm.description.value}
+          <b>Module code: </b>
+          {this.state.dataForm.module.value}
         </p>
+        <p>
+          <b>Textbook: </b>《{this.state.dataForm.textbook.value}》
+        </p>
+        <p>
+          <b>Type: </b>
+          {this.state.dataForm.listingType.value}
+        </p>
+        <p>
+          <b>Price: </b>
+          {this.state.dataForm.listingType.value === "rent"
+            ? this.state.dataForm.rentalPrice.value
+            : this.state.dataForm.sellingPrice.value}
+        </p>
+        <p>
+          <b>Delivery method: </b>
+          {this.state.dataForm.deliveryMethod.value}
+        </p>
+        {this.state.dataForm.deliveryMethod.value === "mail" ? null : (
+          <p>
+            <b>Location: </b>
+            {this.state.dataForm.location.value}
+          </p>
+        )}
+        {this.state.dataForm.description.value === "" ? null : (
+          <p>
+            <b>Description: </b>
+            <br />
+            {this.state.dataForm.description.value}
+          </p>
+        )}
+
         <div style={{ display: "flex", justifyContent: "center" }}>
           <Button onClick={this.toggleModalHandler}>Go back</Button>
           <Button onClick={this.onSubmitHandler}>Submit</Button>
@@ -357,7 +432,14 @@ class NewPost extends Component {
     let successPost = (
       <Modal show={this.props.postUploaded && this.props.imageUploaded}>
         Successfully posted!
-        <div style={{ display: "flex", justifyContent: "center" }}>
+        <br />
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-evenly",
+          }}
+        >
           <Link to="/">
             <Button onClick={() => this.props.dispatchClearNewPostData()}>
               Home
