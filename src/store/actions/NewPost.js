@@ -64,7 +64,8 @@ export const editPost = (editedDetails, node) => {
     dispatch(submitNewPostInit());
     database
       .ref()
-      .child(`/listings/${node}`)
+      .child("listings")
+      .child(node)
       .set(editedDetails)
       .then(dispatch(submitNewPostSuccess()))
       .catch((error) => {
@@ -72,7 +73,7 @@ export const editPost = (editedDetails, node) => {
         dispatch(submitNewPostFail(message));
       });
   };
-}
+};
 
 export const submitNewPhoto = (imageAsFile, identifier) => {
   return (dispatch) => {
@@ -100,7 +101,7 @@ async function submitPhoto(imageAsFile, identifier, key) {
   while (key < imageAsFile.length) {
     const imageRef = storage
       .ref(`/listingPictures/${identifier}/${key}`)
-      .child(`/${key}`)
+      .child(`/${key}`);
 
     await imageRef
       .put(imageAsFile[key])
@@ -147,7 +148,7 @@ async function editPhoto(imageAsFile, identifier, key) {
   while (key < imageAsFile.length) {
     const imageRef = storage
       .ref(`/listingPictures/${identifier}/${key}`)
-      .child(`/${key}`)
+      .child(`/${key}`);
 
     if (imageAsFile[key] === null) {
       imageRef

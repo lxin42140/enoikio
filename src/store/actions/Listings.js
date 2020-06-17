@@ -194,7 +194,11 @@ export const fetchExpandedListing = (identifier) => {
 async function getDownloadURL(numImage, identifier, key) {
   const imageURL = [];
   while (key < numImage) {
-    const ref = storage.ref(`/listingPictures/${identifier}/${key}`);
+    const ref = storage
+      .ref()
+      .child("listingPictures")
+      .child(identifier)
+      .child(key);
 
     const image = await ref.listAll();
     if (image.items.length === 0) {
@@ -205,13 +209,13 @@ async function getDownloadURL(numImage, identifier, key) {
 
     let link;
     await ref
-      .child("" + key)
+      .child(key)
       .getDownloadURL()
       .then((url) => (link = url));
 
     let imageName;
     await ref
-      .child("" + key)
+      .child(key)
       .getMetadata()
       .then((data) => (imageName = data.customMetadata.name));
 
