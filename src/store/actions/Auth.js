@@ -13,6 +13,7 @@ export const authSuccess = (user) => {
     user: user,
     displayName: user.displayName,
     photoURL: user.photoURL,
+    uid: user.uid,
     email: user.email,
   };
 };
