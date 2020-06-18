@@ -109,7 +109,7 @@ class NewPost extends Component {
     formIsValid: false,
     showModal: false,
     numberOfImages: 0,
-    uploadImageError: false,
+    // uploadImageError: false,
   };
 
   checkValidity(value, rules) {
@@ -174,7 +174,7 @@ class NewPost extends Component {
           break;
         case "listingType":
           formData[key] = this.state.dataForm[key].value;
-          if (this.state.dataForm[key].value === "Rent") {
+          if (this.state.dataForm[key].value === "rent") {
             formData["price"] = this.state.dataForm.rentalPrice.value;
           } else {
             formData["price"] = this.state.dataForm.sellingPrice.value;
@@ -190,7 +190,6 @@ class NewPost extends Component {
     }
 
     const postDetails = {
-      postDetails: formData,
       displayName: this.props.displayName,
       unique: unique,
       date: date,
@@ -198,6 +197,7 @@ class NewPost extends Component {
       numberOfImages: this.state.numberOfImages,
       status: "available",
       likedUsers: ["none"],
+      postDetails: formData,
     };
     this.props.dispatchSubmitPost(postDetails, this.props.token);
     this.props.dispatchSubmitPhoto(this.state.imageAsFile, unique);
@@ -224,22 +224,29 @@ class NewPost extends Component {
     }
     imageArray = imageArray.slice(0, imageArray.length - 2);
 
-    if (imageArray.length > 3) {
-      this.setState({ uploadImageError: true });
-    } else {
-      let formIsValid = true;
-      for (let element in this.state.dataForm) {
-        if (!this.state.dataForm[element].valid) {
-          formIsValid = false;
-          break;
-        }
+    // if (imageArray.length > 3) {
+    //   this.setState({ uploadImageError: true });
+    // } else {
+    //   let formIsValid = true;
+    //   for (let element in this.state.dataForm) {
+    //     if (!this.state.dataForm[element].valid) {
+    //       formIsValid = false;
+    //       break;
+    //     }
+    //   }
+
+    let formIsValid = true;
+    for (let element in this.state.dataForm) {
+      if (!this.state.dataForm[element].valid) {
+        formIsValid = false;
+        break;
       }
       const numImages = imageArray.length;
       this.setState({
         imageAsFile: imageArray,
         numberOfImages: numImages,
         formIsValid: formIsValid,
-        uploadImageError: false,
+        // uploadImageError: false,
       });
     }
   };
@@ -277,7 +284,7 @@ class NewPost extends Component {
       formIsValid: false,
       showModal: false,
       numberOfImages: 0,
-      uploadImageError: false,
+      // uploadImageError: false,
     });
   };
 
@@ -353,11 +360,11 @@ class NewPost extends Component {
             {form}
             <br />
             <div className={classes.ImageText}>{displayImageList}</div>
-            <p style={{ color: "red" }}>
+            {/* <p style={{ color: "red" }}>
               {this.state.uploadImageError
                 ? "Please select a maximum of 3 images"
                 : null}
-            </p>
+            </p> */}
             <div style={{ marginBottom: "10px" }}>
               <input
                 type="file"
@@ -432,15 +439,15 @@ class NewPost extends Component {
     let successPost = (
       <Modal show={this.props.postUploaded && this.props.imageUploaded}>
         Successfully posted!
-        <br />
         <div
           style={{
             display: "flex",
             alignItems: "center",
-            justifyContent: "space-evenly",
+            justifyContent: "center",
+            paddingTop: "20px",
           }}
         >
-          <Link to="/">
+          <Link to="/" style={{ paddingRight: "10px" }}>
             <Button onClick={() => this.props.dispatchClearNewPostData()}>
               Home
             </Button>

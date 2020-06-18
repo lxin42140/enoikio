@@ -89,6 +89,7 @@ export const setInterestedListing = (listing) => {
       .getDownloadURL()
       .then((url) => {
         const result = {
+          listingType: listing.postDetails.listingType,
           textBook: listing.postDetails.textbook,
           price: listing.postDetails.price,
           displayName: listing.displayName,

@@ -242,43 +242,77 @@ class Offer extends Component {
   };
 
   onConfirmOffer = (event) => {
-    if (this.priceValidation() && this.dateValidation()) {
+    if (this.priceValidation()) {
       const interestedListing = Object.assign({}, this.state.interestedListing);
 
-      let message = {
-        content:
-          "Offer for《" +
-          interestedListing.textBook +
-          "》: $" +
-          this.state.priceOffer +
-          ". Rental duration: from " +
-          this.state.startRental +
-          " to " +
-          this.state.endRental,
-        type: "MADE_OFFER",
-        interestedListing: interestedListing,
-        sender: this.props.displayName,
-        price: this.state.priceOffer,
-        startRental: this.state.startRental,
-        endRental: this.state.endRental,
-        date: moment().format("DD/MM/YYYY"),
-        time: moment().format("HH:mm:ss"),
-      };
-
-      const chatHistory = Object.assign([], this.props.fullChat);
-      chatHistory.push(message);
-      database
-        .ref()
-        .child("chats/" + this.props.fullChatUID)
-        .update({
-          chatHistory: chatHistory,
-        })
-        .then((res) => {
-          this.setState({
-            showPopUp: false,
-            offerType: "MADE_OFFER",
+      let message;
+      if (interestedListing.listingType === "rent") {
+        if (this.dateValidation()) {
+          message = {
+            content:
+              "Offer for《" +
+              interestedListing.textBook +
+              "》: $" +
+              this.state.priceOffer +
+              ". Rental duration: from " +
+              this.state.startRental +
+              " to " +
+              this.state.endRental,
+            type: "MADE_OFFER",
+            interestedListing: interestedListing,
+            sender: this.props.displayName,
+            price: this.state.priceOffer,
+            startRental: this.state.startRental,
+            endRental: this.state.endRental,
+            date: moment().format("DD/MM/YYYY"),
+            time: moment().format("HH:mm:ss"),
+          };
+          const chatHistory = Object.assign([], this.props.fullChat);
+          chatHistory.push(message);
+          database
+            .ref()
+            .child("chats/" + this.props.fullChatUID)
+            .update({
+              chatHistory: chatHistory,
+            })
+            .then((res) => {
+              this.setState({
+                showPopUp: false,
+                offerType: "MADE_OFFER",
+              });
+            });
+        }
+      } else {
+        message = {
+          content:
+            "Offer for《" +
+            interestedListing.textBook +
+            "》: $" +
+            this.state.priceOffer +
+            ".",
+          interestedListing: interestedListing,
+          sender: this.props.displayName,
+          price: this.state.priceOffer,
+          startRental: this.state.startRental,
+          endRental: this.state.endRental,
+          date: moment().format("DD/MM/YYYY"),
+          time: moment().format("HH:mm:ss"),
+        };
+        const chatHistory = Object.assign([], this.props.fullChat);
+        chatHistory.push(message);
+        database
+          .ref()
+          .child("chats/" + this.props.fullChatUID)
+          .update({
+            chatHistory: chatHistory,
+          })
+          .then((res) => {
+            this.setState({
+              showPopUp: false,
+              offerType: "MADE_OFFER",
+            });
           });
-        });
+      }
     }
   };
 
@@ -442,22 +476,26 @@ class Offer extends Component {
             placeholder="Enter offer here..."
           />
           <br />
-          <input
-            type="text"
-            className={classes.OfferInput}
-            onChange={this.startRentalOnChange}
-            value={this.state.startRental}
-            placeholder="From DD/MM/YYYY"
-          />
-          <br />
-          <input
-            type="text"
-            className={classes.OfferInput}
-            onChange={this.endRentalOnChange}
-            value={this.state.endRental}
-            placeholder="To DD/MM/YYYY"
-          />
-          <br />
+          {this.interestedListing.listingType === "rent" ? (
+            <React.Fragment>
+              <input
+                type="text"
+                className={classes.OfferInput}
+                onChange={this.startRentalOnChange}
+                value={this.state.startRental}
+                placeholder="From DD/MM/YYYY"
+              />
+              <br />
+              <input
+                type="text"
+                className={classes.OfferInput}
+                onChange={this.endRentalOnChange}
+                value={this.state.endRental}
+                placeholder="To DD/MM/YYYY"
+              />
+              <br />
+            </React.Fragment>
+          ) : null}
           <div
             style={{
               display: "flex",
@@ -583,7 +621,10 @@ class Offer extends Component {
             </p>
             <p>
               <span>
-                <b>$ {this.state.interestedListing.price}</b> / month
+                <b>$ {this.state.interestedListing.price}</b>
+                {this.state.interestedListing.listingType === "rent"
+                  ? "/ month"
+                  : null}
               </span>
             </p>
           </div>
