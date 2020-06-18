@@ -59,14 +59,14 @@ export const submitNewPost = (data) => {
   };
 };
 
-export const editPost = (editedDetails, node) => {
+export const editPost = (edittedDetails, node) => {
   return (dispatch) => {
     dispatch(submitNewPostInit());
     database
       .ref()
       .child("listings")
       .child(node)
-      .set(editedDetails)
+      .set(edittedDetails)
       .then(dispatch(submitNewPostSuccess()))
       .catch((error) => {
         const message = error.message.split("-").join(" ");
@@ -103,6 +103,7 @@ async function submitPhoto(imageAsFile, identifier, key) {
       .ref()
       .child("listingPictures")
       .child(identifier)
+      .child("" + key)
       .child("" + key);
 
     await imageRef
