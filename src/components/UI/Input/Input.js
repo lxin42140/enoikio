@@ -9,15 +9,15 @@ const input = (props) => {
   if (props.touched && !props.valid && props.shouldValidate) {
     inputClasses.push(classes.Invalid);
     validationError = <p>Enter a valid field</p>;
-  } else if (props.elementType === 'textarea') {
+  } else if (props.elementType === "textarea") {
     inputClasses.push(classes.Textarea);
-
   }
 
   switch (props.elementType) {
     case "input":
       inputElement = (
         <input
+          disabled={props.disabled}
           onChange={props.change}
           className={inputClasses.join(" ")}
           {...props.elementConfig}
@@ -28,6 +28,7 @@ const input = (props) => {
     case "textarea":
       inputElement = (
         <textarea
+          disabled={props.disabled}
           onChange={props.change}
           className={inputClasses.join(" ")}
           {...props.elementConfig}
@@ -39,6 +40,7 @@ const input = (props) => {
     case "number":
       inputElement = (
         <number
+          disabled={props.disabled}
           onChange={props.change}
           className={inputClasses.join(" ")}
           {...props.elementConfig}
@@ -49,6 +51,7 @@ const input = (props) => {
     case "select":
       inputElement = (
         <select
+          disabled={props.disabled}
           className={classes.InputElement}
           value={props.value}
           onChange={props.change}
@@ -64,6 +67,7 @@ const input = (props) => {
     default:
       inputElement = (
         <input
+          disabled={props.disabled}
           className={inputClasses.join(" ")}
           {...props.elementConfig}
           value={props.value}

@@ -44,8 +44,14 @@ class NewPost extends Component {
         elementType: "select",
         elementConfig: {
           options: [
-            { value: "rent", displayValue: "Rent" },
-            { value: "sell", displayValue: "Sell" },
+            {
+              value: "rent",
+              displayValue: "Rent (unable to edit once submitted)",
+            },
+            {
+              value: "sell",
+              displayValue: "Sell (unable to edit once submitted)",
+            },
           ],
         },
         value: "rent",

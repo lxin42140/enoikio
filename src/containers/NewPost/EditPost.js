@@ -349,6 +349,7 @@ class EditPost extends Component {
     let form = formElementsArray.map((formElement) => {
       return (
         <Input
+          disabled={formElement.id === "listingType"}
           key={formElement.id}
           elementType={formElement.config.elementType}
           elementConfig={formElement.config.elementConfig}

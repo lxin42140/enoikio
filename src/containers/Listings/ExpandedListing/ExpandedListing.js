@@ -63,8 +63,8 @@ class ExpandedListing extends Component {
   };
 
   cancelConfirmation = () => {
-    this.setState({ askUserToDelete: false })
-  }
+    this.setState({ askUserToDelete: false });
+  };
 
   askUserToDelete = () => {
     this.setState({ askUserToDelete: true });
@@ -81,17 +81,14 @@ class ExpandedListing extends Component {
     async function deleteAllImages(unique) {
       let key = 0;
       while (key < 3) {
-        const ref =
-          storage
-            .ref("listingPictures")
-            .child(unique)
-            .child("" + key);
-    
+        const ref = storage
+          .ref("listingPictures")
+          .child(unique)
+          .child("" + key);
+
         const image = await ref.listAll();
         if (image.items.length !== 0) {
-          ref
-            .child("" + key)
-            .delete()
+          ref.child("" + key).delete();
         }
         key += 1;
       }
@@ -104,16 +101,16 @@ class ExpandedListing extends Component {
       return <Spinner />;
     }
 
-    const imageArray = this.props.expandedListing.imageURL.filter(image =>
-        image !== null);
+    const imageArray = this.props.expandedListing.imageURL.filter(
+      (image) => image !== null
+    );
     const numImages = imageArray.length;
 
     const singleImage = (
       <img
         src={imageArray[this.state.imageIndex].url}
         alt={
-          imageArray[this.state.imageIndex].url ===
-            "error"
+          imageArray[this.state.imageIndex].url === "error"
             ? "Unable to load image"
             : "Loading image..."
         }
@@ -125,27 +122,24 @@ class ExpandedListing extends Component {
       this.props.expandedListing.imageURL.length === 1 ? (
         singleImage
       ) : (
-          <div className={classes.Images}>
-            <button
-              onClick={this.prevImageHandler}
-              disabled={this.state.imageIndex === 0}
-              className={classes.ImageButton}
-            >
-              <FontAwesomeIcon icon={faChevronLeft} />
-            </button>
-            {singleImage}
-            <button
-              onClick={this.nextImageHandler}
-              disabled={
-                this.state.imageIndex ===
-                numImages - 1
-              }
-              className={classes.ImageButton}
-            >
-              <FontAwesomeIcon icon={faChevronRight} />
-            </button>
-          </div>
-        );
+        <div className={classes.Images}>
+          <button
+            onClick={this.prevImageHandler}
+            disabled={this.state.imageIndex === 0}
+            className={classes.ImageButton}
+          >
+            <FontAwesomeIcon icon={faChevronLeft} />
+          </button>
+          {singleImage}
+          <button
+            onClick={this.nextImageHandler}
+            disabled={this.state.imageIndex === numImages - 1}
+            className={classes.ImageButton}
+          >
+            <FontAwesomeIcon icon={faChevronRight} />
+          </button>
+        </div>
+      );
 
     let selections = (
       <Link to="/auth">
@@ -162,7 +156,9 @@ class ExpandedListing extends Component {
           <Link to="/edit-post">
             <Button btnType="Important">Edit</Button>
           </Link>
-          <Button btnType="Important" onClick={this.askUserToDelete}>Delete</Button>
+          <Button btnType="Important" onClick={this.askUserToDelete}>
+            Delete
+          </Button>
         </React.Fragment>
       );
     } else if (this.props.isAuthenticated) {
@@ -221,25 +217,27 @@ class ExpandedListing extends Component {
       </React.Fragment>
     );
 
-    const askForConfirmation =
+    const askForConfirmation = (
       <Modal show={this.state.askUserToDelete}>
         <div style={{}}>
-        <p>Confirm delete listing?</p>
-        <p>This action cannot be undone.</p>
-        <Button onClick={this.cancelConfirmation}>Go back</Button>
-        <Button onClick={this.confirmDelete}>Delete</Button>
+          <p>Confirm delete listing?</p>
+          <p>This action cannot be undone.</p>
+          <Button onClick={this.cancelConfirmation}>Go back</Button>
+          <Button onClick={this.confirmDelete}>Delete</Button>
         </div>
       </Modal>
+    );
 
-    const confirmDeleteModal =
+    const confirmDeleteModal = (
       <Modal show={this.state.confirmDelete}>
-        Listing deleted.
-        <Link to="/">
-          <Button>
-            Home
-          </Button>
-        </Link>
+        <div style={{ display: "block" }}>
+          <p>Listing deleted.</p>
+          <Link to="/">
+            <Button>Home</Button>
+          </Link>
+        </div>
       </Modal>
+    );
 
     return (
       <React.Fragment>
