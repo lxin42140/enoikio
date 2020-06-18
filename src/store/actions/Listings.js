@@ -105,9 +105,24 @@ export const setInterestedListing = (listing) => {
   };
 };
 
+export const removedListing = (key) => {
+  return {
+    type: actionTypes.REMOVED_LISTING,
+    key: key,
+  };
+};
+
 export const fetchAllListings = () => {
   return (dispatch, getState) => {
     dispatch(fetchListingInit());
+
+    database
+      .ref()
+      .child("listings")
+      .on("child_removed", (snapShot) => {
+        dispatch(removedListing(snapShot.key));
+      });
+
     database
       .ref()
       .child("listings")

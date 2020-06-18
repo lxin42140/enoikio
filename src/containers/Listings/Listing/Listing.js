@@ -25,11 +25,14 @@ class Listing extends Component {
     }
 
     storage
-      .ref("/listingPictures/" + this.props.identifier)
+      .ref()
+      .child("listingPictures")
+      .child(this.props.identifier)
       .child("0")
-      .child("0")
+      // .child("0")
       .getDownloadURL()
       .then((url) => {
+        console.log(url);
         this.setState({
           image: url,
         });
