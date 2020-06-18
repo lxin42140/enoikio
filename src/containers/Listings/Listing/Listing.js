@@ -129,7 +129,8 @@ class Listing extends Component {
         <div>
           <ul className={classes.Description}>
             <li>
-            <b>Type: </b>{this.props.listingType}
+              <b>Type: </b>
+              {this.props.listingType}
             </li>
             <li>
               {this.props.status === "available" ? (
@@ -143,9 +144,9 @@ class Listing extends Component {
                 </p>
               )}
             </li>
-            {this.props.listingType === "Rent" ? (
+            {this.props.listingType === "rent" ? (
               <li>
-                <b>Price: </b>${this.props.price} / month
+                <b>Price: </b>${this.props.price} /month
               </li>
             ) : (
               <li>
@@ -206,8 +207,7 @@ class Listing extends Component {
               margin: "0",
             }}
           >
-            {this.state.likedUsers.length +
-              (this.state.likedUsers.length < 2 ? " like" : " likes")}
+            {this.state.likedUsers.length - 1 + " likes"}
           </p>
         </div>
       </div>
