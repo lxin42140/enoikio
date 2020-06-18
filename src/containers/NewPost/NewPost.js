@@ -109,7 +109,6 @@ class NewPost extends Component {
     formIsValid: false,
     showModal: false,
     numberOfImages: 0,
-    // uploadImageError: false,
   };
 
   checkValidity(value, rules) {
@@ -209,7 +208,6 @@ class NewPost extends Component {
 
     let imageArray = [...this.state.imageAsFile];
 
-    //check whether images uploaded is same as any file in the state already
     for (let uploadedImage in images) {
       let diffImage = true;
       for (let currImage in imageArray) {
@@ -224,17 +222,6 @@ class NewPost extends Component {
     }
     imageArray = imageArray.slice(0, imageArray.length - 2);
 
-    // if (imageArray.length > 3) {
-    //   this.setState({ uploadImageError: true });
-    // } else {
-    //   let formIsValid = true;
-    //   for (let element in this.state.dataForm) {
-    //     if (!this.state.dataForm[element].valid) {
-    //       formIsValid = false;
-    //       break;
-    //     }
-    //   }
-
     let formIsValid = true;
     for (let element in this.state.dataForm) {
       if (!this.state.dataForm[element].valid) {
@@ -246,7 +233,6 @@ class NewPost extends Component {
         imageAsFile: imageArray,
         numberOfImages: numImages,
         formIsValid: formIsValid,
-        // uploadImageError: false,
       });
     }
   };
@@ -284,7 +270,6 @@ class NewPost extends Component {
       formIsValid: false,
       showModal: false,
       numberOfImages: 0,
-      // uploadImageError: false,
     });
   };
 
@@ -360,11 +345,6 @@ class NewPost extends Component {
             {form}
             <br />
             <div className={classes.ImageText}>{displayImageList}</div>
-            {/* <p style={{ color: "red" }}>
-              {this.state.uploadImageError
-                ? "Please select a maximum of 3 images"
-                : null}
-            </p> */}
             <div style={{ marginBottom: "10px" }}>
               <input
                 type="file"
@@ -458,11 +438,11 @@ class NewPost extends Component {
     );
 
     return (
-      <React.Fragment>
+      <div>
         {createNewPost}
         {postSummary}
         {successPost}
-      </React.Fragment>
+      </div>
     );
   }
 }

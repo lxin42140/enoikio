@@ -59,16 +59,15 @@ export const submitNewPost = (data) => {
   };
 };
 
-export const editPost = (edittedDetails, node) => {
+export const editPost = (editedDetails, node) => {
   return (dispatch) => {
     dispatch(submitNewPostInit());
     database
       .ref()
       .child("listings")
       .child(node)
-      .set(edittedDetails)
-      .then(dispatch(submitNewPostSuccess()))
-      .catch((error) => {
+      .set(editedDetails)
+      .then(dispatch(submitNewPostSuccess()), (error) => {
         const message = error.message.split("-").join(" ");
         dispatch(submitNewPostFail(message));
       });
@@ -106,9 +105,8 @@ async function submitPhoto(imageAsFile, identifier, key) {
       .child("" + key)
       .child("" + key);
 
-    await imageRef
-      .put(imageAsFile[key])
-      // .catch((error) => (error = error.message.split("-").join(" ")));
+    await imageRef.put(imageAsFile[key]);
+    // .catch((error) => (error = error.message.split("-").join(" ")));
 
     const metadata = {
       customMetadata: {
@@ -116,9 +114,8 @@ async function submitPhoto(imageAsFile, identifier, key) {
         index: key,
       },
     };
-    imageRef
-      .updateMetadata(metadata)
-      // .catch((error) => (error = error.message.split("-").join(" ")));
+    imageRef.updateMetadata(metadata);
+    // .catch((error) => (error = error.message.split("-").join(" ")));
 
     key += 1;
   }
@@ -157,22 +154,19 @@ async function editPhoto(imageAsFile, identifier, key) {
       .child("" + key);
 
     if (imageAsFile[key] === null) {
-      await imageRef
-        .delete()
-        // .catch((error) => (error = error.message.split("-").join(" ")));
+      await imageRef.delete();
+      // .catch((error) => (error = error.message.split("-").join(" ")));
     } else if (typeof imageAsFile[key] !== "string") {
-      await imageRef
-        .put(imageAsFile[key])
-        // .catch((error) => (error = error.message.split("-").join(" ")));
+      await imageRef.put(imageAsFile[key]);
+      // .catch((error) => (error = error.message.split("-").join(" ")));
       const metadata = {
         customMetadata: {
           name: imageAsFile[key].name,
           index: key,
         },
       };
-      await imageRef
-        .updateMetadata(metadata)
-        // .catch((error) => (error = error.message.split("-").join(" ")));
+      await imageRef.updateMetadata(metadata);
+      // .catch((error) => (error = error.message.split("-").join(" ")));
     }
     key += 1;
   }

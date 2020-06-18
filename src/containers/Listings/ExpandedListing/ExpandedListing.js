@@ -79,7 +79,6 @@ class ExpandedListing extends Component {
       return <Spinner />;
     }
 
-    console.log(this.props.expandedListing.imageURL)
     const imageArray = this.props.expandedListing.imageURL.filter(image =>
         image !== null);
     const numImages = imageArray.length;

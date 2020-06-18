@@ -16,43 +16,15 @@ class Listing extends Component {
     likedUsers: [],
   };
 
-  async componentDidMount() {
+  componentDidMount() {
+    this.retrieveImage();
+
     let currLikedUsers = this.props.listings.filter(
       (listing) => listing.key === this.props.node
     )[0].likedUsers;
 
     if (!currLikedUsers) {
       currLikedUsers = [];
-    }
-
-    let imageIndex = 0;
-    while (imageIndex < 3) {
-      const image = await storage
-        .ref("listingPictures")
-        .child(this.props.identifier)
-        .child("" + imageIndex)
-        .listAll()
-
-      if (image.items.length === 0) {
-        imageIndex += 1;
-        continue
-      } else {
-        storage
-        .ref("listingPictures")
-        .child(this.props.identifier)
-        .child("" + imageIndex)
-        .child("" + imageIndex)
-        .getDownloadURL()
-        .then((url) => {
-          this.setState({
-            image: url,
-          });
-        })
-        .catch((error) => {
-          this.setState({ error: true });
-        });
-        break;
-      }
     }
 
     if (this.props.isAuthenticated && this.props.likedUsers) {
@@ -67,6 +39,38 @@ class Listing extends Component {
       this.setState({
         likedUsers: currLikedUsers,
       });
+    }
+  }
+
+  async retrieveImage() {
+    let imageIndex = 0;
+    while (imageIndex < 3) {
+      const image = await storage
+        .ref("listingPictures")
+        .child(this.props.identifier)
+        .child("" + imageIndex)
+        .listAll();
+
+      if (image.items.length === 0) {
+        imageIndex += 1;
+        continue;
+      } else {
+        storage
+          .ref("listingPictures")
+          .child(this.props.identifier)
+          .child("" + imageIndex)
+          .child("" + imageIndex)
+          .getDownloadURL()
+          .then((url) => {
+            this.setState({
+              image: url,
+            });
+          })
+          .catch((error) => {
+            this.setState({ error: true });
+          });
+        break;
+      }
     }
   }
 
@@ -210,7 +214,8 @@ class Listing extends Component {
               margin: "0",
             }}
           >
-            {(this.state.likedUsers.length - 1) +
+            {this.state.likedUsers.length -
+              1 +
               (this.state.likedUsers.length < 3 ? " like" : " likes")}
           </p>
         </div>

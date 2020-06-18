@@ -16,41 +16,60 @@ class EditPost extends Component {
         elementType: "input",
         elementConfig: {
           type: "text",
-          placeholder: "Module Code",
+          placeholder: "Module code",
         },
         value: "",
         validation: {
           required: true,
           maxLength: 8,
         },
-        valid: true,
-        touched: true,
+        valid: false,
+        touched: false,
       },
       textbook: {
         elementType: "input",
         elementConfig: {
           type: "text",
-          placeholder: "Title of Textbook",
+          placeholder: "Title of textbook",
         },
         value: "",
         validation: {
           required: true,
         },
-        valid: true,
-        touched: true,
+        valid: false,
+        touched: false,
       },
-      price: {
+      listingType: {
+        elementType: "select",
+        elementConfig: {
+          options: [
+            { value: "rent", displayValue: "Rent" },
+            { value: "sell", displayValue: "Sell" },
+          ],
+        },
+        value: "rent",
+        validation: false,
+        valid: true,
+      },
+      rentalPrice: {
         elementType: "input",
         elementConfig: {
           type: "number",
-          placeholder: "Rent Price (per month)",
+          placeholder: "Rent price (per month)",
         },
         value: "",
-        validation: {
-          required: true,
-        },
+        validation: false,
         valid: true,
-        touched: true,
+      },
+      sellingPrice: {
+        elementType: "input",
+        elementConfig: {
+          type: "number",
+          placeholder: "Selling price",
+        },
+        value: "",
+        validation: false,
+        valid: true,
       },
       deliveryMethod: {
         elementType: "select",
@@ -61,7 +80,7 @@ class EditPost extends Component {
           ],
         },
         value: "meet-up",
-        validation: true,
+        validation: false,
         valid: true,
       },
       location: {
@@ -71,11 +90,8 @@ class EditPost extends Component {
           placeholder: "Pick-up location",
         },
         value: "",
-        validation: {
-          required: true,
-        },
+        validation: false,
         valid: true,
-        touched: true,
       },
       description: {
         elementType: "textarea",
@@ -84,13 +100,11 @@ class EditPost extends Component {
           placeholder: "Please enter any other information",
         },
         value: "",
-        validation: true,
+        validation: false,
         valid: true,
-        touched: true,
       },
     },
     imageAsFile: [],
-    uploadImageError: false,
     formIsValid: true,
     showModal: false,
     initialEdit: true,
@@ -103,17 +117,37 @@ class EditPost extends Component {
   componentDidMount() {
     if (this.state.initialEdit) {
       const dataForm = { ...this.state.dataForm };
-      const form = [
-        "module",
-        "textbook",
-        "price",
-        "deliveryMethod",
-        "location",
-        "description",
-      ];
-      for (let key in form) {
-        const data = form[key];
-        dataForm[data].value = this.props.editListing.postDetails[data];
+      for (let key in dataForm) {
+        switch (key) {
+          case "deliveryMethod":
+            dataForm[key].value = this.props.editListing.postDetails[key];
+            if (this.props.editListing.postDetails[key] === "meet-up") {
+              dataForm[
+                "location"
+              ].value = this.props.editListing.postDetails.location;
+            }
+            break;
+          case "listingType":
+            dataForm[key].value = this.props.editListing.postDetails[key];
+            if (this.props.editListing.postDetails[key] === "rent") {
+              dataForm[
+                "rentalPrice"
+              ].value = this.props.editListing.postDetails.price;
+            } else {
+              dataForm[
+                "sellingPrice"
+              ].value = this.props.editListing.postDetails.price;
+            }
+            break;
+          case "rentalPrice":
+          case "sellingPrice":
+          case "location":
+            break;
+          default:
+            dataForm[key].value = this.props.editListing.postDetails[key];
+            dataForm[key].touched = true;
+            dataForm[key].valid = true;
+        }
       }
       const imageName = [];
       for (let key in this.props.editListing.imageURL) {
@@ -142,23 +176,26 @@ class EditPost extends Component {
     return isValid;
   }
 
-  inputChangedHandler = (event, formElement) => {
+  inputChangedHandler = (event, inputIdentifier) => {
     const updatedDataForm = {
       ...this.state.dataForm,
     };
-
     const updatedFormElement = {
-      ...updatedDataForm[formElement.id],
+      ...updatedDataForm[inputIdentifier],
     };
     updatedFormElement.value = event.target.value;
     updatedFormElement.valid = this.checkValidity(
       updatedFormElement.value,
       updatedFormElement.validation
     );
-    updatedDataForm[formElement.id] = updatedFormElement;
+    updatedFormElement.touched = true;
+    updatedDataForm[inputIdentifier] = updatedFormElement;
     let formIsValid = true;
     for (let inputIdentifiers in updatedDataForm) {
-      if (!updatedDataForm[inputIdentifiers].valid) {
+      if (
+        !updatedDataForm[inputIdentifiers].valid ||
+        this.state.imageAsFile.length === 0
+      ) {
         formIsValid = false;
         break;
       }
@@ -166,7 +203,6 @@ class EditPost extends Component {
     this.setState({
       dataForm: updatedDataForm,
       formIsValid: formIsValid,
-      initialEdit: false,
     });
   };
 
@@ -178,32 +214,43 @@ class EditPost extends Component {
       switch (key) {
         case "module":
         case "textbook":
-        case "location":
           formData[key] = this.state.dataForm[key].value.toLowerCase();
+          break;
+        case "deliveryMethod":
+          formData[key] = this.state.dataForm[key].value;
+          if (this.state.dataForm[key].value === "meet-up") {
+            formData[
+              "location"
+            ] = this.state.dataForm.location.value.toLowerCase();
+          }
+          break;
+        case "listingType":
+          formData[key] = this.state.dataForm[key].value;
+          if (this.state.dataForm[key].value === "rent") {
+            formData["price"] = this.state.dataForm.rentalPrice.value;
+          } else {
+            formData["price"] = this.state.dataForm.sellingPrice.value;
+          }
+          break;
+        case "rentalPrice":
+        case "sellingPrice":
+        case "location":
           break;
         default:
           formData[key] = this.state.dataForm[key].value;
       }
     }
 
-    let postDetails;
-    this.props.editListing.likedUsers ? 
-      postDetails = {
-        ...this.props.editListing,
-        postDetails: formData,
-        numberOfImages: this.state.imageAsFile.length,
-      } : 
-      postDetails = {
-        ...this.props.editListing,
-        postDetails: formData,
-        numberOfImages: this.state.imageAsFile.filter((image) => image !== null)
-          .length,
-        likedUsers: [],
-      }
-    delete postDetails.userId;
-    delete postDetails.comments;
-    delete postDetails.key;
-    delete postDetails.imageURL;
+    const postDetails = {
+      ...this.props.editListing,
+      postDetails: formData,
+      numberOfImages: this.state.imageAsFile.filter((image) => image !== null)
+        .length,
+    };
+
+    if (!postDetails.comments) {
+      delete postDetails.comments;
+    }
 
     this.props.dispatchEditPost(postDetails, this.props.editListing.key);
     this.props.dispatchSubmitPhoto(
@@ -250,7 +297,6 @@ class EditPost extends Component {
         imageAsFile: imageArray,
         numberOfImages: numImages,
         formIsValid: formIsValid,
-        uploadImageError: false,
       });
     }
   };
@@ -278,25 +324,23 @@ class EditPost extends Component {
   };
 
   render() {
-    if (this.props.error) {
-      return (
-        <Modal show={true}>
-          <p style={{ color: "red" }}>{this.props.error}</p>;
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <Link to="/">
-              <Button>Home</Button>
-            </Link>
-          </div>
-        </Modal>
-      );
-    }
-
     if (this.props.editListingLoading) {
       return <Spinner />;
-    } 
+    }
 
     const formElementsArray = [];
+
     for (let key in this.state.dataForm) {
+      if (
+        (key === "location" &&
+          this.state.dataForm.deliveryMethod.value === "mail") ||
+        (key === "rentalPrice" &&
+          this.state.dataForm.listingType.value === "sell") ||
+        (key === "sellingPrice" &&
+          this.state.dataForm.listingType.value === "rent")
+      ) {
+        continue;
+      }
       formElementsArray.push({
         id: key,
         config: this.state.dataForm[key],
@@ -313,7 +357,7 @@ class EditPost extends Component {
           valid={formElement.config.valid}
           shouldValidate={formElement.config.validation}
           touched={formElement.config.touched}
-          change={(event) => this.inputChangedHandler(event, formElement)}
+          change={(event) => this.inputChangedHandler(event, formElement.id)}
         />
       );
     });
@@ -353,34 +397,29 @@ class EditPost extends Component {
         {this.props.uploadingPost ? (
           <Spinner />
         ) : (
-            <React.Fragment>
-              {form}
-              <br />
-              <div className={classes.ImageText}>{displayImageList}</div>
-              <p style={{ color: "red" }}>
-                {this.state.uploadImageError
-                  ? "Please select a maximum of 3 images"
-                  : null}
-              </p>
-              <div style={{ marginBottom: "10px" }}>
-                <input
-                  type="file"
-                  accept=".png,.jpeg, .jpg"
-                  multiple
-                  style={{ width: "95px" }}
-                  onChange={this.handleImageAsFile}
-                  disabled={count >= 3}
-                />
-              </div>
-              <Button
-                btnType="Important"
-                onClick={this.toggleModalHandler}
-                disabled={!this.state.formIsValid}
-              >
-                SUBMIT
+          <React.Fragment>
+            {form}
+            <br />
+            <div className={classes.ImageText}>{displayImageList}</div>
+            <div style={{ marginBottom: "10px" }}>
+              <input
+                type="file"
+                accept=".png,.jpeg, .jpg"
+                multiple
+                style={{ width: "95px" }}
+                onChange={this.handleImageAsFile}
+                disabled={count >= 3}
+              />
+            </div>
+            <Button
+              btnType="Important"
+              onClick={this.toggleModalHandler}
+              disabled={!this.state.formIsValid}
+            >
+              SUBMIT
             </Button>
-            </React.Fragment>
-          )}
+          </React.Fragment>
+        )}
       </div>
     );
 
@@ -391,15 +430,41 @@ class EditPost extends Component {
     let postSummary = (
       <Modal show={this.state.showModal}>
         <h1>Confirm listing details:</h1>
-        <p>Module code: {this.state.dataForm.module.value}</p>
-        <p>Textbook:《{this.state.dataForm.textbook.value}》</p>
-        <p>Price: {this.state.dataForm.price.value}</p>
-        <p>Delivery method: {this.state.dataForm.deliveryMethod.value}</p>
-        <p>Location: {this.state.dataForm.location.value}</p>
         <p>
-          Description: <br />
-          {this.state.dataForm.description.value}
+          <b>Module code: </b>
+          {this.state.dataForm.module.value}
         </p>
+        <p>
+          <b>Textbook: </b>《{this.state.dataForm.textbook.value}》
+        </p>
+        <p>
+          <b>Type: </b>
+          {this.state.dataForm.listingType.value}
+        </p>
+        <p>
+          <b>Price: </b>
+          {this.state.dataForm.listingType.value === "rent"
+            ? this.state.dataForm.rentalPrice.value
+            : this.state.dataForm.sellingPrice.value}
+        </p>
+        <p>
+          <b>Delivery method: </b>
+          {this.state.dataForm.deliveryMethod.value}
+        </p>
+        {this.state.dataForm.deliveryMethod.value === "mail" ? null : (
+          <p>
+            <b>Location: </b>
+            {this.state.dataForm.location.value}
+          </p>
+        )}
+        {this.state.dataForm.description.value === "" ? null : (
+          <p>
+            <b>Description: </b>
+            <br />
+            {this.state.dataForm.description.value}
+          </p>
+        )}
+
         <div style={{ display: "flex", justifyContent: "center" }}>
           <Button onClick={this.toggleModalHandler}>Go back</Button>
           <Button onClick={this.onSubmitHandler}>Submit</Button>
@@ -409,7 +474,7 @@ class EditPost extends Component {
 
     let successPost = (
       <Modal show={this.props.postUploaded}>
-        {"Successfully edited!"}
+        Successfully edited!
         <div style={{ display: "flex", justifyContent: "center" }}>
           <Link to="/">
             <Button onClick={() => this.props.dispatchClearNewPostData()}>
@@ -432,7 +497,6 @@ class EditPost extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    error: state.newPost.error,
     editListing: state.listing.expandedListing,
     editListingLoading: state.listing.expandedListingLoading,
     uploadingPost: state.newPost.uploadingPost,

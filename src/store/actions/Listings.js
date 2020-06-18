@@ -132,7 +132,6 @@ export const fetchAllListings = () => {
         const listing = {
           key: key,
           unique: snapShot.val().unique,
-          userId: snapShot.val().userId,
           displayName: snapShot.val().displayName,
           date: snapShot.val().date,
           time: snapShot.val().time,
@@ -160,6 +159,14 @@ export const fetchAllListings = () => {
             } else if (snapShot.key === "comments") {
               updatedListing.comments = snapShot.val();
               dispatch(updateListing(updatedListing));
+            } else {
+              updatedListing = {
+                ...updatedListing,
+                postDetails: {
+                  ...snapShot.val(),
+                },
+              };
+              dispatch(updateListing(updatedListing));
             }
           });
 
@@ -183,11 +190,11 @@ export const fetchAllListings = () => {
         result.push(listing);
         result.reverse();
         dispatch(fetchListingSuccess(result));
-      })
-      // .catch((error) => {
-      //   const message = error.message.split("-").join(" ");
-      //   dispatch(fetchListingFail(message));
-      // });
+      });
+    // .catch((error) => {
+    //   const message = error.message.split("-").join(" ");
+    //   dispatch(fetchListingFail(message));
+    // });
   };
 };
 
