@@ -153,6 +153,7 @@ async function editPhoto(imageAsFile, identifier, key) {
       .ref()
       .child("listingPictures")
       .child(identifier)
+      .child("" + key)
       .child("" + key);
 
     if (imageAsFile[key] === null) {

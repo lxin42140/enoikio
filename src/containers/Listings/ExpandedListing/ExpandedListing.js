@@ -7,7 +7,7 @@ import * as actions from "../../../store/actions/index";
 import Button from "../../../components/UI/Button/Button";
 import Spinner from "../../../components/UI/Spinner/Spinner";
 import Comments from "../../Comments/Comments";
-// import Modal from "../../../components/UI/Modal/Modal";
+import Modal from "../../../components/UI/Modal/Modal";
 import { database } from "../../../firebase/firebase";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -19,6 +19,8 @@ import {
 class ExpandedListing extends Component {
   state = {
     imageIndex: 0,
+    askUserToDelete: false,
+    confirmDelete: false,
   };
 
   prevImageHandler = () => {
@@ -60,30 +62,34 @@ class ExpandedListing extends Component {
     }
   };
 
+  cancelConfirmation = () => {
+    this.setState({ askUserToDelete: false })
+  }
+
+  askUserToDelete = () => {
+    this.setState({ askUserToDelete: true });
+  };
+
+  confirmDelete = () => {
+    this.setState({ confirmDelete: true, askUserToDelete: false });
+  };
+
   render() {
     if (this.props.expandedListingLoading) {
       return <Spinner />;
     }
 
-    // if (this.props.error) {
-    //   return (
-    //     <Modal show={true}>
-    //       <p style={{ color: "red" }}>{this.props.error}</p>;
-    //       <div style={{ display: "flex", justifyContent: "center" }}>
-    //         <Link to="/">
-    //           <Button>Home</Button>
-    //         </Link>
-    //       </div>
-    //     </Modal>
-    //   );
-    // }
+    console.log(this.props.expandedListing.imageURL)
+    const imageArray = this.props.expandedListing.imageURL.filter(image =>
+        image !== null);
+    const numImages = imageArray.length;
 
     const singleImage = (
       <img
-        src={this.props.expandedListing.imageURL[this.state.imageIndex].url}
+        src={imageArray[this.state.imageIndex].url}
         alt={
-          this.props.expandedListing.imageURL[this.state.imageIndex].url ===
-          "error"
+          imageArray[this.state.imageIndex].url ===
+            "error"
             ? "Unable to load image"
             : "Loading image..."
         }
@@ -95,27 +101,27 @@ class ExpandedListing extends Component {
       this.props.expandedListing.imageURL.length === 1 ? (
         singleImage
       ) : (
-        <div className={classes.Images}>
-          <button
-            onClick={this.prevImageHandler}
-            disabled={this.state.imageIndex === 0}
-            className={classes.ImageButton}
-          >
-            <FontAwesomeIcon icon={faChevronLeft} />
-          </button>
-          {singleImage}
-          <button
-            onClick={this.nextImageHandler}
-            disabled={
-              this.state.imageIndex ===
-              this.props.expandedListing.imageURL.length - 1
-            }
-            className={classes.ImageButton}
-          >
-            <FontAwesomeIcon icon={faChevronRight} />
-          </button>
-        </div>
-      );
+          <div className={classes.Images}>
+            <button
+              onClick={this.prevImageHandler}
+              disabled={this.state.imageIndex === 0}
+              className={classes.ImageButton}
+            >
+              <FontAwesomeIcon icon={faChevronLeft} />
+            </button>
+            {singleImage}
+            <button
+              onClick={this.nextImageHandler}
+              disabled={
+                this.state.imageIndex ===
+                numImages - 1
+              }
+              className={classes.ImageButton}
+            >
+              <FontAwesomeIcon icon={faChevronRight} />
+            </button>
+          </div>
+        );
 
     let selections = (
       <Link to="/auth">
@@ -132,6 +138,7 @@ class ExpandedListing extends Component {
           <Link to="/edit-post">
             <Button btnType="Important">Edit</Button>
           </Link>
+          <Button btnType="Important" onClick={this.askUserToDelete}>Delete</Button>
         </React.Fragment>
       );
     } else if (this.props.isAuthenticated) {
@@ -190,24 +197,47 @@ class ExpandedListing extends Component {
       </React.Fragment>
     );
 
-    return (
-      <div className={classes.ExpandedListing}>
-        <div className={classes.ExpandedListingContent}>
-          <div className={classes.ImageContent}>{image}</div>
-          <div className={classes.TextContent}>{listingInformation}</div>
+    const askForConfirmation =
+      <Modal show={this.state.askUserToDelete}>
+        <div style={{}}>
+        <p>Confirm delete listing?</p>
+        <p>This action cannot be undone.</p>
+        <Button onClick={this.cancelConfirmation}>Go back</Button>
+        <Button onClick={this.confirmDelete}>Submit</Button>
         </div>
-        <Comments
-          comments={this.props.expandedListing.comments}
-          identifier={this.props.expandedListing.key}
-        />
-      </div>
+      </Modal>
+
+    const confirmDeleteModal =
+      <Modal show={this.state.confirmDelete}>
+        Listing deleted.
+        <Link to="/">
+          <Button>
+            Home
+          </Button>
+        </Link>
+      </Modal>
+
+    return (
+      <React.Fragment>
+        <div className={classes.ExpandedListing}>
+          <div className={classes.ExpandedListingContent}>
+            <div className={classes.ImageContent}>{image}</div>
+            <div className={classes.TextContent}>{listingInformation}</div>
+          </div>
+          <Comments
+            comments={this.props.expandedListing.comments}
+            identifier={this.props.expandedListing.key}
+          />
+        </div>
+        {this.state.askUserToDelete ? askForConfirmation : null}
+        {this.state.confirmDelete ? confirmDeleteModal : null}
+      </React.Fragment>
     );
   }
 }
 
 const mapStateToProps = (state) => {
   return {
-    // error: state.listing.error,
     expandedListing: state.listing.expandedListing,
     expandedListingLoading: state.listing.expandedListingLoading,
     isAuthenticated: state.auth.user !== null,
