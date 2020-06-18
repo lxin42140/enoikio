@@ -37,6 +37,7 @@ const asyncLogOut = asyncComponent(() => {
 
 class App extends Component {
   componentDidMount() {
+    this.props.dispatchAutoSignIn();
     this.props.dispatchFetchAllListings();
     this.props.history.push("/");
   }
@@ -94,6 +95,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     dispatchFetchAllListings: () => dispatch(actions.fetchAllListings()),
     dispatchFetchChats: () => dispatch(actions.fetchChats()),
+    dispatchAutoSignIn: () => dispatch(actions.autoSignIn()),
   };
 };
 

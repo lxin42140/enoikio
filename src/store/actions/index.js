@@ -21,6 +21,7 @@ export {
   signOut,
   passwordReset,
   setAuthRedirectPath,
+  autoSignIn
 } from "./Auth";
 
 export { fetchChats, fetchFullChat, chatCleanUp } from "./Chat";
