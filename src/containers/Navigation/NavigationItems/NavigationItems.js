@@ -27,12 +27,12 @@ class NavigationItems extends Component {
             Home
           </NavigationItem>
           <NavigationItem link="/new-post">New Post</NavigationItem>
-          <NavigationItem
+          {/* <NavigationItem
             link="/post-history"
             onClick={() => this.props.setFilterTerm("displayName")}
           >
             Past Posts
-          </NavigationItem>
+          </NavigationItem> */}
           <NavigationItem
             link="/liked-listings"
             onClick={() => this.props.setFilterTerm("favorites")}
@@ -40,6 +40,7 @@ class NavigationItems extends Component {
             Favorites
           </NavigationItem>
           <NavigationItem link="/chats">Chats</NavigationItem>
+          <NavigationItem link="/profile">Profile</NavigationItem>
           <NavigationItem link="/logout">Log out</NavigationItem>
           <FontAwesomeIcon
             icon={faSearch}

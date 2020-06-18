@@ -214,9 +214,7 @@ class Listing extends Component {
               margin: "0",
             }}
           >
-            {this.state.likedUsers.length -
-              1 +
-              (this.state.likedUsers.length < 3 ? " like" : " likes")}
+            {this.state.likedUsers.length - 1}
           </p>
         </div>
       </div>
