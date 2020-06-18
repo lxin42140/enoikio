@@ -209,7 +209,7 @@ export const fetchExpandedListing = (identifier) => {
 async function getDownloadURL(numImage, identifier, key) {
   const imageURL = [];
   while (key < numImage) {
-    console.log(imageURL);
+    // console.log(imageURL);
     const ref = storage
       .ref()
       .child("listingPictures")

@@ -136,14 +136,16 @@ class Listing extends Component {
               {this.props.listingType}
             </li>
             <li>
-              {this.props.status === "available" ? (
+              {this.props.status === "available" ||
+              this.props.status === "sold" ? (
                 <p style={{ margin: "0px" }}>
                   <b>Status: </b>
                   {this.props.status}
                 </p>
               ) : (
                 <p style={{ margin: "0px" }}>
-                  Status: <br /> {this.props.status}
+                  <b>Status: </b>
+                  <br /> {this.props.status}
                 </p>
               )}
             </li>

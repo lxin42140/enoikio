@@ -288,9 +288,9 @@ class Offer extends Component {
             "Offer for《" +
             interestedListing.textBook +
             "》: $" +
-            this.state.priceOffer +
-            ".",
+            this.state.priceOffer,
           interestedListing: interestedListing,
+          type: "MADE_OFFER",
           sender: this.props.displayName,
           price: this.state.priceOffer,
           startRental: this.state.startRental,
@@ -406,15 +406,21 @@ class Offer extends Component {
         });
       });
 
+    let status =
+      "loaned out from " +
+      this.state.startRental +
+      " to " +
+      this.state.endRental;
+
+    if (this.state.interestedListing.listingType === "sell") {
+      status = "sold";
+    }
+
     database
       .ref()
       .child("listings/" + this.state.interestedListing.key)
       .update({
-        status:
-          "loaned out from " +
-          this.state.startRental +
-          " to " +
-          this.state.endRental,
+        status: status,
       });
   };
 
@@ -476,7 +482,7 @@ class Offer extends Component {
             placeholder="Enter offer here..."
           />
           <br />
-          {this.interestedListing.listingType === "rent" ? (
+          {this.state.interestedListing.listingType === "rent" ? (
             <React.Fragment>
               <input
                 type="text"
@@ -513,6 +519,7 @@ class Offer extends Component {
     );
 
     let buttons;
+
     if (this.state.isListingOwner) {
       switch (this.state.offerType) {
         case "MADE_OFFER":
