@@ -3,6 +3,7 @@ export const FETCH_LISTING_INIT = "FETCH_LISTING_INIT";
 export const FETCH_LISTING_SUCCESS = "FETCH_LISTING_SUCCESS";
 export const FETCH_LISTING_FAIL = "FETCH_LISTING_FAIL";
 export const UPDATE_LISTING = "UPDATE_LISTING";
+export const REMOVED_LISTING = "REMOVED_LISTING"
 
 /*--------------------fetch filtered listing-----------------*/
 export const FILTER_LISTINGS = "FILTER_LISTINGS";

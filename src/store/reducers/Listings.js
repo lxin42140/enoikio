@@ -70,24 +70,40 @@ const updateListing = (state, updatedListing) => {
   });
 };
 
+const removedListing = (state, key) => {
+  const updatedListings = Object.assign([], state.listings).filter(
+    (listing) => listing.key !== key
+  );
+  return updateObject(state, {
+    listings: updatedListings,
+  });
+};
+
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.FETCH_LISTING_INIT:
       return fetchAllListingInit(state, action);
+
     case actionTypes.FETCH_LISTING_SUCCESS:
       return fetchListingSuccess(state, action.data);
     case actionTypes.UPDATE_LISTING:
       return updateListing(state, action.updatedListing);
+    case actionTypes.REMOVED_LISTING:
+      return removedListing(state, action.key);
+
     case actionTypes.FETCH_LISTING_FAIL:
       return fetchListingFail(state, action.error);
+
     case actionTypes.SET_EXPANDED_LISTING_INIT:
       return setExpandedListingInit(state, action);
     case actionTypes.SET_EXPANDED_LISTING:
       return setExpandedListing(state, action.expandedListing);
     case actionTypes.CLEAR_EXPANDED_LISTING:
       return clearExpandedListing(state, action);
+
     case actionTypes.FILTER_LISTINGS:
       return filterListings(state, action.filterType, action.searchObject);
+
     case actionTypes.SET_INTERESTED_LISTING:
       return interestedListing(state, action.interestedListing);
     case actionTypes.CLEAR_INTERESTED_LISTING:
