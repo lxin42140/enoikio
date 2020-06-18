@@ -90,16 +90,43 @@ class EditPost extends Component {
       },
     },
     imageAsFile: [],
-    loading: true,
     uploadImageError: false,
     formIsValid: true,
     showModal: false,
     initialEdit: true,
-    initialImageChange: true,
   };
 
   componentWillUnmount() {
     this.props.dispatchClearExpandedListing();
+  }
+
+  componentDidMount() {
+    if (this.state.initialEdit) {
+      const dataForm = { ...this.state.dataForm };
+      const form = [
+        "module",
+        "textbook",
+        "price",
+        "deliveryMethod",
+        "location",
+        "description",
+      ];
+      for (let key in form) {
+        const data = form[key];
+        dataForm[data].value = this.props.editListing.postDetails[data];
+      }
+      const imageName = [];
+      for (let key in this.props.editListing.imageURL) {
+        this.props.editListing.imageURL[key] === null
+          ? imageName.push(null)
+          : imageName.push(this.props.editListing.imageURL[key].name);
+      }
+      this.setState({
+        dataForm: dataForm,
+        imageAsFile: imageName,
+        initialEdit: false,
+      });
+    }
   }
 
   checkValidity(value, rules) {
@@ -159,12 +186,20 @@ class EditPost extends Component {
       }
     }
 
-    const postDetails = {
-      ...this.props.editListing,
-      postDetails: formData,
-      numberOfImages: this.state.imageAsFile.filter((image) => image !== null)
-        .length,
-    };
+    let postDetails;
+    this.props.editListing.likedUsers ? 
+      postDetails = {
+        ...this.props.editListing,
+        postDetails: formData,
+        numberOfImages: this.state.imageAsFile.length,
+      } : 
+      postDetails = {
+        ...this.props.editListing,
+        postDetails: formData,
+        numberOfImages: this.state.imageAsFile.filter((image) => image !== null)
+          .length,
+        likedUsers: [],
+      }
     delete postDetails.userId;
     delete postDetails.comments;
     delete postDetails.key;
@@ -210,14 +245,12 @@ class EditPost extends Component {
           break;
         }
       }
-      //   console.log(imageArray);
       const numImages = imageArray.length;
       this.setState({
         imageAsFile: imageArray,
         numberOfImages: numImages,
         formIsValid: formIsValid,
         uploadImageError: false,
-        initialImageChange: false,
       });
     }
   };
@@ -233,44 +266,15 @@ class EditPost extends Component {
 
         this.setState({
           imageAsFile: imageArray,
-          initialImageChange: false,
           formIsValid: validForm,
         });
         break;
       }
     }
-    // console.log(imageArray);
   };
 
   toggleModalHandler = () => {
     this.setState((prevState) => ({ showModal: !prevState.showModal }));
-  };
-
-  updateState = () => {
-    const dataForm = { ...this.state.dataForm };
-    const form = [
-      "module",
-      "textbook",
-      "price",
-      "deliveryMethod",
-      "location",
-      "description",
-    ];
-    for (let key in form) {
-      const data = form[key];
-      dataForm[data].value = this.props.editListing.postDetails[data];
-    }
-    const imageName = [];
-    for (let key in this.props.editListing.imageURL) {
-      this.props.editListing.imageURL[key] === null
-        ? imageName.push(null)
-        : imageName.push(this.props.editListing.imageURL[key].name);
-    }
-    this.setState({
-      dataForm: dataForm,
-      imageAsFile: imageName,
-      initialEdit: false,
-    });
   };
 
   render() {
@@ -289,12 +293,7 @@ class EditPost extends Component {
 
     if (this.props.editListingLoading) {
       return <Spinner />;
-    } else if (this.state.initialEdit) {
-      //WILL GIVE WARNING IN CONSOLE!
-      this.updateState();
-    }
-
-    // console.log(this.state.imageAsFile);
+    } 
 
     const formElementsArray = [];
     for (let key in this.state.dataForm) {
@@ -354,34 +353,34 @@ class EditPost extends Component {
         {this.props.uploadingPost ? (
           <Spinner />
         ) : (
-          <React.Fragment>
-            {form}
-            <br />
-            <div className={classes.ImageText}>{displayImageList}</div>
-            <p style={{ color: "red" }}>
-              {this.state.uploadImageError
-                ? "Please select a maximum of 3 images"
-                : null}
-            </p>
-            <div style={{ marginBottom: "10px" }}>
-              <input
-                type="file"
-                accept=".png,.jpeg, .jpg"
-                multiple
-                style={{ width: "95px" }}
-                onChange={this.handleImageAsFile}
-                disabled={count >= 3}
-              />
-            </div>
-            <Button
-              btnType="Important"
-              onClick={this.toggleModalHandler}
-              disabled={!this.state.formIsValid}
-            >
-              SUBMIT
+            <React.Fragment>
+              {form}
+              <br />
+              <div className={classes.ImageText}>{displayImageList}</div>
+              <p style={{ color: "red" }}>
+                {this.state.uploadImageError
+                  ? "Please select a maximum of 3 images"
+                  : null}
+              </p>
+              <div style={{ marginBottom: "10px" }}>
+                <input
+                  type="file"
+                  accept=".png,.jpeg, .jpg"
+                  multiple
+                  style={{ width: "95px" }}
+                  onChange={this.handleImageAsFile}
+                  disabled={count >= 3}
+                />
+              </div>
+              <Button
+                btnType="Important"
+                onClick={this.toggleModalHandler}
+                disabled={!this.state.formIsValid}
+              >
+                SUBMIT
             </Button>
-          </React.Fragment>
-        )}
+            </React.Fragment>
+          )}
       </div>
     );
 

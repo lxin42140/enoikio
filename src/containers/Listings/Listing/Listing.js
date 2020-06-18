@@ -10,12 +10,13 @@ import { storage, database } from "../../../firebase/firebase";
 class Listing extends Component {
   state = {
     image: "",
+    imageIndex: 0,
     error: false,
     liked: false,
     likedUsers: [],
   };
 
-  componentDidMount() {
+  async componentDidMount() {
     let currLikedUsers = this.props.listings.filter(
       (listing) => listing.key === this.props.node
     )[0].likedUsers;
@@ -24,22 +25,35 @@ class Listing extends Component {
       currLikedUsers = [];
     }
 
-    storage
-      .ref()
-      .child("listingPictures")
-      .child(this.props.identifier)
-      .child("0")
-      // .child("0")
-      .getDownloadURL()
-      .then((url) => {
-        console.log(url);
-        this.setState({
-          image: url,
+    let imageIndex = 0;
+    while (imageIndex < 3) {
+      const image = await storage
+        .ref("listingPictures")
+        .child(this.props.identifier)
+        .child("" + imageIndex)
+        .listAll()
+
+      if (image.items.length === 0) {
+        imageIndex += 1;
+        continue
+      } else {
+        storage
+        .ref("listingPictures")
+        .child(this.props.identifier)
+        .child("" + imageIndex)
+        .child("" + imageIndex)
+        .getDownloadURL()
+        .then((url) => {
+          this.setState({
+            image: url,
+          });
+        })
+        .catch((error) => {
+          this.setState({ error: true });
         });
-      })
-      .catch((error) => {
-        this.setState({ error: true });
-      });
+        break;
+      }
+    }
 
     if (this.props.isAuthenticated && this.props.likedUsers) {
       const likedUser = this.props.likedUsers.filter(
@@ -62,22 +76,6 @@ class Listing extends Component {
       database.ref().child("listings").child(this.props.node).update({
         likedUsers: likedUsers,
       });
-    }
-
-    if (!this.state.error && this.state.image === "") {
-      storage
-        .ref("/listingPictures/" + this.props.identifier)
-        .child("0")
-        .child("0")
-        .getDownloadURL()
-        .then((url) => {
-          this.setState({
-            image: url,
-          });
-        })
-        .catch((error) => {
-          this.setState({ error: true });
-        });
     }
   }
 
@@ -212,7 +210,8 @@ class Listing extends Component {
               margin: "0",
             }}
           >
-            {this.state.likedUsers.length - 1 + " likes"}
+            {(this.state.likedUsers.length - 1) +
+              (this.state.likedUsers.length < 3 ? " like" : " likes")}
           </p>
         </div>
       </div>

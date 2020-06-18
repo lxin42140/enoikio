@@ -183,7 +183,11 @@ export const fetchAllListings = () => {
         result.push(listing);
         result.reverse();
         dispatch(fetchListingSuccess(result));
-      });
+      })
+      // .catch((error) => {
+      //   const message = error.message.split("-").join(" ");
+      //   dispatch(fetchListingFail(message));
+      // });
   };
 };
 
@@ -218,7 +222,7 @@ async function getDownloadURL(numImage, identifier, key) {
 
     const image = await ref.listAll();
     if (image.items.length === 0) {
-      await imageURL.push(null);
+      imageURL.push(null);
       key += 1;
       continue;
     }
