@@ -8,7 +8,7 @@ import Button from "../../../components/UI/Button/Button";
 import Spinner from "../../../components/UI/Spinner/Spinner";
 import Comments from "../../Comments/Comments";
 import Modal from "../../../components/UI/Modal/Modal";
-import { database } from "../../../firebase/firebase";
+import { database, storage } from "../../../firebase/firebase";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faWindowClose,
@@ -71,6 +71,31 @@ class ExpandedListing extends Component {
   };
 
   confirmDelete = () => {
+    database
+      .ref()
+      .child("listings")
+      .child(this.props.expandedListing.key)
+      .remove();
+    deleteAllImages(this.props.expandedListing.unique);
+
+    async function deleteAllImages(unique) {
+      let key = 0;
+      while (key < 3) {
+        const ref =
+          storage
+            .ref("listingPictures")
+            .child(unique)
+            .child("" + key);
+    
+        const image = await ref.listAll();
+        if (image.items.length !== 0) {
+          ref
+            .child("" + key)
+            .delete()
+        }
+        key += 1;
+      }
+    }
     this.setState({ confirmDelete: true, askUserToDelete: false });
   };
 
@@ -202,7 +227,7 @@ class ExpandedListing extends Component {
         <p>Confirm delete listing?</p>
         <p>This action cannot be undone.</p>
         <Button onClick={this.cancelConfirmation}>Go back</Button>
-        <Button onClick={this.confirmDelete}>Submit</Button>
+        <Button onClick={this.confirmDelete}>Delete</Button>
         </div>
       </Modal>
 

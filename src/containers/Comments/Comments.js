@@ -29,11 +29,13 @@ class Comments extends Component {
       .child("listings")
       .child(this.props.identifier)
       .on("value", (snapShot) => {
-        const comments = Object.assign([], snapShot.val().comments);
-        comments.reverse();
-        this.setState({
-          comments: comments,
-        });
+        if (snapShot.val()) {
+          const comments = Object.assign([], snapShot.val().comments);
+          comments.reverse();
+          this.setState({
+            comments: comments,
+          });
+        }
       });
   }
 

@@ -150,23 +150,32 @@ async function editPhoto(imageAsFile, identifier, key) {
       .ref()
       .child("listingPictures")
       .child(identifier)
-      .child("" + key)
       .child("" + key);
+      // .child("" + key);
 
     if (imageAsFile[key] === null) {
-      await imageRef.delete();
-      // .catch((error) => (error = error.message.split("-").join(" ")));
+      const list = await imageRef.listAll();
+      if (list.items.length !== 0) {
+        await imageRef
+          .child("" + key)
+          .delete()
+          // .catch((error) => (error = error.message.split("-").join(" ")));
+      }
     } else if (typeof imageAsFile[key] !== "string") {
-      await imageRef.put(imageAsFile[key]);
-      // .catch((error) => (error = error.message.split("-").join(" ")));
+      await imageRef
+        .child("" + key)
+        .put(imageAsFile[key])
+        // .catch((error) => (error = error.message.split("-").join(" ")));
       const metadata = {
         customMetadata: {
           name: imageAsFile[key].name,
           index: key,
         },
       };
-      await imageRef.updateMetadata(metadata);
-      // .catch((error) => (error = error.message.split("-").join(" ")));
+      await imageRef
+        .child("" + key)
+        .updateMetadata(metadata)
+        // .catch((error) => (error = error.message.split("-").join(" ")));
     }
     key += 1;
   }

@@ -244,8 +244,7 @@ class EditPost extends Component {
     const postDetails = {
       ...this.props.editListing,
       postDetails: formData,
-      numberOfImages: this.state.imageAsFile.filter((image) => image !== null)
-        .length,
+      numberOfImages: this.state.imageAsFile.length,
     };
 
     if (!postDetails.comments) {
