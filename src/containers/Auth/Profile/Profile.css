@@ -1,0 +1,96 @@
+.Background {
+    width: 100%;
+    height: 128px;
+    background-color: #ffcdc5;
+    /* background-image: url(https://mweb-cdn.karousell.com/build/profile-bg-aad22df….jpg); */
+    background-repeat: repeat;
+    background-size: 50%;
+    padding: 0px;
+    margin-top: -40px;
+    margin-bottom: -45px;
+}
+
+.Navigation {
+    margin-top: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 17px;
+    color: grey;
+    width: 100%;
+    height: 52px;
+    border-bottom: 1px solid #e7ebee;
+}
+
+.Navigation button {
+    border: none;
+    background-color: white;
+    font-family: inherit;
+    font-size: inherit;
+    height: 52px;
+    width: 72px;
+    cursor: pointer;
+    margin-right: 20px;
+}
+
+.Navigation button:hover {
+    background-color: #e7ebee;
+}
+
+.Navigation button:active,
+.Navigation button:focus {
+    font-weight: bold;
+    color: #dd5641;
+    border-bottom: 3px solid #dd5641;
+    outline: none;
+}
+
+/**------------------------------*/
+.Profile {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    width: 100%;
+}
+
+/**---------------------------------*/
+.ProfileDetails {
+    flex: 0 0 324px;
+    min-width: 324px;
+    width: 40%;
+    height: 600px;
+    padding: 0 24px 0 0;
+    margin: 0px;
+    margin-left: -30px;
+}
+
+.ProfileImage {
+    width: 152px;
+    height: 152px;
+    margin-top: -140px;
+    border-radius: 50%;
+    border: 5px solid white;
+}
+
+.ProfileList {
+    list-style: none;
+    text-align: left;
+    font-size: 14px;
+    color: grey;
+}
+
+.ProfileList li {
+    padding: 5px 0;
+}
+
+/**---------------------------------*/
+
+.OtherInfo {
+    display: flex;
+    flex-flow: row wrap;
+    width: 100%;
+    height: 100%;
+    box-shadow: 0 3px 10px 0 rgba(44, 44, 45, .07);
+    background-color: #fff;
+    border-radius: 8px;
+}

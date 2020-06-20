@@ -182,26 +182,53 @@ class ExpandedListing extends Component {
           </h1>
           <ul className={classes.Description}>
             <li>
-              Price: ${this.props.expandedListing.postDetails.price} / month
+              <b>Type: </b>
+              {this.props.expandedListing.postDetails.listingType}
             </li>
-            <li>Status: {this.props.expandedListing.status}</li>
             <li>
-              Delivery method:
+              <b>Status: </b>
+              {this.props.expandedListing.status}
+            </li>
+            {this.props.expandedListing.postDetails.listingType === "rent" ? (
+              <li>
+                <b>Price: </b>${this.props.expandedListing.postDetails.price}
+                /month
+              </li>
+            ) : (
+              <li>
+                <b>Price: </b>${this.props.expandedListing.postDetails.price}
+              </li>
+            )}
+            <li>
+              <b>Delivery method: </b>
               {this.props.expandedListing.postDetails.deliveryMethod}
             </li>
-            <li>Location: {this.props.expandedListing.postDetails.location}</li>
+            {this.props.expandedListing.postDetails.deliveryMethod ===
+            "mail" ? null : (
+              <li>
+                <b>Location: </b>
+                {this.props.expandedListing.postDetails.location}
+              </li>
+            )}
             {this.props.expandedListing.postDetails.description ? (
               <React.Fragment>
                 <li>
                   <br />
-                  Description: <br />
+                  <b>Description: </b>
+                  <br />
                   {this.props.expandedListing.postDetails.description}
                 </li>
               </React.Fragment>
             ) : null}
             <br />
-            <li>Posted by: {this.props.expandedListing.displayName}</li>
-            <li>Posted on: {this.props.expandedListing.date}</li>
+            <li>
+              <b>Posted by: </b>
+              {this.props.expandedListing.displayName}
+            </li>
+            <li>
+              <b>Posted on: </b>
+              {this.props.expandedListing.date}
+            </li>
           </ul>
           <div className={classes.Selection}>{selections}</div>
         </div>
@@ -249,6 +276,7 @@ class ExpandedListing extends Component {
           <Comments
             comments={this.props.expandedListing.comments}
             identifier={this.props.expandedListing.key}
+            userName={this.props.expandedListing.displayName}
           />
         </div>
         {this.state.askUserToDelete ? askForConfirmation : null}

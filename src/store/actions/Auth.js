@@ -1,5 +1,6 @@
 import * as actionTypes from "./actionTypes";
 import firebase, { database, auth } from "../../firebase/firebase";
+import moment from "moment";
 
 export const authStart = () => {
   return {
@@ -8,6 +9,24 @@ export const authStart = () => {
 };
 
 export const authSuccess = (user) => {
+  const creationArr = user.metadata.creationTime.split(",")[1].split(" ");
+  creationArr.shift();
+  const dateJoined =
+    creationArr[0] + " " + creationArr[1] + " " + creationArr[2];
+
+  const lastSignArr = user.metadata.lastSignInTime.split(",")[1].split(" ");
+  lastSignArr.shift();
+  const lastSignIn =
+    lastSignArr[0] +
+    " " +
+    lastSignArr[1] +
+    " " +
+    lastSignArr[2] +
+    " @ " +
+    moment(lastSignArr[3].split(":"), "HH:mm:ss")
+      .add(8, "hours")
+      .format("HH:mm");
+
   return {
     type: actionTypes.AUTH_SUCCESS,
     user: user,
@@ -15,6 +34,8 @@ export const authSuccess = (user) => {
     photoURL: user.photoURL,
     uid: user.uid,
     email: user.email,
+    dateJoined: dateJoined,
+    lastSignIn: lastSignIn,
   };
 };
 
@@ -89,7 +110,7 @@ export const signIn = (email, password) => {
       .then((res) => {
         return auth.signInWithEmailAndPassword(email, password).then((user) => {
           // if (user.user.emailVerified) {
-            dispatch(authSuccess(user.user));
+          dispatch(authSuccess(user.user));
           // } else {
           //   dispatch(authFail("Please verify email"));
           // }

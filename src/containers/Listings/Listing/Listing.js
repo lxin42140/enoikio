@@ -96,6 +96,10 @@ class Listing extends Component {
     if (!this.props.isAuthenticated) {
       this.props.history.push("/auth");
     } else {
+      if (this.props.userId === this.props.displayName) {
+        return;
+      }
+
       let currLikedUsers = [...this.state.likedUsers];
 
       if (this.state.liked) {

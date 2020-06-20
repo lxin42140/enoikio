@@ -27,12 +27,6 @@ class NavigationItems extends Component {
             Home
           </NavigationItem>
           <NavigationItem link="/new-post">New Post</NavigationItem>
-          {/* <NavigationItem
-            link="/post-history"
-            onClick={() => this.props.setFilterTerm("displayName")}
-          >
-            Past Posts
-          </NavigationItem> */}
           <NavigationItem
             link="/liked-listings"
             onClick={() => this.props.setFilterTerm("favorites")}

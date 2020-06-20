@@ -74,6 +74,7 @@ class Comments extends Component {
       .child(this.props.identifier)
       .update({ comments: commentHistory })
       .then((res) => {
+        this.updateReviews(numStars.length, this.props.userName);
         this.setState({
           message: "",
           numStars: 0,
@@ -81,49 +82,95 @@ class Comments extends Component {
       });
   };
 
+  updateReviews = (numStars, displayName) => {
+    database
+      .ref()
+      .child("users")
+      .once("value", (snapShot) => {
+        if (snapShot.exists()) {
+          snapShot.forEach((data) => {
+            if (data.val().displayName === displayName) {
+              const reviews = Object.assign([], data.val().reviews);
+              reviews.push(numStars);
+              database.ref().child("users").child(data.key).update({
+                reviews: reviews,
+              });
+            }
+          });
+        } else {
+          database
+            .ref()
+            .child("users")
+            .push({
+              displayName: displayName,
+              reviews: [numStars],
+            });
+        }
+      });
+  };
+
   render() {
     let commentInput = (
       <div>
-        <p style={{ margin: "10px 0 5px 10px", textAlign: "center" }}>
-          Write your review
-        </p>
-        <div style={{ textAlign: "left", paddingLeft: "10px" }}>
-          <FontAwesomeIcon
-            icon={faStar}
-            style={
-              this.state.numStars > 0 ? { color: "#ff5138" } : { color: "gray" }
-            }
-            onClick={() => this.starChangeHandler(1)}
-          />
-          <FontAwesomeIcon
-            icon={faStar}
-            style={
-              this.state.numStars > 1 ? { color: "#ff5138" } : { color: "gray" }
-            }
-            onClick={() => this.starChangeHandler(2)}
-          />
-          <FontAwesomeIcon
-            icon={faStar}
-            style={
-              this.state.numStars > 2 ? { color: "#ff5138" } : { color: "gray" }
-            }
-            onClick={() => this.starChangeHandler(3)}
-          />
-          <FontAwesomeIcon
-            icon={faStar}
-            style={
-              this.state.numStars > 3 ? { color: "#ff5138" } : { color: "gray" }
-            }
-            onClick={() => this.starChangeHandler(4)}
-          />
-          <FontAwesomeIcon
-            icon={faStar}
-            style={
-              this.state.numStars > 4 ? { color: "#ff5138" } : { color: "gray" }
-            }
-            onClick={() => this.starChangeHandler(5)}
-          />
-        </div>
+        {this.props.displayName === this.props.userName ? (
+          <p style={{ margin: "10px 0 5px 10px", textAlign: "center" }}>
+            Write your comment
+          </p>
+        ) : (
+          <React.Fragment>
+            <p style={{ margin: "10px 0 5px 10px", textAlign: "center" }}>
+              Write your review
+            </p>
+            <div style={{ textAlign: "left", paddingLeft: "10px" }}>
+              <FontAwesomeIcon
+                icon={faStar}
+                style={
+                  this.state.numStars > 0
+                    ? { color: "#ff5138" }
+                    : { color: "gray" }
+                }
+                onClick={() => this.starChangeHandler(1)}
+              />
+              <FontAwesomeIcon
+                icon={faStar}
+                style={
+                  this.state.numStars > 1
+                    ? { color: "#ff5138" }
+                    : { color: "gray" }
+                }
+                onClick={() => this.starChangeHandler(2)}
+              />
+              <FontAwesomeIcon
+                icon={faStar}
+                style={
+                  this.state.numStars > 2
+                    ? { color: "#ff5138" }
+                    : { color: "gray" }
+                }
+                onClick={() => this.starChangeHandler(3)}
+              />
+              <FontAwesomeIcon
+                icon={faStar}
+                style={
+                  this.state.numStars > 3
+                    ? { color: "#ff5138" }
+                    : { color: "gray" }
+                }
+                onClick={() => this.starChangeHandler(4)}
+              />
+              <FontAwesomeIcon
+                icon={faStar}
+                style={
+                  this.state.numStars > 4
+                    ? { color: "#ff5138" }
+                    : { color: "gray" }
+                }
+                onClick={() => this.starChangeHandler(5)}
+              />
+            </div>
+          </React.Fragment>
+        )}
+
         <div className={classes.NewComment}>
           <textarea
             className={classes.textarea}
