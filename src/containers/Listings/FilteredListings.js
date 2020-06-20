@@ -1,11 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-// import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import Listing from "./Listing/Listing";
 import classes from "./Listings.css";
-// import Modal from "../../components/UI/Modal/Modal";
-// import Button from "../../components/UI/Button/Button";
 
 class FilteredListings extends Component {
   state = {
@@ -69,7 +67,29 @@ class FilteredListings extends Component {
 
   render() {
     if (this.state.filteredListings.length < 1) {
-      return <h3>Oops..No available listings</h3>;
+      const message = <h3>Oops..No available listings</h3>;
+      let makeRequest = null;
+      if (this.props.filterType === "textbook" || this.props.filterType === "moduleCode") {
+        if (this.props.isAuthenticated) {
+          makeRequest = (
+            <Link to="/new-request">
+              <p>Make a request</p>
+            </Link>
+          );
+        } else {
+          makeRequest = (
+            <Link to="/auth">
+              <p>Make a request</p>
+            </Link>
+          );
+        }
+      }
+      return (
+        <div>
+          {message}
+          {makeRequest}
+        </div>
+      );
     }
 
     let listings = this.state.filteredListings.map((listing) => {
@@ -124,6 +144,7 @@ const mapStateToProps = (state) => {
     filterType: state.listing.filterType,
     searchObject: state.listing.searchObject,
     displayName: state.auth.displayName,
+    isAuthenticated: state.auth.user !== null,
   };
 };
 

@@ -15,6 +15,10 @@ const asyncEditPost = asyncComponent(() => {
   return import("./containers/NewPost/EditPost");
 });
 
+const asyncNewRequest = asyncComponent(() => {
+  return import("./containers/Requests/NewRequest");
+});
+
 const asyncAuth = asyncComponent(() => {
   return import("./containers/Auth/Auth");
 });
@@ -43,6 +47,7 @@ class App extends Component {
   componentDidMount() {
     this.props.dispatchAutoSignIn();
     this.props.dispatchFetchAllListings();
+    this.props.dispatchFetchAllRequests();
     this.props.history.push("/");
   }
 
@@ -70,6 +75,7 @@ class App extends Component {
           <Route path="/searchResults" component={asyncFilteredListings} />
           <Route path="/new-post" component={asyncNewPost} />
           <Route path="/edit-post" component={asyncEditPost} />
+          <Route path="/new-request" component={asyncNewRequest} />
           <Route path="/expanded-listing" component={asyncExpandedListing} />
           <Route path="/post-history" component={asyncFilteredListings} />
           <Route path="/liked-listings" component={asyncFilteredListings} />
@@ -99,6 +105,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     dispatchFetchAllListings: () => dispatch(actions.fetchAllListings()),
+    dispatchFetchAllRequests: () => dispatch(actions.fetchAllRequests()),
     dispatchFetchChats: () => dispatch(actions.fetchChats()),
     dispatchAutoSignIn: () => dispatch(actions.autoSignIn()),
   };
