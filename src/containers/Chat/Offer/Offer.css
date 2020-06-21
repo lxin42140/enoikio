@@ -13,6 +13,18 @@
     color: #2c2c2d,
 }
 
+.RequestDetails {
+    display: flex;
+    text-align: left;
+    max-width: 50%;
+    color: #2c2c2d,
+}
+
+.RequestDetails ul {
+    list-style: none;
+    padding-left: 10px;
+}
+
 .Buttons {
     align-self: center;
     margin-left: auto;

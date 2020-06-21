@@ -11,6 +11,7 @@ export {
   fetchAllRequests,
   submitNewRequest,
   clearRequestData,
+  resolveRequest,
 } from "./Requests"
 
 export { 

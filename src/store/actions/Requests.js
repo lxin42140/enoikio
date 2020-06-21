@@ -53,6 +53,13 @@ export const clearRequestData = () => {
   }
 }
 
+export const setResolveRequest = (request) => {
+  return {
+    type: actionTypes.SET_RESOLVE_REQUEST,
+    request: request,
+  }
+}
+
 export const fetchAllRequests = () => {
   return (dispatch, getState) => {
     dispatch(fetchRequestInit());
@@ -99,4 +106,16 @@ export const submitNewRequest = (data) => {
         dispatch(submitNewRequestFail(message));
       });
   };
+}
+
+export const resolveRequest = (request) => {
+  return (dispatch) => {
+    request = {
+      key: request.key,
+      module: request.requestDetails.module,
+      textbook: request.requestDetails.textbook,
+      displayName: request.displayName
+    }
+    dispatch(setResolveRequest(request));
+  }
 }

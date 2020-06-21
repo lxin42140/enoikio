@@ -32,6 +32,7 @@ export const SUBMIT_NEW_REQUEST_SUCCESS = "SUBMIT_NEW_REQUEST_SUCCESS";
 export const SUBMIT_NEW_REQUEST_FAIL = "SUBMIT_NEW_REQUEST_SUCCESS";
 export const REMOVED_REQUEST = "REMOVED_REQUEST"
 export const CLEAR_REQUEST_DATA = "CLEAR_REQUEST_DATA"
+export const SET_RESOLVE_REQUEST = "SET_RESOLVE_REQUEST"
 
 /*----------------------Fetch all request----------------------*/
 export const FETCH_REQUEST_INIT = "FETCH_REQUEST_INIT";
