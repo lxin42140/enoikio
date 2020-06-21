@@ -7,12 +7,18 @@ export {
   emptyInterestedListing,
 } from "./Listings";
 
+export {
+  fetchAllRequests,
+  submitNewRequest,
+  clearRequestData,
+} from "./Requests"
+
 export { 
   submitNewPost, 
   submitNewPhoto, 
   submitEditedPhoto, 
   clearPostData, 
-  editPost 
+  editPost,
 } from "./NewPost";
 
 export {

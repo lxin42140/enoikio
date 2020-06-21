@@ -12,12 +12,14 @@ import ListingReducer from "./store/reducers/Listings";
 import NewPostReducer from "./store/reducers/newPost";
 import AuthReducer from "./store/reducers/Auth";
 import ChatReducer from "./store/reducers/Chat";
+import RequestReducer from './store/reducers/Requests';
 
 const rootReducer = combineReducers({
   listing: ListingReducer,
   newPost: NewPostReducer,
   auth: AuthReducer,
   chat: ChatReducer,
+  request: RequestReducer,
 });
 
 const composeEnhancers =

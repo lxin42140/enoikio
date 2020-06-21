@@ -26,6 +26,18 @@ export const SUBMIT_NEW_PHOTO_SUCCESS = "SUBMIT_NEW_PHOTO_SUCCESS";
 export const SUBMIT_NEW_PHOTO_FAIL = "SUBMIT_NEW_PHOTO_FAIL";
 export const CLEAR_NEW_POST_DATA = "CLEAR_NEW_POST_DATA";
 
+/*----------------------Submit new request----------------------*/
+export const SUBMIT_NEW_REQUEST_INIT = "SUBMIT_NEW_REQUEST_INIT";
+export const SUBMIT_NEW_REQUEST_SUCCESS = "SUBMIT_NEW_REQUEST_SUCCESS";
+export const SUBMIT_NEW_REQUEST_FAIL = "SUBMIT_NEW_REQUEST_SUCCESS";
+export const REMOVED_REQUEST = "REMOVED_REQUEST"
+export const CLEAR_REQUEST_DATA = "CLEAR_REQUEST_DATA"
+
+/*----------------------Fetch all request----------------------*/
+export const FETCH_REQUEST_INIT = "FETCH_REQUEST_INIT";
+export const FETCH_REQUEST_SUCCESS = "FETCH_REQUEST_SUCCESS";
+export const FETCH_REQUEST_FAIL = "FETCH_REQUEST_SUCCESS";
+
 /*----------------------authentication----------------------*/
 export const AUTH_START = "AUTH_START";
 export const AUTH_SUCCESS = "AUTH_SUCCESS";

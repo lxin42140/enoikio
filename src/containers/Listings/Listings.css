@@ -8,6 +8,41 @@
     justify-content: flex-start;
 }
 
+.Navigation {
+    margin-top: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 17px;
+    color: grey;
+    width: 100%;
+    height: 52px;
+    border-bottom: 1px solid #e7ebee;
+}
+
+.Navigation button {
+    border: none;
+    background-color: white;
+    font-family: inherit;
+    font-size: inherit;
+    height: 52px;
+    width: 72px;
+    cursor: pointer;
+    margin-right: 20px;
+}
+
+.Navigation button:hover {
+    background-color: #e7ebee;
+}
+
+.Navigation button:active,
+.Navigation button:focus {
+    font-weight: bold;
+    color: #dd5641;
+    border-bottom: 3px solid #dd5641;
+    outline: none;
+}
+
 @media (max-width: 616px) {
     .Listings {
         justify-content: center;

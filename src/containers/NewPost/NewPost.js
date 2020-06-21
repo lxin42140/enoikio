@@ -461,8 +461,6 @@ const mapStateToProps = (state) => {
     uploadingImage: state.newPost.uploadingImage,
     imageUploaded: state.newPost.imageUploaded,
     displayName: state.auth.displayName,
-    editListing: state.listing.expandedListing,
-    editListingLoading: state.listing.expandedListingLoading,
   };
 };
 

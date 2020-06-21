@@ -288,7 +288,7 @@ class ExpandedListing extends Component {
 
     const askForConfirmation = (
       <Modal show={this.state.askUserToDelete}>
-        <div style={{}}>
+        <div>
           <p>Confirm delete listing?</p>
           <p>This action cannot be undone.</p>
           <Button onClick={this.cancelConfirmation}>Go back</Button>
