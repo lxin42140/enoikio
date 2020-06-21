@@ -1,36 +1,32 @@
-import React, { Component } from 'react';
-import Button from '../../../components/UI/Button/Button';
-import classes from "./Request.css";
+import React, { Component } from "react";
 import { connect } from "react-redux";
-import { database } from '../../../firebase/firebase';
-import { Link } from 'react-router-dom';
-import Modal from '../../../components/UI/Modal/Modal';
+import { Link } from "react-router-dom";
+
+import Button from "../../../components/UI/Button/Button";
+import classes from "./Request.css";
+import { database } from "../../../firebase/firebase";
+import Modal from "../../../components/UI/Modal/Modal";
 
 class Request extends Component {
-
   state = {
     askUserToDelete: false,
     confirmDelete: false,
-  }
+  };
 
   cancelConfirmation = () => {
-    this.setState({ askUserToDelete: false })
-  }
+    this.setState({ askUserToDelete: false });
+  };
 
   askUserToDelete = () => {
     this.setState({ askUserToDelete: true });
   };
 
   deleteRequest = () => {
-    console.log(this.props.key)
-    database
-      .ref()
-      .child("requests")
-      .child(this.props.node)
-      .remove();
+    console.log(this.props.key);
+    database.ref().child("requests").child(this.props.node).remove();
 
     this.setState({ confirmDelete: true, askUserToDelete: false });
-  }
+  };
 
   onChatHandler = (chatDisplayName) => {
     // this.props.dispatchSetInterestedListing(this.props.expandedListing);
@@ -38,13 +34,11 @@ class Request extends Component {
       const UID = this.props.displayName + chatDisplayName;
       const chatRef = database.ref().child("chats");
       const pushMessageKey = chatRef.push().key;
-      chatRef
-        .child(pushMessageKey)
-        .set({
-          userA: this.props.displayName,
-          userB: chatDisplayName,
-          UID: UID,
-        })
+      chatRef.child(pushMessageKey).set({
+        userA: this.props.displayName,
+        userB: chatDisplayName,
+        UID: UID,
+      });
     }
   };
 
@@ -71,7 +65,7 @@ class Request extends Component {
       </div>
     );
 
-    const askForConfirmation =
+    const askForConfirmation = (
       <Modal show={this.state.askUserToDelete}>
         <div>
           <p>Confirm delete request?</p>
@@ -80,33 +74,37 @@ class Request extends Component {
           <Button onClick={this.deleteRequest}>Delete</Button>
         </div>
       </Modal>
+    );
 
-    const confirmDeleteModal =
+    const confirmDeleteModal = (
       <Modal show={this.state.confirmDelete}>
         Listing deleted.
         <Link to="/">
-          <Button>
-            Home
-          </Button>
+          <Button>Home</Button>
         </Link>
       </Modal>
+    );
 
     const isOwner = this.props.displayName === this.props.userId;
 
     return (
       <React.Fragment>
-      <div className={classes.Request}>
-        {request}
-        {isOwner ?
-          <Button onClick={this.askUserToDelete}>Delete</Button> :
-          <Link to={{
-            pathname: "/chats",
-            search: "?" + this.props.displayName
-          }}>
+        <div className={classes.Request}>
+          {request}
+          {isOwner ? (
+            <Button onClick={this.askUserToDelete}>Delete</Button>
+          ) : (
+            <Link
+              to={{
+                pathname: "/chats",
+                search: "?" + this.props.displayName,
+              }}
+            >
               <Button onClick={() => this.onChatHandler(this.props.userId)}>
                 Chat
               </Button>
-          </Link>}
+            </Link>
+          )}
         </div>
         {this.state.askUserToDelete ? askForConfirmation : null}
         {this.state.confirmDelete ? confirmDeleteModal : null}

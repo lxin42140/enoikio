@@ -153,8 +153,19 @@ class FilteredListings extends Component {
     }
 
     return (
-      <div className={classes.Listings}>
-        {listings} {makeRequest}
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          boxSizing: "border-box",
+          justifyContent: "flex-start",
+          flexWrap: "wrap",
+          lineHeight: "21px",
+          textSizeAdjust: "100%",
+        }}
+      >
+        {makeRequest}
+        {listings}
       </div>
     );
   }
