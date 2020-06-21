@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 
 import Listing from "./Listing/Listing";
-import classes from "./Listings.css";
 
 class FilteredListings extends Component {
   state = {
