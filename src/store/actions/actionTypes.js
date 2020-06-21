@@ -3,7 +3,7 @@ export const FETCH_LISTING_INIT = "FETCH_LISTING_INIT";
 export const FETCH_LISTING_SUCCESS = "FETCH_LISTING_SUCCESS";
 export const FETCH_LISTING_FAIL = "FETCH_LISTING_FAIL";
 export const UPDATE_LISTING = "UPDATE_LISTING";
-export const REMOVED_LISTING = "REMOVED_LISTING"
+export const REMOVED_LISTING = "REMOVED_LISTING";
 
 /*--------------------fetch filtered listing-----------------*/
 export const FILTER_LISTINGS = "FILTER_LISTINGS";
@@ -31,8 +31,11 @@ export const AUTH_START = "AUTH_START";
 export const AUTH_SUCCESS = "AUTH_SUCCESS";
 export const AUTH_FAIL = "AUTH_FAIL";
 export const AUTH_LOGOUT = "AUTH_LOGOUT";
-export const SENT_EMAIL_CONFIRMATION = "SENT_EMAIL_CONFIRMATION"
-export const PASSWORD_RESET = "PASSWORD_RESET"
+export const SENT_EMAIL_CONFIRMATION = "SENT_EMAIL_CONFIRMATION";
+export const PASSWORD_RESET = "PASSWORD_RESET";
+export const UPDATE_USER_DETAILS_INIT = "UPDATE_USER_DETAILS_INIT";
+export const UPDATE_USER_DETAILS_IMAGE = "UPDATE_USER_DETAILS_IMAGE";
+export const RESET_USER_UPDATE = "RESET_USER_UPDATE"
 export const SET_AUTH_REDIRECT = "SET_AUTH_REDIRECT";
 
 /*----------------------Chat----------------------*/

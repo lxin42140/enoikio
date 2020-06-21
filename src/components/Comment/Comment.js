@@ -14,9 +14,8 @@ const comment = (props) => {
     <div className={classes.CommentMessage}>
       <div>
         <img
-          src="https://media.karousell.com/media/photos/profiles/2020/03/07/heiiieiieiie_1583567636.jpg"
+          src={props.profilePicture}
           alt="User profile"
-          width="35"
           className={classes.ProfileImage}
         />
       </div>
@@ -28,11 +27,13 @@ const comment = (props) => {
         <div
           style={{ textAlign: "left", paddingBottom: "5px", fontSize: "10px" }}
         >
-          <div>
-            {props.numStars.map((star) => (
-              <FontAwesomeIcon icon={faStar} style={{ color: "#ff5138" }} />
-            ))}
-          </div>
+          {props.isListingOwner ? null : (
+            <div>
+              {props.numStars.map((star) => (
+                <FontAwesomeIcon icon={faStar} style={{ color: "#ff5138" }} />
+              ))}
+            </div>
+          )}
         </div>
         <div className={classes.CommentText}>{props.content}</div>
       </div>

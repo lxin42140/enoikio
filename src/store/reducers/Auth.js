@@ -13,11 +13,15 @@ const initialState = {
   loading: false,
   sentEmailVerification: false,
   passwordReset: false,
+  updatingUserDetails: false,
+  updatedUserDetails: false,
   authRedirectPath: "/",
 };
 
 const authStart = (state, action) => {
   return updateObject(state, {
+    updatingUserDetails: false,
+    updatedUserDetails: false,
     displayName: "",
     photoURL: "",
     email: "",
@@ -44,6 +48,8 @@ const passwordReset = (state, action) => {
 const authFail = (state, action) => {
   return updateObject(state, {
     error: action.error,
+    updatingUserDetails: false,
+    updatedUserDetails: false,
     loading: false,
     displayName: "",
     photoURL: "",
@@ -60,6 +66,8 @@ const authFail = (state, action) => {
 
 const authSuccess = (state, action) => {
   return updateObject(state, {
+    updatingUserDetails: false,
+    updatedUserDetails: false,
     error: null,
     loading: false,
     user: action.user,
@@ -76,6 +84,8 @@ const authSuccess = (state, action) => {
 
 const authLogout = (state, action) => {
   return updateObject(state, {
+    updatingUserDetails: false,
+    updatedUserDetails: false,
     displayName: "",
     photoURL: "",
     email: "",
@@ -88,6 +98,28 @@ const authLogout = (state, action) => {
     sentEmailVerification: false,
     passwordReset: false,
     authRedirectPath: "/",
+  });
+};
+
+const updateUserDetailsInit = (state, action) => {
+  return updateObject(state, {
+    updatingUserDetails: true,
+    updatedUserDetails: false,
+  });
+};
+
+const updatePhotosDetails = (state, action) => {
+  return updateObject(state, {
+    photoURL: action.photoURL,
+    updatingUserDetails: false,
+    updatedUserDetails: true,
+  });
+};
+
+const resetUserUpdate = (state, action) => {
+  return updateObject(state, {
+    updatingUserDetails: false,
+    updatedUserDetails: false,
   });
 };
 
@@ -111,6 +143,12 @@ const reducer = (state = initialState, action) => {
       return sentEmailConfirmation(state, action);
     case actions.PASSWORD_RESET:
       return passwordReset(state, action);
+    case actions.UPDATE_USER_DETAILS_INIT:
+      return updateUserDetailsInit(state, action);
+    case actions.UPDATE_USER_DETAILS_IMAGE:
+      return updatePhotosDetails(state, action);
+    case actions.RESET_USER_UPDATE:
+      return resetUserUpdate(state, action);
     default:
       return state;
   }

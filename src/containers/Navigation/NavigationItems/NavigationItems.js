@@ -34,7 +34,12 @@ class NavigationItems extends Component {
             Favorites
           </NavigationItem>
           <NavigationItem link="/chats">Chats</NavigationItem>
-          <NavigationItem link="/profile">Profile</NavigationItem>
+          <NavigationItem
+            link="/profile"
+            onClick={() => this.props.setFilterTerm("displayName")}
+          >
+            Profile
+          </NavigationItem>
           <NavigationItem link="/logout">Log out</NavigationItem>
           <FontAwesomeIcon
             icon={faSearch}

@@ -28,7 +28,7 @@
     font-family: inherit;
     font-size: inherit;
     height: 52px;
-    width: 72px;
+    width: 100px;
     cursor: pointer;
     margin-right: 20px;
 }
@@ -58,7 +58,7 @@
     flex: 0 0 324px;
     min-width: 324px;
     width: 40%;
-    height: 600px;
+    height: 100%;
     padding: 0 24px 0 0;
     margin: 0px;
     margin-left: -30px;
@@ -93,4 +93,13 @@
     box-shadow: 0 3px 10px 0 rgba(44, 44, 45, .07);
     background-color: #fff;
     border-radius: 8px;
+}
+
+.Reviews {
+    padding-left: 10px;
+    list-style-type: none;
+}
+
+.Reviews li {
+    display: list-item;
 }

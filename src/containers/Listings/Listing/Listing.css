@@ -1,15 +1,53 @@
 /*TODO: fix listing size to relative*/
-.Listing {
+.Normal {
     display: flex;
     flex-direction: column;
-    width: 250px;
     height: 520px;
+    width: 250px;
     overflow-y: auto;
     border: 1px solid #ccc;
     padding: 8px;
     box-sizing: border-box;
     margin: 10px;
     text-align: left
+}
+
+.Normal:hover {
+    box-shadow: 0 0 5px 2px #d3d3d3;
+}
+
+.Shortened {
+    display: flex;
+    flex-direction: column;
+    height: 475px;
+    width: 250px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    padding: 8px;
+    box-sizing: border-box;
+    margin: 10px;
+    text-align: left
+}
+
+.Shortened:hover {
+    box-shadow: 0 0 5px 2px #d3d3d3;
+}
+
+.OnRent {
+    display: flex;
+    flex-direction: column;
+    height: 340px;
+    width: 200px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    padding: 5px;
+    box-sizing: border-box;
+    margin: 10px;
+    text-align: left
+}
+
+.OnRent:hover {
+    box-shadow: 0 0 5px 2px #d3d3d3;
 }
 
 .FullListing {
@@ -23,14 +61,6 @@
     justify-content: flex-start;
 }
 
-.Listing:hover {
-    box-shadow: 0 0 5px 2px #d3d3d3;
-}
-
-.Listing li {
-    padding: 3px;
-}
-
 .Textbook {
     color: black;
     font-size: medium;
@@ -41,13 +71,14 @@
     width: 200px;
     height: 200px;
     object-fit: cover;
+    border-radius: 4px;
 }
 
 .Description {
     font-size: 12px;
     color: grey;
     list-style: none;
-    padding-left: 0px;
+    padding-left: 13px;
 }
 
 .Icon {

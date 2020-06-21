@@ -1,6 +1,5 @@
 import React from "react";
 import classes from "./Contact.css";
-import profileImage from "../../../assets/Images/chats/profile";
 
 const contact = (props) => {
   let style = null;
@@ -9,7 +8,7 @@ const contact = (props) => {
   }
   return (
     <div className={classes.friend} onClick={props.onClick} style={style}>
-      <img src={profileImage} alt="profile" />
+      <img src={props.profilePic} alt="profile" />
       <p>
         <strong
           style={{
@@ -31,7 +30,6 @@ const contact = (props) => {
           {props.lastMessage}
         </span>
       </p>
-      {/* <div className={classes.status}></div> */}
     </div>
   );
 };

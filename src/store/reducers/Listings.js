@@ -2,13 +2,16 @@ import * as actionTypes from "../actions/actionTypes";
 import { updateObject } from "../utility";
 
 const initialState = {
-  listings: [],
-  error: null,
   loading: false,
+  error: null,
+  listings: [],
+
   expandedListing: null,
   expandedListingLoading: false,
+
   filterType: "",
   searchObject: "",
+  
   interestedListing: null,
 };
 

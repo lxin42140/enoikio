@@ -3,13 +3,18 @@ import { updateObject } from "../utility";
 
 const initialState = {
   initialLoad: true,
+
   fetchChatContactsLoading: false,
+  isEmpty: false,
   chatContacts: [],
   existingChatNames: [],
+
   fullChat: [],
   fullChatUID: "",
   fullChatLoading: false,
+
   recipient: "",
+  recipientProfilePic: "",
 };
 
 const fetchChatContactsInit = (state, action) => {
@@ -20,11 +25,18 @@ const fetchChatContactsInit = (state, action) => {
 };
 
 const fetchChatContactsSuccess = (state, action) => {
-  return updateObject(state, {
-    chatContacts: action.chatContacts,
-    existingChatNames: action.existingChatNames,
-    fetchChatContactsLoading: false,
-  });
+  if (action.isEmpty) {
+    return updateObject(state, {
+      isEmpty: true,
+      fetchChatContactsLoading: false,
+    });
+  } else {
+    return updateObject(state, {
+      chatContacts: action.chatContacts,
+      existingChatNames: action.existingChatNames,
+      fetchChatContactsLoading: false,
+    });
+  }
 };
 
 const fetchFullChatInit = (state, action) => {
@@ -50,6 +62,7 @@ const fetchFullChatInitSuccess = (state, action) => {
     fullChatUID: action.fullChatUID,
     fullChatLoading: false,
     recipient: action.recipient,
+    recipientProfilePic: action.profilePic,
     chatContacts: chatContacts,
   });
 };
@@ -59,12 +72,14 @@ const updateContacts = (state, action) => {
     chatContacts: action.updatedChatContacts,
     existingChatNames: action.updatedChatNames,
     recipient: "",
+    recipientProfilePic: "",
   });
 };
 
 const resetRecipient = (state, action) => {
   return updateObject(state, {
     recipient: "",
+    recipientProfilePic: "",
   });
 };
 

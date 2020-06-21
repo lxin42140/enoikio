@@ -71,6 +71,41 @@ export const passwordResetSuccess = () => {
   };
 };
 
+export const updateUserDetailsInit = () => {
+  return {
+    type: actionTypes.UPDATE_USER_DETAILS_INIT,
+  };
+};
+
+export const updatePhotosDetails = (photoURL) => {
+  return {
+    type: actionTypes.UPDATE_USER_DETAILS_IMAGE,
+    photoURL: photoURL,
+  };
+};
+
+export const resetUserUpdate = () => {
+  return {
+    type: actionTypes.RESET_USER_UPDATE,
+  };
+};
+
+export const updateUserDetails = (user, photoURL) => {
+  return (dispatch) => {
+    user
+      .updateProfile({
+        photoURL: photoURL,
+      })
+      .then((res) => {
+        dispatch(updatePhotosDetails(photoURL));
+      })
+      .catch((error) => {
+        const message = error.message.split("-").join(" ");
+        dispatch(authFail(message));
+      });
+  };
+};
+
 export const signOut = () => {
   return (dispatch) => {
     auth.signOut().then((res) => dispatch(logout()));

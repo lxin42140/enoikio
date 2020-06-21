@@ -2,16 +2,18 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import moment from "moment";
+import { faStar } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import * as classes from "./Comments.css";
 import Comment from "../../components/Comment/Comment";
 import Button from "../../components/UI/Button/Button";
 import { database } from "../../firebase/firebase";
-import { faStar } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import profileImage from "../../assets/Images/chats/profile";
 
 class Comments extends Component {
   state = {
+    isListingOwner: false,
     message: "",
     numStars: 0,
     comments: [],
@@ -21,6 +23,7 @@ class Comments extends Component {
     if (this.state.comments.length < 1 && this.props.comments !== undefined) {
       this.setState({
         comments: this.props.comments,
+        isListingOwner: this.props.displayName === this.props.userName,
       });
     }
 
@@ -34,6 +37,7 @@ class Comments extends Component {
           comments.reverse();
           this.setState({
             comments: comments,
+            isListingOwner: this.props.displayName === this.props.userName,
           });
         }
       });
@@ -52,18 +56,40 @@ class Comments extends Component {
   };
 
   submitCommentHandler = (event) => {
-    const numStars = [];
-    for (let i = 0; i < this.state.numStars; i++) {
-      numStars.push(i);
+    let message;
+    let profilePicture = profileImage;
+
+    if (this.props.photoURL !== "") {
+      profilePicture = this.props.photoURL;
     }
-    const message = {
-      content: this.state.message,
-      numStars: numStars,
-      sender: this.props.displayName,
-      date: moment().format("DD-MM-YYYY"),
-      time: moment().format("HH:mm:ss"),
-      key: this.props.displayName + Date.now(),
-    };
+
+    if (this.state.isListingOwner) {
+      message = {
+        content: this.state.message,
+        isListingOwner: this.state.isListingOwner,
+        sender: this.props.displayName,
+        profilePicture: profilePicture,
+        date: moment().format("DD-MM-YYYY"),
+        time: moment().format("HH:mm:ss"),
+        key: this.props.displayName + Date.now(),
+      };
+    } else {
+      const numStars = [];
+      for (let i = 0; i < this.state.numStars; i++) {
+        numStars.push(i);
+      }
+      message = {
+        content: this.state.message,
+        isListingOwner: this.state.isListingOwner,
+        numStars: numStars,
+        sender: this.props.displayName,
+        profilePicture: profilePicture,
+        date: moment().format("DD-MM-YYYY"),
+        time: moment().format("HH:mm:ss"),
+        key: this.props.displayName + Date.now(),
+      };
+      this.updateReviews(numStars.length, this.props.userName, message);
+    }
 
     const commentHistory = Object.assign([], this.state.comments);
     commentHistory.push(message);
@@ -74,7 +100,6 @@ class Comments extends Component {
       .child(this.props.identifier)
       .update({ comments: commentHistory })
       .then((res) => {
-        this.updateReviews(numStars.length, this.props.userName);
         this.setState({
           message: "",
           numStars: 0,
@@ -82,7 +107,7 @@ class Comments extends Component {
       });
   };
 
-  updateReviews = (numStars, displayName) => {
+  updateReviews = (numStars, displayName, message) => {
     database
       .ref()
       .child("users")
@@ -92,8 +117,11 @@ class Comments extends Component {
             if (data.val().displayName === displayName) {
               const reviews = Object.assign([], data.val().reviews);
               reviews.push(numStars);
+              const comments = Object.assign([], data.val().comments);
+              comments.push(message);
               database.ref().child("users").child(data.key).update({
                 reviews: reviews,
+                comments: comments,
               });
             }
           });
@@ -104,6 +132,7 @@ class Comments extends Component {
             .push({
               displayName: displayName,
               reviews: [numStars],
+              comments: [message],
             });
         }
       });
@@ -112,7 +141,7 @@ class Comments extends Component {
   render() {
     let commentInput = (
       <div>
-        {this.props.displayName === this.props.userName ? (
+        {this.state.isListingOwner ? (
           <p style={{ margin: "10px 0 5px 10px", textAlign: "center" }}>
             Write your comment
           </p>
@@ -183,7 +212,11 @@ class Comments extends Component {
             <Button
               btnType="Important"
               onClick={this.submitCommentHandler}
-              disabled={this.state.message === "" || this.state.numStars === 0}
+              disabled={
+                (this.state.isListingOwner && this.state.message === "") ||
+                (!this.state.isListingOwner &&
+                  (this.state.numStars === 0 || this.state.message === ""))
+              }
             >
               Post
             </Button>
@@ -195,11 +228,13 @@ class Comments extends Component {
     let reviews = this.state.comments.map((comment) => (
       <li key={comment.key}>
         <Comment
+          isListingOwner={comment.isListingOwner}
           sender={comment.sender}
           date={comment.date}
           time={comment.time}
           numStars={comment.numStars}
           content={comment.content}
+          profilePicture={comment.profilePicture}
         />
       </li>
     ));
@@ -236,6 +271,7 @@ const mapStateToProps = (state) => {
   return {
     isAuthenticated: state.auth.user !== null,
     displayName: state.auth.displayName,
+    photoURL: state.auth.photoURL,
   };
 };
 

@@ -412,16 +412,25 @@ class Offer extends Component {
       " to " +
       this.state.endRental;
 
+    let updates = {
+      status: status,
+      lessee: this.props.recipient,
+    };
+
     if (this.state.interestedListing.listingType === "sell") {
       status = "sold";
+    }
+
+    if (this.state.interestedListing.listingType !== "rent") {
+      updates = {
+        status: status,
+      };
     }
 
     database
       .ref()
       .child("listings/" + this.state.interestedListing.key)
-      .update({
-        status: status,
-      });
+      .update(updates);
   };
 
   onRejectOffer = () => {
@@ -449,6 +458,7 @@ class Offer extends Component {
       .then((res) => {
         this.setState({
           offerType: "REJECTED_OFFER",
+          lessee: "none",
         });
       });
 

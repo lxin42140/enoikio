@@ -201,6 +201,7 @@ class NewPost extends Component {
       time: time,
       numberOfImages: this.state.numberOfImages,
       status: "available",
+      lessee: "none",
       likedUsers: ["none"],
       postDetails: formData,
     };

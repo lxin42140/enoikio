@@ -121,80 +121,194 @@ class Listing extends Component {
   };
 
   render() {
-    let listing = (
-      <React.Fragment>
-        <div className={classes.Textbook}>
-          <p style={{ textAlign: "center" }}>
-            {this.props.module}:《{this.props.textbook}》
-          </p>
-        </div>
-        <div style={{ textAlign: "center", height: "200px" }}>
-          <img
-            src={this.state.image}
-            alt={this.state.error ? "Unable to load image" : "Loading image..."}
-            className={classes.Image}
-          />
-        </div>
-        <div>
-          <ul className={classes.Description}>
-            <li>
-              <b>Type: </b>
-              {this.props.listingType}
-            </li>
-            <li>
-              {this.props.status === "available" ||
-              this.props.status === "sold" ? (
+    let listing;
+
+    if (this.props.filterType && this.props.filterType === "onRent") {
+      listing = (
+        <React.Fragment>
+          <div className={classes.Textbook}>
+            <p style={{ textAlign: "center" }}>
+              {this.props.module}:《{this.props.textbook}》
+            </p>
+          </div>
+          <div style={{ textAlign: "center", height: "150px" }}>
+            <img
+              src={this.state.image}
+              alt={
+                this.state.error ? "Unable to load image" : "Loading image..."
+              }
+              style={{
+                flex: "none",
+                objectFit: "cover",
+                width: "150px",
+                height: "150px",
+                borderRadius: "4px",
+              }}
+            />
+          </div>
+          <div>
+            <ul className={classes.Description}>
+              <li>
+                <b>Rental duration:</b>
+                {this.props.status.split("from")[1]}
+              </li>
+              <li>
+                <b>Lessee: </b> {this.props.lessee}
+              </li>
+            </ul>
+          </div>
+        </React.Fragment>
+      );
+    } else if (
+      this.props.filterType &&
+      this.props.filterType === "displayName"
+    ) {
+      listing = (
+        <React.Fragment>
+          <div className={classes.Textbook}>
+            <p style={{ textAlign: "center" }}>
+              {this.props.module}:《{this.props.textbook}》
+            </p>
+          </div>
+          <div style={{ textAlign: "center", height: "200px" }}>
+            <img
+              src={this.state.image}
+              alt={
+                this.state.error ? "Unable to load image" : "Loading image..."
+              }
+              style={{
+                flex: "none",
+                objectFit: "cover",
+                width: "200px",
+                height: "200px",
+              }}
+            />
+          </div>
+          <div>
+            <ul className={classes.Description}>
+              <li>
+                <b>Type: </b>
+                {this.props.listingType}
+              </li>
+              <li>
                 <p style={{ margin: "0px" }}>
                   <b>Status: </b>
                   {this.props.status}
                 </p>
+              </li>
+              {this.props.listingType === "rent" ? (
+                <li>
+                  <b>Price: </b>${this.props.price} /month
+                </li>
               ) : (
+                <li>
+                  <b>Price: </b>${this.props.price}
+                </li>
+              )}
+              <li>
+                <b>Delivery method: </b>
+                {this.props.deliveryMethod}
+              </li>
+              {this.props.deliveryMethod === "mail" ? null : (
+                <li>
+                  <b>Location: </b>
+                  {this.props.location}
+                </li>
+              )}
+              <li>
+                <b>Posted on: </b>
+                {this.props.date}
+              </li>
+            </ul>
+          </div>
+        </React.Fragment>
+      );
+    } else {
+      listing = (
+        <React.Fragment>
+          <div className={classes.Textbook}>
+            <p style={{ textAlign: "center" }}>
+              {this.props.module}:《{this.props.textbook}》
+            </p>
+          </div>
+          <div style={{ textAlign: "center", height: "200px" }}>
+            <img
+              src={this.state.image}
+              alt={
+                this.state.error ? "Unable to load image" : "Loading image..."
+              }
+              className={classes.Image}
+            />
+          </div>
+          <div>
+            <ul className={classes.Description}>
+              <li>
+                <b>Type: </b>
+                {this.props.listingType}
+              </li>
+              <li>
                 <p style={{ margin: "0px" }}>
                   <b>Status: </b>
-                  <br /> {this.props.status}
+                  {this.props.status}
                 </p>
+              </li>
+              {this.props.listingType === "rent" ? (
+                <li>
+                  <b>Price: </b>${this.props.price} /month
+                </li>
+              ) : (
+                <li>
+                  <b>Price: </b>${this.props.price}
+                </li>
               )}
-            </li>
-            {this.props.listingType === "rent" ? (
               <li>
-                <b>Price: </b>${this.props.price} /month
+                <b>Delivery method: </b>
+                {this.props.deliveryMethod}
               </li>
-            ) : (
+              {this.props.deliveryMethod === "mail" ? null : (
+                <li>
+                  <b>Location: </b>
+                  {this.props.location}
+                </li>
+              )}
+              <br />
               <li>
-                <b>Price: </b>${this.props.price}
+                <b>Posted by: </b>
+                {this.props.userId}
               </li>
-            )}
-            <li>
-              <b>Delivery method: </b>
-              {this.props.deliveryMethod}
-            </li>
-            {this.props.deliveryMethod === "mail" ? null : (
               <li>
-                <b>Location: </b>
-                {this.props.location}
+                <b>Posted on: </b>
+                {this.props.date}
               </li>
-            )}
-            <br />
-            <li>
-              <b>Posted by: </b>
-              {this.props.userId}
-            </li>
-            <li>
-              <b>Posted on: </b>
-              {this.props.date}
-            </li>
-          </ul>
-        </div>
-      </React.Fragment>
-    );
+            </ul>
+          </div>
+        </React.Fragment>
+      );
+    }
 
-    const heartStyle = [classes.Icon];
+    //styling for heart icon
+    const HeartStyle = [classes.Icon];
     this.state.liked
-      ? heartStyle.push(classes.Enabled)
-      : heartStyle.push(classes.Disabled);
+      ? HeartStyle.push(classes.Enabled)
+      : HeartStyle.push(classes.Disabled);
+
+    //styling for listing
+    let ListingStyle = classes.Normal;
+    if (this.props.filterType) {
+      switch (this.props.filterType) {
+        case "displayName":
+          ListingStyle = classes.Shortened;
+          break;
+        case "onRent":
+          ListingStyle = classes.OnRent;
+          break;
+        default:
+          break;
+      }
+    }
 
     return (
-      <div className={classes.Listing}>
+      <div className={ListingStyle}>
         <div
           onClick={this.expandListingHandler}
           style={{ cursor: "pointer", marginBottom: "-30px" }}
@@ -207,7 +321,7 @@ class Listing extends Component {
         >
           <FontAwesomeIcon
             icon={faHeart}
-            className={heartStyle.join(" ")}
+            className={HeartStyle.join(" ")}
             onClick={this.toggleLikePostHandler}
           />
           <p

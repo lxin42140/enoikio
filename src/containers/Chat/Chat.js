@@ -5,6 +5,7 @@ import classes from "./Chat.css";
 import Contact from "../../components/Chat/Contact/Contact";
 import ChatBox from "./ChatBox/ChatBox";
 import * as actions from "../../store/actions/index";
+import Spinner from "../../components/UI/Spinner/Spinner";
 
 class Chat extends Component {
   state = {
@@ -16,8 +17,8 @@ class Chat extends Component {
     this.props.dispatchClearInterestedListing();
   }
 
-  onSelectChatHandler = (ChatUID) => {
-    this.props.dispatchFetchFullChat(ChatUID);
+  onSelectChatHandler = (ChatUID, profilePic) => {
+    this.props.dispatchFetchFullChat(ChatUID, profilePic);
     this.setState({
       initialLoad: false,
     });
@@ -27,17 +28,24 @@ class Chat extends Component {
     return (
       <div className={classes.Chat}>
         <div className={classes.ChatContacts}>
-          {this.props.chatContacts.map((contact) => {
-            return (
-              <Contact
-                key={contact.userName}
-                userName={contact.userName}
-                lastMessage={contact.lastMessage}
-                recipient={this.props.recipient}
-                onClick={() => this.onSelectChatHandler(contact.UID)}
-              />
-            );
-          })}
+          {this.props.fetchChatContactsLoading ? (
+            <Spinner />
+          ) : this.props.isEmpty ? null : (
+            this.props.chatContacts.map((contact) => {
+              return (
+                <Contact
+                  key={contact.userName}
+                  profilePic={contact.profilePic}
+                  userName={contact.userName}
+                  lastMessage={contact.lastMessage}
+                  recipient={this.props.recipient}
+                  onClick={() =>
+                    this.onSelectChatHandler(contact.UID, contact.profilePic)
+                  }
+                />
+              );
+            })
+          )}
           <h4 style={{ color: "#444" }}>Chat Contacts</h4>
         </div>
         <div className={classes.ChatBox}>
@@ -56,6 +64,8 @@ class Chat extends Component {
               fullChatUID={this.props.fullChatUID}
               displayName={this.props.displayName}
               recipient={this.props.recipient}
+              recipientProfilePic={this.props.recipientProfilePic}
+              photoURL={this.props.photoURL}
             />
           )}
         </div>
@@ -66,11 +76,18 @@ class Chat extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    chatContacts: state.chat.chatContacts,
-    interestedListing: state.listing.interestedListing,
     displayName: state.auth.displayName,
+    photoURL: state.auth.photoURL,
+
+    interestedListing: state.listing.interestedListing,
+
+    chatContacts: state.chat.chatContacts,
+    fetchChatContactsLoading: state.chat.fetchChatContactsLoading,
+    isEmpty: state.chat.isEmpty,
 
     recipient: state.chat.recipient,
+    recipientProfilePic: state.chat.recipientProfilePic,
+
     fullChat: state.chat.fullChat,
     fullChatUID: state.chat.fullChatUID,
     fullChatLoading: state.chat.fullChatLoading,
@@ -79,8 +96,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    dispatchFetchFullChat: (chatUID) =>
-      dispatch(actions.fetchFullChat(chatUID)),
+    dispatchFetchFullChat: (chatUID, profilePic) =>
+      dispatch(actions.fetchFullChat(chatUID, profilePic)),
     dispatchClearInterestedListing: () =>
       dispatch(actions.emptyInterestedListing()),
     dispatchChatCleanUp: (chatContacts) =>

@@ -1,11 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-// import { Link } from "react-router-dom";
 
 import Listing from "./Listing/Listing";
 import classes from "./Listings.css";
-// import Modal from "../../components/UI/Modal/Modal";
-// import Button from "../../components/UI/Button/Button";
 
 class FilteredListings extends Component {
   state = {
@@ -43,6 +40,15 @@ class FilteredListings extends Component {
           (listing) => listing.displayName === this.props.displayName
         );
         break;
+      case "onRent":
+        filteredListings = this.props.listings.filter(
+          (listing) =>
+            listing.displayName === this.props.displayName &&
+            listing.lessee !== "none" &&
+            listing.status !== "sold" &&
+            listing.status !== "available"
+        );
+        break;
       case "textbook":
         filteredListings = this.props.listings.filter(
           (listing) => listing.postDetails.textbook === this.props.searchObject
@@ -69,19 +75,28 @@ class FilteredListings extends Component {
 
   render() {
     if (this.state.filteredListings.length < 1) {
-      return <h3>Oops..No available listings</h3>;
+      switch (this.state.filterType) {
+        case "displayName":
+          return <h3>Submit your listing and view it here...</h3>;
+        case "onRent":
+          return <h3>No rentals yet...</h3>;
+        default:
+          return <h3>Oops..No available listings</h3>;
+      }
     }
 
     let listings = this.state.filteredListings.map((listing) => {
       if (listing.postDetails.deliveryMethod === "mail") {
         return (
           <Listing
+            filterType={this.state.filterType}
             history={this.props.history}
             key={listing.unique}
             date={listing.date}
             identifier={listing.unique}
             userId={listing.displayName}
             status={listing.status}
+            lessee={listing.lessee}
             deliveryMethod={listing.postDetails.deliveryMethod}
             listingType={listing.postDetails.listingType}
             module={listing.postDetails.module}
@@ -95,12 +110,14 @@ class FilteredListings extends Component {
       }
       return (
         <Listing
+          filterType={this.state.filterType}
           history={this.props.history}
           key={listing.unique}
           date={listing.date}
           identifier={listing.unique}
           userId={listing.displayName}
           status={listing.status}
+          lessee={listing.lessee}
           deliveryMethod={listing.postDetails.deliveryMethod}
           listingType={listing.postDetails.listingType}
           location={listing.postDetails.location}

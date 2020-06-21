@@ -1,5 +1,6 @@
 import * as actionTypes from "./actionTypes";
-import { database } from "../../firebase/firebase";
+import { database, storage } from "../../firebase/firebase";
+import profileImage from "../../assets/Images/chats/profile";
 
 export const fetchChatContactsInit = () => {
   return {
@@ -13,19 +14,32 @@ export const fetchFullChatInit = () => {
   };
 };
 
-export const fetchChatContactsSuccess = (chatContacts, existingChatNames) => {
-  return {
-    type: actionTypes.FETCH_CHAT_CONTACTS_SUCCESS,
-    chatContacts: chatContacts,
-    existingChatNames: existingChatNames,
-  };
+export const fetchChatContactsSuccess = (
+  isEmpty,
+  chatContacts,
+  existingChatNames
+) => {
+  if (isEmpty) {
+    return {
+      type: actionTypes.FETCH_CHAT_CONTACTS_SUCCESS,
+      isEmpty: isEmpty,
+    };
+  } else {
+    return {
+      type: actionTypes.FETCH_CHAT_CONTACTS_SUCCESS,
+      isEmpty: isEmpty,
+      chatContacts: chatContacts,
+      existingChatNames: existingChatNames,
+    };
+  }
 };
 
 export const fetchFullChatInitSuccess = (
   fullChat,
   fullChatUID,
   recipient,
-  lastMessage
+  lastMessage,
+  profilePic
 ) => {
   return {
     type: actionTypes.FETCH_FULL_CHAT_INIT_SUCCESS,
@@ -33,6 +47,7 @@ export const fetchFullChatInitSuccess = (
     fullChatUID: fullChatUID,
     recipient: recipient,
     lastMessage: lastMessage,
+    profilePic: profilePic,
   };
 };
 
@@ -56,10 +71,21 @@ export const resetRecipient = () => {
 export const fetchChats = () => {
   return (dispatch, getState) => {
     dispatch(fetchChatContactsInit());
+
+    database
+      .ref()
+      .child("chats")
+      .once("value", (snapShot) => {
+        if (!snapShot.exists()) {
+          dispatch(fetchChatContactsSuccess(true, null, null));
+        }
+      });
+
     database
       .ref()
       .child("chats")
       .on("child_added", (snapShot) => {
+        dispatch(fetchChatContactsInit());
         if (
           snapShot.val().userA === getState().auth.displayName ||
           snapShot.val().userB === getState().auth.displayName
@@ -75,23 +101,47 @@ export const fetchChats = () => {
               snapShot.val().chatHistory.length - 1
             ].content;
           }
+
           if (userName === getState().auth.displayName) {
             userName = snapShot.val().userB;
           }
-          chatSummary = {
-            UID: snapShot.key,
-            userName: userName,
-            lastMessage: lastMessage,
-          };
-          existingChatNames.push(userName);
-          chatContacts.push(chatSummary);
-          dispatch(fetchChatContactsSuccess(chatContacts, existingChatNames));
+
+          getProfileImage(userName).then((profilePic) => {
+            chatSummary = {
+              UID: snapShot.key,
+              userName: userName,
+              lastMessage: lastMessage,
+              profilePic: profilePic,
+            };
+
+            existingChatNames.push(userName);
+            chatContacts.push(chatSummary);
+            chatContacts.reverse();
+            dispatch(
+              fetchChatContactsSuccess(false, chatContacts, existingChatNames)
+            );
+          });
         }
       });
   };
 };
 
-export const fetchFullChat = (chatUID) => {
+async function getProfileImage(userName) {
+  let profilePic;
+  await storage
+    .ref()
+    .child("userProfilePictures")
+    .child(userName)
+    .getDownloadURL()
+    .then(
+      (url) => (profilePic = url),
+      (error) => (profilePic = profileImage)
+    );
+
+  return profilePic;
+}
+
+export const fetchFullChat = (chatUID, profilePic) => {
   return (dispatch, getState) => {
     dispatch(fetchFullChatInit());
     database
@@ -115,7 +165,13 @@ export const fetchFullChat = (chatUID) => {
           }
 
           dispatch(
-            fetchFullChatInitSuccess(fullChat, chatUID, recipient, lastMessage)
+            fetchFullChatInitSuccess(
+              fullChat,
+              chatUID,
+              recipient,
+              lastMessage,
+              profilePic
+            )
           );
         }
       });

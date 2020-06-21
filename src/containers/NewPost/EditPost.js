@@ -418,6 +418,16 @@ class EditPost extends Component {
             >
               SUBMIT
             </Button>
+            <Button
+              onClick={() => {
+                this.props.dispatchExpandedListing(
+                  this.props.editListing.unique
+                );
+                this.props.history.goBack();
+              }}
+            >
+              Cancel
+            </Button>
           </React.Fragment>
         )}
       </div>
@@ -516,6 +526,8 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(actions.editPost(editedPost, node)),
     dispatchClearExpandedListing: () =>
       dispatch(actions.clearExpandedListing()),
+    dispatchExpandedListing: (identifier) =>
+      dispatch(actions.fetchExpandedListing(identifier)),
   };
 };
 

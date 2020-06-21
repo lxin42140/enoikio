@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-// import { connect } from "react-redux";
 import moment from "moment";
 
 import { database } from "../../../firebase/firebase";
@@ -85,6 +84,8 @@ class ChatBox extends Component {
                 date={message.date}
                 time={message.time}
                 currentUser={this.props.displayName}
+                photoURL={this.props.photoURL}
+                recipientProfilePic={this.props.recipientProfilePic}
               />
             ))
           )}

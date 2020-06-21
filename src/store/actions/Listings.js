@@ -140,7 +140,9 @@ export const fetchAllListings = () => {
           status: snapShot.val().status,
           comments: snapShot.val().comments,
           likedUsers: snapShot.val().likedUsers,
+          lessee: snapShot.val().lessee,
         };
+
         database
           .ref()
           .child("listings")
@@ -158,6 +160,9 @@ export const fetchAllListings = () => {
               dispatch(updateListing(updatedListing));
             } else if (snapShot.key === "comments") {
               updatedListing.comments = snapShot.val();
+              dispatch(updateListing(updatedListing));
+            } else if (snapShot.key === "lessee") {
+              updatedListing.lessee = snapShot.val();
               dispatch(updateListing(updatedListing));
             } else {
               updatedListing = {

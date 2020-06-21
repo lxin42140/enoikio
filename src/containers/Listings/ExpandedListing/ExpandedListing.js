@@ -97,7 +97,7 @@ class ExpandedListing extends Component {
   };
 
   render() {
-    if (this.props.expandedListingLoading) {
+    if (this.props.expandedListingLoading || !this.props.expandedListing) {
       return <Spinner />;
     }
 
@@ -187,16 +187,53 @@ class ExpandedListing extends Component {
             </li>
             <li>
               <b>Status: </b>
-              {this.props.expandedListing.status}
+              {this.props.expandedListing.status === "available" ? (
+                <span
+                  style={{
+                    color: "rgb(40, 197, 40)",
+                    fontSize: "18px",
+                    fontWeight: "bolder",
+                  }}
+                >
+                  {this.props.expandedListing.status}
+                </span>
+              ) : (
+                <span
+                  style={{
+                    color: "red",
+                    fontSize: "18px",
+                    fontWeight: "bolder",
+                  }}
+                >
+                  {this.props.expandedListing.status}
+                </span>
+              )}
             </li>
             {this.props.expandedListing.postDetails.listingType === "rent" ? (
               <li>
-                <b>Price: </b>${this.props.expandedListing.postDetails.price}
-                /month
+                <b>Price: </b>
+                <span
+                  style={{
+                    color: "#fd8673",
+                    fontSize: "20px",
+                    fontWeight: "bolder",
+                  }}
+                >
+                  ${this.props.expandedListing.postDetails.price} /month
+                </span>
               </li>
             ) : (
               <li>
-                <b>Price: </b>${this.props.expandedListing.postDetails.price}
+                <b>Price: </b>
+                <span
+                  style={{
+                    color: "#fd8673",
+                    fontSize: "20px",
+                    fontWeight: "bolder",
+                  }}
+                >
+                  ${this.props.expandedListing.postDetails.price}
+                </span>
               </li>
             )}
             <li>
@@ -216,7 +253,9 @@ class ExpandedListing extends Component {
                   <br />
                   <b>Description: </b>
                   <br />
-                  {this.props.expandedListing.postDetails.description}
+                  <p style={{ fontSize: "14px" }}>
+                    {this.props.expandedListing.postDetails.description}
+                  </p>
                 </li>
               </React.Fragment>
             ) : null}
@@ -232,7 +271,10 @@ class ExpandedListing extends Component {
           </ul>
           <div className={classes.Selection}>{selections}</div>
         </div>
-        <Link to="/">
+        <div
+          onClick={() => this.props.history.goBack()}
+          style={{ cursor: "pointer" }}
+        >
           <FontAwesomeIcon
             icon={faWindowClose}
             style={{
@@ -240,7 +282,7 @@ class ExpandedListing extends Component {
               paddingRight: "5px",
             }}
           />
-        </Link>
+        </div>
       </React.Fragment>
     );
 
