@@ -1,9 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-<<<<<<< HEAD
-=======
 import { Link } from "react-router-dom";
->>>>>>> ac6f599e596764bc357da814d0f0119f3e363f9f
 
 import Listing from "./Listing/Listing";
 import classes from "./Listings.css";
@@ -89,23 +86,6 @@ class FilteredListings extends Component {
       }
     }
 
-    let makeRequest = null;
-      if (this.props.filterType === "textbook" || this.props.filterType === "moduleCode") {
-        if (this.props.isAuthenticated) {
-          makeRequest = (
-            <Link to="/new-request">
-              <p>Make a request</p>
-            </Link>
-          );
-        } else {
-          makeRequest = (
-            <Link to="/auth">
-              <p>Make a request</p>
-            </Link>
-          );
-        }
-      }
-
     let listings = this.state.filteredListings.map((listing) => {
       if (listing.postDetails.deliveryMethod === "mail") {
         return (
@@ -152,7 +132,31 @@ class FilteredListings extends Component {
       );
     });
 
-    return <div className={classes.Listings}>{listings}  {makeRequest} </div>;
+    let makeRequest = null;
+    if (
+      this.props.filterType === "textbook" ||
+      this.props.filterType === "moduleCode"
+    ) {
+      if (this.props.isAuthenticated) {
+        makeRequest = (
+          <Link to="/new-request">
+            <p>Make a request</p>
+          </Link>
+        );
+      } else {
+        makeRequest = (
+          <Link to="/auth">
+            <p>Make a request</p>
+          </Link>
+        );
+      }
+    }
+
+    return (
+      <div className={classes.Listings}>
+        {listings} {makeRequest}
+      </div>
+    );
   }
 }
 
