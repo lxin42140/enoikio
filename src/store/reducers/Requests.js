@@ -7,6 +7,7 @@ const initialState = {
   loadingRequest: false,
   uploadingRequest: false,
   requestUploaded: false,
+  resolve: null,
 };
 
 const fetchRequestSuccess = (state, request) => {
@@ -57,6 +58,10 @@ const removedRequest = (state, key) => {
   });
 };
 
+const setResolveRequest = (state, request) => {
+  return updateObject(state, { resolve: request })
+}
+
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.FETCH_REQUEST_INIT:
@@ -72,6 +77,9 @@ const reducer = (state = initialState, action) => {
       return submitNewRequestSuccess(state, action);
     case actionTypes.SUBMIT_NEW_REQUEST_FAIL:
       return submitNewRequestFail(state, action.error);
+
+    case actionTypes.SET_RESOLVE_REQUEST:
+      return setResolveRequest(state, action.request);
 
     case actionTypes.CLEAR_REQUEST_DATA:
       return clearRequestData(state, action);

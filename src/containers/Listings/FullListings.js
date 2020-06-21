@@ -5,7 +5,6 @@ import Listing from "./Listing/Listing";
 import Request from "../Requests/Request/Request";
 import Spinner from "../../components/UI/Spinner/Spinner";
 import classes from "./Listings.css";
-// import Button from '../../components/UI/Button/Button';
 
 class FullListings extends Component {
 
@@ -112,6 +111,7 @@ class FullListings extends Component {
         return (
           <Request 
             key={request.key}
+            request={request}
             node={request.key}
             module={request.requestDetails.module}
             textbook={request.requestDetails.textbook}

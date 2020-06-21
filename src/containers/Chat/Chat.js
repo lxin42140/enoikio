@@ -76,6 +76,10 @@ class Chat extends Component {
 
 const mapStateToProps = (state) => {
   return {
+<<<<<<< Updated upstream
+=======
+    chatContacts: state.chat.chatContacts,
+>>>>>>> Stashed changes
     displayName: state.auth.displayName,
     photoURL: state.auth.photoURL,
 

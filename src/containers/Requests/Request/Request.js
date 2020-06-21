@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
+import { database } from '../../../firebase/firebase';
+import { Link } from 'react-router-dom';
+import Modal from '../../../components/UI/Modal/Modal';
+import * as actions from "../../../store/actions/index";
 
 import Button from "../../../components/UI/Button/Button";
 import classes from "./Request.css";
@@ -29,7 +32,7 @@ class Request extends Component {
   };
 
   onChatHandler = (chatDisplayName) => {
-    // this.props.dispatchSetInterestedListing(this.props.expandedListing);
+    this.props.dispatchResolveRequest(this.props.request);
     if (this.props.existingChatNames.indexOf(chatDisplayName) < 0) {
       const UID = this.props.displayName + chatDisplayName;
       const chatRef = database.ref().child("chats");
@@ -121,11 +124,11 @@ const mapStateToProps = (state) => {
   };
 };
 
-// const mapDispatchToProps = (dispatch) => {
-//   return {
-//     dispatchExpandedListing: (identifier) =>
-//       dispatch(actions.fetchExpandedListing(identifier)),
-//   };
-// };
+const mapDispatchToProps = (dispatch) => {
+  return {
+    dispatchResolveRequest: (request) =>
+      dispatch(actions.resolveRequest(request)),
+  };
+};
 
-export default connect(mapStateToProps)(Request);
+export default connect(mapStateToProps, mapDispatchToProps)(Request);
