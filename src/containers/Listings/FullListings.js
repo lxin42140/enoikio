@@ -7,27 +7,26 @@ import Spinner from "../../components/UI/Spinner/Spinner";
 import classes from "./Listings.css";
 
 class FullListings extends Component {
-
   state = {
     initialLoad: true,
     viewListing: true,
     viewRequest: false,
-  }
+  };
 
   showRequestHandler = () => {
-    this.setState({ 
+    this.setState({
       initialLoad: false,
       viewListing: false,
-      viewRequest: true, 
-    })
-  }
+      viewRequest: true,
+    });
+  };
 
   showListingHandler = () => {
     this.setState({
       viewListing: true,
       viewRequest: false,
-    })
-  }
+    });
+  };
 
   render() {
     if (this.props.loading) {
@@ -44,15 +43,16 @@ class FullListings extends Component {
                 color: "#dd5641",
                 borderBottom: "3px solid #dd5641",
                 outline: "none",
+                marginRight: "0",
               }}
             >
               Listings
             </button>
           ) : (
-              "Listings"
-            )}
+            "Listings"
+          )}
         </button>
-        <button onClick={this.showRequestHandler}>Offers</button>
+        <button onClick={this.showRequestHandler}>Requests</button>
       </div>
     );
 
@@ -105,28 +105,33 @@ class FullListings extends Component {
 
     let requests;
     if (this.props.allRequests.length < 1) {
-      requests = <h3>No requests at the moment</h3>
+      requests = <h3>No requests at the moment</h3>;
     } else {
       requests = this.props.allRequests.map((request) => {
         return (
-          <Request 
+          <Request
             key={request.key}
             request={request}
             node={request.key}
             module={request.requestDetails.module}
             textbook={request.requestDetails.textbook}
+            requestType={request.requestDetails.requestType}
             userId={request.displayName}
             date={request.date}
           />
         );
-      })
+      });
     }
 
     return (
       <div>
         <div>{toggleSwitch}</div>
-        <div className={classes.Listings}>{this.state.viewListing ? listings : null}</div>
-        <div className={classes.Listings}>{this.state.viewRequest ? requests : null}</div>
+        <div className={classes.Listings}>
+          {this.state.viewListing ? listings : null}
+        </div>
+        <div className={classes.Listings}>
+          {this.state.viewRequest ? requests : null}
+        </div>
       </div>
     );
   }

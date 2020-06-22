@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
 
 import classes from "./SearchBar.css";
 import * as actions from "../../../store/actions/index";
@@ -55,9 +54,7 @@ class SearchBar extends Component {
 
   onCancelSearchHandler = (event) => {
     this.props.onClick();
-    if (this.state.userInput !== "") {
-      this.props.history.goBack();
-    }
+    this.props.history.goBack();
   };
 
   onSearchHandler = (event) => {
@@ -66,6 +63,13 @@ class SearchBar extends Component {
         this.state.filterType,
         this.state.userInput.toLowerCase()
       );
+      this.props.history.push("/searchResults");
+    }
+  };
+
+  onEnterSearchHandler = (event) => {
+    if (event.keyCode === 13) {
+      this.onSearchHandler();
     }
   };
 
@@ -113,17 +117,16 @@ class SearchBar extends Component {
               className={classes.input}
               type="text"
               onChange={this.onChangeHandler}
+              onKeyDown={this.onEnterSearchHandler}
               value={this.state.userInput}
               placeholder={placeHolder}
             />
             <div>
-              <Link to="/searchResults" onClick={this.onSearchHandler}>
-                <FontAwesomeIcon
-                  icon={faSearch}
-                  className={classes.searchIcon}
-                  style={{ paddingRight: "10px" }}
-                />
-              </Link>
+              <FontAwesomeIcon
+                icon={faSearch}
+                className={classes.searchIcon}
+                style={{ paddingRight: "10px" }}
+              />
             </div>
           </div>
         </div>
@@ -144,7 +147,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(
-  null,
-  mapDispatchToProps
-)(SearchBar);
+export default connect(null, mapDispatchToProps)(SearchBar);

@@ -3,21 +3,29 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 
 import Listing from "./Listing/Listing";
+import * as classes from "./Listings.css";
 
 class FilteredListings extends Component {
   state = {
     filteredListings: [],
     filterType: "",
+    searchObject: "",
   };
 
   componentDidUpdate() {
-    if (this.props.filterType !== this.state.filterType) {
+    if (
+      this.props.filterType !== this.state.filterType ||
+      this.state.searchObject !== this.props.searchObject
+    ) {
       this.filter();
     }
   }
 
   componentDidMount() {
-    if (this.props.filterType !== this.state.filterType) {
+    if (
+      this.props.filterType !== this.state.filterType ||
+      this.state.searchObject !== this.props.searchObject
+    ) {
       this.filter();
     }
   }
@@ -70,6 +78,7 @@ class FilteredListings extends Component {
     this.setState({
       filteredListings: filteredListings,
       filterType: this.props.filterType,
+      searchObject: this.props.searchObject,
     });
   };
 
@@ -80,6 +89,22 @@ class FilteredListings extends Component {
           return <h3>Submit your listing and view it here...</h3>;
         case "onRent":
           return <h3>No rentals yet...</h3>;
+        case "moduleCode":
+        case "textbook":
+          return (
+            <div>
+              <h3>Oops, no available listings</h3>
+              {this.props.isAuthenticated ? (
+                <Link to="/new-request">
+                  <p>Make a request</p>
+                </Link>
+              ) : (
+                <Link to="/auth">
+                  <p>Make a request</p>
+                </Link>
+              )}
+            </div>
+          );
         default:
           break;
       }
@@ -133,47 +158,9 @@ class FilteredListings extends Component {
           />
         );
       });
-    } else {
-      listings = <h3>Oops, no available listings</h3>
     }
 
-    let makeRequest = null;
-    if (
-      (this.props.filterType === "textbook" ||
-      this.props.filterType === "moduleCode") && 
-      this.state.filteredListings.length < 1
-    ) {
-      if (this.props.isAuthenticated) {
-        makeRequest = (
-          <Link to="/new-request">
-            <p>Make a request</p>
-          </Link>
-        );
-      } else {
-        makeRequest = (
-          <Link to="/auth">
-            <p>Make a request</p>
-          </Link>
-        );
-      }
-    }
-
-    return (
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          boxSizing: "border-box",
-          justifyContent: "flex-start",
-          flexWrap: "wrap",
-          lineHeight: "21px",
-          textSizeAdjust: "100%",
-        }}
-      >
-        {listings}
-        {makeRequest}
-      </div>
-    );
+    return <div className={classes.Listings}>{listings}</div>;
   }
 }
 

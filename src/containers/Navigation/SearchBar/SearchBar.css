@@ -10,6 +10,8 @@
     background-color: #ffcdc5;
     width: 10%;
     height: 70%;
+    display: flex;
+    align-items: center;
 }
 
 .arrowDown {

@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { database } from '../../../firebase/firebase';
-import { Link } from 'react-router-dom';
-import Modal from '../../../components/UI/Modal/Modal';
+import { database } from "../../../firebase/firebase";
+import { Link } from "react-router-dom";
+import Modal from "../../../components/UI/Modal/Modal";
 import * as actions from "../../../store/actions/index";
 
 import Button from "../../../components/UI/Button/Button";
