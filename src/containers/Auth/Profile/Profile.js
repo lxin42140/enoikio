@@ -228,7 +228,7 @@ class Profile extends Component {
           <img
             className={classes.ProfileImage}
             src={
-              this.props.photoURL === "" || !this.props.photoURL ? profileImage : this.props.photoURL
+              this.props.photoURL === "" ? profileImage : this.props.photoURL
             }
             alt="profile"
             style={{ cursor: "pointer" }}

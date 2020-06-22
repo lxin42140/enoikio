@@ -126,6 +126,7 @@ class SearchBar extends Component {
                 icon={faSearch}
                 className={classes.searchIcon}
                 style={{ paddingRight: "10px" }}
+                onClick={this.onSearchHandler}
               />
             </div>
           </div>

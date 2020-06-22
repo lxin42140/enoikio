@@ -65,6 +65,10 @@ const authFail = (state, action) => {
 };
 
 const authSuccess = (state, action) => {
+  let photoURL = "";
+  if (action.photoURL) {
+    photoURL = action.photoURL;
+  }
   return updateObject(state, {
     updatingUserDetails: false,
     updatedUserDetails: false,
@@ -72,7 +76,7 @@ const authSuccess = (state, action) => {
     loading: false,
     user: action.user,
     displayName: action.displayName,
-    photoURL: action.photoURL,
+    photoURL: photoURL,
     email: action.email,
     uid: action.uid,
     dateJoined: action.dateJoined,
