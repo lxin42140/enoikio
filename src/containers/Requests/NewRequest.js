@@ -40,7 +40,25 @@ class NewRequest extends Component {
         },
         valid: false,
         touched: false,
-      }
+      },
+      requestType: {
+        elementType: "select",
+        elementConfig: {
+          options: [
+            {
+              value: "rent",
+              displayValue: "Rent (unable to edit once submitted)",
+            },
+            {
+              value: "buy",
+              displayValue: "Buy (unable to edit once submitted)",
+            },
+          ],
+        },
+        value: "rent",
+        validation: false,
+        valid: true,
+      },
     },
     formIsValid: false,
     showModal: false,
@@ -98,7 +116,6 @@ class NewRequest extends Component {
       unique: unique,
       date: date,
       time: time,
-      // likedUsers: ["none"],
       requestDetails: formData,
     };
     this.props.dispatchSubmitRequest(postDetails);
@@ -171,6 +188,10 @@ class NewRequest extends Component {
         </p>
         <p>
           <b>Textbook: </b>《{this.state.dataForm.textbook.value}》
+        </p>
+        <p>
+          <b>Request type: </b>
+          {this.state.dataForm.requestType.value}
         </p>
 
         <div style={{ display: "flex", justifyContent: "center" }}>

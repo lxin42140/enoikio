@@ -7,8 +7,6 @@ import * as actions from "../../../store/actions/index";
 
 import Button from "../../../components/UI/Button/Button";
 import classes from "./Request.css";
-import { database } from "../../../firebase/firebase";
-import Modal from "../../../components/UI/Modal/Modal";
 
 class Request extends Component {
   state = {
@@ -55,6 +53,10 @@ class Request extends Component {
         </div>
         <div>
           <ul className={classes.Description}>
+            <li>
+              <b>Request type: </b>
+              {this.props.requestType}
+            </li>
             <li>
               <b>Posted by: </b>
               {this.props.userId}

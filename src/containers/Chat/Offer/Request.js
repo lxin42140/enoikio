@@ -282,23 +282,55 @@ class Request extends Component {
       const interestedListing = Object.assign({}, this.state.interestedListing);
 
       let message;
-      if (this.dateValidation()) {
+      if (interestedListing.requestType === "rent") {
+        if (this.dateValidation()) {
+          message = {
+            content:
+              "Offer for《" +
+              interestedListing.textbook +
+              "》: $" +
+              this.state.priceOffer +
+              ". Rental duration: from " +
+              this.state.startRental +
+              " to " +
+              this.state.endRental,
+            type: "CONFIRM_OFFER",
+            interestedListing: interestedListing,
+            sender: this.props.displayName,
+            price: this.state.priceOffer,
+            startRental: this.state.startRental,
+            endRental: this.state.endRental,
+            date: moment().format("DD/MM/YYYY"),
+            time: moment().format("HH:mm:ss"),
+          };
+          const chatHistory = Object.assign([], this.props.fullChat);
+          chatHistory.push(message);
+          database
+            .ref()
+            .child("chats/" + this.props.fullChatUID)
+            .update({
+              chatHistory: chatHistory,
+            })
+            .then((res) => {
+              this.setState({
+                showConfirmRequestPopUp: false,
+                offerType: "CONFIRM_OFFER",
+              });
+            });
+        }
+      } else {
         message = {
           content:
             "Offer for《" +
-            interestedListing.textbook +
+            interestedListing.textBook +
             "》: $" +
-            this.state.priceOffer +
-            ". Rental duration: from " +
-            this.state.startRental +
-            " to " +
-            this.state.endRental,
-          type: "CONFIRM_OFFER",
+            this.state.priceOffer,
           interestedListing: interestedListing,
+          type: "CONFIRM_OFFER",
           sender: this.props.displayName,
-          price: this.state.priceOffer,
-          startRental: this.state.startRental,
-          endRental: this.state.endRental,
+          price: this.state.priceOffer ? this.state.priceOffer : null,
+          startRental: this.state.startRental ? this.state.startRental : null,
+          endRental: this.state.endRental ? this.state.endRental : null,
           date: moment().format("DD/MM/YYYY"),
           time: moment().format("HH:mm:ss"),
         };
@@ -313,7 +345,7 @@ class Request extends Component {
           .then((res) => {
             this.setState({
               showConfirmRequestPopUp: false,
-              offerType: "MADE_OFFER",
+              offerType: "CONFIRM_OFFER",
             });
           });
       }
@@ -328,9 +360,9 @@ class Request extends Component {
       type: "CANCELLED_OFFER",
       interestedListing: interestedListing,
       sender: this.props.displayName,
-      price: this.state.priceOffer,
-      startRental: this.state.startRental,
-      endRental: this.state.endRental,
+      price: this.state.priceOffer ? this.state.priceOffer : null,
+      startRental: this.state.startRental ? this.state.startRental : null,
+      endRental: this.state.endRental ? this.state.endRental : null,
       date: moment().format("DD/MM/YYYY"),
       time: moment().format("HH:mm:ss"),
     };
@@ -359,8 +391,8 @@ class Request extends Component {
       interestedListing: this.state.interestedListing,
       sender: this.props.displayName,
       price: this.state.priceOffer,
-      startRental: this.state.startRental,
-      endRental: this.state.endRental,
+      startRental: this.state.startRental ? this.state.startRental : null,
+      endRental: this.state.endRental ? this.state.endRental : null,
       date: moment().format("DD/MM/YYYY"),
       time: moment().format("HH:mm:ss"),
     };
@@ -473,24 +505,28 @@ class Request extends Component {
             placeholder="Enter offer here..."
           />
           <br />
-          <input
-            type="text"
-            className={classes.OfferInput}
-            onChange={this.startRentalOnChange}
-            value={this.state.startRental}
-            placeholder="From DD/MM/YYYY"
-          />
-          <br />
-          <input
-            type="text"
-            className={classes.OfferInput}
-            onChange={this.endRentalOnChange}
-            value={this.state.endRental}
-            placeholder="To DD/MM/YYYY"
-          />
-          <br />
+          {this.state.interestedListing.listingType === "rent" ? (
+            <React.Fragment>
+              <input
+                type="text"
+                className={classes.OfferInput}
+                onChange={this.startRentalOnChange}
+                value={this.state.startRental}
+                placeholder="From DD/MM/YYYY"
+              />
+              <br />
+              <input
+                type="text"
+                className={classes.OfferInput}
+                onChange={this.endRentalOnChange}
+                value={this.state.endRental}
+                placeholder="To DD/MM/YYYY"
+              />
+              <br />
+            </React.Fragment>
+          ) : null}
 
-          <div
+          < div
             style={{
               display: "flex",
               alignItems: "center",
@@ -503,7 +539,7 @@ class Request extends Component {
             <Button onClick={this.closeConfirmRequestPopUpHandler}>Cancel</Button>
           </div>
         </div>
-      </Modal>
+      </Modal >
     );
 
     let buttons;
@@ -548,14 +584,14 @@ class Request extends Component {
           break;
         case "CONFIRM_OFFER":
           buttons = (
-          <React.Fragment>
-            <Button btnType="Important" onClick={this.onAcceptOffer}>
-              Accept offer
+            <React.Fragment>
+              <Button btnType="Important" onClick={this.onAcceptOffer}>
+                Accept offer
             </Button>
-            <Button btnType="Important" onClick={this.onRejectOffer}>
-              Reject offer
+              <Button btnType="Important" onClick={this.onRejectOffer}>
+                Reject offer
             </Button>
-          </React.Fragment>
+            </React.Fragment>
           );
           break;
         case "ACCEPTED_OFFER":

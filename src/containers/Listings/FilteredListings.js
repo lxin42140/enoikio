@@ -82,12 +82,36 @@ class FilteredListings extends Component {
         case "onRent":
           return <h3>No rentals yet...</h3>;
         default:
-          return <h3>Oops..No available listings</h3>;
+          break;
       }
     }
 
-    let listings = this.state.filteredListings.map((listing) => {
-      if (listing.postDetails.deliveryMethod === "mail") {
+    let listings;
+
+    if (this.state.filteredListings.length > 0) {
+      listings = this.state.filteredListings.map((listing) => {
+        if (listing.postDetails.deliveryMethod === "mail") {
+          return (
+            <Listing
+              filterType={this.state.filterType}
+              history={this.props.history}
+              key={listing.unique}
+              date={listing.date}
+              identifier={listing.unique}
+              userId={listing.displayName}
+              status={listing.status}
+              lessee={listing.lessee}
+              deliveryMethod={listing.postDetails.deliveryMethod}
+              listingType={listing.postDetails.listingType}
+              module={listing.postDetails.module}
+              price={listing.postDetails.price}
+              textbook={listing.postDetails.textbook}
+              numImages={listing.numberOfImages}
+              node={listing.key}
+              likedUsers={listing.likedUsers}
+            />
+          );
+        }
         return (
           <Listing
             filterType={this.state.filterType}
@@ -100,6 +124,7 @@ class FilteredListings extends Component {
             lessee={listing.lessee}
             deliveryMethod={listing.postDetails.deliveryMethod}
             listingType={listing.postDetails.listingType}
+            location={listing.postDetails.location}
             module={listing.postDetails.module}
             price={listing.postDetails.price}
             textbook={listing.postDetails.textbook}
@@ -108,34 +133,16 @@ class FilteredListings extends Component {
             likedUsers={listing.likedUsers}
           />
         );
-      }
-      return (
-        <Listing
-          filterType={this.state.filterType}
-          history={this.props.history}
-          key={listing.unique}
-          date={listing.date}
-          identifier={listing.unique}
-          userId={listing.displayName}
-          status={listing.status}
-          lessee={listing.lessee}
-          deliveryMethod={listing.postDetails.deliveryMethod}
-          listingType={listing.postDetails.listingType}
-          location={listing.postDetails.location}
-          module={listing.postDetails.module}
-          price={listing.postDetails.price}
-          textbook={listing.postDetails.textbook}
-          numImages={listing.numberOfImages}
-          node={listing.key}
-          likedUsers={listing.likedUsers}
-        />
-      );
-    });
+      });
+    } else {
+      listings = <h3>Oops, no available listings</h3>
+    }
 
     let makeRequest = null;
     if (
-      this.props.filterType === "textbook" ||
-      this.props.filterType === "moduleCode"
+      (this.props.filterType === "textbook" ||
+      this.props.filterType === "moduleCode") && 
+      this.state.filteredListings.length < 1
     ) {
       if (this.props.isAuthenticated) {
         makeRequest = (
@@ -164,8 +171,8 @@ class FilteredListings extends Component {
           textSizeAdjust: "100%",
         }}
       >
-        {makeRequest}
         {listings}
+        {makeRequest}
       </div>
     );
   }
