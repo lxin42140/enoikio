@@ -54,6 +54,10 @@ class Request extends Component {
         <div>
           <ul className={classes.Description}>
             <li>
+              <b>Request type: </b>
+              {this.props.requestType}
+            </li>
+            <li>
               <b>Posted by: </b>
               {this.props.userId}
             </li>
