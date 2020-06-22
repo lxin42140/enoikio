@@ -5,8 +5,8 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
 import classes from "./NavigationItems.css";
 import NavigationItem from "./NavigationItem/NavigationItem";
-import SearchBar from "../../../containers/Navigation/SearchBar/SearchBar";
-import * as actions from "../../../store/actions/index";
+import SearchBar from "./SearchBar/SearchBar";
+import * as actions from "../../store/actions/index";
 
 class NavigationItems extends Component {
   state = {

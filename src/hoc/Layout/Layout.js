@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 
 import classes from "./Layout.css";
-import NavigationItems from "../../containers/Navigation/NavigationItems/NavigationItems";
+import NavigationItems from "../../containers/Navigation/NavigationItems";
 
 class Layout extends Component {
   render() {

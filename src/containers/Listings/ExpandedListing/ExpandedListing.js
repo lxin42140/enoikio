@@ -6,7 +6,7 @@ import classes from "./ExpandedListing.css";
 import * as actions from "../../../store/actions/index";
 import Button from "../../../components/UI/Button/Button";
 import Spinner from "../../../components/UI/Spinner/Spinner";
-import Comments from "../../Comments/Comments";
+import Comments from "../../Listings/ExpandedListing/Comments/Comments";
 import Modal from "../../../components/UI/Modal/Modal";
 import { database, storage } from "../../../firebase/firebase";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
