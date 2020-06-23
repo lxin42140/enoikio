@@ -10,6 +10,10 @@
     justify-content: flex-end;
 }
 
+.SearchIcon:hover {
+    cursor: pointer;
+}
+
 @media (min-width: 500px) {
     .NavigationItems {
         flex-flow: row;

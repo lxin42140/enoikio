@@ -41,6 +41,7 @@ class NavigationItems extends Component {
             Profile
           </NavigationItem>
           <NavigationItem link="/logout">Log out</NavigationItem>
+          <div className={classes.SearchIcon}>
           <FontAwesomeIcon
             icon={faSearch}
             style={{
@@ -51,6 +52,7 @@ class NavigationItems extends Component {
             }}
             onClick={this.toggleSearchBarHandler}
           />
+          </div>
         </React.Fragment>
       );
     } else {
@@ -60,6 +62,7 @@ class NavigationItems extends Component {
             Home
           </NavigationItem>
           <NavigationItem link="/auth">Log In</NavigationItem>
+          <div className={classes.SearchIcon}>
           <FontAwesomeIcon
             icon={faSearch}
             style={{
@@ -70,6 +73,7 @@ class NavigationItems extends Component {
             }}
             onClick={this.toggleSearchBarHandler}
           />
+          </div>
         </React.Fragment>
       );
     }
