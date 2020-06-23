@@ -263,7 +263,13 @@ class NewPost extends Component {
       ...this.state.dataForm,
     };
     for (let element in refreshedForm) {
-      refreshedForm[element].value = "";
+      if (element === "listingType") {
+        refreshedForm[element].value = "rent";
+      } else if (element === "deliveryMethod") {
+        refreshedForm[element].value = "meet-up";
+      } else {
+        refreshedForm[element].value = "";
+      }
       if (refreshedForm[element].touched) {
         refreshedForm[element].touched = false;
       }
