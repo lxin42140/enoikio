@@ -32,6 +32,7 @@ const fetchChatContactsSuccess = (state, action) => {
     });
   } else {
     return updateObject(state, {
+      isEmpty: false,
       chatContacts: action.chatContacts,
       existingChatNames: action.existingChatNames,
       fetchChatContactsLoading: false,

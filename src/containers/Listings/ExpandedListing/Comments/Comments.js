@@ -92,6 +92,7 @@ class Comments extends Component {
     }
 
     const commentHistory = Object.assign([], this.state.comments);
+    commentHistory.reverse();
     commentHistory.push(message);
 
     database

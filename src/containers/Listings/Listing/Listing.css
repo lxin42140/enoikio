@@ -2,7 +2,7 @@
 .Normal {
     display: flex;
     flex-direction: column;
-    height: 520px;
+    height: 505px;
     width: 250px;
     overflow-y: auto;
     border: 1px solid #ccc;
@@ -19,7 +19,7 @@
 .Shortened {
     display: flex;
     flex-direction: column;
-    height: 475px;
+    height: 460px;
     width: 250px;
     overflow-y: auto;
     border: 1px solid #ccc;
@@ -86,7 +86,7 @@
     stroke-width: 40px;
     cursor: pointer;
     transition-duration: 0.2s;
-    padding-left: 3px;
+    padding-left: 13px;
 }
 
 .Enabled {

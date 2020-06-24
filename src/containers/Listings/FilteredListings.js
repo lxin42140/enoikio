@@ -89,6 +89,8 @@ class FilteredListings extends Component {
           return <h3>Submit your listing and view it here...</h3>;
         case "onRent":
           return <h3>No rentals yet...</h3>;
+        case "favorites":
+          return <h3>Like a post and view it here...</h3>;
         case "moduleCode":
         case "textbook":
           return (

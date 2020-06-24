@@ -13,7 +13,7 @@ export const authSuccess = (user) => {
   creationArr.shift();
   const dateJoined =
     creationArr[0] + " " + creationArr[1] + " " + creationArr[2];
-
+ 
   const lastSignArr = user.metadata.lastSignInTime.split(",")[1].split(" ");
   lastSignArr.shift();
   const lastSignIn =

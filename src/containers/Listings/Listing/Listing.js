@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import moment from "moment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { connect } from "react-redux";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
@@ -6,6 +7,7 @@ import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import classes from "./Listing.css";
 import * as actions from "../../../store/actions/index";
 import { storage, database } from "../../../firebase/firebase";
+import Button from "../../../components/UI/Button/Button";
 
 class Listing extends Component {
   state = {
@@ -19,9 +21,7 @@ class Listing extends Component {
   componentDidMount() {
     this.retrieveImage();
 
-    let currLikedUsers = this.props.listings.filter(
-      (listing) => listing.key === this.props.node
-    )[0].likedUsers;
+    let currLikedUsers = this.props.likedUsers;
 
     if (!currLikedUsers) {
       currLikedUsers = [];
@@ -120,172 +120,79 @@ class Listing extends Component {
     }
   };
 
+  onChangeRentalHandler = (event, offerType) => {
+    const chatKey = this.props.chatContacts.filter(
+      (contact) => contact.userName === this.props.lessee
+    )[0].UID;
+
+    const listing = {
+      unique: this.props.identifier,
+      key: this.props.node,
+      displayName: this.props.userId,
+      offerType: offerType,
+      listingType: this.props.listingType,
+      textbook: this.props.textbook,
+      price: this.props.price,
+      sender: this.props.displayName,
+    };
+
+    storage
+      .ref("/listingPictures/" + this.props.identifier)
+      .child("0")
+      .child("0")
+      .getDownloadURL()
+      .then((url) => {
+        listing.url = url;
+        let message = {
+          content:
+            offerType === "COMPLETED_OFFER"
+              ? "Rental for《" + this.props.textbook + "》completed"
+              : "Offer for《" + this.props.textbook + "》rejected",
+          type: offerType,
+          interestedListing: listing,
+          sender: listing.sender,
+          price: listing.price,
+          startRental: "",
+          endRental: "",
+          date: moment().format("DD/MM/YYYY"),
+          time: moment().format("HH:mm:ss"),
+        };
+
+        database
+          .ref()
+          .child("chats/" + chatKey)
+          .once("value", (snapShot) => {
+            snapShot.forEach((data) => {
+              if (data.key === "chatHistory") {
+                const chatHistory = Object.assign([], data.val());
+                chatHistory.push(message);
+                database
+                  .ref()
+                  .child("chats/" + chatKey)
+                  .update({
+                    chatHistory: chatHistory,
+                  })
+                  .then((res) => {
+                    this.props.history.push({
+                      pathname: "/chats",
+                      search: "?" + this.props.userId,
+                    });
+                  });
+              }
+            });
+          });
+      });
+
+    database
+      .ref()
+      .child("listings/" + this.props.node)
+      .update({
+        lessee: "none",
+        status: "available",
+      });
+  };
+
   render() {
-    let listing;
-
-    if (this.props.filterType && this.props.filterType === "onRent") {
-      listing = (
-        <React.Fragment>
-          <div className={classes.Textbook}>
-            <p style={{ textAlign: "center" }}>
-              {this.props.module}:《{this.props.textbook}》
-            </p>
-          </div>
-          <div style={{ textAlign: "center", height: "150px" }}>
-            <img
-              src={this.state.image}
-              alt={
-                this.state.error ? "Unable to load image" : "Loading image..."
-              }
-              style={{
-                flex: "none",
-                objectFit: "cover",
-                width: "150px",
-                height: "150px",
-                borderRadius: "4px",
-              }}
-            />
-          </div>
-          <div>
-            <ul className={classes.Description}>
-              <li>
-                <b>Rental duration:</b>
-                {this.props.status.split("from")[1]}
-              </li>
-              <li>
-                <b>Lessee: </b> {this.props.lessee}
-              </li>
-            </ul>
-          </div>
-        </React.Fragment>
-      );
-    } else if (
-      this.props.filterType &&
-      this.props.filterType === "displayName"
-    ) {
-      listing = (
-        <React.Fragment>
-          <div className={classes.Textbook}>
-            <p style={{ textAlign: "center" }}>
-              {this.props.module}:《{this.props.textbook}》
-            </p>
-          </div>
-          <div style={{ textAlign: "center", height: "200px" }}>
-            <img
-              src={this.state.image}
-              alt={
-                this.state.error ? "Unable to load image" : "Loading image..."
-              }
-              style={{
-                flex: "none",
-                objectFit: "cover",
-                width: "200px",
-                height: "200px",
-              }}
-            />
-          </div>
-          <div>
-            <ul className={classes.Description}>
-              <li>
-                <b>Type: </b>
-                {this.props.listingType}
-              </li>
-              <li>
-                <p style={{ margin: "0px" }}>
-                  <b>Status: </b>
-                  {this.props.status}
-                </p>
-              </li>
-              {this.props.listingType === "rent" ? (
-                <li>
-                  <b>Price: </b>${this.props.price} /month
-                </li>
-              ) : (
-                <li>
-                  <b>Price: </b>${this.props.price}
-                </li>
-              )}
-              <li>
-                <b>Delivery method: </b>
-                {this.props.deliveryMethod}
-              </li>
-              {this.props.deliveryMethod === "mail" ? null : (
-                <li>
-                  <b>Location: </b>
-                  {this.props.location}
-                </li>
-              )}
-              <li>
-                <b>Posted on: </b>
-                {this.props.date}
-              </li>
-            </ul>
-          </div>
-        </React.Fragment>
-      );
-    } else {
-      listing = (
-        <React.Fragment>
-          <div className={classes.Textbook}>
-            <p style={{ textAlign: "center" }}>
-              {this.props.module}:《{this.props.textbook}》
-            </p>
-          </div>
-          <div style={{ textAlign: "center", height: "200px" }}>
-            <img
-              src={this.state.image}
-              alt={
-                this.state.error ? "Unable to load image" : "Loading image..."
-              }
-              className={classes.Image}
-            />
-          </div>
-          <div>
-            <ul className={classes.Description}>
-              <li>
-                <b>Type: </b>
-                {this.props.listingType}
-              </li>
-              <li>
-                <p style={{ margin: "0px" }}>
-                  <b>Status: </b>
-                  {this.props.status}
-                </p>
-              </li>
-              {this.props.listingType === "rent" ? (
-                <li>
-                  <b>Price: </b>${this.props.price} /month
-                </li>
-              ) : (
-                <li>
-                  <b>Price: </b>${this.props.price}
-                </li>
-              )}
-              <li>
-                <b>Delivery method: </b>
-                {this.props.deliveryMethod}
-              </li>
-              {this.props.deliveryMethod === "mail" ? null : (
-                <li>
-                  <b>Location: </b>
-                  {this.props.location}
-                </li>
-              )}
-              <br />
-              <li>
-                <b>Posted by: </b>
-                {this.props.userId}
-              </li>
-              <li>
-                <b>Posted on: </b>
-                {this.props.date}
-              </li>
-            </ul>
-          </div>
-        </React.Fragment>
-      );
-    }
-
     //styling for heart icon
     const HeartStyle = [classes.Icon];
     this.state.liked
@@ -307,36 +214,233 @@ class Listing extends Component {
       }
     }
 
-    return (
-      <div className={ListingStyle}>
-        <div
-          onClick={this.expandListingHandler}
-          style={{ cursor: "pointer", marginBottom: "-30px" }}
+    const heartIcon = (
+      <div style={{ display: "flex", alignItems: "center", marginTop: "auto" }}>
+        <FontAwesomeIcon
+          icon={faHeart}
+          className={HeartStyle.join(" ")}
+          onClick={this.toggleLikePostHandler}
+        />
+        <p
+          style={{
+            paddingLeft: "5px",
+            color: "#ccc",
+            fontSize: "small",
+            margin: "0",
+          }}
         >
-          {listing}
-          <br />
-        </div>
-        <div
-          style={{ display: "flex", alignItems: "center", marginTop: "auto" }}
-        >
-          <FontAwesomeIcon
-            icon={faHeart}
-            className={HeartStyle.join(" ")}
-            onClick={this.toggleLikePostHandler}
-          />
-          <p
-            style={{
-              paddingLeft: "5px",
-              color: "#ccc",
-              fontSize: "small",
-              margin: "0",
-            }}
-          >
-            {this.state.likedUsers.length - 1}
-          </p>
-        </div>
+          {this.state.likedUsers.length - 1}
+        </p>
       </div>
     );
+
+    let listing;
+
+    if (this.props.filterType && this.props.filterType === "onRent") {
+      listing = (
+        <React.Fragment>
+          <div
+            onClick={this.expandListingHandler}
+            style={{ cursor: "pointer", marginBottom: "-30px" }}
+          >
+            <div className={classes.Textbook}>
+              <p style={{ textAlign: "center" }}>
+                {this.props.module}:《{this.props.textbook}》
+              </p>
+            </div>
+            <div style={{ textAlign: "center", height: "150px" }}>
+              <img
+                src={this.state.image}
+                alt={
+                  this.state.error ? "Unable to load image" : "Loading image..."
+                }
+                style={{
+                  flex: "none",
+                  objectFit: "cover",
+                  width: "150px",
+                  height: "150px",
+                  borderRadius: "4px",
+                }}
+              />
+            </div>
+            <div>
+              <ul className={classes.Description}>
+                <li>
+                  <b>Rental duration:</b>
+                  {this.props.status.split("from")[1]}
+                </li>
+                <li>
+                  <b>Lessee: </b> {this.props.lessee}
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              marginTop: "auto",
+              justifyContent: "center",
+            }}
+          >
+            <Button
+              btnType="Important"
+              onClick={(event) =>
+                this.onChangeRentalHandler(event, "COMPLETED_OFFER")
+              }
+            >
+              Completed
+            </Button>
+            <Button
+              onClick={(event) =>
+                this.onChangeRentalHandler(event, "REJECTED_OFFER")
+              }
+            >
+              Reject
+            </Button>
+          </div>
+        </React.Fragment>
+      );
+    } else if (
+      this.props.filterType &&
+      this.props.filterType === "displayName"
+    ) {
+      listing = (
+        <React.Fragment>
+          <div
+            onClick={this.expandListingHandler}
+            style={{ cursor: "pointer", marginBottom: "-30px" }}
+          >
+            <div className={classes.Textbook}>
+              <p style={{ textAlign: "center" }}>
+                {this.props.module}:《{this.props.textbook}》
+              </p>
+            </div>
+            <div style={{ textAlign: "center", height: "200px" }}>
+              <img
+                src={this.state.image}
+                alt={
+                  this.state.error ? "Unable to load image" : "Loading image..."
+                }
+                style={{
+                  flex: "none",
+                  objectFit: "cover",
+                  width: "200px",
+                  height: "200px",
+                }}
+              />
+            </div>
+            <div>
+              <ul className={classes.Description}>
+                <li>
+                  <b>Type: </b>
+                  {this.props.listingType}
+                </li>
+                <li>
+                  <p style={{ margin: "0px" }}>
+                    <b>Status: </b>
+                    {this.props.status}
+                  </p>
+                </li>
+                {this.props.listingType === "rent" ? (
+                  <li>
+                    <b>Price: </b>${this.props.price} /month
+                  </li>
+                ) : (
+                  <li>
+                    <b>Price: </b>${this.props.price}
+                  </li>
+                )}
+                <li>
+                  <b>Delivery method: </b>
+                  {this.props.deliveryMethod}
+                </li>
+                {this.props.deliveryMethod === "mail" ? null : (
+                  <li>
+                    <b>Location: </b>
+                    {this.props.location}
+                  </li>
+                )}
+                <li>
+                  <b>Posted on: </b>
+                  {this.props.date}
+                </li>
+              </ul>
+            </div>
+          </div>
+          {heartIcon}
+        </React.Fragment>
+      );
+    } else {
+      listing = (
+        <React.Fragment>
+          <div
+            onClick={this.expandListingHandler}
+            style={{ cursor: "pointer", marginBottom: "-30px" }}
+          >
+            <div className={classes.Textbook}>
+              <p style={{ textAlign: "center" }}>
+                {this.props.module}:《{this.props.textbook}》
+              </p>
+            </div>
+            <div style={{ textAlign: "center", height: "200px" }}>
+              <img
+                src={this.state.image}
+                alt={
+                  this.state.error ? "Unable to load image" : "Loading image..."
+                }
+                className={classes.Image}
+              />
+            </div>
+            <div>
+              <ul className={classes.Description}>
+                <li>
+                  <b>Type: </b>
+                  {this.props.listingType}
+                </li>
+                <li>
+                  <p style={{ margin: "0px" }}>
+                    <b>Status: </b>
+                    {this.props.status}
+                  </p>
+                </li>
+                {this.props.listingType === "rent" ? (
+                  <li>
+                    <b>Price: </b>${this.props.price} /month
+                  </li>
+                ) : (
+                  <li>
+                    <b>Price: </b>${this.props.price}
+                  </li>
+                )}
+                <li>
+                  <b>Delivery method: </b>
+                  {this.props.deliveryMethod}
+                </li>
+                {this.props.deliveryMethod === "mail" ? null : (
+                  <li>
+                    <b>Location: </b>
+                    {this.props.location}
+                  </li>
+                )}
+                <br />
+                <li>
+                  <b>Posted by: </b>
+                  {this.props.userId}
+                </li>
+                <li>
+                  <b>Posted on: </b>
+                  {this.props.date}
+                </li>
+              </ul>
+            </div>
+          </div>
+          {heartIcon}
+        </React.Fragment>
+      );
+    }
+
+    return <div className={ListingStyle}>{listing}</div>;
   }
 }
 
@@ -345,6 +449,7 @@ const mapStateToProps = (state) => {
     isAuthenticated: state.auth.user !== null,
     displayName: state.auth.displayName,
     listings: state.listing.listings,
+    chatContacts: state.chat.chatContacts,
   };
 };
 

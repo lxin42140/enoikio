@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import moment from "moment";
+// import { connect } from "react-redux";
 
 import { database } from "../../../firebase/firebase";
 import classes from "./ChatBox.css";
@@ -7,8 +8,7 @@ import Button from "../../../components/UI/Button/Button";
 import Spinner from "../../../components/UI/Spinner/Spinner";
 import ChatMessage from "../../../components/Chat/ChatMessage/ChatMessage";
 import Offer from "../Offer/Offer";
-import Request from "../Offer/Request";
-import { connect } from 'react-redux';
+// import Request from "../Offer/Request";
 
 class ChatBox extends Component {
   state = {
@@ -69,15 +69,10 @@ class ChatBox extends Component {
         <div className={classes.ChatBoxHeader}>
           <h4>{this.props.recipient}</h4>
         </div>
-        {this.props.interestedListing ? 
         <Offer
           fullChat={this.props.fullChat}
           fullChatUID={this.props.fullChatUID}
-        /> : 
-        <Request
-          fullChat={this.props.fullChat}
-          fullChatUID={this.props.fullChatUID}
-        />}
+        />
         <div className={classes.ChatBoxMessages}>
           {this.props.fullChatLoading ? (
             <Spinner />
@@ -124,11 +119,11 @@ class ChatBox extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    interestedListing: state.listing.interestedListing,
-    resolveRequest: state.request.resolve,
-  }
-}
+// const mapStateToProps = (state) => {
+//   return {
+//     interestedListing: state.listing.interestedListing,
+//     resolveRequest: state.request.resolve,
+//   };
+// };
 
-export default connect(mapStateToProps)(ChatBox);
+export default ChatBox;

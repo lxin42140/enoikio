@@ -19,6 +19,57 @@ class Offer extends Component {
     isListingOwner: false,
   };
 
+  componentDidMount() {
+    const offerMessages = this.props.fullChat.filter(
+      (message) => message.type !== "NORMAL"
+    );
+    let lastOffer = offerMessages[offerMessages.length - 1];
+
+    if (
+      this.props.interestedListing &&
+      (this.props.fullChat.length < 1 || offerMessages.length < 1)
+    ) {
+      // console.log("componentDidMount", "first");
+      this.setState({
+        isListingOwner:
+          this.props.interestedListing.displayName === this.props.displayName,
+        interestedListing: this.props.interestedListing,
+        fullChatUID: this.props.fullChatUID,
+        offerType: "FIRST_OFFER",
+      });
+    } else if (
+      this.props.interestedListing &&
+      lastOffer &&
+      lastOffer.interestedListing.key !== this.props.interestedListing.key
+    ) {
+      // console.log("componentDidMount", "second");
+
+      let offerType = "FIRST_OFFER";
+      if (this.props.interestedListing.offerType) {
+        offerType = this.props.interestedListing.offerType;
+      }
+      this.setState({
+        isListingOwner:
+          this.props.interestedListing.displayName === this.props.displayName,
+        interestedListing: this.props.interestedListing,
+        fullChatUID: this.props.fullChatUID,
+        offerType: offerType,
+      });
+    } else if (lastOffer) {
+      // console.log("componentDidMount", "third");
+
+      this.setState({
+        isListingOwner: this.isListingOwner(lastOffer),
+        interestedListing: lastOffer.interestedListing,
+        fullChatUID: this.props.fullChatUID,
+        priceOffer: lastOffer.price,
+        startRental: lastOffer.startRental,
+        endRental: lastOffer.endRental,
+        offerType: lastOffer.type,
+      });
+    }
+  }
+
   componentDidUpdate() {
     const offerMessages = this.props.fullChat.filter(
       (message) => message.type !== "NORMAL"
@@ -30,6 +81,8 @@ class Offer extends Component {
       lastOffer &&
       this.state.offerType !== lastOffer.type
     ) {
+      // console.log("componentDidUpdate", "first");
+
       this.setState({
         isListingOwner: this.isListingOwner(lastOffer),
         interestedListing: lastOffer.interestedListing,
@@ -43,6 +96,8 @@ class Offer extends Component {
       this.props.interestedListing &&
       (this.props.fullChat.length < 1 || offerMessages.length < 1)
     ) {
+      // console.log("componentDidUpdate", "second");
+
       this.setState({
         isListingOwner:
           this.props.interestedListing.displayName === this.props.displayName,
@@ -54,6 +109,8 @@ class Offer extends Component {
         endRental: "",
       });
     } else if (this.state.fullChatUID !== this.props.fullChatUID && lastOffer) {
+      // console.log("componentDidUpdate", "third");
+
       this.setState({
         isListingOwner: this.isListingOwner(lastOffer),
         interestedListing: lastOffer.interestedListing,
@@ -65,6 +122,8 @@ class Offer extends Component {
         offerType: lastOffer.type,
       });
     } else if (this.state.fullChatUID !== this.props.fullChatUID) {
+      // console.log("componentDidUpdate", "fourth");
+
       this.setState({
         priceOffer: "",
         startRental: "",
@@ -74,46 +133,6 @@ class Offer extends Component {
         fullChatUID: this.props.fullChatUID,
         showPopUp: false,
         isListingOwner: false,
-      });
-    }
-  }
-
-  componentDidMount() {
-    const offerMessages = this.props.fullChat.filter(
-      (message) => message.type !== "NORMAL"
-    );
-    let lastOffer = offerMessages[offerMessages.length - 1];
-    if (
-      this.props.interestedListing &&
-      (this.props.fullChat.length < 1 || offerMessages.length < 1)
-    ) {
-      this.setState({
-        isListingOwner:
-          this.props.interestedListing.displayName === this.props.displayName,
-        interestedListing: this.props.interestedListing,
-        fullChatUID: this.props.fullChatUID,
-        offerType: "FIRST_OFFER",
-      });
-    } else if (
-      this.props.interestedListing &&
-      lastOffer &&
-      lastOffer.interestedListing.key !== this.props.interestedListing.key
-    ) {
-      this.setState({
-        isListingOwner: this.isListingOwner(lastOffer),
-        interestedListing: this.props.interestedListing,
-        fullChatUID: this.props.fullChatUID,
-        offerType: "FIRST_OFFER",
-      });
-    } else if (lastOffer) {
-      this.setState({
-        isListingOwner: this.isListingOwner(lastOffer),
-        interestedListing: lastOffer.interestedListing,
-        fullChatUID: this.props.fullChatUID,
-        priceOffer: lastOffer.price,
-        startRental: lastOffer.startRental,
-        endRental: lastOffer.endRental,
-        offerType: lastOffer.type,
       });
     }
   }
@@ -251,7 +270,7 @@ class Offer extends Component {
           message = {
             content:
               "Offer for《" +
-              interestedListing.textBook +
+              interestedListing.textbook +
               "》: $" +
               this.state.priceOffer +
               ". Rental duration: from " +
@@ -286,7 +305,7 @@ class Offer extends Component {
         message = {
           content:
             "Offer for《" +
-            interestedListing.textBook +
+            interestedListing.textbook +
             "》: $" +
             this.state.priceOffer,
           interestedListing: interestedListing,
@@ -320,13 +339,13 @@ class Offer extends Component {
     const interestedListing = Object.assign({}, this.state.interestedListing);
 
     let message = {
-      content: "I'm interested in《" + interestedListing.textBook + "》",
+      content: "I'm interested in《" + interestedListing.textbook + "》",
       type: "INTERESTED_OFFER",
       interestedListing: interestedListing,
       sender: this.props.displayName,
-      price: this.state.priceOffer,
-      startRental: this.state.startRental,
-      endRental: this.state.endRental,
+      price: "",
+      startRental: "",
+      endRental: "",
       date: moment().format("DD/MM/YYYY"),
       time: moment().format("HH:mm:ss"),
     };
@@ -351,7 +370,7 @@ class Offer extends Component {
     const interestedListing = Object.assign({}, this.state.interestedListing);
 
     let message = {
-      content: "Offer for《" + interestedListing.textBook + "》cancelled",
+      content: "Offer for《" + interestedListing.textbook + "》cancelled",
       type: "CANCELLED_OFFER",
       interestedListing: interestedListing,
       sender: this.props.displayName,
@@ -381,7 +400,7 @@ class Offer extends Component {
   onAcceptOffer = () => {
     let message = {
       content:
-        "Offer for《" + this.state.interestedListing.textBook + "》accepted",
+        "Offer for《" + this.state.interestedListing.textbook + "》accepted",
       type: "ACCEPTED_OFFER",
       interestedListing: this.state.interestedListing,
       sender: this.props.displayName,
@@ -436,7 +455,7 @@ class Offer extends Component {
   onRejectOffer = () => {
     let message = {
       content:
-        "Offer for《" + this.state.interestedListing.textBook + "》rejected",
+        "Offer for《" + this.state.interestedListing.textbook + "》rejected",
       type: "REJECTED_OFFER",
       interestedListing: this.state.interestedListing,
       sender: this.props.displayName,
@@ -563,6 +582,9 @@ class Offer extends Component {
         case "REJECTED_OFFER":
           buttons = <p style={{ margin: "5px" }}>Rejected offer</p>;
           break;
+        case "COMPLETED_OFFER":
+          buttons = <p style={{ margin: "5px" }}>Rental completed</p>;
+          break;
         default:
           break;
       }
@@ -592,6 +614,16 @@ class Offer extends Component {
           buttons = (
             <React.Fragment>
               <p style={{ margin: "5px" }}>Offer rejected</p>
+              <Button btnType="Important" onClick={this.onShowPopUpHandler}>
+                Make another offer
+              </Button>
+            </React.Fragment>
+          );
+          break;
+        case "COMPLETED_OFFER":
+          buttons = (
+            <React.Fragment>
+              <p style={{ margin: "5px" }}>Rental completed</p>
               <Button btnType="Important" onClick={this.onShowPopUpHandler}>
                 Make another offer
               </Button>
@@ -634,7 +666,7 @@ class Offer extends Component {
           </div>
           <div className={classes.InterestedListingDetails}>
             <p style={{ margin: "0", marginBottom: "-15px" }}>
-              《{this.state.interestedListing.textBook}》
+              《{this.state.interestedListing.textbook}》
             </p>
             <p>
               <span>

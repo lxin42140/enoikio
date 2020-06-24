@@ -87,21 +87,28 @@ export const setInterestedListing = (listing) => {
       .child("0")
       .child("0")
       .getDownloadURL()
-      .then((url) => {
-        const result = {
-          listingType: listing.postDetails.listingType,
-          textBook: listing.postDetails.textbook,
-          price: listing.postDetails.price,
-          displayName: listing.displayName,
-          url: url,
-          key: listing.key,
-        };
-        dispatch(interestedListing(result));
-      });
-    // .catch((error) => {
-    //   const message = error.message.split("-").join(" ");
-    //   dispatch(fetchListingFail(message));
-    // });
+      .then(
+        (url) => {
+          let offerType = "";
+          if (listing.offerType) {
+            offerType = listing.offerType;
+          }
+          const result = {
+            listingType: listing.postDetails.listingType,
+            textbook: listing.postDetails.textbook,
+            price: listing.postDetails.price,
+            displayName: listing.displayName,
+            url: url,
+            key: listing.key,
+            offerType: offerType,
+          };
+          dispatch(interestedListing(result));
+        },
+        (error) => {
+          const message = error.message.split("-").join(" ");
+          dispatch(fetchListingFail(message));
+        }
+      );
   };
 };
 
