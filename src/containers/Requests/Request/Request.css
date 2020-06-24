@@ -1,3 +1,10 @@
+.Requests {
+  padding-left: 5%;
+  padding-right: 5%;
+  padding-top: 8px;
+  width: 90%;
+}
+
 /*TODO: fix listing size to relative*/
 .Request {
   display: flex;
@@ -14,17 +21,39 @@
   text-align: left
 }
 
-.Request:hover {
-  box-shadow: 0 0 5px 2px #d3d3d3;
-}
-
-.Request li {
-  padding: 3px;
+.Content {
+  display: flex;
+  flex-direction: row;
+  /* justify-content: space-between; */
+  align-items: center;
+  width: 100%;
+  padding-right: 20px;
+  padding-left: 5px;
 }
 
 .Textbook {
+  width: 55%;
+}
+
+.Textbook p {
+  font-size: 14px;
   color: black;
-  font-size: medium;
+}
+
+.Details {
+  width: 15%;
+}
+
+.Details p {
+  font-size: 12px;
+  color: grey;
+  flex-direction: row;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.Request:hover {
+  box-shadow: 0 0 5px 2px #d3d3d3;
 }
 
 /*TODO: fix image size to relative, affects the dimensions of each listing*/
@@ -34,12 +63,13 @@
   object-fit: cover;
 }
 
-.Description {
+/* .Content p {
   font-size: 12px;
   color: grey;
-  list-style: none;
-  padding-left: 0px;
-}
+  flex-direction: row;
+  margin-top: 5px;
+  margin-bottom: 5px;
+} */
 
 .Icon {
   stroke: grey;

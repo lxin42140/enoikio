@@ -8,9 +8,8 @@
 
 .filter {
     background-color: #ffcdc5;
-    width: 10%;
+    width: 100px;
     height: 70%;
-    display: flex;
     align-items: center;
 }
 
@@ -54,6 +53,7 @@
 .searchIcon:active,
 .searchIcon:hover {
     color: #fd8673;
+    cursor: pointer;
 }
 
 .input {
@@ -88,4 +88,8 @@
     font-size: 1.2rem;
     float: right;
     padding: 20px;
+}
+
+.closeIcon:hover {
+    cursor: pointer;
 }

@@ -104,12 +104,14 @@ class SearchBar extends Component {
     return (
       <React.Fragment>
         <div className={classes.Searchbar}>
-          <div className={classes.filter} onClick={this.filterDropdownHandler}>
-            <button className={classes.button}>Filter by</button>
-            <FontAwesomeIcon
-              icon={faChevronDown}
-              className={classes.arrowDown}
-            />
+          <div className={classes.filter}>
+            <div style={{height: "100%"}}onClick={this.filterDropdownHandler}>
+              <button className={classes.button}>Filter by</button>
+              <FontAwesomeIcon
+                icon={faChevronDown}
+                className={classes.arrowDown}
+              />
+            </div>
             <div className={classes.dropdownContent}>{dropDown}</div>
           </div>
           <div className={classes.searchBox}>

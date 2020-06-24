@@ -45,27 +45,29 @@ class Request extends Component {
 
   render() {
     let request = (
-      <div style={{ flexDirection: "column" }}>
+      <div className={classes.Content}>
         <div className={classes.Textbook}>
-          <p>
+          <p style={{ fontSize: "14px", color: "black" }}>
             {this.props.module}:《{this.props.textbook}》
           </p>
         </div>
-        <div>
-          <ul className={classes.Description}>
-            <li>
-              <b>Request type: </b>
-              {this.props.requestType}
-            </li>
-            <li>
-              <b>Posted by: </b>
-              {this.props.userId}
-            </li>
-            <li>
-              <b>Posted on: </b>
-              {this.props.date}
-            </li>
-          </ul>
+        <div className={classes.Details}>
+          <p>
+            <b>Request type: </b> <br />
+            {this.props.requestType}
+          </p>
+        </div>
+        <div className={classes.Details}>
+          <p>
+            <b>Posted by: </b> <br />
+            {this.props.userId}
+          </p>
+        </div>
+        <div className={classes.Details}>
+          <p>
+            <b>Posted on: </b> <br />
+            {this.props.date}
+          </p>
         </div>
       </div>
     );
@@ -92,28 +94,41 @@ class Request extends Component {
 
     const isOwner = this.props.displayName === this.props.userId;
 
+    let button;
+
+    if (!this.props.isAuthenticated) {
+      button = (
+        <Link to="/auth">
+          <Button>Chat</Button>
+        </Link>
+      );
+    } else {
+      if (isOwner) {
+        button = <Button onClick={this.askUserToDelete}>Delete</Button>
+      } else {
+        button = (
+          <Link
+            to={{
+              pathname: "/chats",
+            }}
+          >
+            <Button onClick={() => this.onChatHandler(this.props.userId)}>
+              Chat
+              </Button>
+          </Link>
+        );
+      }
+    }
+
     return (
-      <React.Fragment>
+      <div className={classes.Requests}>
         <div className={classes.Request}>
           {request}
-          {isOwner ? (
-            <Button onClick={this.askUserToDelete}>Delete</Button>
-          ) : (
-            <Link
-              to={{
-                pathname: "/chats",
-                search: "?" + this.props.displayName,
-              }}
-            >
-              <Button onClick={() => this.onChatHandler(this.props.userId)}>
-                Chat
-              </Button>
-            </Link>
-          )}
+          {button}
         </div>
         {this.state.askUserToDelete ? askForConfirmation : null}
         {this.state.confirmDelete ? confirmDeleteModal : null}
-      </React.Fragment>
+      </div>
     );
   }
 }
