@@ -7,6 +7,26 @@
     text-size-adjust: 100%;
 }
 
+.Selections {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    font-size: medium;
+    margin-bottom: 5px;
+    margin-top: 10px;
+}
+
+.Selections a {
+    padding: 0 10px;
+    color: grey;
+}
+
+.Selections a:hover {
+    cursor: pointer;
+    color: #dd5641;
+}
+
 .Navigation {
     margin-top: 50px;
     display: flex;

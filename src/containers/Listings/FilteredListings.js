@@ -94,18 +94,20 @@ class FilteredListings extends Component {
         case "moduleCode":
         case "textbook":
           return (
-            <div>
+            <React.Fragment>
               <h3>Oops, no available listings</h3>
-              {this.props.isAuthenticated ? (
-                <Link to="/new-request">
-                  <p>Make a request</p>
-                </Link>
-              ) : (
-                <Link to="/auth">
-                  <p>Make a request</p>
-                </Link>
-              )}
-            </div>
+              <div className={classes.Selections}>
+                {this.props.isAuthenticated ? (
+                  <Link to="/new-request">
+                    <a>Make a request</a>
+                  </Link>
+                ) : (
+                  <Link to="/auth">
+                    <a>Make a request</a>
+                  </Link>
+                )}
+              </div>
+            </React.Fragment>
           );
         default:
           break;

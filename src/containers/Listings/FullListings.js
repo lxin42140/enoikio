@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 
 import Listing from "./Listing/Listing";
 import Request from "../Requests/Request/Request";
@@ -105,22 +106,52 @@ class FullListings extends Component {
 
     let requests;
     if (this.props.allRequests.length < 1) {
-      requests = <h3>No requests at the moment</h3>;
+      requests = (
+        <React.Fragment>
+          <div className={classes.Selections}>
+            {this.props.isAuthenticated ? (
+              <Link to="/new-request">
+                <a>Make a request</a>
+              </Link>
+            ) : (
+              <Link to="/auth">
+                <a>Make a request</a>
+              </Link>
+            )}
+          </div>
+          <h3>No requests at the moment</h3>
+        </React.Fragment>
+      );
     } else {
-      requests = this.props.allRequests.map((request) => {
-        return (
-          <Request
-            key={request.key}
-            request={request}
-            node={request.key}
-            module={request.requestDetails.module}
-            textbook={request.requestDetails.textbook}
-            requestType={request.requestDetails.requestType}
-            userId={request.displayName}
-            date={request.date}
-          />
-        );
-      });
+      requests = (
+        <React.Fragment>
+          <div className={classes.Selections}>
+            {this.props.isAuthenticated ? (
+              <Link to="/new-request">
+                <a className={classes}>Make a request</a>
+              </Link>
+            ) : (
+              <Link to="/auth">
+                <a>Make a request</a>
+              </Link>
+            )}
+          </div>
+          {this.props.allRequests.map((request) => {
+            return (
+              <Request
+                key={request.key}
+                request={request}
+                node={request.key}
+                module={request.requestDetails.module}
+                textbook={request.requestDetails.textbook}
+                requestType={request.requestDetails.requestType}
+                userId={request.displayName}
+                date={request.date}
+              />
+            );
+          })}
+        </React.Fragment>
+      );
     }
 
     return (
