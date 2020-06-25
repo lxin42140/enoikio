@@ -211,7 +211,6 @@ class Comments extends Component {
           />
           <span style={{ paddingLeft: "15px" }}>
             <Button
-              btnType="Important"
               onClick={this.submitCommentHandler}
               disabled={
                 (this.state.isListingOwner && this.state.message === "") ||

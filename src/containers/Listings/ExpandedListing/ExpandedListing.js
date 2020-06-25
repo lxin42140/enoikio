@@ -154,7 +154,7 @@ class ExpandedListing extends Component {
       selections = (
         <React.Fragment>
           <Link to="/edit-post">
-            <Button btnType="Important">Edit</Button>
+            <Button>Edit</Button>
           </Link>
           <Button btnType="Important" onClick={this.askUserToDelete}>
             Delete
@@ -190,8 +190,8 @@ class ExpandedListing extends Component {
               {this.props.expandedListing.status === "available" ? (
                 <span
                   style={{
-                    color: "rgb(40, 197, 40)",
-                    fontSize: "18px",
+                    color: "black",
+                    fontSize: "16px",
                     fontWeight: "bolder",
                   }}
                 >
@@ -200,8 +200,8 @@ class ExpandedListing extends Component {
               ) : (
                 <span
                   style={{
-                    color: "red",
-                    fontSize: "18px",
+                    color: "black",
+                    fontSize: "16px",
                     fontWeight: "bolder",
                   }}
                 >
