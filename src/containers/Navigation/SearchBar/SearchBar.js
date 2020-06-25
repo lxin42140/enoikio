@@ -54,7 +54,9 @@ class SearchBar extends Component {
 
   onCancelSearchHandler = (event) => {
     this.props.onClick();
-    this.props.history.goBack();
+    if (this.state.userInput !== "") {
+      this.props.history.goBack();
+    }
   };
 
   onSearchHandler = (event) => {
