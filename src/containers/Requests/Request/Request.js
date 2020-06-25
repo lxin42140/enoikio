@@ -47,25 +47,25 @@ class Request extends Component {
     let request = (
       <div className={classes.Content}>
         <div className={classes.Textbook}>
-          <p style={{ fontSize: "14px", color: "black" }}>
+          <p>
             {this.props.module}:《{this.props.textbook}》
           </p>
         </div>
         <div className={classes.Details}>
           <p>
-            <b>Request type: </b> <br />
+            <b>Request type: </b>
             {this.props.requestType}
           </p>
         </div>
         <div className={classes.Details}>
           <p>
-            <b>Posted by: </b> <br />
+            <b>Posted by: </b>
             {this.props.userId}
           </p>
         </div>
         <div className={classes.Details}>
           <p>
-            <b>Posted on: </b> <br />
+            <b>Posted on: </b>
             {this.props.date}
           </p>
         </div>
@@ -114,7 +114,7 @@ class Request extends Component {
           >
             <Button onClick={() => this.onChatHandler(this.props.userId)}>
               Chat
-              </Button>
+            </Button>
           </Link>
         );
       }

@@ -158,7 +158,6 @@ class EditPost extends Component {
       this.setState({
         dataForm: dataForm,
         imageAsFile: imageName,
-        initialEdit: false,
       });
     }
   }
@@ -203,6 +202,7 @@ class EditPost extends Component {
     this.setState({
       dataForm: updatedDataForm,
       formIsValid: formIsValid,
+      initialEdit: false,
     });
   };
 
@@ -246,6 +246,9 @@ class EditPost extends Component {
       postDetails: formData,
       numberOfImages: this.state.imageAsFile.length,
     };
+
+    delete postDetails.key;
+    delete postDetails.imageURL;
 
     if (!postDetails.comments) {
       delete postDetails.comments;
@@ -296,6 +299,7 @@ class EditPost extends Component {
         imageAsFile: imageArray,
         numberOfImages: numImages,
         formIsValid: formIsValid,
+        initialEdit: false,
       });
     }
   };
@@ -312,6 +316,7 @@ class EditPost extends Component {
         this.setState({
           imageAsFile: imageArray,
           formIsValid: validForm,
+          initialEdit: false,
         });
         break;
       }
@@ -414,7 +419,7 @@ class EditPost extends Component {
             <Button
               btnType="Important"
               onClick={this.toggleModalHandler}
-              disabled={!this.state.formIsValid}
+              disabled={!this.state.formIsValid || this.state.initialEdit}
             >
               SUBMIT
             </Button>
