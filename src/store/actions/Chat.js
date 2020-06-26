@@ -70,11 +70,14 @@ export const resetRecipient = () => {
 
 export const fetchChats = () => {
   return (dispatch, getState) => {
+    const displayName = getState().auth.displayName;
     dispatch(fetchChatContactsInit());
 
     database
       .ref()
       .child("chats")
+      .orderByChild("userA")
+      .equalTo(displayName)
       .once("value", (snapShot) => {
         if (!snapShot.exists()) {
           dispatch(fetchChatContactsSuccess(true, null, null));
