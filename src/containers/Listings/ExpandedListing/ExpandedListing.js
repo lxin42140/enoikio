@@ -122,24 +122,24 @@ class ExpandedListing extends Component {
       this.props.expandedListing.imageURL.length === 1 ? (
         singleImage
       ) : (
-        <div className={classes.Images}>
-          <button
-            onClick={this.prevImageHandler}
-            disabled={this.state.imageIndex === 0}
-            className={classes.ImageButton}
-          >
-            <FontAwesomeIcon icon={faChevronLeft} />
-          </button>
-          {singleImage}
-          <button
-            onClick={this.nextImageHandler}
-            disabled={this.state.imageIndex === numImages - 1}
-            className={classes.ImageButton}
-          >
-            <FontAwesomeIcon icon={faChevronRight} />
-          </button>
-        </div>
-      );
+          <div className={classes.Images}>
+            <button
+              onClick={this.prevImageHandler}
+              disabled={this.state.imageIndex === 0}
+              className={classes.ImageButton}
+            >
+              <FontAwesomeIcon icon={faChevronLeft} />
+            </button>
+            {singleImage}
+            <button
+              onClick={this.nextImageHandler}
+              disabled={this.state.imageIndex === numImages - 1}
+              className={classes.ImageButton}
+            >
+              <FontAwesomeIcon icon={faChevronRight} />
+            </button>
+          </div>
+        );
 
     let selections = (
       <Link to="/auth">
@@ -156,7 +156,10 @@ class ExpandedListing extends Component {
           <Link to="/edit-post">
             <Button>Edit</Button>
           </Link>
-          <Button btnType="Important" onClick={this.askUserToDelete}>
+          <Button 
+            btnType="Important" 
+            onClick={this.askUserToDelete}
+            disabled={this.props.expandedListing.status !== "available"}>
             Delete
           </Button>
         </React.Fragment>
@@ -198,16 +201,16 @@ class ExpandedListing extends Component {
                   {this.props.expandedListing.status}
                 </span>
               ) : (
-                <span
-                  style={{
-                    color: "black",
-                    fontSize: "16px",
-                    fontWeight: "bolder",
-                  }}
-                >
-                  {this.props.expandedListing.status}
-                </span>
-              )}
+                  <span
+                    style={{
+                      color: "red",
+                      fontSize: "18px",
+                      fontWeight: "bolder",
+                    }}
+                  >
+                    {this.props.expandedListing.status}
+                  </span>
+                )}
             </li>
             {this.props.expandedListing.postDetails.listingType === "rent" ? (
               <li>
@@ -223,30 +226,30 @@ class ExpandedListing extends Component {
                 </span>
               </li>
             ) : (
-              <li>
-                <b>Price: </b>
-                <span
-                  style={{
-                    color: "#fd8673",
-                    fontSize: "20px",
-                    fontWeight: "bolder",
-                  }}
-                >
-                  ${this.props.expandedListing.postDetails.price}
-                </span>
-              </li>
-            )}
+                <li>
+                  <b>Price: </b>
+                  <span
+                    style={{
+                      color: "#fd8673",
+                      fontSize: "20px",
+                      fontWeight: "bolder",
+                    }}
+                  >
+                    ${this.props.expandedListing.postDetails.price}
+                  </span>
+                </li>
+              )}
             <li>
               <b>Delivery method: </b>
               {this.props.expandedListing.postDetails.deliveryMethod}
             </li>
             {this.props.expandedListing.postDetails.deliveryMethod ===
-            "mail" ? null : (
-              <li>
-                <b>Location: </b>
-                {this.props.expandedListing.postDetails.location}
-              </li>
-            )}
+              "mail" ? null : (
+                <li>
+                  <b>Location: </b>
+                  {this.props.expandedListing.postDetails.location}
+                </li>
+              )}
             {this.props.expandedListing.postDetails.description ? (
               <React.Fragment>
                 <li>
@@ -271,19 +274,22 @@ class ExpandedListing extends Component {
           </ul>
           <div className={classes.Selection}>{selections}</div>
         </div>
-        <div
-          onClick={() => this.props.history.goBack()}
-          style={{ cursor: "pointer" }}
-        >
-          <FontAwesomeIcon
-            icon={faWindowClose}
-            style={{
-              color: "#ff5138",
-              paddingRight: "5px",
-            }}
-          />
-        </div>
       </React.Fragment>
+    );
+
+    const goBack = (
+      <div
+        onClick={() => this.props.history.goBack()}
+        style={{ cursor: "pointer" }}
+      >
+        <FontAwesomeIcon
+          icon={faWindowClose}
+          style={{
+            color: "#ff5138",
+            paddingRight: "5px",
+          }}
+        />
+      </div>
     );
 
     const askForConfirmation = (
@@ -312,8 +318,11 @@ class ExpandedListing extends Component {
       <React.Fragment>
         <div className={classes.ExpandedListing}>
           <div className={classes.ExpandedListingContent}>
-            <div className={classes.ImageContent}>{image}</div>
-            <div className={classes.TextContent}>{listingInformation}</div>
+            <div className={classes.Content}>
+              <div className={classes.ImageContent}>{image}</div>
+              <div className={classes.TextContent}>{listingInformation}</div>
+            </div>
+            <div className={classes.Back}>{goBack}</div>
           </div>
           <Comments
             comments={this.props.expandedListing.comments}
