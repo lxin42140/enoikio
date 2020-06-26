@@ -6,16 +6,26 @@
 
 .ExpandedListingContent {
     height: 100%;
+    width: 100%;
     display: flex;
     flex-direction: row;
-    justify-content: flex-start;
     vertical-align: top;
     border-bottom: 2px solid #f0f1f1;
 }
 
+.Content {
+    width: 95%;
+    display: flex;
+    flex-direction: row;
+}
+
+.Back {
+    width: 5%;
+}
+
 .ImageContent {
     width: 50%;
-    margin: 10px;
+    margin: 5px;
 }
 
 .Images {
@@ -26,10 +36,12 @@
 
 /*TODO: fix image size to relative, affects the dimensions of each listing*/
 .Image {
-    height: 400px;
+    max-height: 400px;
     vertical-align: top;
     text-align: left;
+    max-width: 250px;
     width: 90%;
+    height: 90%;
 }
 
 .ImageButton {
@@ -77,4 +89,13 @@
     align-items: center;
     margin-top: auto;
     padding-bottom: 5px;
+}
+
+/* justify content does not work idk why   */
+@media (max-width: 550px) {
+    .Content {
+        flex-direction: column;
+        justify-content: center;
+    }
+
 }
