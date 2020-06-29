@@ -172,7 +172,7 @@ export const signUp = (email, password, displayName) => {
               displayName: displayName,
             });
             const actionCodeSettings = {
-              url: "http://localhost:3000/auth",
+              url: "https://enoikio-orbit2020.web.app/auth"
             };
             return user.user
               .sendEmailVerification(actionCodeSettings)
