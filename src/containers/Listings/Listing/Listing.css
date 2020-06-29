@@ -36,7 +36,7 @@
 .OnRent {
     display: flex;
     flex-direction: column;
-    height: 340px;
+    height: 350px;
     width: 200px;
     overflow-y: auto;
     border: 1px solid #ccc;
@@ -64,6 +64,13 @@
 .Textbook {
     color: black;
     font-size: medium;
+    text-align: center;
+}
+
+.TextBookLongTitle {
+    color: black;
+    font-size: small;
+    text-align: center;
 }
 
 /*TODO: fix image size to relative, affects the dimensions of each listing*/

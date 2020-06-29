@@ -1,13 +1,12 @@
-import React, { Component } from "react";
-import moment from "moment";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { connect } from "react-redux";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
-
-import classes from "./Listing.css";
-import * as actions from "../../../store/actions/index";
-import { storage, database } from "../../../firebase/firebase";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import moment from "moment";
+import React, { Component } from "react";
+import { connect } from "react-redux";
 import Button from "../../../components/UI/Button/Button";
+import { database, storage } from "../../../firebase/firebase";
+import * as actions from "../../../store/actions/index";
+import classes from "./Listing.css";
 
 class Listing extends Component {
   state = {
@@ -243,8 +242,14 @@ class Listing extends Component {
             onClick={this.expandListingHandler}
             style={{ cursor: "pointer", marginBottom: "-30px" }}
           >
-            <div className={classes.Textbook}>
-              <p style={{ textAlign: "center" }}>
+            <div
+              className={
+                this.props.textbook.split(" ").length > 4
+                  ? classes.TextBookLongTitle
+                  : classes.Textbook
+              }
+            >
+              <p>
                 {this.props.module}:《{this.props.textbook}》
               </p>
             </div>
@@ -311,8 +316,14 @@ class Listing extends Component {
             onClick={this.expandListingHandler}
             style={{ cursor: "pointer", marginBottom: "-30px" }}
           >
-            <div className={classes.Textbook}>
-              <p style={{ textAlign: "center" }}>
+            <div
+              className={
+                this.props.textbook.split(" ").length > 4
+                  ? classes.TextBookLongTitle
+                  : classes.Textbook
+              }
+            >
+              <p>
                 {this.props.module}:《{this.props.textbook}》
               </p>
             </div>
@@ -378,8 +389,14 @@ class Listing extends Component {
             onClick={this.expandListingHandler}
             style={{ cursor: "pointer", marginBottom: "-30px" }}
           >
-            <div className={classes.Textbook}>
-              <p style={{ textAlign: "center" }}>
+            <div
+              className={
+                this.props.textbook.split(" ").length > 4
+                  ? classes.TextBookLongTitle
+                  : classes.Textbook
+              }
+            >
+              <p>
                 {this.props.module}:《{this.props.textbook}》
               </p>
             </div>
@@ -423,8 +440,7 @@ class Listing extends Component {
                     {this.props.location}
                   </li>
                 )}
-                <br />
-                <li>
+                <li style={{ paddingTop: "5px" }}>
                   <b>Posted by: </b>
                   {this.props.userId}
                 </li>
