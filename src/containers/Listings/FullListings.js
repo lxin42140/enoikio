@@ -147,6 +147,7 @@ class FullListings extends Component {
                 requestType={request.requestDetails.requestType}
                 userId={request.displayName}
                 date={request.date}
+                priority={request.requestDetails.priority}
               />
             );
           })}
@@ -160,9 +161,7 @@ class FullListings extends Component {
         <div className={classes.Listings}>
           {this.state.viewListing ? listings : null}
         </div>
-        <div className={classes.Listings}>
           {this.state.viewRequest ? requests : null}
-        </div>
       </div>
     );
   }

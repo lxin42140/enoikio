@@ -44,6 +44,17 @@ class Request extends Component {
   };
 
   render() {
+    const defaultDetails = [classes.Details, classes.Default];
+
+    const priorityColour = [classes.Details];
+    if (this.props.priority === "urgent") {
+      priorityColour.push(classes.Enabled);
+    } else if (this.props.priority === "moderate") {
+      priorityColour.push(classes.Moderate);
+    } else {
+      priorityColour.push(classes.Low);
+    }
+
     let request = (
       <div className={classes.Content}>
         <div className={classes.Textbook}>
@@ -51,23 +62,25 @@ class Request extends Component {
             {this.props.module}:《{this.props.textbook}》
           </p>
         </div>
-        <div className={classes.Details}>
-          <p>
-            <b>Request type: </b>
-            {this.props.requestType}
-          </p>
+
+        <div className={classes.Info}>
+          <p className={classes.Header}>Request type: </p>
+          <p className={defaultDetails.join(" ")}>{this.props.requestType}</p>
         </div>
-        <div className={classes.Details}>
-          <p>
-            <b>Posted by: </b>
-            {this.props.userId}
-          </p>
+
+        <div className={classes.Info}>
+          <p className={classes.Header}>Priority level: </p>
+          <p className={priorityColour.join(" ")}>{this.props.priority}</p>
         </div>
-        <div className={classes.Details}>
-          <p>
-            <b>Posted on: </b>
-            {this.props.date}
-          </p>
+
+        <div className={classes.Info}>
+          <p className={classes.Header}>Posted by: </p>
+          <p className={defaultDetails.join(" ")}>{this.props.userId}</p>
+        </div>
+
+        <div className={classes.Info}>
+          <p className={classes.Header}>Posted on: </p>
+          <p className={defaultDetails.join(" ")}>{this.props.date}</p>
         </div>
       </div>
     );
