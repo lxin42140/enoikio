@@ -25,6 +25,22 @@
     border-right: 2px solid #f4f4f4;
 }
 
+@media (max-width: 525px) {
+    .ChatContacts {
+        width: 100%;
+    }
+
+    .ChatBox {
+        width: 100%;
+    }
+}
+
+@media (max-width: 375px) {
+    .Chat {
+        width: max-content;
+    }
+}
+
 /* .Search {
     background: #e3e9ed;
     height: 60px;

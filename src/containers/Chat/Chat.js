@@ -10,7 +10,25 @@ import Spinner from "../../components/UI/Spinner/Spinner";
 class Chat extends Component {
   state = {
     initialLoad: true,
+    smallScreen: false,
+    showMessages: false,
   };
+
+  componentDidMount() {
+    if (window.innerWidth < 525) {
+      this.setState({ smallScreen: true });
+    } else {
+      this.setState({ smallScreen: false })
+    }
+
+    window.addEventListener('resize', () => {
+      if (window.innerWidth < 525) {
+        this.setState({ smallScreen: true });
+      } else {
+        this.setState({ smallScreen: false })
+      }
+    })
+  }
 
   componentWillUnmount() {
     this.props.dispatchChatCleanUp(this.props.chatContacts);
@@ -21,33 +39,44 @@ class Chat extends Component {
     this.props.dispatchFetchFullChat(ChatUID, profilePic);
     this.setState({
       initialLoad: false,
+      showMessages: true,
     });
   };
 
+  onGoBackHandler = () => {
+    this.setState({ showMessages: false })
+  }
+
   render() {
-    return (
-      <div className={classes.Chat}>
-        <div className={classes.ChatContacts}>
-          {this.props.fetchChatContactsLoading ? (
-            <Spinner />
-          ) : this.props.isEmpty ? null : (
-            this.props.chatContacts.map((contact) => {
-              return (
-                <Contact
-                  key={contact.userName}
-                  profilePic={contact.profilePic}
-                  userName={contact.userName}
-                  lastMessage={contact.lastMessage}
-                  recipient={this.props.recipient}
-                  onClick={() =>
-                    this.onSelectChatHandler(contact.UID, contact.profilePic)
-                  }
-                />
-              );
-            })
-          )}
-          <h4 style={{ color: "#444" }}>Chat Contacts</h4>
-        </div>
+
+    const chatContacts = (
+      <div className={classes.ChatContacts}>
+        {this.props.fetchChatContactsLoading ? (
+          <Spinner />
+        ) : this.props.isEmpty ? null : (
+          this.props.chatContacts.map((contact) => {
+            return (
+              <Contact
+                key={contact.userName}
+                profilePic={contact.profilePic}
+                userName={contact.userName}
+                lastMessage={contact.lastMessage}
+                recipient={this.props.recipient}
+                onClick={() =>
+                  this.onSelectChatHandler(contact.UID, contact.profilePic)
+                }
+              />
+            );
+          })
+        )}
+        <h4 style={{ color: "#444" }}>Chat Contacts</h4>
+      </div>
+    );
+
+    let chatMessages;
+
+    if (!this.state.smallScreen) {
+      chatMessages = (
         <div className={classes.ChatBox}>
           {this.state.initialLoad && this.props.chatContacts.length < 1 ? (
             <h3 style={{ color: "#aab8c2" }}>
@@ -58,17 +87,45 @@ class Chat extends Component {
               Select a conversation to read from the list on the left.
             </h3>
           ) : (
-            <ChatBox
-              fullChatLoading={this.props.fullChatLoading}
-              fullChat={this.props.fullChat}
-              fullChatUID={this.props.fullChatUID}
-              displayName={this.props.displayName}
-              recipient={this.props.recipient}
-              recipientProfilePic={this.props.recipientProfilePic}
-              photoURL={this.props.photoURL}
-            />
-          )}
+                <ChatBox
+                  fullChatLoading={this.props.fullChatLoading}
+                  fullChat={this.props.fullChat}
+                  fullChatUID={this.props.fullChatUID}
+                  displayName={this.props.displayName}
+                  recipient={this.props.recipient}
+                  recipientProfilePic={this.props.recipientProfilePic}
+                  photoURL={this.props.photoURL}
+                />
+              )}
         </div>
+      );
+    } else {
+      chatMessages = (
+        <div className={classes.ChatBox}>
+          <ChatBox
+            fullChatLoading={this.props.fullChatLoading}
+            fullChat={this.props.fullChat}
+            fullChatUID={this.props.fullChatUID}
+            displayName={this.props.displayName}
+            recipient={this.props.recipient}
+            recipientProfilePic={this.props.recipientProfilePic}
+            photoURL={this.props.photoURL}
+            smallScreen
+            click={this.onGoBackHandler}
+          />
+        </div>
+      );
+    }
+
+    return this.state.smallScreen ? (
+      <div className={classes.Chat}>
+        {this.state.showMessages ? null : chatContacts}
+        {this.state.showMessages ? chatMessages : null}
+      </div>
+    ) : (
+      <div className={classes.Chat}>
+        {chatContacts}
+        {chatMessages}
       </div>
     );
   }

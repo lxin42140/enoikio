@@ -27,6 +27,8 @@
     width: 50%;
     margin: 5px;
     height: 100%;
+    display: flex;
+    align-items: center;
 }
 
 .Images {
@@ -36,14 +38,12 @@
     justify-content: center;
 }
 
-/*TODO: fix image size to relative, affects the dimensions of each listing*/
 .Image {
     text-align: center;
-    max-height: 400px;
     max-width: 250px;
     margin: auto;
     width: 90%;
-    height: 90%;
+    height: auto;
 }
 
 .ImageButton {
@@ -93,11 +93,21 @@
     padding-bottom: 5px;
 }
 
-/* justify content does not work idk why   */
-@media (max-width: 550px) {
+@media (max-width: 685px) {
     .Content {
+        display: flex;
         flex-direction: column;
+        align-items: center;
+    }
+
+    .Image {
+        width: 100%;
+        height: 100%;
+    }
+
+    .TextContent {
         justify-content: center;
+        width: 100%;
     }
 
 }
