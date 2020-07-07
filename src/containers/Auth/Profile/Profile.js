@@ -17,6 +17,7 @@ class Profile extends Component {
   state = {
     initialLoad: true,
     showFilteredListing: true,
+    showFilteredRequest: false,
     showComments: false,
 
     imageAsFile: "",
@@ -65,15 +66,27 @@ class Profile extends Component {
     this.props.setFilterTerm("displayName");
     this.setState({
       showFilteredListing: true,
+      showFilteredRequest: false,
       showComments: false,
       initialLoad: false,
     });
   };
 
+  onShowRequestHandler = () => {
+    this.props.setFilterTerm("displayName");
+    this.setState({
+      showFilteredListing: false,
+      showFilteredRequest: true,
+      showComments: false,
+      initialLoad: false,
+    })
+  }
+
   onShowOnRentHandler = () => {
     this.props.setFilterTerm("onRent");
     this.setState({
       showFilteredListing: true,
+      showFilteredRequest: false,
       showComments: false,
       initialLoad: false,
     });
@@ -82,6 +95,7 @@ class Profile extends Component {
   onShowReviewsHandler = () => {
     this.setState({
       showFilteredListing: false,
+      showFilteredRequest: false,
       showComments: true,
       initialLoad: false,
     });
@@ -305,6 +319,7 @@ class Profile extends Component {
               "Listings"
             )}
           </button>
+          <button onClick={this.onShowRequestHandler}>Request</button>
           <button onClick={this.onShowOnRentHandler}>On rent</button>
           <button onClick={this.onShowReviewsHandler}>Reviews</button>
         </div>
@@ -314,6 +329,8 @@ class Profile extends Component {
           <div className={classes.OtherInfo}>
             {this.state.showFilteredListing ? (
               <FilterListings history={this.props.history} />
+            ) : this.state.showFilteredRequest ? (
+              <FilterListings filterRequest />
             ) : this.state.comments.length < 1 ? (
               <h3>Oops..No reviews</h3>
             ) : (

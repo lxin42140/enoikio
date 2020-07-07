@@ -3,17 +3,26 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 
 import Listing from "./Listing/Listing";
+import Request from "../Requests/Request/Request";
 import * as classes from "./Listings.css";
 
 class FilteredListings extends Component {
   state = {
+    filteredRequests: [],
+    requestFilterType: "",
+
     filteredListings: [],
     filterType: "",
     searchObject: "",
   };
 
   componentDidUpdate() {
-    if (
+    // console.log(this.props.filterType);
+    // console.log('state ' + this.state.filterType)
+    if (this.props.filterRequest && 
+      this.state.requestFilterType !== this.props.filterType) {
+      this.filterRequests();
+    } else if (
       this.props.filterType !== this.state.filterType ||
       this.state.searchObject !== this.props.searchObject
     ) {
@@ -22,12 +31,28 @@ class FilteredListings extends Component {
   }
 
   componentDidMount() {
-    if (
+    if (this.props.filterRequest && (
+      this.props.filterType !== this.state.filterType ||
+      this.state.searchObject !== this.props.searchObject
+    )) {
+      this.filterRequests();
+    } else if (
       this.props.filterType !== this.state.filterType ||
       this.state.searchObject !== this.props.searchObject
     ) {
       this.filter();
     }
+  }
+
+  filterRequests = () => {
+    const filteredRequests = this.props.allRequests.filter(request => 
+      request.displayName === this.props.displayName
+    )
+    this.setState({
+      filteredRequests: filteredRequests,
+      requestFilterType: this.props.filterType,
+      searchObject: this.props.searchObject,
+    })
   }
 
   filter = () => {
@@ -83,6 +108,29 @@ class FilteredListings extends Component {
   };
 
   render() {
+    if (this.props.filterRequest) {
+      if (this.state.filteredRequests.length < 1) {
+        return <h3>Submit your request and view it here...</h3>;
+      } else {
+        const myRequests = this.state.filteredRequests.map(request => {
+          return (
+            <Request
+              key={request.key}
+              request={request}
+              node={request.key}
+              module={request.requestDetails.module}
+              textbook={request.requestDetails.textbook}
+              requestType={request.requestDetails.requestType}
+              userId={request.displayName}
+              date={request.date}
+              priority={request.requestDetails.priority}
+            />
+          );
+        })
+        return <div className={classes.Listings}>{myRequests}</div>;
+      }
+    }
+
     if (this.state.filteredListings.length < 1) {
       switch (this.state.filterType) {
         case "displayName":
@@ -102,10 +150,10 @@ class FilteredListings extends Component {
                     <a>Make a request</a>
                   </Link>
                 ) : (
-                  <Link to="/auth">
-                    <a>Make a request</a>
-                  </Link>
-                )}
+                    <Link to="/auth">
+                      <a>Make a request</a>
+                    </Link>
+                  )}
               </div>
             </React.Fragment>
           );
@@ -171,6 +219,7 @@ class FilteredListings extends Component {
 const mapStateToProps = (state) => {
   return {
     listings: state.listing.listings,
+    allRequests: state.request.requests,
     filterType: state.listing.filterType,
     searchObject: state.listing.searchObject,
     displayName: state.auth.displayName,
