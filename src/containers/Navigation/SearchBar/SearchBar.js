@@ -12,6 +12,7 @@ import {
   faWindowClose,
   faSearch,
   faChevronDown,
+  faUser,
 } from "@fortawesome/free-solid-svg-icons";
 
 class SearchBar extends Component {
@@ -30,6 +31,9 @@ class SearchBar extends Component {
         break;
       case "textbook":
         placeHolder = "textbook title";
+        break;
+      case "searchProfile":
+        placeHolder = "profile name";
         break;
       default:
         placeHolder = "location";
@@ -61,11 +65,18 @@ class SearchBar extends Component {
 
   onSearchHandler = (event) => {
     if (this.state.userInput !== "") {
-      this.props.setFilterTerm(
-        this.state.filterType,
-        this.state.userInput.toLowerCase()
-      );
-      this.props.history.push("/searchResults");
+      if (this.state.filterType === "searchProfile") {
+        this.props.setFilterProfile(
+          this.state.userInput.toLowerCase().split(" ").join("")
+        );
+        this.props.history.push("/searchProfile");
+      } else {
+        this.props.setFilterTermForListing(
+          this.state.filterType,
+          this.state.userInput.toLowerCase().split(" ").join("")
+        );
+        this.props.history.push("/searchResults");
+      }
     }
   };
 
@@ -79,9 +90,9 @@ class SearchBar extends Component {
     let dropDown = (
       <React.Fragment>
         <DropDown
-          icon={faLocationArrow}
-          onClick={() => this.changeFilterHandler("location")}
-          text={"location"}
+          icon={faUniversity}
+          onClick={() => this.changeFilterHandler("moduleCode")}
+          text={"module code"}
         />
         <DropDown
           icon={faBook}
@@ -89,9 +100,14 @@ class SearchBar extends Component {
           text={"book title"}
         />
         <DropDown
-          icon={faUniversity}
-          onClick={() => this.changeFilterHandler("moduleCode")}
-          text={"module code"}
+          icon={faUser}
+          onClick={() => this.changeFilterHandler("searchProfile")}
+          text={"profile name"}
+        />
+        <DropDown
+          icon={faLocationArrow}
+          onClick={() => this.changeFilterHandler("location")}
+          text={"location"}
         />
       </React.Fragment>
     );
@@ -107,7 +123,10 @@ class SearchBar extends Component {
       <React.Fragment>
         <div className={classes.Searchbar}>
           <div className={classes.filter}>
-            <div style={{height: "100%"}}onClick={this.filterDropdownHandler}>
+            <div
+              style={{ height: "100%" }}
+              onClick={this.filterDropdownHandler}
+            >
               <button className={classes.button}>Filter by</button>
               <FontAwesomeIcon
                 icon={faChevronDown}
@@ -147,8 +166,10 @@ class SearchBar extends Component {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setFilterTerm: (filterType, object) =>
+    setFilterTermForListing: (filterType, object) =>
       dispatch(actions.setFilterListings(filterType, object)),
+    setFilterProfile: (displayName) =>
+      dispatch(actions.setFilterProfile(displayName.toLowerCase())),
   };
 };
 

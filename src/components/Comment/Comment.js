@@ -12,11 +12,12 @@ const comment = (props) => {
   }
   return (
     <div className={classes.CommentMessage}>
-      <div>
+      <div style={{ cursor: "pointer" }}>
         <img
           src={props.profilePicture}
           alt="User profile"
           className={classes.ProfileImage}
+          onClick={props.onClick}
         />
       </div>
       <div className={classes.CommentContent}>

@@ -1,6 +1,7 @@
 import moment from "moment";
 import firebase, { auth, database } from "../../firebase/firebase";
 import * as actionTypes from "./actionTypes";
+import profileImage from "../../assets/Images/chats/profile";
 
 export const authStart = () => {
   return {
@@ -9,23 +10,10 @@ export const authStart = () => {
 };
 
 export const authSuccess = (user) => {
-  const creationArr = user.metadata.creationTime.split(",")[1].split(" ");
-  creationArr.shift();
-  const dateJoined =
-    creationArr[0] + " " + creationArr[1] + " " + creationArr[2];
-
-  const lastSignArr = user.metadata.lastSignInTime.split(",")[1].split(" ");
-  lastSignArr.shift();
-  const lastSignIn =
-    lastSignArr[0] +
-    " " +
-    lastSignArr[1] +
-    " " +
-    lastSignArr[2] +
-    " @ " +
-    moment(lastSignArr[3].split(":"), "HH:mm:ss")
-      .add(8, "hours")
-      .format("HH:mm");
+  const userDateTime = formatDateTime(
+    user.metadata.creationTime,
+    user.metadata.lastSignInTime
+  );
 
   return {
     type: actionTypes.AUTH_SUCCESS,
@@ -34,8 +22,8 @@ export const authSuccess = (user) => {
     photoURL: user.photoURL,
     uid: user.uid,
     email: user.email,
-    dateJoined: dateJoined,
-    lastSignIn: lastSignIn,
+    dateJoined: userDateTime[0],
+    lastSignIn: userDateTime[1],
   };
 };
 
@@ -92,6 +80,17 @@ export const resetUserUpdate = () => {
 
 export const updateUserDetails = (user, photoURL) => {
   return (dispatch) => {
+    database
+      .ref()
+      .child("users")
+      .orderByChild("displayName")
+      .equalTo(user.displayName)
+      .once("child_added", (snapShot) => {
+        database.ref().child("users").child(snapShot.key).update({
+          photoURL: photoURL,
+        });
+      });
+
     user
       .updateProfile({
         photoURL: photoURL,
@@ -100,7 +99,8 @@ export const updateUserDetails = (user, photoURL) => {
         dispatch(updatePhotosDetails(photoURL));
       })
       .catch((error) => {
-        const message = error.message.split("-").join(" ");
+        let message = error.message.split("-").join(" ");
+        message = "Oops, something went wrong. Please try again later!";
         dispatch(authFail(message));
       });
   };
@@ -137,6 +137,85 @@ export const passwordReset = (email) => {
   };
 };
 
+const formatDateTime = (dateCreated, dateSignedIn) => {
+  let formatted_dateCreated = null;
+  let formatted_dateSigned = null;
+
+  if (dateCreated) {
+    const creationArr = dateCreated.split(",")[1].split(" ");
+    creationArr.shift();
+    formatted_dateCreated =
+      creationArr[0] + " " + creationArr[1] + " " + creationArr[2];
+  }
+
+  if (dateSignedIn) {
+    const lastSignArr = dateSignedIn.split(",")[1].split(" ");
+    lastSignArr.shift();
+    formatted_dateSigned =
+      lastSignArr[0] +
+      " " +
+      lastSignArr[1] +
+      " " +
+      lastSignArr[2] +
+      " @ " +
+      moment(lastSignArr[3].split(":"), "HH:mm:ss")
+        .add(8, "hours")
+        .format("HH:mm");
+  }
+
+  return [formatted_dateCreated, formatted_dateSigned];
+};
+
+async function updateUserProfile(user) {
+  database
+    .ref()
+    .child("users")
+    .orderByChild("displayName")
+    .equalTo(user.displayName)
+    .once("value", (snapShot) => {
+      if (snapShot.exists()) {
+        const userDateTime = formatDateTime(null, user.metadata.lastSignInTime);
+        database
+          .ref()
+          .child("users")
+          .orderByChild("displayName")
+          .equalTo(user.displayName)
+          .once("child_added", (snapShot) => {
+            let photoURL = user.photoURL;
+            if (!photoURL || photoURL === "") {
+              photoURL = profileImage;
+            }
+            database.ref().child("users").child(snapShot.key).update({
+              photoURL: photoURL,
+              lastSignIn: userDateTime[1],
+            });
+          });
+      } else {
+        const userDateTime = formatDateTime(
+          user.metadata.creationTime,
+          user.metadata.lastSignInTime
+        );
+
+        let photoURL = user.photoURL;
+        if (!photoURL || photoURL === "") {
+          photoURL = profileImage;
+        }
+
+        const profileDetails = {
+          formattedDisplayName: user.displayName
+            .toLowerCase()
+            .split(" ")
+            .join(""),
+          displayName: user.displayName,
+          photoURL: photoURL,
+          dateJoined: userDateTime[0],
+          lastSignIn: userDateTime[1],
+        };
+
+        database.ref().child("users").push(profileDetails);
+      }
+    });
+}
 export const signIn = (email, password) => {
   return (dispatch) => {
     dispatch(authStart());
@@ -146,13 +225,15 @@ export const signIn = (email, password) => {
         return auth.signInWithEmailAndPassword(email, password).then((user) => {
           // if (user.user.emailVerified) {
           dispatch(authSuccess(user.user));
+          updateUserProfile(user.user);
           // } else {
           //   dispatch(authFail("Please verify email"));
           // }
         });
       })
       .catch((error) => {
-        const message = error.message.split("-").join(" ");
+        let message = error.message.split("-").join(" ");
+        message = "Oops, something went wrong. Please try again later!";
         dispatch(authFail(message));
       });
   };
@@ -172,7 +253,7 @@ export const signUp = (email, password, displayName) => {
               displayName: displayName,
             });
             const actionCodeSettings = {
-              url: "https://enoikio-orbit2020.web.app/auth"
+              url: "https://enoikio-orbit2020.web.app/auth",
             };
             return user.user
               .sendEmailVerification(actionCodeSettings)

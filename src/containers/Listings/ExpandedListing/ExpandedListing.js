@@ -1,7 +1,7 @@
 import {
   faChevronLeft,
   faChevronRight,
-  faWindowClose
+  faWindowClose,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { Component } from "react";
@@ -328,6 +328,7 @@ class ExpandedListing extends Component {
             comments={this.props.expandedListing.comments}
             identifier={this.props.expandedListing.key}
             userName={this.props.expandedListing.displayName}
+            history={this.props.history}
           />
         </div>
         {this.state.askUserToDelete ? askForConfirmation : null}

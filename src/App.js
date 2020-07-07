@@ -43,6 +43,10 @@ const asyncLogOut = asyncComponent(() => {
   return import("../src/containers/Auth/Logout/Logout");
 });
 
+const asyncGeneralProfile = asyncComponent(() => {
+  return import("./containers/Auth/Profile/GeneralProfile");
+});
+
 class App extends Component {
   componentDidMount() {
     this.props.dispatchAutoSignIn();
@@ -64,6 +68,7 @@ class App extends Component {
         <Route path="/searchResults" component={asyncFilteredListings} />
         <Route path="/expanded-listing" component={asyncExpandedListing} />
         <Route path="/auth" component={asyncAuth} />
+        <Route path="/searchProfile" component={asyncGeneralProfile} />
         <Redirect to="/" />
       </Switch>
     );
@@ -73,6 +78,7 @@ class App extends Component {
         <Switch>
           <Route path="/" exact component={Listings} />
           <Route path="/searchResults" component={asyncFilteredListings} />
+          <Route path="/searchProfile" component={asyncGeneralProfile} />
           <Route path="/new-post" component={asyncNewPost} />
           <Route path="/edit-post" component={asyncEditPost} />
           <Route path="/new-request" component={asyncNewRequest} />

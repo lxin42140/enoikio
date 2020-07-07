@@ -111,6 +111,7 @@ class Auth extends Component {
   }
 
   validateDisplayName = (event) => {
+    // display names have no spaces and are all in lower case
     const displayName = this.state.controls.displayName.value
       .toLowerCase()
       .split(" ")

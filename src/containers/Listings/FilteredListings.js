@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 
 import Listing from "./Listing/Listing";
 import * as classes from "./Listings.css";
-
 class FilteredListings extends Component {
   state = {
     filteredListings: [],
@@ -57,20 +56,35 @@ class FilteredListings extends Component {
             listing.status !== "available"
         );
         break;
+      case "searchProfile":
+        filteredListings = this.props.listings.filter(
+          (listing) => listing.formattedDisplayName === this.props.searchObject
+        );
+        break;
       case "textbook":
         filteredListings = this.props.listings.filter(
-          (listing) => listing.postDetails.textbook === this.props.searchObject
+          (listing) =>
+            listing.postDetails.textbook.toLowerCase().split(" ").join("") ===
+            this.props.searchObject
         );
         break;
       case "moduleCode":
         filteredListings = this.props.listings.filter(
-          (listing) => listing.postDetails.module === this.props.searchObject
+          (listing) =>
+            listing.postDetails.module.toLowerCase().split(" ").join("") ===
+            this.props.searchObject
         );
         break;
       case "location":
-        filteredListings = this.props.listings.filter(
-          (listing) => listing.postDetails.location === this.props.searchObject
-        );
+        filteredListings = this.props.listings.filter((listing) => {
+          if (listing.postDetails.location) {
+            return (
+              listing.postDetails.location.toLowerCase().split(" ").join("") ===
+              this.props.searchObject
+            );
+          }
+          return false;
+        });
         break;
       default:
         break;
@@ -85,6 +99,8 @@ class FilteredListings extends Component {
   render() {
     if (this.state.filteredListings.length < 1) {
       switch (this.state.filterType) {
+        case "location":
+          return <h3>Oops, nothing to see here!</h3>;
         case "displayName":
           return <h3>Submit your listing and view it here...</h3>;
         case "onRent":
@@ -171,8 +187,8 @@ class FilteredListings extends Component {
 const mapStateToProps = (state) => {
   return {
     listings: state.listing.listings,
-    filterType: state.listing.filterType,
-    searchObject: state.listing.searchObject,
+    filterType: state.search.filterType,
+    searchObject: state.search.searchObject,
     displayName: state.auth.displayName,
     isAuthenticated: state.auth.user !== null,
   };

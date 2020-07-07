@@ -2,7 +2,7 @@ export {
   fetchAllListings,
   fetchExpandedListing,
   clearExpandedListing,
-  setFilterListings,
+  // setFilterListings,
   setInterestedListing,
   emptyInterestedListing,
 } from "./Listings";
@@ -35,3 +35,8 @@ export {
 } from "./Auth";
 
 export { fetchChats, fetchFullChat, chatCleanUp } from "./Chat";
+
+export {
+  setFilterListings,
+  setFilterProfile,
+} from "./Search"

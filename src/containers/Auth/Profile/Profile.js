@@ -330,7 +330,6 @@ class Profile extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    /**------Auth--------- */
     user: state.auth.user,
     displayName: state.auth.displayName,
     photoURL: state.auth.photoURL,

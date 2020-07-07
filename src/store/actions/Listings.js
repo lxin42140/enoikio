@@ -34,13 +34,13 @@ export const setExpandedListingInit = () => {
   };
 };
 
-export const filterListings = (filterType, searchObject) => {
-  return {
-    type: actionTypes.FILTER_LISTINGS,
-    filterType: filterType,
-    searchObject: searchObject,
-  };
-};
+// export const filterListings = (filterType, searchObject) => {
+//   return {
+//     type: actionTypes.FILTER_LISTINGS,
+//     filterType: filterType,
+//     searchObject: searchObject,
+//   };
+// };
 
 export const interestedListing = (interestedListing) => {
   return {
@@ -49,11 +49,11 @@ export const interestedListing = (interestedListing) => {
   };
 };
 
-export const setFilterListings = (filterType, searchObject) => {
-  return (dispatch) => {
-    dispatch(filterListings(filterType, searchObject));
-  };
-};
+// export const setFilterListings = (filterType, searchObject) => {
+//   return (dispatch) => {
+//     dispatch(filterListings(filterType, searchObject));
+//   };
+// };
 
 export const updateListing = (updatedListing) => {
   return {
@@ -140,6 +140,7 @@ export const fetchAllListings = () => {
           key: key,
           unique: snapShot.val().unique,
           displayName: snapShot.val().displayName,
+          formattedDisplayName: snapShot.val().formattedDisplayName,
           date: snapShot.val().date,
           time: snapShot.val().time,
           postDetails: snapShot.val().postDetails,

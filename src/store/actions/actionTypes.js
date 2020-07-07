@@ -5,8 +5,11 @@ export const FETCH_LISTING_FAIL = "FETCH_LISTING_FAIL";
 export const UPDATE_LISTING = "UPDATE_LISTING";
 export const REMOVED_LISTING = "REMOVED_LISTING";
 
-/*--------------------fetch filtered listing-----------------*/
+/**-----------------------search--------------------------- */
 export const FILTER_LISTINGS = "FILTER_LISTINGS";
+export const FILTER_PROFILE = "FILTER_PROFILE";
+
+/*--------------------set expanded listing-----------------*/
 export const SET_EXPANDED_LISTING_INIT = "SET_EXPANDED_LISTING_INIT";
 export const SET_EXPANDED_LISTING = "SET_EXPANDED_LISTING";
 export const CLEAR_EXPANDED_LISTING = "CLEAR_EXPANDED_LISTING";

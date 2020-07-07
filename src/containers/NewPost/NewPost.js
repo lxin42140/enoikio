@@ -166,8 +166,11 @@ class NewPost extends Component {
     for (let key in this.state.dataForm) {
       switch (key) {
         case "module":
-        case "textbook":
           formData[key] = this.state.dataForm[key].value.toLowerCase();
+          break;
+        case "textbook":
+          let str = this.state.dataForm[key].value.toLowerCase();
+          formData[key] = str.charAt(0).toUpperCase() + str.slice(1);
           break;
         case "deliveryMethod":
           formData[key] = this.state.dataForm[key].value;
@@ -195,6 +198,7 @@ class NewPost extends Component {
     }
 
     const postDetails = {
+      formattedDisplayName: this.props.displayName.toLowerCase(),
       displayName: this.props.displayName,
       unique: unique,
       date: date,

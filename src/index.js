@@ -13,6 +13,7 @@ import NewPostReducer from "./store/reducers/newPost";
 import AuthReducer from "./store/reducers/Auth";
 import ChatReducer from "./store/reducers/Chat";
 import RequestReducer from './store/reducers/Requests';
+import SearchReducer from './store/reducers/Search'
 
 const rootReducer = combineReducers({
   listing: ListingReducer,
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
   auth: AuthReducer,
   chat: ChatReducer,
   request: RequestReducer,
+  search: SearchReducer
 });
 
 const composeEnhancers =
