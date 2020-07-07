@@ -78,8 +78,8 @@ class Profile extends Component {
       showFilteredRequest: true,
       showComments: false,
       initialLoad: false,
-    })
-  }
+    });
+  };
 
   onShowOnRentHandler = () => {
     this.props.setFilterTerm("onRent");

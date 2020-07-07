@@ -22,6 +22,18 @@ class Request extends Component {
     this.setState({ askUserToDelete: true });
   };
 
+  closePopup = () => {
+    this.setState({
+      askUserToDelete: false,
+      confirmDelete: false,
+    });
+  };
+
+  searchProfileHandler = (displayName) => {
+    this.props.setFilterProfile(displayName.toLowerCase().split(" ").join(""));
+    this.props.history.push("/searchProfile?profile=displayName");
+  };
+
   deleteRequest = () => {
     database.ref().child("requests").child(this.props.node).remove();
 
@@ -55,7 +67,15 @@ class Request extends Component {
     }
 
     let request = (
-      <div className={classes.Content}>
+      <div
+        className={classes.Content}
+        style={this.props.isProfile ? null : { cursor: "pointer" }}
+        onClick={() =>
+          this.props.isProfile
+            ? null
+            : this.searchProfileHandler(this.props.userId)
+        }
+      >
         <div className={classes.Textbook}>
           <p>
             {this.props.module}:《{this.props.textbook}》
@@ -97,10 +117,11 @@ class Request extends Component {
 
     const confirmDeleteModal = (
       <Modal show={this.state.confirmDelete}>
-        Listing deleted.
+        <p>Listing deleted</p>
         <Link to="/">
           <Button>Home</Button>
         </Link>
+        <Button onClick={this.closePopup}>Close</Button>
       </Modal>
     );
 
@@ -114,22 +135,20 @@ class Request extends Component {
           <Button>Chat</Button>
         </Link>
       );
+    } else if (isOwner) {
+      button = <Button onClick={this.askUserToDelete}>Delete</Button>;
     } else {
-      if (isOwner) {
-        button = <Button onClick={this.askUserToDelete}>Delete</Button>
-      } else {
-        button = (
-          <Link
-            to={{
-              pathname: "/chats",
-            }}
-          >
-            <Button onClick={() => this.onChatHandler(this.props.userId)}>
-              Chat
-            </Button>
-          </Link>
-        );
-      }
+      button = (
+        <Link
+          to={{
+            pathname: "/chats",
+          }}
+        >
+          <Button onClick={() => this.onChatHandler(this.props.userId)}>
+            Chat
+          </Button>
+        </Link>
+      );
     }
 
     return (
@@ -157,6 +176,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     dispatchResolveRequest: (request) =>
       dispatch(actions.resolveRequest(request)),
+    setFilterProfile: (displayName) =>
+      dispatch(actions.setFilterProfile(displayName)),
   };
 };
 

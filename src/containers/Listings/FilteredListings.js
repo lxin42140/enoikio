@@ -7,7 +7,7 @@ import Request from "../Requests/Request/Request";
 import * as classes from "./Listings.css";
 class FilteredListings extends Component {
   state = {
-    filteredRequests: [],
+    // filteredRequests: [],
     requestFilterType: "",
 
     filteredListings: [],
@@ -45,11 +45,11 @@ class FilteredListings extends Component {
   }
 
   filterRequests = () => {
-    const filteredRequests = this.props.allRequests.filter(
-      (request) => request.displayName === this.props.displayName
-    );
+    // const filteredRequests = this.props.allRequests.filter(
+    //   (request) => request.displayName === this.props.displayName
+    // );
     this.setState({
-      filteredRequests: filteredRequests,
+      // filteredRequests: this.props.allRequests,
       requestFilterType: this.props.filterType,
       searchObject: this.props.searchObject,
     });
@@ -124,12 +124,16 @@ class FilteredListings extends Component {
 
   render() {
     if (this.props.filterRequest) {
-      if (this.state.filteredRequests.length < 1) {
+      const filteredRequests = this.props.allRequests.filter(
+        (request) => request.displayName === this.props.displayName
+      );
+      if (filteredRequests.length < 1) {
         return <h3>Submit your request and view it here...</h3>;
       } else {
-        const myRequests = this.state.filteredRequests.map((request) => {
+        const myRequests = filteredRequests.map((request) => {
           return (
             <Request
+              isProfile={true}
               key={request.key}
               request={request}
               node={request.key}
@@ -142,14 +146,21 @@ class FilteredListings extends Component {
             />
           );
         });
-        return <div>{myRequests}</div>;
+        return <div className={classes.Listings}>{myRequests}</div>;
       }
     }
 
     if (this.state.filteredListings.length < 1) {
       switch (this.state.filterType) {
         case "location":
-          return <h3>Oops...Nothing to see here!</h3>;
+          return (
+            <React.Fragment>
+              <h3>Oops...Nothing to see here!</h3>
+              <div className={classes.Selections}>
+                <a onClick={() => this.props.history.goBack()}>Go back</a>
+              </div>
+            </React.Fragment>
+          );
         case "displayName":
           return <h3>Submit your listing and view it here...</h3>;
         case "searchProfile":
@@ -173,6 +184,9 @@ class FilteredListings extends Component {
                     <a>Make a request</a>
                   </Link>
                 )}
+              </div>
+              <div className={classes.Selections}>
+                <a onClick={() => this.props.history.goBack()}>Go back</a>
               </div>
             </React.Fragment>
           );

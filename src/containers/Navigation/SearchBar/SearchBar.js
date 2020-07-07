@@ -69,13 +69,15 @@ class SearchBar extends Component {
         this.props.setFilterProfile(
           this.state.userInput.toLowerCase().split(" ").join("")
         );
-        this.props.history.push("/searchProfile");
+        this.props.history.push("/searchProfile?profile=displayName");
       } else {
         this.props.setFilterTermForListing(
           this.state.filterType,
           this.state.userInput.toLowerCase().split(" ").join("")
         );
-        this.props.history.push("/searchResults");
+        this.props.history.push(
+          "/searchResults?search=" + this.state.userInput
+        );
       }
       this.props.onClick();
     }

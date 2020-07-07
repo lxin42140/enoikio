@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import ProfileComponent from "../../../components/GeneralProfile/GeneralProfile";
 import { database } from "../../../firebase/firebase";
 import Spinner from "../../../components/UI/Spinner/Spinner";
+import * as classes from "./Profile.css";
 class GeneralProfilePage extends Component {
   state = {
     initialLoad: true,
@@ -98,7 +99,14 @@ class GeneralProfilePage extends Component {
   };
   render() {
     if (this.state.error) {
-      return <h3>Oops...The user you are looking for doesn't seem to exist</h3>;
+      return (
+        <React.Fragment>
+          <h3>Oops...The user you are looking for doesn't seem to exist</h3>
+          <div className={classes.Selections}>
+            <a onClick={() => this.props.history.goBack()}>Go back</a>
+          </div>
+        </React.Fragment>
+      );
     }
 
     if (this.state.loading) {

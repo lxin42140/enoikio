@@ -141,6 +141,7 @@ export const fetchAllListings = () => {
           unique: snapShot.val().unique,
           displayName: snapShot.val().displayName,
           formattedDisplayName: snapShot.val().formattedDisplayName,
+          photoURL: snapShot.val().photoURL,
           date: snapShot.val().date,
           time: snapShot.val().time,
           postDetails: snapShot.val().postDetails,
@@ -168,6 +169,9 @@ export const fetchAllListings = () => {
               dispatch(updateListing(updatedListing));
             } else if (snapShot.key === "comments") {
               updatedListing.comments = snapShot.val();
+              dispatch(updateListing(updatedListing));
+            } else if (snapShot.key === "photoURL") {
+              updatedListing.photoURL = snapShot.val();
               dispatch(updateListing(updatedListing));
             } else if (snapShot.key === "lessee") {
               updatedListing.lessee = snapShot.val();

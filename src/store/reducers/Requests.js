@@ -46,11 +46,11 @@ const clearRequestData = (state, action) => {
   return updateObject(state, {
     uploadingRequest: false,
     requestUploaded: false,
-  })
-}
+  });
+};
 
 const removedRequest = (state, key) => {
-  const updatedRequests = Object.assign([], state.requests).filter(
+  const updatedRequests = state.requests.filter(
     (request) => request.key !== key
   );
   return updateObject(state, {
@@ -59,8 +59,8 @@ const removedRequest = (state, key) => {
 };
 
 const setResolveRequest = (state, request) => {
-  return updateObject(state, { resolve: request })
-}
+  return updateObject(state, { resolve: request });
+};
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
@@ -70,7 +70,7 @@ const reducer = (state = initialState, action) => {
       return fetchRequestSuccess(state, action.data);
     case actionTypes.FETCH_REQUEST_FAIL:
       return fetchRequestFail(state, action.error);
-    
+
     case actionTypes.SUBMIT_NEW_REQUEST_INIT:
       return submitNewRequestInit(state, action);
     case actionTypes.SUBMIT_NEW_REQUEST_SUCCESS:
@@ -88,7 +88,6 @@ const reducer = (state = initialState, action) => {
     //   return updateRequest(state, action.updatedRequest);
     case actionTypes.REMOVED_REQUEST:
       return removedRequest(state, action.key);
-
 
     default:
       return state;

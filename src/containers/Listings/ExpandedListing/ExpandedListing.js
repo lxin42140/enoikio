@@ -95,6 +95,10 @@ class ExpandedListing extends Component {
     this.setState({ confirmDelete: true, askUserToDelete: false });
   };
 
+  searchProfileHandler = (displayName) => {
+    this.props.setFilterProfile(displayName.toLowerCase().split(" ").join(""));
+    this.props.history.push("/searchProfile?profile=displayName");
+  };
   render() {
     if (this.props.expandedListingLoading || !this.props.expandedListing) {
       return <Spinner />;
@@ -141,9 +145,37 @@ class ExpandedListing extends Component {
       );
 
     let selections = (
-      <Link to="/auth">
-        <Button>Chat to make offer</Button>
-      </Link>
+      <React.Fragment>
+        <div
+          style={{ cursor: "pointer", display: "flex", alignItems: "center" }}
+          onClick={() =>
+            this.searchProfileHandler(this.props.expandedListing.displayName)
+          }
+        >
+          <img
+            src={this.props.expandedListing.photoURL}
+            alt="Profile"
+            style={{
+              border: "1px solid grey",
+              borderRadius: "50px",
+              width: "50px",
+              height: "50px",
+            }}
+          />
+          <p
+            style={{
+              paddingLeft: "10px",
+              paddingRight: "20px",
+              color: "grey",
+            }}
+          >
+            @{this.props.expandedListing.displayName}
+          </p>
+        </div>
+        <Link to="/auth">
+          <Button>Chat to make offer</Button>
+        </Link>
+      </React.Fragment>
     );
 
     if (
@@ -152,7 +184,33 @@ class ExpandedListing extends Component {
     ) {
       selections = (
         <React.Fragment>
-          <Link to="/edit-post">
+          <div
+            style={{ cursor: "pointer", display: "flex", alignItems: "center" }}
+            onClick={() =>
+              this.searchProfileHandler(this.props.expandedListing.displayName)
+            }
+          >
+            <img
+              src={this.props.expandedListing.photoURL}
+              alt="Profile"
+              style={{
+                border: "1px solid grey",
+                borderRadius: "50px",
+                width: "50px",
+                height: "50px",
+              }}
+            />
+            <p
+              style={{
+                paddingLeft: "10px",
+                paddingRight: "20px",
+                color: "grey",
+              }}
+            >
+              @{this.props.expandedListing.displayName}
+            </p>
+          </div>
+          <Link to="/edit-post" style={{ paddingRight: "20px" }}>
             <Button>Edit</Button>
           </Link>
           <Button
@@ -166,13 +224,41 @@ class ExpandedListing extends Component {
       );
     } else if (this.props.isAuthenticated) {
       selections = (
-        <Button
-          onClick={() =>
-            this.onChatHandler(this.props.expandedListing.displayName)
-          }
-        >
-          Chat to make offer
-        </Button>
+        <React.Fragment>
+          <div
+            style={{ cursor: "pointer", display: "flex", alignItems: "center" }}
+            onClick={() =>
+              this.searchProfileHandler(this.props.expandedListing.displayName)
+            }
+          >
+            <img
+              src={this.props.expandedListing.photoURL}
+              alt="Profile"
+              style={{
+                border: "1px solid grey",
+                borderRadius: "50px",
+                width: "50px",
+                height: "50px",
+              }}
+            />
+            <p
+              style={{
+                paddingLeft: "10px",
+                paddingRight: "20px",
+                color: "grey",
+              }}
+            >
+              @{this.props.expandedListing.displayName}
+            </p>
+          </div>
+          <Button
+            onClick={() =>
+              this.onChatHandler(this.props.expandedListing.displayName)
+            }
+          >
+            Chat to make offer
+          </Button>
+        </React.Fragment>
       );
     }
 
@@ -264,14 +350,11 @@ class ExpandedListing extends Component {
             ) : null}
             <br />
             <li>
-              <b>Posted by: </b>
-              {this.props.expandedListing.displayName}
-            </li>
-            <li>
               <b>Posted on: </b>
               {this.props.expandedListing.date}
             </li>
           </ul>
+
           <div className={classes.Selection}>{selections}</div>
         </div>
       </React.Fragment>
@@ -328,7 +411,7 @@ class ExpandedListing extends Component {
             comments={this.props.expandedListing.comments}
             identifier={this.props.expandedListing.key}
             userName={this.props.expandedListing.displayName}
-            history={this.props.history}
+            searchProfileHandler={this.searchProfileHandler}
           />
         </div>
         {this.state.askUserToDelete ? askForConfirmation : null}
@@ -352,6 +435,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     dispatchSetInterestedListing: (listing) =>
       dispatch(actions.setInterestedListing(listing)),
+    setFilterProfile: (displayName) =>
+      dispatch(actions.setFilterProfile(displayName)),
   };
 };
 

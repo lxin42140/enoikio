@@ -91,6 +91,17 @@ export const updateUserDetails = (user, photoURL) => {
         });
       });
 
+    database
+      .ref()
+      .child("listings")
+      .orderByChild("displayName")
+      .equalTo(user.displayName)
+      .once("child_added", (snapShot) => {
+        database.ref().child("listings").child(snapShot.key).update({
+          photoURL: photoURL,
+        });
+      });
+
     user
       .updateProfile({
         photoURL: photoURL,

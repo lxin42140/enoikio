@@ -139,6 +139,7 @@ class FullListings extends Component {
           {this.props.allRequests.map((request) => {
             return (
               <Request
+                history={this.props.history}
                 key={request.key}
                 request={request}
                 node={request.key}
@@ -159,9 +160,8 @@ class FullListings extends Component {
       <div>
         <div>{toggleSwitch}</div>
         <div className={classes.Listings}>
-          {this.state.viewListing ? listings : null}
+          {this.state.viewListing ? listings : requests}
         </div>
-          {this.state.viewRequest ? requests : null}
       </div>
     );
   }

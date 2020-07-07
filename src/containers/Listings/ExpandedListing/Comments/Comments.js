@@ -9,7 +9,6 @@ import Comment from "../../../../components/Comment/Comment";
 import Button from "../../../../components/UI/Button/Button";
 import { database } from "../../../../firebase/firebase";
 import * as classes from "./Comments.css";
-import * as actions from "../../../../store/actions/index";
 class Comments extends Component {
   state = {
     isListingOwner: false,
@@ -105,11 +104,6 @@ class Comments extends Component {
           numStars: 0,
         });
       });
-  };
-
-  searchProfileHandler = (displayName) => {
-    this.props.setFilterProfile(displayName.toLowerCase().split(" ").join(""));
-    this.props.history.push("/searchProfile");
   };
 
   updateReviews = (numStars, displayName, message) => {
@@ -230,7 +224,7 @@ class Comments extends Component {
           numStars={comment.numStars}
           content={comment.content}
           profilePicture={comment.profilePicture}
-          onClick={() => this.searchProfileHandler(comment.sender)}
+          onClick={() => this.props.searchProfileHandler(comment.sender)}
         />
       </li>
     ));
@@ -270,12 +264,4 @@ const mapStateToProps = (state) => {
     photoURL: state.auth.photoURL,
   };
 };
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    setFilterProfile: (displayName) =>
-      dispatch(actions.setFilterProfile(displayName)),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Comments);
+export default connect(mapStateToProps)(Comments);
