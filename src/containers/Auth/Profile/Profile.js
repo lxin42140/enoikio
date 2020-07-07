@@ -1,17 +1,16 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
-import * as classes from "./Profile.css";
-import * as actions from "../../../store/actions/index";
+import React, { Component } from "react";
+import { connect } from "react-redux";
 import profileImage from "../../../assets/Images/chats/profile";
-import FilterListings from "../../Listings/FilteredListings";
-import { database, storage } from "../../../firebase/firebase";
 import Comment from "../../../components/Comment/Comment";
-import Modal from "../../../components/UI/Modal/Modal";
 import Button from "../../../components/UI/Button/Button";
+import Modal from "../../../components/UI/Modal/Modal";
 import Spinner from "../../../components/UI/Spinner/Spinner";
+import { database, storage } from "../../../firebase/firebase";
+import * as actions from "../../../store/actions/index";
+import FilterListings from "../../Listings/FilteredListings";
+import * as classes from "./Profile.css";
 
 class Profile extends Component {
   state = {
@@ -102,6 +101,9 @@ class Profile extends Component {
   };
 
   editProfileImageHandler = () => {
+    if (!this.props.updatingUserDetails || !this.props.updatedUserDetails) {
+      this.props.resetUserUpdate();
+    }
     this.setState({
       editProfileImage: true,
     });

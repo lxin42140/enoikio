@@ -1,6 +1,6 @@
-import * as actionTypes from "./actionTypes";
-import firebase, { database, auth } from "../../firebase/firebase";
 import moment from "moment";
+import firebase, { auth, database } from "../../firebase/firebase";
+import * as actionTypes from "./actionTypes";
 
 export const authStart = () => {
   return {
@@ -13,7 +13,7 @@ export const authSuccess = (user) => {
   creationArr.shift();
   const dateJoined =
     creationArr[0] + " " + creationArr[1] + " " + creationArr[2];
- 
+
   const lastSignArr = user.metadata.lastSignInTime.split(",")[1].split(" ");
   lastSignArr.shift();
   const lastSignIn =
@@ -172,7 +172,7 @@ export const signUp = (email, password, displayName) => {
               displayName: displayName,
             });
             const actionCodeSettings = {
-              url: "http://localhost:3000/auth",
+              url: "https://enoikio-orbit2020.web.app/auth"
             };
             return user.user
               .sendEmailVerification(actionCodeSettings)

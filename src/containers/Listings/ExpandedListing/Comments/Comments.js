@@ -1,15 +1,14 @@
+import { faStar } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import moment from "moment";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import moment from "moment";
-import { faStar } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
-import * as classes from "./Comments.css";
+import profileImage from "../../../../assets/Images/chats/profile";
 import Comment from "../../../../components/Comment/Comment";
 import Button from "../../../../components/UI/Button/Button";
 import { database } from "../../../../firebase/firebase";
-import profileImage from "../../../../assets/Images/chats/profile";
+import * as classes from "./Comments.css";
 
 class Comments extends Component {
   state = {
@@ -112,6 +111,8 @@ class Comments extends Component {
     database
       .ref()
       .child("users")
+      .orderByChild("displayName")
+      .equalTo(displayName)
       .once("value", (snapShot) => {
         if (snapShot.exists()) {
           snapShot.forEach((data) => {

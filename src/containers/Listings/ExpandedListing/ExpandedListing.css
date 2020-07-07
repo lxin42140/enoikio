@@ -26,20 +26,22 @@
 .ImageContent {
     width: 50%;
     margin: 5px;
+    height: 100%;
 }
 
 .Images {
     display: flex;
     flex-direction: row;
     align-items: center;
+    justify-content: center;
 }
 
 /*TODO: fix image size to relative, affects the dimensions of each listing*/
 .Image {
+    text-align: center;
     max-height: 400px;
-    vertical-align: top;
-    text-align: left;
     max-width: 250px;
+    margin: auto;
     width: 90%;
     height: 90%;
 }
@@ -61,8 +63,8 @@
 }
 
 .TextContent {
-    width:50%;
-    display:flex;
+    width: 50%;
+    display: flex;
     justify-content: flex-end;
 }
 
@@ -81,7 +83,7 @@
     display: block;
     text-align: left;
     line-height: 150%;
-} 
+}
 
 .Selection {
     display: flex;
