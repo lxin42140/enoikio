@@ -23,7 +23,6 @@ class Request extends Component {
   };
 
   deleteRequest = () => {
-    console.log(this.props.key);
     database.ref().child("requests").child(this.props.node).remove();
 
     this.setState({ confirmDelete: true, askUserToDelete: false });

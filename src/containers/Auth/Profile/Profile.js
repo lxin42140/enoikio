@@ -321,7 +321,7 @@ class Profile extends Component {
               "Listings"
             )}
           </button>
-          <button onClick={this.onShowRequestHandler}>Request</button>
+          <button onClick={this.onShowRequestHandler}>Requests</button>
           <button onClick={this.onShowOnRentHandler}>On rent</button>
           <button onClick={this.onShowReviewsHandler}>Reviews</button>
         </div>
@@ -332,7 +332,7 @@ class Profile extends Component {
             {this.state.showFilteredListing ? (
               <FilterListings history={this.props.history} />
             ) : this.state.showFilteredRequest ? (
-              <FilterListings filterRequest />
+              <FilterListings history={this.props.history} filterRequest />
             ) : this.state.comments.length < 1 ? (
               <h3>Oops..No reviews</h3>
             ) : (

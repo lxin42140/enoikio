@@ -16,10 +16,10 @@ class FilteredListings extends Component {
   };
 
   componentDidUpdate() {
-    // console.log(this.props.filterType);
-    // console.log('state ' + this.state.filterType)
-    if (this.props.filterRequest && 
-      this.state.requestFilterType !== this.props.filterType) {
+    if (
+      this.props.filterRequest &&
+      this.state.requestFilterType !== this.props.filterType
+    ) {
       this.filterRequests();
     } else if (
       this.props.filterType !== this.state.filterType ||
@@ -30,10 +30,11 @@ class FilteredListings extends Component {
   }
 
   componentDidMount() {
-    if (this.props.filterRequest && (
-      this.props.filterType !== this.state.filterType ||
-      this.state.searchObject !== this.props.searchObject
-    )) {
+    if (
+      this.props.filterRequest &&
+      (this.props.filterType !== this.state.filterType ||
+        this.state.searchObject !== this.props.searchObject)
+    ) {
       this.filterRequests();
     } else if (
       this.props.filterType !== this.state.filterType ||
@@ -44,15 +45,15 @@ class FilteredListings extends Component {
   }
 
   filterRequests = () => {
-    const filteredRequests = this.props.allRequests.filter(request => 
-      request.displayName === this.props.displayName
-    )
+    const filteredRequests = this.props.allRequests.filter(
+      (request) => request.displayName === this.props.displayName
+    );
     this.setState({
       filteredRequests: filteredRequests,
       requestFilterType: this.props.filterType,
       searchObject: this.props.searchObject,
-    })
-  }
+    });
+  };
 
   filter = () => {
     let filteredListings = [];
@@ -126,7 +127,7 @@ class FilteredListings extends Component {
       if (this.state.filteredRequests.length < 1) {
         return <h3>Submit your request and view it here...</h3>;
       } else {
-        const myRequests = this.state.filteredRequests.map(request => {
+        const myRequests = this.state.filteredRequests.map((request) => {
           return (
             <Request
               key={request.key}
@@ -140,17 +141,19 @@ class FilteredListings extends Component {
               priority={request.requestDetails.priority}
             />
           );
-        })
-        return <div className={classes.Listings}>{myRequests}</div>;
+        });
+        return <div>{myRequests}</div>;
       }
     }
 
     if (this.state.filteredListings.length < 1) {
       switch (this.state.filterType) {
         case "location":
-          return <h3>Oops, nothing to see here!</h3>;
+          return <h3>Oops...Nothing to see here!</h3>;
         case "displayName":
           return <h3>Submit your listing and view it here...</h3>;
+        case "searchProfile":
+          return <h3>Oops...This user has no listings</h3>;
         case "onRent":
           return <h3>No rentals yet...</h3>;
         case "favorites":
@@ -159,17 +162,17 @@ class FilteredListings extends Component {
         case "textbook":
           return (
             <React.Fragment>
-              <h3>Oops, no available listings</h3>
+              <h3>Oops...No available listings</h3>
               <div className={classes.Selections}>
                 {this.props.isAuthenticated ? (
                   <Link to="/new-request">
                     <a>Make a request</a>
                   </Link>
                 ) : (
-                    <Link to="/auth">
-                      <a>Make a request</a>
-                    </Link>
-                  )}
+                  <Link to="/auth">
+                    <a>Make a request</a>
+                  </Link>
+                )}
               </div>
             </React.Fragment>
           );

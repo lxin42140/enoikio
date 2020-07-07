@@ -9,7 +9,7 @@ import Button from "../../components/UI/Button/Button";
 import * as actions from "../../store/actions/index";
 import Spinner from "../../components/UI/Spinner/Spinner";
 import Modal from "../../components/UI/Modal/Modal";
-
+import profileImage from "../../assets/Images/chats/profile";
 class NewPost extends Component {
   state = {
     dataForm: {
@@ -197,8 +197,14 @@ class NewPost extends Component {
       }
     }
 
+    let photoURL = this.props.photoURL;
+    if (!photoURL) {
+      photoURL = profileImage;
+    }
+
     const postDetails = {
       formattedDisplayName: this.props.displayName.toLowerCase(),
+      photoURL: photoURL,
       displayName: this.props.displayName,
       unique: unique,
       date: date,
@@ -471,6 +477,7 @@ const mapStateToProps = (state) => {
     uploadingImage: state.newPost.uploadingImage,
     imageUploaded: state.newPost.imageUploaded,
     displayName: state.auth.displayName,
+    photoURL: state.auth.photoURL,
   };
 };
 

@@ -11,7 +11,6 @@ import Spinner from "../../components/UI/Spinner/Spinner";
 import Modal from "../../components/UI/Modal/Modal";
 
 class NewRequest extends Component {
-
   state = {
     dataForm: {
       module: {
@@ -130,7 +129,17 @@ class NewRequest extends Component {
     const unique = this.props.displayName + Date.now();
     const formData = {};
     for (let key in this.state.dataForm) {
-      formData[key] = this.state.dataForm[key].value.toLowerCase();
+      switch (key) {
+        case "module":
+          formData[key] = this.state.dataForm[key].value.toLowerCase();
+          break;
+        case "textbook":
+          let str = this.state.dataForm[key].value.toLowerCase();
+          formData[key] = str.charAt(0).toUpperCase() + str.slice(1);
+          break;
+        default:
+          formData[key] = this.state.dataForm[key].value;
+      }
     }
 
     const postDetails = {
@@ -267,7 +276,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    dispatchSubmitRequest: (newRequest) => dispatch(actions.submitNewRequest(newRequest)),
+    dispatchSubmitRequest: (newRequest) =>
+      dispatch(actions.submitNewRequest(newRequest)),
     dispatchClearRequestData: () => dispatch(actions.clearRequestData()),
   };
 };
