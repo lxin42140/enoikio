@@ -73,6 +73,7 @@ class GeneralProfilePage extends Component {
         } else {
           this.setState({
             error: true,
+            formattedDisplayName: this.props.searchObject,
           });
         }
       });
