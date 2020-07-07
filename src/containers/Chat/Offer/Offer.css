@@ -9,6 +9,7 @@
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
+    text-align: left;
     max-width: 50%;
     color: #2c2c2d,
 }

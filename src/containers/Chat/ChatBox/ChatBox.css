@@ -13,6 +13,15 @@
     border-bottom: 2px solid #f4f4f4;
 }
 
+.DisplayName {
+    justify-content: center;
+    width: 95%;
+}
+
+.Back {
+    width: 5%;
+}
+
 .ChatBoxMessages {
     padding: 10px;
     overflow-y: auto;
@@ -38,4 +47,10 @@
 
 .input:focus {
     outline: none;
+}
+
+@media (max-width: 375px) {
+    .ChatBox {
+        width: max-content;
+    }
 }
