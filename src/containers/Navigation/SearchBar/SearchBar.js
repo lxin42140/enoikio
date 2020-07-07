@@ -77,6 +77,7 @@ class SearchBar extends Component {
         );
         this.props.history.push("/searchResults");
       }
+      this.props.onClick();
     }
   };
 
