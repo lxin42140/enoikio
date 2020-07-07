@@ -47,15 +47,37 @@ class NewRequest extends Component {
           options: [
             {
               value: "rent",
-              displayValue: "Rent (unable to edit once submitted)",
+              displayValue: "Rent",
             },
             {
               value: "buy",
-              displayValue: "Buy (unable to edit once submitted)",
+              displayValue: "Buy",
             },
           ],
         },
         value: "rent",
+        validation: false,
+        valid: true,
+      },
+      priority: {
+        elementType: "select",
+        elementConfig: {
+          options: [
+            {
+              value: "urgent",
+              displayValue: "Urgent",
+            },
+            {
+              value: "moderate",
+              displayValue: "Moderate",
+            },
+            {
+              value: "low",
+              displayValue: "Low",
+            },
+          ],
+        },
+        value: "urgent",
         validation: false,
         valid: true,
       },
@@ -192,6 +214,10 @@ class NewRequest extends Component {
         <p>
           <b>Request type: </b>
           {this.state.dataForm.requestType.value}
+        </p>
+        <p>
+          <b>Priority level: </b>
+          {this.state.dataForm.priority.value}
         </p>
 
         <div style={{ display: "flex", justifyContent: "center" }}>
