@@ -96,7 +96,7 @@ export const updateUserDetails = (user, photoURL) => {
       .child("listings")
       .orderByChild("displayName")
       .equalTo(user.displayName)
-      .once("child_added", (snapShot) => {
+      .on("child_added", (snapShot) => {
         database.ref().child("listings").child(snapShot.key).update({
           photoURL: photoURL,
         });
