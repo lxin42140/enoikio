@@ -6,11 +6,11 @@ import Spinner from "../../../components/UI/Spinner/Spinner";
 import * as classes from "./Profile.css";
 class GeneralProfilePage extends Component {
   state = {
-    initialLoad: true,
     loading: true,
     error: false,
 
-    showFilteredListing: true,
+    showPastListing: true,
+    showRequests: false,
     showComments: false,
 
     formattedDisplayName: "",
@@ -53,11 +53,11 @@ class GeneralProfilePage extends Component {
             );
             comments.reverse();
             this.setState({
-              initialLoad: true,
               loading: false,
               error: false,
 
-              showFilteredListing: true,
+              showPastListing: true,
+              showRequest: false,
               showComments: false,
 
               formattedDisplayName: this.props.searchObject,
@@ -81,16 +81,16 @@ class GeneralProfilePage extends Component {
   };
   onShowPastPostHandler = () => {
     this.setState({
-      showFilteredListing: true,
+      showPastListing: true,
+      showRequests: false,
       showComments: false,
-      initialLoad: false,
     });
   };
   onShowReviewsHandler = () => {
     this.setState({
-      showFilteredListing: false,
+      showPastListing: false,
+      showRequests: false,
       showComments: true,
-      initialLoad: false,
     });
   };
 
@@ -115,8 +115,8 @@ class GeneralProfilePage extends Component {
 
     return (
       <ProfileComponent
-        showFilteredListing={this.state.showFilteredListing}
-        initialLoad={this.state.initialLoad}
+        showPastListing={this.state.showPastListing}
+        showRequests={this.state.showRequests}
         showComments={this.state.showComments}
         history={this.props.history}
         onShowPastPostHandler={this.onShowPastPostHandler}

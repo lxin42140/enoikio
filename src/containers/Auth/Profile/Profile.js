@@ -14,9 +14,9 @@ import * as classes from "./Profile.css";
 
 class Profile extends Component {
   state = {
-    initialLoad: true,
-    showFilteredListing: true,
-    showFilteredRequest: false,
+    showPastListing: true,
+    showOnRent: false,
+    showRequest: false,
     showComments: false,
 
     imageAsFile: "",
@@ -64,39 +64,39 @@ class Profile extends Component {
   onShowPastPostHandler = () => {
     this.props.setFilterTerm("displayName");
     this.setState({
-      showFilteredListing: true,
-      showFilteredRequest: false,
+      showPastListing: true,
+      showOnRent: false,
+      showRequest: false,
       showComments: false,
-      initialLoad: false,
     });
   };
 
   onShowRequestHandler = () => {
     this.props.setFilterTerm("displayName");
     this.setState({
-      showFilteredListing: false,
-      showFilteredRequest: true,
+      showPastListing: false,
+      showOnRent: false,
+      showRequest: true,
       showComments: false,
-      initialLoad: false,
     });
   };
 
   onShowOnRentHandler = () => {
     this.props.setFilterTerm("onRent");
     this.setState({
-      showFilteredListing: true,
-      showFilteredRequest: false,
+      showPastListing: false,
+      showOnRent: true,
+      showRequest: false,
       showComments: false,
-      initialLoad: false,
     });
   };
 
   onShowReviewsHandler = () => {
     this.setState({
-      showFilteredListing: false,
-      showFilteredRequest: false,
+      showPastListing: false,
+      showOnRent: false,
+      showRequest: false,
       showComments: true,
-      initialLoad: false,
     });
   };
 
@@ -305,33 +305,74 @@ class Profile extends Component {
       <React.Fragment>
         <div className={classes.Background} />
         <div className={classes.Navigation}>
-          <button onClick={this.onShowPastPostHandler}>
-            {this.state.initialLoad ? (
-              <button
-                style={{
-                  fontWeight: "bold",
-                  color: "#dd5641",
-                  borderBottom: "3px solid #dd5641",
-                  outline: "none",
-                }}
-              >
-                Listings
-              </button>
-            ) : (
-              "Listings"
-            )}
+          <button
+            onClick={this.onShowPastPostHandler}
+            style={
+              this.state.showPastListing
+                ? {
+                    fontWeight: "bold",
+                    color: "#dd5641",
+                    borderBottom: "3px solid #dd5641",
+                    outline: "none",
+                  }
+                : null
+            }
+          >
+            Listings
           </button>
-          <button onClick={this.onShowRequestHandler}>Requests</button>
-          <button onClick={this.onShowOnRentHandler}>On rent</button>
-          <button onClick={this.onShowReviewsHandler}>Reviews</button>
+          <button
+            onClick={this.onShowRequestHandler}
+            style={
+              this.state.showRequest
+                ? {
+                    fontWeight: "bold",
+                    color: "#dd5641",
+                    borderBottom: "3px solid #dd5641",
+                    outline: "none",
+                  }
+                : null
+            }
+          >
+            Requests
+          </button>
+          <button
+            onClick={this.onShowOnRentHandler}
+            style={
+              this.state.showOnRent
+                ? {
+                    fontWeight: "bold",
+                    color: "#dd5641",
+                    borderBottom: "3px solid #dd5641",
+                    outline: "none",
+                  }
+                : null
+            }
+          >
+            On rent
+          </button>
+          <button
+            onClick={this.onShowReviewsHandler}
+            style={
+              this.state.showComments
+                ? {
+                    fontWeight: "bold",
+                    color: "#dd5641",
+                    borderBottom: "3px solid #dd5641",
+                    outline: "none",
+                  }
+                : null
+            }
+          >
+            Reviews
+          </button>
         </div>
         <div className={classes.Profile}>
           <div className={classes.ProfileDetails}>{profile}</div>
           {editProfileImage}
           <div className={classes.OtherInfo}>
-            {this.state.showFilteredListing ? (
+            {this.state.showPastListing || this.state.showOnRent ? (
               <FilterListings history={this.props.history} />
-            ) : this.state.showFilteredRequest ? (
+            ) : this.state.showRequest ? (
               <FilterListings history={this.props.history} filterRequest />
             ) : this.state.comments.length < 1 ? (
               <h3>Oops..No reviews</h3>

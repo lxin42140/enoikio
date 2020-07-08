@@ -118,28 +118,41 @@ const profile = (props) => {
         />
       </div>
       <div className={classes.Navigation}>
-        <button onClick={props.onShowPastPostHandler}>
-          {props.initialLoad ? (
-            <button
-              style={{
-                fontWeight: "bold",
-                color: "#dd5641",
-                borderBottom: "3px solid #dd5641",
-                outline: "none",
-              }}
-            >
-              Listings
-            </button>
-          ) : (
-            "Listings"
-          )}
+        <button
+          onClick={props.onShowPastPostHandler}
+          style={
+            props.showPastListing
+              ? {
+                  fontWeight: "bold",
+                  color: "#dd5641",
+                  borderBottom: "3px solid #dd5641",
+                  outline: "none",
+                }
+              : null
+          }
+        >
+          Listings
         </button>
-        <button onClick={props.onShowReviewsHandler}>Reviews</button>
+        <button
+          onClick={props.onShowReviewsHandler}
+          style={
+            props.showComments
+              ? {
+                  fontWeight: "bold",
+                  color: "#dd5641",
+                  borderBottom: "3px solid #dd5641",
+                  outline: "none",
+                }
+              : null
+          }
+        >
+          Reviews
+        </button>
       </div>
       <div className={classes.Profile}>
         <div className={classes.ProfileDetails}>{profile}</div>
         <div className={classes.OtherInfo}>
-          {props.showFilteredListing ? (
+          {props.showPastListing ? (
             <FilterListings history={props.history} />
           ) : props.comments.length < 1 ? (
             <h3>Oops..No reviews</h3>

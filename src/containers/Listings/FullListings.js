@@ -9,14 +9,12 @@ import classes from "./Listings.css";
 
 class FullListings extends Component {
   state = {
-    initialLoad: true,
     viewListing: true,
     viewRequest: false,
   };
 
   showRequestHandler = () => {
     this.setState({
-      initialLoad: false,
       viewListing: false,
       viewRequest: true,
     });
@@ -36,24 +34,36 @@ class FullListings extends Component {
 
     const toggleSwitch = (
       <div className={classes.Navigation}>
-        <button onClick={this.showListingHandler}>
-          {this.state.initialLoad ? (
-            <button
-              style={{
-                fontWeight: "bold",
-                color: "#dd5641",
-                borderBottom: "3px solid #dd5641",
-                outline: "none",
-                marginRight: "0",
-              }}
-            >
-              Listings
-            </button>
-          ) : (
-            "Listings"
-          )}
+        <button
+          onClick={this.showListingHandler}
+          style={
+            this.state.viewListing
+              ? {
+                  fontWeight: "bold",
+                  color: "#dd5641",
+                  borderBottom: "3px solid #dd5641",
+                  outline: "none",
+                }
+              : null
+          }
+        >
+          Listings
         </button>
-        <button onClick={this.showRequestHandler}>Requests</button>
+        <button
+          onClick={this.showRequestHandler}
+          style={
+            this.state.viewRequest
+              ? {
+                  fontWeight: "bold",
+                  color: "#dd5641",
+                  borderBottom: "3px solid #dd5641",
+                  outline: "none",
+                }
+              : null
+          }
+        >
+          Requests
+        </button>
       </div>
     );
 
