@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import moment from "moment";
-// import { connect } from "react-redux";
+import { connect } from "react-redux";
 
 import { database } from "../../../firebase/firebase";
 import classes from "./ChatBox.css";
@@ -10,7 +10,7 @@ import ChatMessage from "../../../components/Chat/ChatMessage/ChatMessage";
 import Offer from "../Offer/Offer";
 import { faWindowClose } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
+import * as actions from "../../../store/actions/index";
 class ChatBox extends Component {
   state = {
     message: "",
@@ -64,10 +64,20 @@ class ChatBox extends Component {
     }
   };
 
+  searchProfileHandler = (displayName) => {
+    let formattedDisplayName = displayName.toLowerCase().split(" ").join("");
+    this.props.setFilterProfile(formattedDisplayName);
+    this.props.history.push("/searchProfile?profile=" + formattedDisplayName);
+  };
+
   render() {
     return (
       <div className={classes.ChatBox}>
-        <div className={classes.ChatBoxHeader}>
+        <div
+          className={classes.ChatBoxHeader}
+          style={{ cursor: "pointer" }}
+          onClick={() => this.searchProfileHandler(this.props.recipient)}
+        >
           <div className={classes.DisplayName}>
             <h4>{this.props.recipient}</h4>
           </div>
@@ -76,14 +86,15 @@ class ChatBox extends Component {
             className={classes.Back}
             style={{ cursor: "pointer" }}
           >
-          {this.props.smallScreen ?          
-            <FontAwesomeIcon
-              icon={faWindowClose}
-              style={{
-                color: "#ff5138",
-                paddingRight: "5px",
-              }}
-            /> : null}
+            {this.props.smallScreen ? (
+              <FontAwesomeIcon
+                icon={faWindowClose}
+                style={{
+                  color: "#ff5138",
+                  paddingRight: "5px",
+                }}
+              />
+            ) : null}
           </div>
         </div>
         <Offer
@@ -94,20 +105,20 @@ class ChatBox extends Component {
           {this.props.fullChatLoading ? (
             <Spinner />
           ) : (
-              this.props.fullChat.map((message) => (
-                <ChatMessage
-                  key={message.date + " " + message.time}
-                  type={message.type}
-                  displayName={message.sender}
-                  message={message.content}
-                  date={message.date}
-                  time={message.time}
-                  currentUser={this.props.displayName}
-                  photoURL={this.props.photoURL}
-                  recipientProfilePic={this.props.recipientProfilePic}
-                />
-              ))
-            )}
+            this.props.fullChat.map((message) => (
+              <ChatMessage
+                key={message.date + " " + message.time}
+                type={message.type}
+                displayName={message.sender}
+                message={message.content}
+                date={message.date}
+                time={message.time}
+                currentUser={this.props.displayName}
+                photoURL={this.props.photoURL}
+                recipientProfilePic={this.props.recipientProfilePic}
+              />
+            ))
+          )}
           <div
             ref={(element) => {
               this.element = element;
@@ -136,11 +147,13 @@ class ChatBox extends Component {
   }
 }
 
-// const mapStateToProps = (state) => {
-//   return {
-//     interestedListing: state.listing.interestedListing,
-//     resolveRequest: state.request.resolve,
-//   };
-// };
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setFilterProfile: (displayName) =>
+      dispatch(actions.setFilterProfile(displayName)),
+    setFilterTermForListing: (filterType, object) =>
+      dispatch(actions.setFilterListings(filterType, object)),
+  };
+};
 
-export default ChatBox;
+export default connect(null, mapDispatchToProps)(ChatBox);

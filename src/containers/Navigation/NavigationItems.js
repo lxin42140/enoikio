@@ -19,16 +19,16 @@ class NavigationItems extends Component {
     if (window.innerWidth < 525) {
       this.setState({ smallScreen: true });
     } else {
-      this.setState({ smallScreen: false })
+      this.setState({ smallScreen: false });
     }
 
-    window.addEventListener('resize', () => {
+    window.addEventListener("resize", () => {
       if (window.innerWidth < 525) {
         this.setState({ smallScreen: true });
       } else {
-        this.setState({ smallScreen: false })
+        this.setState({ smallScreen: false });
       }
-    })
+    });
   }
 
   toggleSearchBarHandler = (event) => {
@@ -36,8 +36,8 @@ class NavigationItems extends Component {
   };
 
   toggleDropDown = () => {
-    this.setState((prevState) => ({ showDropDown: !prevState.showDropDown }))
-  }
+    this.setState((prevState) => ({ showDropDown: !prevState.showDropDown }));
+  };
 
   render() {
     let nav;
@@ -47,15 +47,10 @@ class NavigationItems extends Component {
       if (this.props.isAuthenticated) {
         dropDown = (
           <React.Fragment>
-            <NavigationItem
-              link="/"
-              exact
-              onClick={this.toggleDropDown}>
+            <NavigationItem link="/" exact onClick={this.toggleDropDown}>
               Home
             </NavigationItem>
-            <NavigationItem
-              link="/new-post"
-              onClick={this.toggleDropDown}>
+            <NavigationItem link="/new-post" onClick={this.toggleDropDown}>
               New Post
             </NavigationItem>
             <NavigationItem
@@ -67,9 +62,7 @@ class NavigationItems extends Component {
             >
               Favorites
             </NavigationItem>
-            <NavigationItem
-              link="/chats"
-              onClick={this.toggleDropDown}>
+            <NavigationItem link="/chats" onClick={this.toggleDropDown}>
               Chats
             </NavigationItem>
             <NavigationItem
@@ -81,9 +74,7 @@ class NavigationItems extends Component {
             >
               Profile
             </NavigationItem>
-            <NavigationItem
-              link="/logout"
-              onClick={this.toggleDropDown}>
+            <NavigationItem link="/logout" onClick={this.toggleDropDown}>
               Log out
             </NavigationItem>
           </React.Fragment>
@@ -91,15 +82,10 @@ class NavigationItems extends Component {
       } else {
         dropDown = (
           <React.Fragment>
-            <NavigationItem
-              link="/"
-              exact
-              onClick={this.toggleDropDown}>
+            <NavigationItem link="/" exact onClick={this.toggleDropDown}>
               Home
             </NavigationItem>
-            <NavigationItem
-              link="/auth"
-              onClick={this.toggleDropDown}>
+            <NavigationItem link="/auth" onClick={this.toggleDropDown}>
               Log in
             </NavigationItem>
           </React.Fragment>
@@ -119,7 +105,9 @@ class NavigationItems extends Component {
               onClick={this.toggleDropDown}
             />
           </div>
-          <div className={classes.dropdownContent}>{this.state.showDropDown ? dropDown : null}</div>
+          <div className={classes.dropdownContent}>
+            {this.state.showDropDown ? dropDown : null}
+          </div>
         </div>
       );
     } else {
@@ -141,14 +129,14 @@ class NavigationItems extends Component {
             <NavigationItem link="/new-post">New Post</NavigationItem>
             <NavigationItem
               link="/liked-listings"
-              onClick={() => this.props.setFilterTerm("favorites")}
+              onClick={() => this.props.setFilterTermForListing("favorites")}
             >
               Favorites
             </NavigationItem>
             <NavigationItem link="/chats">Chats</NavigationItem>
             <NavigationItem
-              link="/profile"
-              onClick={() => this.props.setFilterTerm("displayName")}
+              link="/profile?profile=personal"
+              onClick={() => this.props.setFilterTermForListing("displayName")}
             >
               Profile
             </NavigationItem>
@@ -200,7 +188,7 @@ class NavigationItems extends Component {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setFilterTerm: (filterType) =>
+    setFilterTermForListing: (filterType) =>
       dispatch(actions.setFilterListings(filterType, "")),
   };
 };

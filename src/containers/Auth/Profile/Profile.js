@@ -62,7 +62,7 @@ class Profile extends Component {
   }
 
   onShowPastPostHandler = () => {
-    this.props.setFilterTerm("displayName");
+    this.props.setFilterTermForListing("displayName");
     this.setState({
       showPastListing: true,
       showOnRent: false,
@@ -72,7 +72,7 @@ class Profile extends Component {
   };
 
   onShowRequestHandler = () => {
-    this.props.setFilterTerm("displayName");
+    this.props.setFilterTermForListing("displayName");
     this.setState({
       showPastListing: false,
       showOnRent: false,
@@ -82,7 +82,7 @@ class Profile extends Component {
   };
 
   onShowOnRentHandler = () => {
-    this.props.setFilterTerm("onRent");
+    this.props.setFilterTermForListing("onRent");
     this.setState({
       showPastListing: false,
       showOnRent: true,
@@ -138,6 +138,11 @@ class Profile extends Component {
     });
   };
 
+  searchProfileHandler = (displayName) => {
+    let formattedDisplayName = displayName.toLowerCase().split(" ").join("");
+    this.props.setFilterProfile(formattedDisplayName);
+    this.props.history.push("/searchProfile?profile=" + formattedDisplayName);
+  };
   render() {
     let editProfileImage = (
       <Modal show={this.state.editProfileImage}>
@@ -296,6 +301,7 @@ class Profile extends Component {
             numStars={comment.numStars}
             content={comment.content}
             key={comment.key}
+            onClick={() => this.searchProfileHandler(comment.sender)}
           />
         </li>
       ));
@@ -402,8 +408,10 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setFilterTerm: (filterType) =>
+    setFilterTermForListing: (filterType) =>
       dispatch(actions.setFilterListings(filterType, "")),
+    setFilterProfile: (displayName) =>
+      dispatch(actions.setFilterProfile(displayName.toLowerCase())),
     updateUserDetailsInit: () => dispatch(actions.updateUserDetailsInit()),
     updatePhotoUrl: (user, photoURL) =>
       dispatch(actions.updateUserDetails(user, photoURL)),

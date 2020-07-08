@@ -64,23 +64,35 @@ class SearchBar extends Component {
   };
 
   onSearchHandler = (event) => {
-    if (this.state.userInput !== "") {
-      if (this.state.filterType === "searchProfile") {
-        this.props.setFilterProfile(
-          this.state.userInput.toLowerCase().split(" ").join("")
-        );
-        this.props.history.push("/searchProfile?profile=displayName");
+    if (this.state.userInput === "") {
+      return;
+    }
+
+    if (this.state.filterType === "searchProfile") {
+      let formattedDisplayName = this.state.userInput
+        .toLowerCase()
+        .split(" ")
+        .join("");
+      if (
+        this.props.displayName.toLowerCase().split(" ").join("") ===
+        formattedDisplayName
+      ) {
+        this.props.setFilterTermForListing("displayName");
+        this.props.history.push("/profile?profile=personal");
       } else {
-        this.props.setFilterTermForListing(
-          this.state.filterType,
-          this.state.userInput.toLowerCase().split(" ").join("")
-        );
+        this.props.setFilterProfile(formattedDisplayName);
         this.props.history.push(
-          "/searchResults?search=" + this.state.userInput
+          "/searchProfile?profile=" + formattedDisplayName
         );
       }
-      this.props.onClick();
+    } else {
+      this.props.setFilterTermForListing(
+        this.state.filterType,
+        this.state.userInput.toLowerCase().split(" ").join("")
+      );
+      this.props.history.push("/searchResults?search=" + this.state.userInput);
     }
+    this.props.onClick();
   };
 
   onEnterSearchHandler = (event) => {
@@ -167,6 +179,12 @@ class SearchBar extends Component {
   }
 }
 
+const mapStateToProps = (state) => {
+  return {
+    displayName: state.auth.displayName,
+  };
+};
+
 const mapDispatchToProps = (dispatch) => {
   return {
     setFilterTermForListing: (filterType, object) =>
@@ -176,4 +194,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(null, mapDispatchToProps)(SearchBar);
+export default connect(mapStateToProps, mapDispatchToProps)(SearchBar);

@@ -448,7 +448,8 @@ class Offer extends Component {
 
     database
       .ref()
-      .child("listings/" + this.state.interestedListing.key)
+      .child("listings")
+      .child(this.state.interestedListing.key)
       .update(updates);
   };
 
@@ -487,7 +488,8 @@ class Offer extends Component {
     ).filter((offer) => offer.user !== this.props.recipient);
     database
       .ref()
-      .child("listings/" + this.state.interestedListing.key)
+      .child("listings")
+      .child(this.state.interestedListing.key)
       .update({
         offers: newOffers,
         status: "available",

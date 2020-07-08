@@ -18,16 +18,16 @@ class Chat extends Component {
     if (window.innerWidth < 525) {
       this.setState({ smallScreen: true });
     } else {
-      this.setState({ smallScreen: false })
+      this.setState({ smallScreen: false });
     }
 
-    window.addEventListener('resize', () => {
+    window.addEventListener("resize", () => {
       if (window.innerWidth < 525) {
         this.setState({ smallScreen: true });
       } else {
-        this.setState({ smallScreen: false })
+        this.setState({ smallScreen: false });
       }
-    })
+    });
   }
 
   componentWillUnmount() {
@@ -44,11 +44,10 @@ class Chat extends Component {
   };
 
   onGoBackHandler = () => {
-    this.setState({ showMessages: false })
-  }
+    this.setState({ showMessages: false });
+  };
 
   render() {
-
     const chatContacts = (
       <div className={classes.ChatContacts}>
         {this.props.fetchChatContactsLoading ? (
@@ -87,16 +86,17 @@ class Chat extends Component {
               Select a conversation to read from the list on the left.
             </h3>
           ) : (
-                <ChatBox
-                  fullChatLoading={this.props.fullChatLoading}
-                  fullChat={this.props.fullChat}
-                  fullChatUID={this.props.fullChatUID}
-                  displayName={this.props.displayName}
-                  recipient={this.props.recipient}
-                  recipientProfilePic={this.props.recipientProfilePic}
-                  photoURL={this.props.photoURL}
-                />
-              )}
+            <ChatBox
+              fullChatLoading={this.props.fullChatLoading}
+              fullChat={this.props.fullChat}
+              fullChatUID={this.props.fullChatUID}
+              displayName={this.props.displayName}
+              recipient={this.props.recipient}
+              recipientProfilePic={this.props.recipientProfilePic}
+              photoURL={this.props.photoURL}
+              history={this.props.history}
+            />
+          )}
         </div>
       );
     } else {
@@ -112,6 +112,7 @@ class Chat extends Component {
             photoURL={this.props.photoURL}
             smallScreen
             click={this.onGoBackHandler}
+            history={this.props.history}
           />
         </div>
       );

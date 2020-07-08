@@ -30,8 +30,17 @@ class Request extends Component {
   };
 
   searchProfileHandler = (displayName) => {
-    this.props.setFilterProfile(displayName.toLowerCase().split(" ").join(""));
-    this.props.history.push("/searchProfile?profile=displayName");
+    let formattedDisplayName = displayName.toLowerCase().split(" ").join("");
+    if (
+      this.props.displayName.toLowerCase().split(" ").join("") ===
+      formattedDisplayName
+    ) {
+      this.props.setFilterTermForListing("displayName");
+      this.props.history.push("/profile?profile=personal");
+    } else {
+      this.props.setFilterProfile(formattedDisplayName);
+      this.props.history.push("/searchProfile?profile=" + formattedDisplayName);
+    }
   };
 
   deleteRequest = () => {
@@ -178,6 +187,8 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(actions.resolveRequest(request)),
     setFilterProfile: (displayName) =>
       dispatch(actions.setFilterProfile(displayName)),
+    setFilterTermForListing: (filterType, object) =>
+      dispatch(actions.setFilterListings(filterType, object)),
   };
 };
 

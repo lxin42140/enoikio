@@ -96,8 +96,17 @@ class ExpandedListing extends Component {
   };
 
   searchProfileHandler = (displayName) => {
-    this.props.setFilterProfile(displayName.toLowerCase().split(" ").join(""));
-    this.props.history.push("/searchProfile?profile=displayName");
+    let formattedDisplayName = displayName.toLowerCase().split(" ").join("");
+    if (
+      this.props.displayName.toLowerCase().split(" ").join("") ===
+      formattedDisplayName
+    ) {
+      this.props.setFilterTermForListing("displayName");
+      this.props.history.push("/profile?profile=" + this.props.displayName);
+    } else {
+      this.props.setFilterProfile(formattedDisplayName);
+      this.props.history.push("/searchProfile?profile=" + formattedDisplayName);
+    }
   };
   render() {
     if (this.props.expandedListingLoading || !this.props.expandedListing) {
@@ -316,7 +325,7 @@ class ExpandedListing extends Component {
                 <b>Price: </b>
                 <span
                   style={{
-                    color: "#fd8673",
+                    color: "grey",
                     fontSize: "20px",
                     fontWeight: "bolder",
                   }}
@@ -437,6 +446,8 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(actions.setInterestedListing(listing)),
     setFilterProfile: (displayName) =>
       dispatch(actions.setFilterProfile(displayName)),
+    setFilterTermForListing: (filterType, object) =>
+      dispatch(actions.setFilterListings(filterType, object)),
   };
 };
 
