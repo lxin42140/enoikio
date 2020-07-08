@@ -71,7 +71,6 @@ class FullListings extends Component {
     if (this.props.fullListings.length < 1) {
       listings = <h3>Oops..No available listings</h3>;
     } else {
-      console.log(this.props.fullListings)
       listings = this.props.fullListings.map((listing) => {
         if (listing.postDetails.deliveryMethod === "mail") {
           return (

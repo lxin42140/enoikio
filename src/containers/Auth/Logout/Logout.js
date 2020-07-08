@@ -1,15 +1,38 @@
 import React, { Component } from "react";
 import * as actions from "../../../store/actions/index";
 import { connect } from "react-redux";
-import { Redirect } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeartBroken } from "@fortawesome/free-solid-svg-icons";
 
+import Button from "../../../components/UI/Button/Button";
 class Logout extends Component {
-  componentDidMount() {
+  onLogoutHandler = () => {
     this.props.onSignOut();
-  }
+    this.props.history.push("/");
+  };
+
+  onCancelHandler = () => {
+    this.props.history.goBack("/");
+  };
 
   render() {
-    return <Redirect to="/" />;
+    return (
+      <React.Fragment>
+        <h3>We are sorry to see you go! Are you sure you want to log out?</h3>
+        <FontAwesomeIcon
+          icon={faHeartBroken}
+          style={{ fontSize: "3rem", color: "rgb(247, 27, 27)" }}
+        />
+        <br />
+        <br />
+        <div>
+          <Button btnType="Important" onClick={this.onLogoutHandler}>
+            Confirm log out
+          </Button>
+          <Button onClick={this.onCancelHandler}>Go back</Button>
+        </div>
+      </React.Fragment>
+    );
   }
 }
 
