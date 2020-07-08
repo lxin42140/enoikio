@@ -388,7 +388,7 @@ class ExpandedListing extends Component {
       <Modal show={this.state.askUserToDelete}>
         <div>
           <p>Confirm delete listing?</p>
-          <p>This action cannot be undone.</p>
+          <p>This action cannot be undone</p>
           <Button onClick={this.cancelConfirmation}>Go back</Button>
           <Button onClick={this.confirmDelete}>Delete</Button>
         </div>
@@ -398,7 +398,7 @@ class ExpandedListing extends Component {
     const confirmDeleteModal = (
       <Modal show={this.state.confirmDelete}>
         <div style={{ display: "block" }}>
-          <p>Listing deleted.</p>
+          <p>Listing deleted</p>
           <Link to="/">
             <Button>Home</Button>
           </Link>
