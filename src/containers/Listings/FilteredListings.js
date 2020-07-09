@@ -7,9 +7,7 @@ import Request from "../Requests/Request/Request";
 import * as classes from "./Listings.css";
 class FilteredListings extends Component {
   state = {
-    // filteredRequests: [],
-    requestFilterType: "",
-
+    filteredRequests: [],
     filteredListings: [],
     filterType: "",
     searchObject: "",
@@ -17,11 +15,6 @@ class FilteredListings extends Component {
 
   componentDidUpdate() {
     if (
-      this.props.filterRequest &&
-      this.state.requestFilterType !== this.props.filterType
-    ) {
-      this.filterRequests();
-    } else if (
       this.props.filterType !== this.state.filterType ||
       this.state.searchObject !== this.props.searchObject
     ) {
@@ -31,12 +24,6 @@ class FilteredListings extends Component {
 
   componentDidMount() {
     if (
-      this.props.filterRequest &&
-      (this.props.filterType !== this.state.filterType ||
-        this.state.searchObject !== this.props.searchObject)
-    ) {
-      this.filterRequests();
-    } else if (
       this.props.filterType !== this.state.filterType ||
       this.state.searchObject !== this.props.searchObject
     ) {
@@ -44,19 +31,9 @@ class FilteredListings extends Component {
     }
   }
 
-  filterRequests = () => {
-    // const filteredRequests = this.props.allRequests.filter(
-    //   (request) => request.displayName === this.props.displayName
-    // );
-    this.setState({
-      // filteredRequests: this.props.allRequests,
-      requestFilterType: this.props.filterType,
-      searchObject: this.props.searchObject,
-    });
-  };
-
   filter = () => {
     let filteredListings = [];
+    let filteredRequests = [];
     switch (this.props.filterType) {
       case "favorites":
         filteredListings = this.props.listings.filter((listing) => {
@@ -112,10 +89,18 @@ class FilteredListings extends Component {
           return false;
         });
         break;
+      case "requests":
+        filteredRequests = this.props.allRequests.filter(
+          (request) =>
+            request.displayName.toLowerCase().split(" ").join("") ===
+            this.props.searchObject
+        );
+        break;
       default:
         break;
     }
     this.setState({
+      filteredRequests: filteredRequests,
       filteredListings: filteredListings,
       filterType: this.props.filterType,
       searchObject: this.props.searchObject,
@@ -123,14 +108,21 @@ class FilteredListings extends Component {
   };
 
   render() {
-    if (this.props.filterRequest) {
-      const filteredRequests = this.props.allRequests.filter(
-        (request) => request.displayName === this.props.displayName
-      );
-      if (filteredRequests.length < 1) {
+    if (this.state.filterType === "requests") {
+      if (
+        this.state.filteredRequests.length < 1 &&
+        this.state.searchObject !==
+          this.props.displayName.toLowerCase().split(" ").join("")
+      ) {
+        return <h3>Oops...This user did not make any requests</h3>;
+      } else if (
+        this.state.filteredRequests.length < 1 &&
+        this.state.searchObject ===
+          this.props.displayName.toLowerCase().split(" ").join("")
+      ) {
         return <h3>Submit your request and view it here...</h3>;
       } else {
-        const myRequests = filteredRequests.map((request) => {
+        const myRequests = this.state.filteredRequests.map((request) => {
           return (
             <Request
               isProfile={true}
@@ -162,11 +154,11 @@ class FilteredListings extends Component {
             </React.Fragment>
           );
         case "displayName":
-          return <h3>Submit your listing and view it here...</h3>;
+          return <h3>Oops...Submit your listing and view it here</h3>;
         case "searchProfile":
           return <h3>Oops...This user has no listings</h3>;
         case "onRent":
-          return <h3>No rentals yet...</h3>;
+          return <h3>Oops...No rentals yet</h3>;
         case "favorites":
           return <h3>Like a post and view it here...</h3>;
         case "moduleCode":
