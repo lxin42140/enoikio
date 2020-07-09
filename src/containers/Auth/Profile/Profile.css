@@ -88,11 +88,21 @@
 .OtherInfo {
     display: flex;
     flex-flow: row wrap;
-    width: 100%;
+    /* width: 100%; */
     height: 100%;
     box-shadow: 0 3px 10px 0 rgba(44, 44, 45, .07);
     background-color: #fff;
     border-radius: 8px;
+}
+
+.Requests {
+    display: flex;
+    box-sizing: border-box;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    line-height: 21px;
+    text-size-adjust: 100%;
+    overflow-y: hidden;
 }
 
 .Reviews {
@@ -122,4 +132,12 @@
 .Selections a:hover {
     cursor: pointer;
     color: #dd5641;
+}
+
+@media (max-width: 1000px) {
+    body .smallScreen {
+        width: 900px;
+        overflow-x: scroll;
+        padding-right: 50px;
+    }
 }
