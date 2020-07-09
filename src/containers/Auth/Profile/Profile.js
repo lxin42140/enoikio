@@ -164,36 +164,36 @@ class Profile extends Component {
             </Button>
           </React.Fragment>
         ) : (
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <div style={{ paddingBottom: "10px" }}>
-              <input
-                type="file"
-                accept=".png,.jpeg, .jpg"
-                style={{ width: "fit-content" }}
-                onChange={this.handleImageAsFile}
-              />
-            </div>
-            <div>
-              <Button onClick={this.cancelEditProfileImageHandler}>
-                Cancel
-              </Button>
-              <Button
-                btnType="Important"
-                onClick={this.submitNewProfileImage}
-                disabled={this.state.imageAsFile === ""}
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
               >
-                Upload
+                <div style={{ paddingBottom: "10px" }}>
+                  <input
+                    type="file"
+                    accept=".png,.jpeg, .jpg"
+                    style={{ width: "fit-content" }}
+                    onChange={this.handleImageAsFile}
+                  />
+                </div>
+                <div>
+                  <Button onClick={this.cancelEditProfileImageHandler}>
+                    Cancel
               </Button>
-            </div>
-          </div>
-        )}
+                  <Button
+                    btnType="Important"
+                    onClick={this.submitNewProfileImage}
+                    disabled={this.state.imageAsFile === ""}
+                  >
+                    Upload
+              </Button>
+                </div>
+              </div>
+            )}
       </Modal>
     );
 
@@ -311,7 +311,7 @@ class Profile extends Component {
     }
 
     return (
-      <React.Fragment>
+      <div className={classes.smallScreen}>
         <div className={classes.Background} />
         <div className={classes.Navigation}>
           <button
@@ -319,11 +319,11 @@ class Profile extends Component {
             style={
               this.state.showPastListing
                 ? {
-                    fontWeight: "bold",
-                    color: "#dd5641",
-                    borderBottom: "3px solid #dd5641",
-                    outline: "none",
-                  }
+                  fontWeight: "bold",
+                  color: "#dd5641",
+                  borderBottom: "3px solid #dd5641",
+                  outline: "none",
+                }
                 : null
             }
           >
@@ -334,11 +334,11 @@ class Profile extends Component {
             style={
               this.state.showRequest
                 ? {
-                    fontWeight: "bold",
-                    color: "#dd5641",
-                    borderBottom: "3px solid #dd5641",
-                    outline: "none",
-                  }
+                  fontWeight: "bold",
+                  color: "#dd5641",
+                  borderBottom: "3px solid #dd5641",
+                  outline: "none",
+                }
                 : null
             }
           >
@@ -349,11 +349,11 @@ class Profile extends Component {
             style={
               this.state.showOnRent
                 ? {
-                    fontWeight: "bold",
-                    color: "#dd5641",
-                    borderBottom: "3px solid #dd5641",
-                    outline: "none",
-                  }
+                  fontWeight: "bold",
+                  color: "#dd5641",
+                  borderBottom: "3px solid #dd5641",
+                  outline: "none",
+                }
                 : null
             }
           >
@@ -364,11 +364,11 @@ class Profile extends Component {
             style={
               this.state.showComments
                 ? {
-                    fontWeight: "bold",
-                    color: "#dd5641",
-                    borderBottom: "3px solid #dd5641",
-                    outline: "none",
-                  }
+                  fontWeight: "bold",
+                  color: "#dd5641",
+                  borderBottom: "3px solid #dd5641",
+                  outline: "none",
+                }
                 : null
             }
           >
@@ -386,11 +386,11 @@ class Profile extends Component {
             ) : this.state.comments.length < 1 ? (
               <h3>Oops..No reviews</h3>
             ) : (
-              <ul className={classes.Reviews}>{reviews}</ul>
-            )}
+                    <ul className={classes.Reviews}>{reviews}</ul>
+                  )}
           </div>
         </div>
-      </React.Fragment>
+      </div>
     );
   }
 }

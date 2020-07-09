@@ -6,9 +6,8 @@
     padding-right: 5%
 }
 
-@media (max-width: 375px) {
+@media (max-width: 1000px) {
     .Content {
-        /* overflow-x: auto; */
         overflow-x: scroll;
     }
 }

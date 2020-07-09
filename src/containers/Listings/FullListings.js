@@ -169,9 +169,15 @@ class FullListings extends Component {
     return (
       <div>
         <div>{toggleSwitch}</div>
-        <div className={classes.Listings}>
-          {this.state.viewListing ? listings : requests}
-        </div>
+        {this.state.viewListing ? (
+          <div className={classes.Listings}>
+            {listings}
+          </div>
+        ) : (
+          <div className={classes.Requests}>
+            {requests}
+          </div>
+        )}
       </div>
     );
   }
