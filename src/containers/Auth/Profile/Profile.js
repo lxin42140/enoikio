@@ -9,7 +9,7 @@ import Modal from "../../../components/UI/Modal/Modal";
 import Spinner from "../../../components/UI/Spinner/Spinner";
 import { database, storage } from "../../../firebase/firebase";
 import * as actions from "../../../store/actions/index";
-import FilterListings from "../../Listings/FilteredListings";
+import FilterResults from "../../util/FilterResults";
 import * as classes from "./Profile.css";
 
 class Profile extends Component {
@@ -382,7 +382,7 @@ class Profile extends Component {
             {this.state.showPastListing ||
             this.state.showOnRent ||
             this.state.showRequest ? (
-              <FilterListings history={this.props.history} />
+              <FilterResults history={this.props.history} />
             ) : this.state.comments.length < 1 ? (
               <h3>Oops..No reviews</h3>
             ) : (

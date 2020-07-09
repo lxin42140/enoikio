@@ -2,7 +2,7 @@ import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import Comment from "../Comment/Comment";
-import FilterListings from "../../containers/Listings/FilteredListings";
+import FilterListings from "../../containers/util/FilterResults";
 import * as classes from "./GeneralProfile.css";
 import { faWindowClose } from "@fortawesome/free-solid-svg-icons";
 
