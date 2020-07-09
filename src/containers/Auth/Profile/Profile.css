@@ -137,7 +137,6 @@
 @media (max-width: 1000px) {
     body .smallScreen {
         width: 900px;
-        overflow-x: scroll;
         padding-right: 50px;
     }
 }

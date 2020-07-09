@@ -8,6 +8,6 @@
 
 @media (max-width: 1000px) {
     .Content {
-        overflow-x: scroll;
+        overflow-x: auto;
     }
 }
