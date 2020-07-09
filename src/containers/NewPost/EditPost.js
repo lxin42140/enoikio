@@ -131,6 +131,9 @@ class EditPost extends Component {
               dataForm[
                 "location"
               ].value = this.props.editListing.postDetails.location;
+              dataForm["location"].validation = {
+                required: true,
+              };
             }
             break;
           case "listingType":
@@ -139,10 +142,18 @@ class EditPost extends Component {
               dataForm[
                 "rentalPrice"
               ].value = this.props.editListing.postDetails.price;
+              dataForm["rentalPrice"].validation = {
+                required: true,
+                lowerBound: true,
+              };
             } else {
               dataForm[
                 "sellingPrice"
               ].value = this.props.editListing.postDetails.price;
+              dataForm["sellingPrice"].validation = {
+                required: true,
+                lowerBound: true,
+              };
             }
             break;
           case "rentalPrice":
@@ -241,6 +252,9 @@ class EditPost extends Component {
       if (rules.maxLength) {
         isValid = value.length <= rules.maxLength && isValid;
       }
+      if (rules.lowerBound) {
+        isValid = value >= 0 && isValid;
+      }
     }
     return isValid;
   }
@@ -253,6 +267,51 @@ class EditPost extends Component {
       ...updatedDataForm[inputIdentifier],
     };
     updatedFormElement.value = event.target.value;
+
+    switch (inputIdentifier) {
+      case "deliveryMethod":
+        if (event.target.value === "mail") {
+          updatedDataForm.location.validation = false;
+          updatedDataForm.location.valid = true;
+        } else {
+          updatedDataForm.location.validation = {
+            required: true,
+          };
+          updatedDataForm.location.valid = this.checkValidity(
+            updatedDataForm.location.value,
+            updatedDataForm.location.validation
+          );
+        }
+        break;
+      case "listingType":
+        if (event.target.value === "rent") {
+          updatedDataForm.rentalPrice.validation = {
+            required: true,
+            lowerBound: true,
+          };
+          updatedDataForm.rentalPrice.valid = this.checkValidity(
+            updatedDataForm.rentalPrice.value,
+            updatedDataForm.rentalPrice.validation
+          );
+          updatedDataForm.sellingPrice.valid = true;
+          updatedDataForm.sellingPrice.validation = false;
+        } else {
+          updatedDataForm.sellingPrice.validation = {
+            required: true,
+            lowerBound: true,
+          };
+          updatedDataForm.sellingPrice.valid = this.checkValidity(
+            updatedDataForm.sellingPrice.value,
+            updatedDataForm.sellingPrice.validation
+          );
+          updatedDataForm.rentalPrice.valid = true;
+          updatedDataForm.rentalPrice.validation = false;
+        }
+        break;
+      default:
+        break;
+    }
+
     if (inputIdentifier !== "module") {
       updatedFormElement.valid = this.checkValidity(
         updatedFormElement.value,
@@ -348,7 +407,7 @@ class EditPost extends Component {
       imageArray.filter((image) => image !== null).length + images.length >
       3
     ) {
-      this.setState({ uploadImageError: true });
+      this.setState({ formIsValid: false });
     } else {
       for (let key in imageArray) {
         if (images.length === 0) {

@@ -66,8 +66,11 @@ class NewPost extends Component {
           placeholder: "Rent price (per month)",
         },
         value: "",
-        validation: false,
-        valid: true,
+        validation: {
+          required: true,
+          lowerBound: true,
+        },
+        valid: false,
       },
       sellingPrice: {
         elementType: "input",
@@ -98,8 +101,10 @@ class NewPost extends Component {
           placeholder: "Pick-up location",
         },
         value: "",
-        validation: false,
-        valid: true,
+        validation: {
+          required: true,
+        },
+        valid: false,
       },
       description: {
         elementType: "textarea",
@@ -119,6 +124,7 @@ class NewPost extends Component {
   };
 
   componentDidUpdate() {
+    console.log(this.state.formIsValid);
     if (
       !this.state.dataForm.module.validated &&
       this.state.dataForm.module.value !== ""
@@ -199,6 +205,9 @@ class NewPost extends Component {
       if (rules.maxLength) {
         isValid = value.length <= rules.maxLength && isValid;
       }
+      if (rules.lowerBound) {
+        isValid = value >= 0 && isValid;
+      }
     }
     return isValid;
   }
@@ -211,6 +220,51 @@ class NewPost extends Component {
       ...updatedDataForm[inputIdentifier],
     };
     updatedFormElement.value = event.target.value;
+
+    switch (inputIdentifier) {
+      case "deliveryMethod":
+        if (event.target.value === "mail") {
+          updatedDataForm.location.validation = false;
+          updatedDataForm.location.valid = true;
+        } else {
+          updatedDataForm.location.validation = {
+            required: true,
+          };
+          updatedDataForm.location.valid = this.checkValidity(
+            updatedDataForm.location.value,
+            updatedDataForm.location.validation
+          );
+        }
+        break;
+      case "listingType":
+        if (event.target.value === "rent") {
+          updatedDataForm.rentalPrice.validation = {
+            required: true,
+            lowerBound: true,
+          };
+          updatedDataForm.rentalPrice.valid = this.checkValidity(
+            updatedDataForm.rentalPrice.value,
+            updatedDataForm.rentalPrice.validation
+          );
+          updatedDataForm.sellingPrice.valid = true;
+          updatedDataForm.sellingPrice.validation = false;
+        } else {
+          updatedDataForm.sellingPrice.validation = {
+            required: true,
+            lowerBound: true,
+          };
+          updatedDataForm.sellingPrice.valid = this.checkValidity(
+            updatedDataForm.sellingPrice.value,
+            updatedDataForm.sellingPrice.validation
+          );
+          updatedDataForm.rentalPrice.valid = true;
+          updatedDataForm.rentalPrice.validation = false;
+        }
+        break;
+      default:
+        break;
+    }
+
     if (inputIdentifier !== "module") {
       updatedFormElement.valid = this.checkValidity(
         updatedFormElement.value,
@@ -219,6 +273,7 @@ class NewPost extends Component {
     } else {
       updatedFormElement.validated = false;
     }
+
     updatedFormElement.touched = true;
     updatedDataForm[inputIdentifier] = updatedFormElement;
     let formIsValid = true;
@@ -231,6 +286,7 @@ class NewPost extends Component {
         break;
       }
     }
+
     this.setState({ dataForm: updatedDataForm, formIsValid: formIsValid });
   };
 
@@ -301,26 +357,31 @@ class NewPost extends Component {
     const images = event.target.files;
 
     let imageArray = [...this.state.imageAsFile];
-
-    for (let uploadedImage in images) {
-      let diffImage = true;
-      for (let currImage in imageArray) {
-        if (imageArray[currImage].name === images[uploadedImage].name) {
-          diffImage = false;
-          break;
+    if (
+      imageArray.filter((image) => image !== null).length + images.length >
+      3
+    ) {
+      this.setState({ formIsValid: false });
+    } else {
+      for (let uploadedImage in images) {
+        let diffImage = true;
+        for (let currImage in imageArray) {
+          if (imageArray[currImage].name === images[uploadedImage].name) {
+            diffImage = false;
+            break;
+          }
+        }
+        if (diffImage) {
+          imageArray.push(images[uploadedImage]);
         }
       }
-      if (diffImage) {
-        imageArray.push(images[uploadedImage]);
-      }
-    }
-    imageArray = imageArray.slice(0, imageArray.length - 2);
-
-    let formIsValid = true;
-    for (let element in this.state.dataForm) {
-      if (!this.state.dataForm[element].valid) {
-        formIsValid = false;
-        break;
+      imageArray = imageArray.slice(0, imageArray.length - 2);
+      let formIsValid = true;
+      for (let element in this.state.dataForm) {
+        if (!this.state.dataForm[element].valid) {
+          formIsValid = false;
+          break;
+        }
       }
       const numImages = imageArray.length;
       this.setState({
@@ -341,7 +402,15 @@ class NewPost extends Component {
       }
     }
     const length = imageArray.length;
-    this.setState({ imageAsFile: imageArray, numberOfImages: length });
+    if (length < 1) {
+      this.setState({
+        imageAsFile: imageArray,
+        numberOfImages: length,
+        formIsValid: false,
+      });
+    } else {
+      this.setState({ imageAsFile: imageArray, numberOfImages: length });
+    }
   };
 
   createNewFormHandler = () => {
