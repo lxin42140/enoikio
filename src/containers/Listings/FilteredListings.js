@@ -143,10 +143,11 @@ class FilteredListings extends Component {
               userId={request.displayName}
               date={request.date}
               priority={request.requestDetails.priority}
+              showInProfile
             />
           );
         });
-        return <div className={classes.Listings}>{myRequests}</div>;
+        return <div className={classes.Requests}>{myRequests}</div>;
       }
     }
 
@@ -180,10 +181,10 @@ class FilteredListings extends Component {
                     <a>Make a request</a>
                   </Link>
                 ) : (
-                  <Link to="/auth">
-                    <a>Make a request</a>
-                  </Link>
-                )}
+                    <Link to="/auth">
+                      <a>Make a request</a>
+                    </Link>
+                  )}
               </div>
               <div className={classes.Selections}>
                 <a onClick={() => this.props.history.goBack()}>Go back</a>

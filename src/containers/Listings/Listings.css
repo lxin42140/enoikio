@@ -7,6 +7,15 @@
     text-size-adjust: 100%;
 }
 
+.Requests {
+    display: flex;
+    box-sizing: border-box;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    line-height: 21px;
+    text-size-adjust: 100%;
+}
+
 .Selections {
     display: flex;
     align-items: center;
