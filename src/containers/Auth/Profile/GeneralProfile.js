@@ -4,6 +4,7 @@ import ProfileComponent from "../../../components/GeneralProfile/GeneralProfile"
 import { database } from "../../../firebase/firebase";
 import Spinner from "../../../components/UI/Spinner/Spinner";
 import * as classes from "./Profile.css";
+import * as actions from "../../../store/actions/index";
 class GeneralProfilePage extends Component {
   state = {
     loading: true,
@@ -14,6 +15,7 @@ class GeneralProfilePage extends Component {
     showComments: false,
 
     formattedDisplayName: "",
+    // searchQueryName: "",
 
     comments: [],
     numReviews: 0,
@@ -26,8 +28,16 @@ class GeneralProfilePage extends Component {
   };
 
   componentDidUpdate() {
-    if (this.state.formattedDisplayName !== this.props.searchObject) {
+    let searchQueryName = this.props.history.location.search
+      .split("?")[1]
+      .split("=")[1];
+    if (
+      this.state.formattedDisplayName !== this.props.searchObject &&
+      this.props.filterType === "searchProfile"
+    ) {
       this.fetchUserProfile();
+    } else if (searchQueryName !== this.state.formattedDisplayName) {
+      this.searchProfileHandler(searchQueryName);
     }
   }
   componentDidMount() {
@@ -80,9 +90,22 @@ class GeneralProfilePage extends Component {
       });
   };
   onShowPastPostHandler = () => {
+    this.props.setFilterTermForListing("displayName", "");
     this.setState({
       showPastListing: true,
       showRequests: false,
+      showComments: false,
+    });
+  };
+
+  onShowRequestHandler = () => {
+    this.props.setFilterTermForListing(
+      "requests",
+      this.state.displayName.toLowerCase().split(" ").join("")
+    );
+    this.setState({
+      showPastListing: false,
+      showRequests: true,
       showComments: false,
     });
   };
@@ -96,6 +119,12 @@ class GeneralProfilePage extends Component {
 
   onCancelSearchHandler = () => {
     this.props.history.goBack();
+  };
+
+  searchProfileHandler = (displayName) => {
+    let formattedDisplayName = displayName.toLowerCase().split(" ").join("");
+    this.props.setFilterProfile(formattedDisplayName);
+    this.props.history.push("/searchProfile?profile=" + formattedDisplayName);
   };
   render() {
     if (this.state.error) {
@@ -115,13 +144,15 @@ class GeneralProfilePage extends Component {
 
     return (
       <ProfileComponent
+        history={this.props.history}
         showPastListing={this.state.showPastListing}
         showRequests={this.state.showRequests}
         showComments={this.state.showComments}
-        history={this.props.history}
         onShowPastPostHandler={this.onShowPastPostHandler}
         onShowReviewsHandler={this.onShowReviewsHandler}
+        onShowRequestHandler={this.onShowRequestHandler}
         onCancelSearchHandler={this.onCancelSearchHandler}
+        searchProfileHandler={this.searchProfileHandler}
         // from firebase
         numStars={this.state.numStars}
         numReviews={this.state.numReviews}
@@ -138,7 +169,17 @@ class GeneralProfilePage extends Component {
 
 const mapStateToProps = (state) => {
   return {
+    filterType: state.search.filterType,
     searchObject: state.search.searchObject,
   };
 };
-export default connect(mapStateToProps)(GeneralProfilePage);
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setFilterTermForListing: (filterType, searchObject) =>
+      dispatch(actions.setFilterListings(filterType, searchObject)),
+    setFilterProfile: (displayName) =>
+      dispatch(actions.setFilterProfile(displayName.toLowerCase())),
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(GeneralProfilePage);

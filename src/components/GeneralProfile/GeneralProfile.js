@@ -2,7 +2,7 @@ import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import Comment from "../Comment/Comment";
-import FilterListings from "../../containers/Listings/FilteredListings";
+import FilterListings from "../../containers/util/FilterResults";
 import * as classes from "./GeneralProfile.css";
 import { faWindowClose } from "@fortawesome/free-solid-svg-icons";
 
@@ -97,6 +97,7 @@ const profile = (props) => {
           numStars={comment.numStars}
           content={comment.content}
           key={comment.key}
+          onClick={() => props.searchProfileHandler(comment.sender)}
         />
       </li>
     ));
@@ -134,6 +135,21 @@ const profile = (props) => {
           Listings
         </button>
         <button
+          onClick={props.onShowRequestHandler}
+          style={
+            props.showRequests
+              ? {
+                  fontWeight: "bold",
+                  color: "#dd5641",
+                  borderBottom: "3px solid #dd5641",
+                  outline: "none",
+                }
+              : null
+          }
+        >
+          Requests
+        </button>
+        <button
           onClick={props.onShowReviewsHandler}
           style={
             props.showComments
@@ -152,7 +168,7 @@ const profile = (props) => {
       <div className={classes.Profile}>
         <div className={classes.ProfileDetails}>{profile}</div>
         <div className={classes.OtherInfo}>
-          {props.showPastListing ? (
+          {props.showPastListing || props.showRequests ? (
             <FilterListings history={props.history} />
           ) : props.comments.length < 1 ? (
             <h3>Oops..No reviews</h3>

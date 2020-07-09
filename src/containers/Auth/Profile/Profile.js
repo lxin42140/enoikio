@@ -9,7 +9,7 @@ import Modal from "../../../components/UI/Modal/Modal";
 import Spinner from "../../../components/UI/Spinner/Spinner";
 import { database, storage } from "../../../firebase/firebase";
 import * as actions from "../../../store/actions/index";
-import FilterListings from "../../Listings/FilteredListings";
+import FilterResults from "../../util/FilterResults";
 import * as classes from "./Profile.css";
 
 class Profile extends Component {
@@ -62,7 +62,7 @@ class Profile extends Component {
   }
 
   onShowPastPostHandler = () => {
-    this.props.setFilterTermForListing("displayName");
+    this.props.setFilterTermForListing("displayName", "");
     this.setState({
       showPastListing: true,
       showOnRent: false,
@@ -72,7 +72,10 @@ class Profile extends Component {
   };
 
   onShowRequestHandler = () => {
-    this.props.setFilterTermForListing("displayName");
+    this.props.setFilterTermForListing(
+      "requests",
+      this.props.displayName.toLowerCase().split(" ").join("")
+    );
     this.setState({
       showPastListing: false,
       showOnRent: false,
@@ -82,7 +85,7 @@ class Profile extends Component {
   };
 
   onShowOnRentHandler = () => {
-    this.props.setFilterTermForListing("onRent");
+    this.props.setFilterTermForListing("onRent", "");
     this.setState({
       showPastListing: false,
       showOnRent: true,
@@ -376,10 +379,10 @@ class Profile extends Component {
           <div className={classes.ProfileDetails}>{profile}</div>
           {editProfileImage}
           <div className={classes.OtherInfo}>
-            {this.state.showPastListing || this.state.showOnRent ? (
-              <FilterListings history={this.props.history} />
-            ) : this.state.showRequest ? (
-              <FilterListings history={this.props.history} filterRequest />
+            {this.state.showPastListing ||
+            this.state.showOnRent ||
+            this.state.showRequest ? (
+              <FilterResults history={this.props.history} />
             ) : this.state.comments.length < 1 ? (
               <h3>Oops..No reviews</h3>
             ) : (
@@ -408,8 +411,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setFilterTermForListing: (filterType) =>
-      dispatch(actions.setFilterListings(filterType, "")),
+    setFilterTermForListing: (filterType, searchObject) =>
+      dispatch(actions.setFilterListings(filterType, searchObject)),
     setFilterProfile: (displayName) =>
       dispatch(actions.setFilterProfile(displayName.toLowerCase())),
     updateUserDetailsInit: () => dispatch(actions.updateUserDetailsInit()),

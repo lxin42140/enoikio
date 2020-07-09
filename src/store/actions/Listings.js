@@ -34,26 +34,12 @@ export const setExpandedListingInit = () => {
   };
 };
 
-// export const filterListings = (filterType, searchObject) => {
-//   return {
-//     type: actionTypes.FILTER_LISTINGS,
-//     filterType: filterType,
-//     searchObject: searchObject,
-//   };
-// };
-
 export const interestedListing = (interestedListing) => {
   return {
     type: actionTypes.SET_INTERESTED_LISTING,
     interestedListing: interestedListing,
   };
 };
-
-// export const setFilterListings = (filterType, searchObject) => {
-//   return (dispatch) => {
-//     dispatch(filterListings(filterType, searchObject));
-//   };
-// };
 
 export const updateListing = (updatedListing) => {
   return {

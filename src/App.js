@@ -23,8 +23,8 @@ const asyncAuth = asyncComponent(() => {
   return import("./containers/Auth/Auth");
 });
 
-const asyncFilteredListings = asyncComponent(() => {
-  return import("./containers/Listings/FilteredListings");
+const asyncFilteredResults = asyncComponent(() => {
+  return import("./containers/util/FilterResults");
 });
 
 const asyncProfile = asyncComponent(() => {
@@ -65,7 +65,7 @@ class App extends Component {
     let routes = (
       <Switch>
         <Route path="/" exact component={Listings} />
-        <Route path="/searchResults" component={asyncFilteredListings} />
+        <Route path="/searchResults" component={asyncFilteredResults} />
         <Route path="/expanded-listing" component={asyncExpandedListing} />
         <Route path="/auth" component={asyncAuth} />
         <Route path="/searchProfile" component={asyncGeneralProfile} />
@@ -77,14 +77,14 @@ class App extends Component {
       routes = (
         <Switch>
           <Route path="/" exact component={Listings} />
-          <Route path="/searchResults" component={asyncFilteredListings} />
+          <Route path="/searchResults" component={asyncFilteredResults} />
           <Route path="/searchProfile" component={asyncGeneralProfile} />
           <Route path="/new-post" component={asyncNewPost} />
           <Route path="/edit-post" component={asyncEditPost} />
           <Route path="/new-request" component={asyncNewRequest} />
           <Route path="/expanded-listing" component={asyncExpandedListing} />
-          <Route path="/post-history" component={asyncFilteredListings} />
-          <Route path="/liked-listings" component={asyncFilteredListings} />
+          <Route path="/post-history" component={asyncFilteredResults} />
+          <Route path="/liked-listings" component={asyncFilteredResults} />
           <Route path="/chats" component={asyncChat} />
           <Route path="/profile" component={asyncProfile} />
           <Route path="/logout" component={asyncLogOut} />
