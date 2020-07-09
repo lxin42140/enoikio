@@ -66,6 +66,11 @@ class Auth extends Component {
         isSignIn: true,
         isResetPassword: false,
       });
+    } else if (
+      this.state.isSignUp &&
+      !this.state.controls.displayName.validated
+    ) {
+      this.validateDisplayName();
     }
   }
 
@@ -261,17 +266,7 @@ class Auth extends Component {
             </p>
           );
         }
-        validationCheck = (
-          <React.Fragment>
-            {validationMessage}
-            <Button
-              onClick={this.validateDisplayName}
-              disabled={x.config.value === ""}
-            >
-              validate
-            </Button>
-          </React.Fragment>
-        );
+        validationCheck = <React.Fragment>{validationMessage}</React.Fragment>;
       }
       return (
         <React.Fragment key={x.id}>
