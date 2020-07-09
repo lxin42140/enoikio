@@ -511,6 +511,7 @@ class Offer extends Component {
             onChange={this.priceOfferOnChange}
             value={this.state.priceOffer}
             placeholder="Enter offer here..."
+            style={{marginTop: "1%"}}
           />
           <br />
           {this.state.interestedListing.listingType === "rent" ? (
