@@ -51,6 +51,7 @@
     border: none;
     width: 40%;
     border-bottom: 2px solid red;
+    margin-bottom: 1%;
 }
 
 .OfferInput:focus {
