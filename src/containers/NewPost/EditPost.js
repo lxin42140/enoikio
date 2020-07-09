@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 import classes from "./NewPost.css";
 import Input from "../../components/UI/Input/Input";
@@ -19,12 +20,12 @@ class EditPost extends Component {
           placeholder: "Module code",
         },
         value: "",
-        validation: {
-          required: true,
-          maxLength: 8,
-        },
+        validation: false,
         valid: false,
         touched: false,
+        validated: false,
+        validationError: null,
+        moduleName: "",
       },
       textbook: {
         elementType: "input",
@@ -114,6 +115,11 @@ class EditPost extends Component {
     this.props.dispatchClearExpandedListing();
   }
 
+  componentDidUpdate() {
+    if (!this.state.dataForm.module.validated) {
+      this.verifyModuleCode();
+    }
+  }
   componentDidMount() {
     if (this.state.initialEdit) {
       const dataForm = { ...this.state.dataForm };
@@ -162,6 +168,70 @@ class EditPost extends Component {
     }
   }
 
+  verifyModuleCode = () => {
+    axios
+      .get("https://api.nusmods.com/v2/2018-2019/moduleList.json")
+      .then((res) => {
+        let moduleCodeValid = false;
+        for (let i = 0; i < res.data.length; i++) {
+          if (
+            res.data[i].moduleCode.toLowerCase().split(" ").join("") ===
+            this.state.dataForm.module.value.toLowerCase().split(" ").join("")
+          ) {
+            moduleCodeValid = true;
+            this.setState((prevState) => ({
+              ...prevState,
+              formIsValid:
+                true &&
+                prevState.formIsValid &&
+                prevState.dataForm.module.valid,
+              dataForm: {
+                ...prevState.dataForm,
+                module: {
+                  ...prevState.dataForm.module,
+                  valid: true,
+                  validated: true,
+                  moduleName: res.data[i].title,
+                },
+              },
+            }));
+            break;
+          }
+        }
+        if (!moduleCodeValid) {
+          this.setState((prevState) => ({
+            ...prevState,
+            formIsValid: false,
+            dataForm: {
+              ...prevState.dataForm,
+              module: {
+                ...prevState.dataForm.module,
+                valid: false,
+                validated: true,
+                moduleName: "",
+              },
+            },
+          }));
+        }
+      })
+      .catch((error) => {
+        this.setState((prevState) => ({
+          ...prevState,
+          formIsValid: false,
+          dataForm: {
+            ...prevState.dataForm,
+            module: {
+              ...prevState.dataForm.module,
+              valid: false,
+              validated: true,
+              validationError: error,
+              moduleName: "",
+            },
+          },
+        }));
+      });
+  };
+
   checkValidity(value, rules) {
     let isValid = true;
     if (rules) {
@@ -183,10 +253,14 @@ class EditPost extends Component {
       ...updatedDataForm[inputIdentifier],
     };
     updatedFormElement.value = event.target.value;
-    updatedFormElement.valid = this.checkValidity(
-      updatedFormElement.value,
-      updatedFormElement.validation
-    );
+    if (inputIdentifier !== "module") {
+      updatedFormElement.valid = this.checkValidity(
+        updatedFormElement.value,
+        updatedFormElement.validation
+      );
+    } else {
+      updatedFormElement.validated = false;
+    }
     updatedFormElement.touched = true;
     updatedDataForm[inputIdentifier] = updatedFormElement;
     let formIsValid = true;
@@ -355,18 +429,44 @@ class EditPost extends Component {
     }
 
     let form = formElementsArray.map((formElement) => {
+      let validationCheck = null;
+      let validationMessage = null;
+      if (formElement.id === "module") {
+        if (formElement.config.validated && formElement.config.valid) {
+          validationMessage = (
+            <p style={{ color: "grey", fontWeight: "bold" }}>
+              {formElement.config.moduleName}
+            </p>
+          );
+        } else if (formElement.config.validated && !formElement.config.valid) {
+          validationMessage = (
+            <p style={{ color: "red", fontWeight: "bold" }}>
+              Module code does not exist!
+            </p>
+          );
+        } else if (formElement.config.validationError) {
+          validationMessage = (
+            <p style={{ color: "red", fontWeight: "bold" }}>
+              {formElement.config.validationError}
+            </p>
+          );
+        }
+        validationCheck = <React.Fragment>{validationMessage}</React.Fragment>;
+      }
       return (
-        <Input
-          disabled={formElement.id === "listingType"}
-          key={formElement.id}
-          elementType={formElement.config.elementType}
-          elementConfig={formElement.config.elementConfig}
-          value={formElement.config.value}
-          valid={formElement.config.valid}
-          shouldValidate={formElement.config.validation}
-          touched={formElement.config.touched}
-          change={(event) => this.inputChangedHandler(event, formElement.id)}
-        />
+        <React.Fragment key={formElement.id}>
+          <Input
+            key={formElement.id}
+            elementType={formElement.config.elementType}
+            elementConfig={formElement.config.elementConfig}
+            value={formElement.config.value}
+            valid={formElement.config.valid}
+            shouldValidate={formElement.config.validation}
+            touched={formElement.config.touched}
+            change={(event) => this.inputChangedHandler(event, formElement.id)}
+          />
+          {validationCheck}
+        </React.Fragment>
       );
     });
 
