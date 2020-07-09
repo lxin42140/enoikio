@@ -15,7 +15,6 @@ class GeneralProfilePage extends Component {
     showComments: false,
 
     formattedDisplayName: "",
-    // searchQueryName: "",
 
     comments: [],
     numReviews: 0,
@@ -38,6 +37,8 @@ class GeneralProfilePage extends Component {
       this.fetchUserProfile();
     } else if (searchQueryName !== this.state.formattedDisplayName) {
       this.searchProfileHandler(searchQueryName);
+    } else if (this.state.showPastListing && this.state.showRequests) {
+      this.setState({ showRequests: false });
     }
   }
   componentDidMount() {
@@ -90,7 +91,7 @@ class GeneralProfilePage extends Component {
       });
   };
   onShowPastPostHandler = () => {
-    this.props.setFilterTermForListing("displayName", "");
+    this.props.setFilterProfile(this.state.formattedDisplayName);
     this.setState({
       showPastListing: true,
       showRequests: false,
@@ -101,7 +102,7 @@ class GeneralProfilePage extends Component {
   onShowRequestHandler = () => {
     this.props.setFilterTermForListing(
       "requests",
-      this.state.displayName.toLowerCase().split(" ").join("")
+      this.state.formattedDisplayName
     );
     this.setState({
       showPastListing: false,
@@ -149,8 +150,8 @@ class GeneralProfilePage extends Component {
         showRequests={this.state.showRequests}
         showComments={this.state.showComments}
         onShowPastPostHandler={this.onShowPastPostHandler}
-        onShowReviewsHandler={this.onShowReviewsHandler}
         onShowRequestHandler={this.onShowRequestHandler}
+        onShowReviewsHandler={this.onShowReviewsHandler}
         onCancelSearchHandler={this.onCancelSearchHandler}
         searchProfileHandler={this.searchProfileHandler}
         // from firebase
