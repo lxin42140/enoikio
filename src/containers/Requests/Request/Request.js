@@ -1,5 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import {
+  faComment,
+  faTrash,
+  faTimes,
+  faHome,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { database } from "../../../firebase/firebase";
 import { Link } from "react-router-dom";
 import Modal from "../../../components/UI/Modal/Modal";
@@ -88,7 +95,7 @@ class Request extends Component {
         <div className={classes.ProfileTextbook}>
           <p>
             {this.props.module}:《{this.props.textbook}》
-        </p>
+          </p>
         </div>
 
         <div className={classes.ProfileInfo}>
@@ -112,50 +119,56 @@ class Request extends Component {
         </div>
       </div>
     ) : (
-        <div
-          className={classes.Content}
-          style={this.props.isProfile ? null : { cursor: "pointer" }}
-          onClick={() =>
-            this.props.isProfile
-              ? null
-              : this.searchProfileHandler(this.props.userId)
-          }
-        >
-          <div className={classes.Textbook}>
-            <p>
-              {this.props.module}:《{this.props.textbook}》
+      <div
+        className={classes.Content}
+        style={this.props.isProfile ? null : { cursor: "pointer" }}
+        onClick={() =>
+          this.props.isProfile
+            ? null
+            : this.searchProfileHandler(this.props.userId)
+        }
+      >
+        <div className={classes.Textbook}>
+          <p>
+            {this.props.module}:《{this.props.textbook}》
           </p>
-          </div>
-
-          <div className={classes.Info}>
-            <p className={classes.Header}>Request type: </p>
-            <p className={defaultDetails.join(" ")}>{this.props.requestType}</p>
-          </div>
-
-          <div className={classes.Info}>
-            <p className={classes.Header}>Priority level: </p>
-            <p className={priorityColour.join(" ")}>{this.props.priority}</p>
-          </div>
-
-          <div className={classes.Info}>
-            <p className={classes.Header}>Posted by: </p>
-            <p className={defaultDetails.join(" ")}>{this.props.userId}</p>
-          </div>
-
-          <div className={classes.Info}>
-            <p className={classes.Header}>Posted on: </p>
-            <p className={defaultDetails.join(" ")}>{this.props.date}</p>
-          </div>
         </div>
-      );
+
+        <div className={classes.Info}>
+          <p className={classes.Header}>Request type: </p>
+          <p className={defaultDetails.join(" ")}>{this.props.requestType}</p>
+        </div>
+
+        <div className={classes.Info}>
+          <p className={classes.Header}>Priority level: </p>
+          <p className={priorityColour.join(" ")}>{this.props.priority}</p>
+        </div>
+
+        <div className={classes.Info}>
+          <p className={classes.Header}>Posted by: </p>
+          <p className={defaultDetails.join(" ")}>{this.props.userId}</p>
+        </div>
+
+        <div className={classes.Info}>
+          <p className={classes.Header}>Posted on: </p>
+          <p className={defaultDetails.join(" ")}>{this.props.date}</p>
+        </div>
+      </div>
+    );
 
     const askForConfirmation = (
       <Modal show={this.state.askUserToDelete}>
         <div>
           <p>Confirm delete request?</p>
-          <p>This action cannot be undone.</p>
-          <Button onClick={this.cancelConfirmation}>Go back</Button>
-          <Button onClick={this.deleteRequest}>Delete</Button>
+          <p>This action cannot be undone</p>
+          <Button onClick={this.cancelConfirmation}>
+            {<FontAwesomeIcon icon={faTimes} style={{ paddingRight: "5px" }} />}
+            Go back
+          </Button>
+          <Button onClick={this.deleteRequest}>
+            {<FontAwesomeIcon icon={faTrash} style={{ paddingRight: "5px" }} />}
+            Delete
+          </Button>
         </div>
       </Modal>
     );
@@ -164,9 +177,15 @@ class Request extends Component {
       <Modal show={this.state.confirmDelete}>
         <p>Listing deleted</p>
         <Link to="/">
-          <Button>Home</Button>
+          <Button>
+            {<FontAwesomeIcon icon={faHome} style={{ paddingRight: "5px" }} />}
+            Home
+          </Button>
         </Link>
-        <Button onClick={this.closePopup}>Close</Button>
+        <Button onClick={this.closePopup}>
+          {<FontAwesomeIcon icon={faTrash} style={{ paddingRight: "5px" }} />}
+          Close
+        </Button>
       </Modal>
     );
 
@@ -177,11 +196,24 @@ class Request extends Component {
     if (!this.props.isAuthenticated) {
       button = (
         <Link to="/auth">
-          <Button>Chat</Button>
+          <Button>
+            {
+              <FontAwesomeIcon
+                icon={faComment}
+                style={{ paddingRight: "5px" }}
+              />
+            }
+            Chat
+          </Button>
         </Link>
       );
     } else if (isOwner) {
-      button = <Button onClick={this.askUserToDelete}>Delete</Button>;
+      button = (
+        <Button onClick={this.askUserToDelete}>
+          {<FontAwesomeIcon icon={faTrash} style={{ paddingRight: "5px" }} />}
+          Delete
+        </Button>
+      );
     } else {
       button = (
         <Link
@@ -190,6 +222,12 @@ class Request extends Component {
           }}
         >
           <Button onClick={() => this.onChatHandler(this.props.userId)}>
+            {
+              <FontAwesomeIcon
+                icon={faComment}
+                style={{ paddingRight: "5px" }}
+              />
+            }
             Chat
           </Button>
         </Link>

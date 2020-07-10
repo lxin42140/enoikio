@@ -126,7 +126,10 @@ export const signOut = () => {
 export const autoSignIn = () => {
   return (dispatch) => {
     auth.onAuthStateChanged((user) => {
-      if (user && user.emailVerified) {
+      // if (user && user.emailVerified) {
+      //   dispatch(authSuccess(user));
+      // }
+      if (user) {
         dispatch(authSuccess(user));
       }
     });

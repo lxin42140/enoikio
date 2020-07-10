@@ -2,6 +2,11 @@ import {
   faChevronLeft,
   faChevronRight,
   faWindowClose,
+  faEdit,
+  faTrash,
+  faComment,
+  faTimes,
+  faHome,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { Component } from "react";
@@ -182,7 +187,15 @@ class ExpandedListing extends Component {
           </p>
         </div>
         <Link to="/auth">
-          <Button>Chat to make offer</Button>
+          <Button>
+            {
+              <FontAwesomeIcon
+                icon={faComment}
+                style={{ paddingRight: "5px" }}
+              />
+            }
+            Chat to make offer
+          </Button>
         </Link>
       </React.Fragment>
     );
@@ -220,13 +233,22 @@ class ExpandedListing extends Component {
             </p>
           </div>
           <Link to="/edit-post" style={{ paddingRight: "20px" }}>
-            <Button>Edit</Button>
+            <Button>
+              {
+                <FontAwesomeIcon
+                  icon={faEdit}
+                  style={{ paddingRight: "5px" }}
+                />
+              }
+              Edit
+            </Button>
           </Link>
           <Button
             btnType="Important"
             onClick={this.askUserToDelete}
             disabled={this.props.expandedListing.status !== "available"}
           >
+            {<FontAwesomeIcon icon={faTrash} style={{ paddingRight: "5px" }} />}
             Delete
           </Button>
         </React.Fragment>
@@ -265,6 +287,12 @@ class ExpandedListing extends Component {
               this.onChatHandler(this.props.expandedListing.displayName)
             }
           >
+            {
+              <FontAwesomeIcon
+                icon={faComment}
+                style={{ paddingRight: "5px" }}
+              />
+            }
             Chat to make offer
           </Button>
         </React.Fragment>
@@ -389,8 +417,14 @@ class ExpandedListing extends Component {
         <div>
           <p>Confirm delete listing?</p>
           <p>This action cannot be undone</p>
-          <Button onClick={this.cancelConfirmation}>Go back</Button>
-          <Button onClick={this.confirmDelete}>Delete</Button>
+          <Button onClick={this.cancelConfirmation}>
+            {<FontAwesomeIcon icon={faTimes} style={{ paddingRight: "5px" }} />}
+            Go back
+          </Button>
+          <Button onClick={this.confirmDelete} btnType="Important">
+            {<FontAwesomeIcon icon={faTrash} style={{ paddingRight: "5px" }} />}
+            Delete
+          </Button>
         </div>
       </Modal>
     );
@@ -400,7 +434,15 @@ class ExpandedListing extends Component {
         <div style={{ display: "block" }}>
           <p>Listing deleted</p>
           <Link to="/">
-            <Button>Home</Button>
+            <Button>
+              {
+                <FontAwesomeIcon
+                  icon={faHome}
+                  style={{ paddingRight: "5px" }}
+                />
+              }
+              Home
+            </Button>
           </Link>
         </div>
       </Modal>
@@ -418,6 +460,7 @@ class ExpandedListing extends Component {
           </div>
           <Comments
             comments={this.props.expandedListing.comments}
+            replies={this.props.expandedListing.replies}
             identifier={this.props.expandedListing.key}
             userName={this.props.expandedListing.displayName}
             searchProfileHandler={this.searchProfileHandler}

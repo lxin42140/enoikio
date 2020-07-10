@@ -1,4 +1,9 @@
-import { faStar } from "@fortawesome/free-solid-svg-icons";
+import {
+  faStar,
+  faReply,
+  faTimes,
+  faCheck,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import moment from "moment";
 import React, { Component } from "react";
@@ -9,16 +14,35 @@ import Comment from "../../../../components/Comment/Comment";
 import Button from "../../../../components/UI/Button/Button";
 import { database } from "../../../../firebase/firebase";
 import * as classes from "./Comments.css";
+import Modal from "../../../../components/UI/Modal/Modal";
 class Comments extends Component {
   state = {
     isListingOwner: false,
     message: "",
     numStars: 0,
     comments: [],
-  };
 
+    replies: [],
+    toggleReply: false,
+    replyMessage: "",
+    replyKey: "",
+  };
   componentDidMount() {
-    if (this.state.comments.length < 1 && this.props.comments !== undefined) {
+    if (
+      this.state.comments.length < 1 &&
+      this.props.comments !== undefined &&
+      this.state.comments.replies < 1 &&
+      this.props.replies !== undefined
+    ) {
+      this.setState({
+        comments: this.props.comments,
+        replies: this.props.replies,
+        isListingOwner: this.props.displayName === this.props.userName,
+      });
+    } else if (
+      this.state.comments.length < 1 &&
+      this.props.comments !== undefined
+    ) {
       this.setState({
         comments: this.props.comments,
         isListingOwner: this.props.displayName === this.props.userName,
@@ -33,8 +57,13 @@ class Comments extends Component {
         if (snapShot.val()) {
           const comments = Object.assign([], snapShot.val().comments);
           comments.reverse();
+
+          const replies = Object.assign([], snapShot.val().replies);
+          replies.reverse();
+
           this.setState({
             comments: comments,
+            replies: replies,
             isListingOwner: this.props.displayName === this.props.userName,
           });
         }
@@ -128,6 +157,65 @@ class Comments extends Component {
       });
   };
 
+  togglePopUp = (replyKey) => {
+    // close pop up
+    if (this.state.toggleReply) {
+      this.setState({
+        toggleReply: false,
+        replyMessage: "",
+        replyKey: "",
+      });
+    } else {
+      // show pop up
+      this.setState({
+        toggleReply: true,
+        replyKey: replyKey,
+      });
+    }
+  };
+
+  replyOnChange = (event) => {
+    this.setState({
+      replyMessage: event.target.value,
+    });
+  };
+
+  submitReplyHandler = () => {
+    let message;
+    let profilePicture = profileImage;
+
+    if (this.props.photoURL !== "") {
+      profilePicture = this.props.photoURL;
+    }
+
+    message = {
+      content: this.state.replyMessage,
+      sender: this.props.displayName,
+      profilePicture: profilePicture,
+      isListingOwner: this.state.isListingOwner,
+      date: moment().format("DD-MM-YYYY"),
+      time: moment().format("HH:mm:ss"),
+      key: this.state.replyKey,
+    };
+
+    const replyHistory = Object.assign([], this.state.replies);
+    replyHistory.reverse();
+    replyHistory.push(message);
+
+    database
+      .ref()
+      .child("listings")
+      .child(this.props.identifier)
+      .update({ replies: replyHistory })
+      .then((res) => {
+        this.setState({
+          toggleReply: false,
+          replyMessage: "",
+          replyKey: "",
+        });
+      });
+  };
+
   render() {
     let commentInput = (
       <div>
@@ -214,23 +302,114 @@ class Comments extends Component {
       </div>
     );
 
-    let reviews = this.state.comments.map((comment) => (
-      <li key={comment.key}>
+    let reviews = this.state.comments.map((comment) => {
+      let threads = [];
+      for (let index in this.state.replies) {
+        if (this.state.replies[index].key === comment.key) {
+          threads.push(this.state.replies[index]);
+        }
+      }
+      threads = threads.map((reply) => (
         <Comment
-          isListingOwner={comment.isListingOwner}
-          sender={comment.sender}
-          date={comment.date}
-          time={comment.time}
-          numStars={comment.numStars}
-          content={comment.content}
-          profilePicture={comment.profilePicture}
+          isReply
+          isListingOwner={reply.isListingOwner}
+          sender={reply.sender}
+          date={reply.date}
+          time={reply.time}
+          numStars={reply.numStars}
+          content={reply.content}
+          profilePicture={reply.profilePicture}
           onClick={() => this.props.searchProfileHandler(comment.sender)}
         />
-      </li>
-    ));
+      ));
+
+      return (
+        <li key={comment.key}>
+          <div>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <Comment
+                isListingOwner={comment.isListingOwner}
+                sender={comment.sender}
+                date={comment.date}
+                time={comment.time}
+                numStars={comment.numStars}
+                content={comment.content}
+                profilePicture={comment.profilePicture}
+                onClick={() => this.props.searchProfileHandler(comment.sender)}
+              />
+              <div style={{ paddingRight: "15px" }}>
+                {this.props.isAuthenticated ? (
+                  <span>
+                    <Button onClick={() => this.togglePopUp(comment.key)}>
+                      {
+                        <FontAwesomeIcon
+                          icon={faReply}
+                          style={{ paddingRight: "5px" }}
+                        />
+                      }
+                      Reply
+                    </Button>
+                  </span>
+                ) : (
+                  <Link to="/auth">
+                    <Button>Sign in to reply</Button>
+                  </Link>
+                )}
+              </div>
+            </div>
+            {threads}
+          </div>
+        </li>
+      );
+    });
+
+    let replyPopup = (
+      <Modal show={this.state.toggleReply}>
+        <div className={classes.NewComment}>
+          <textarea
+            className={classes.textarea}
+            type="text"
+            value={this.state.replyMessage}
+            placeholder="Type reply here..."
+            onChange={this.replyOnChange}
+          />
+          <span style={{ paddingLeft: "15px" }}>
+            <Button
+              btnType="Important"
+              disabled={this.state.replyMessage === ""}
+              onClick={this.submitReplyHandler}
+            >
+              {
+                <FontAwesomeIcon
+                  icon={faCheck}
+                  style={{ paddingRight: "5px" }}
+                />
+              }
+              Post
+            </Button>
+            <Button onClick={() => this.togglePopUp("")}>
+              {
+                <FontAwesomeIcon
+                  icon={faTimes}
+                  style={{ paddingRight: "5px" }}
+                />
+              }
+              Cancel
+            </Button>
+          </span>
+        </div>
+      </Modal>
+    );
 
     return (
       <div className={classes.Comments}>
+        {replyPopup}
         {this.props.isAuthenticated ? (
           commentInput
         ) : (
