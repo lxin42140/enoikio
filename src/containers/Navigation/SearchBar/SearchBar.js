@@ -33,7 +33,7 @@ class SearchBar extends Component {
         placeHolder = "textbook title";
         break;
       case "searchProfile":
-        placeHolder = "profile name";
+        placeHolder = "exact profile name";
         break;
       default:
         placeHolder = "location";
@@ -115,14 +115,14 @@ class SearchBar extends Component {
           text={"book title"}
         />
         <DropDown
-          icon={faUser}
-          onClick={() => this.changeFilterHandler("searchProfile")}
-          text={"profile name"}
-        />
-        <DropDown
           icon={faLocationArrow}
           onClick={() => this.changeFilterHandler("location")}
           text={"location"}
+        />
+        <DropDown
+          icon={faUser}
+          onClick={() => this.changeFilterHandler("searchProfile")}
+          text={"profile name"}
         />
       </React.Fragment>
     );

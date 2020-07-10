@@ -64,38 +64,20 @@ class FilterResults extends Component {
           (listing) => listing.formattedDisplayName === this.props.searchObject
         );
         break;
-      case "textbook":
-      filteredListings = this.props.listings.sort()
-        // filteredListings = this.props.listings.filter(
-        //   (listing) =>
-        //     listing.postDetails.textbook.toLowerCase().split(" ").join("") ===
-        //     this.props.searchObject
-        // );
-        break;
-      case "moduleCode":
-        filteredListings = this.props.listings.filter(
-          (listing) =>
-            listing.postDetails.module.toLowerCase().split(" ").join("") ===
-            this.props.searchObject
-        );
-        break;
-      case "location":
-        filteredListings = this.props.listings.filter((listing) => {
-          if (listing.postDetails.location) {
-            return (
-              listing.postDetails.location.toLowerCase().split(" ").join("") ===
-              this.props.searchObject
-            );
-          }
-          return false;
-        });
-        break;
       case "requests":
         filteredRequests = this.props.allRequests.filter(
           (request) =>
             request.displayName.toLowerCase().split(" ").join("") ===
             this.props.searchObject
         );
+        break;
+      case "textbook":
+      case "moduleCode":
+      case "location":
+        filteredListings = this.props.listings.filter((listing) =>
+          this.filterListing(listing)
+        );
+        filteredListings = this.sortListing(filteredListings);
         break;
       default:
         break;
@@ -108,21 +90,89 @@ class FilterResults extends Component {
     });
   };
 
-  sort = (strA, strB, searchObject) => {
-    for (let i = 0; i < strA.length; i++) {
-      if (strA.charAt(i) !== strB.charAt(i)) {
-        if (strA.charAt(i) === searchObject.charAt(i)) {
-          return 1;
-        } else if (strB.charAt(i) === searchObject.charAt(i)) {
-          return -1;
-        } else {
-          return 0;
-        }
-      } else if (i >= searchObject.length) {
+  // filter out listings that are completely different
+  // filter by module code, book title, and location
+  filterListing = (listing) => {
+    let str = "";
+    switch (this.props.filterType) {
+      case "moduleCode":
+        str = listing.postDetails.module.toLowerCase().split(" ").join("");
         break;
+      case "location":
+        if (!listing.postDetails.location) {
+          return false;
+        }
+        str = listing.postDetails.location.toLowerCase().split(" ").join("");
+        break;
+      case "textbook":
+        str = listing.postDetails.textbook.toLowerCase().split(" ").join("");
+        break;
+      default:
+        break;
+    }
+    let diffCount = 0;
+    for (let i = 0; i < str.length && i < this.props.searchObject.length; i++) {
+      if (str.charAt(i) !== this.props.searchObject.charAt(i)) {
+        diffCount++;
       }
     }
-    return 0;
+    if (
+      diffCount === str.length ||
+      diffCount === this.props.searchObject.length
+    ) {
+      return false;
+    } else {
+      return true;
+    }
+  };
+
+  // rank base on similarity with search term
+  rank = (listing) => {
+    let str = "";
+    switch (this.props.filterType) {
+      case "moduleCode":
+        str = listing.postDetails.module.toLowerCase().split(" ").join("");
+        break;
+      case "location":
+        if (!listing.postDetails.location) {
+          return false;
+        }
+        str = listing.postDetails.location.toLowerCase().split(" ").join("");
+        break;
+      case "textbook":
+        str = listing.postDetails.textbook.toLowerCase().split(" ").join("");
+        break;
+      default:
+        break;
+    }
+    let similarCount = 0;
+    for (let i = 0; i < str.length && i < this.props.searchObject.length; i++) {
+      if (str.charAt(i) === this.props.searchObject.charAt(i)) {
+        similarCount++;
+      } else {
+        similarCount--;
+      }
+    }
+    return similarCount;
+  };
+
+  // bubble sort
+  sortListing = (listingArr) => {
+    let swap;
+    let n = listingArr.length - 1;
+    do {
+      swap = false;
+      for (let i = 0; i < n; i++) {
+        if (this.rank(listingArr[i]) < this.rank(listingArr[i + 1])) {
+          swap = true;
+          const temp = listingArr[i];
+          listingArr[i] = listingArr[i + 1];
+          listingArr[i + 1] = temp;
+        }
+      }
+      n--;
+    } while (swap);
+    return listingArr;
   };
   render() {
     if (this.state.filterType === "requests") {
