@@ -8,6 +8,12 @@ import { database, storage } from "../../../firebase/firebase";
 import * as actions from "../../../store/actions/index";
 import classes from "./Listing.css";
 
+/*
+KIV:
+2. ADJUST MODAL FOR DELETE LISTING / EDIT LISTING FOR SMALLER SCREEN
+*/
+
+
 class Listing extends Component {
   state = {
     image: "",
@@ -192,6 +198,8 @@ class Listing extends Component {
   };
 
   render() {
+    const smallScreen = this.props.windowWidth < 616;
+
     //styling for heart icon
     const HeartStyle = [classes.Icon];
     this.state.liked
@@ -211,7 +219,7 @@ class Listing extends Component {
         default:
           break;
       }
-    }
+    } 
 
     const heartIcon = (
       <div style={{ display: "flex", alignItems: "center", marginTop: "auto" }}>
@@ -452,14 +460,18 @@ class Listing extends Component {
                     {this.props.location}
                   </li>
                 )}
-                <li style={{ paddingTop: "5px" }}>
-                  <b>Posted by: </b>
-                  {this.props.userId}
-                </li>
-                <li>
-                  <b>Posted on: </b>
-                  {this.props.date}
-                </li>
+                {!smallScreen ? (
+                <React.Fragment>
+                  <li style={{ paddingTop: "5px" }}>
+                    <b>Posted by: </b>
+                    {this.props.userId}
+                  </li>
+                  <li>
+                    <b>Posted on: </b>
+                    {this.props.date}
+                  </li>
+                </React.Fragment>
+                ) : null}
               </ul>
             </div>
           </div>
@@ -478,6 +490,7 @@ const mapStateToProps = (state) => {
     displayName: state.auth.displayName,
     listings: state.listing.listings,
     chatContacts: state.chat.chatContacts,
+    windowWidth: state.window.width,
   };
 };
 

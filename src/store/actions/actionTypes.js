@@ -32,7 +32,7 @@ export const CLEAR_NEW_POST_DATA = "CLEAR_NEW_POST_DATA";
 /*----------------------Submit new request----------------------*/
 export const SUBMIT_NEW_REQUEST_INIT = "SUBMIT_NEW_REQUEST_INIT";
 export const SUBMIT_NEW_REQUEST_SUCCESS = "SUBMIT_NEW_REQUEST_SUCCESS";
-export const SUBMIT_NEW_REQUEST_FAIL = "SUBMIT_NEW_REQUEST_SUCCESS";
+export const SUBMIT_NEW_REQUEST_FAIL = "SUBMIT_NEW_REQUEST_FAIL";
 export const REMOVED_REQUEST = "REMOVED_REQUEST"
 export const CLEAR_REQUEST_DATA = "CLEAR_REQUEST_DATA"
 export const SET_RESOLVE_REQUEST = "SET_RESOLVE_REQUEST"
@@ -40,7 +40,7 @@ export const SET_RESOLVE_REQUEST = "SET_RESOLVE_REQUEST"
 /*----------------------Fetch all request----------------------*/
 export const FETCH_REQUEST_INIT = "FETCH_REQUEST_INIT";
 export const FETCH_REQUEST_SUCCESS = "FETCH_REQUEST_SUCCESS";
-export const FETCH_REQUEST_FAIL = "FETCH_REQUEST_SUCCESS";
+export const FETCH_REQUEST_FAIL = "FETCH_REQUEST_FAIL";
 
 /*----------------------authentication----------------------*/
 export const AUTH_START = "AUTH_START";
@@ -62,3 +62,6 @@ export const FETCH_FULL_CHAT_INIT = "FETCH_FULL_CHAT_INIT";
 export const FETCH_FULL_CHAT_INIT_SUCCESS = "FETCH_FULL_CHAT_INIT_SUCCESS";
 export const REMOVE_EMPTY_CHAT_CONTACTS = "REMOVE_EMPTY_CHAT_CONTACTS";
 export const RESET_RECIPIENT = "RESET_RECIPIENT";
+
+/*----------------------Window----------------------*/
+export const SET_WINDOW_WIDTH = "SET_WINDOW_WIDTH";
