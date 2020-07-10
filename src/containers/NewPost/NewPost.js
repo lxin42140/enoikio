@@ -3,6 +3,8 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import moment from "moment";
 import axios from "axios";
+import { faTrash, faTimes, faCheck } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import classes from "./NewPost.css";
 import Input from "../../components/UI/Input/Input";
@@ -533,7 +535,10 @@ class NewPost extends Component {
           <p style={{ paddingRight: "10px", textAlign: "center" }}>
             {image.name}
           </p>
-          <Button onClick={() => this.removeImageHandler(image)}>Remove</Button>
+          <Button onClick={() => this.removeImageHandler(image)}>
+            {<FontAwesomeIcon icon={faTrash} style={{ paddingRight: "5px" }} />}
+            Remove
+          </Button>
         </div>
       );
     });
@@ -617,8 +622,12 @@ class NewPost extends Component {
         )}
 
         <div style={{ display: "flex", justifyContent: "center" }}>
-          <Button onClick={this.toggleModalHandler}>Go back</Button>
+          <Button onClick={this.toggleModalHandler}>
+            {<FontAwesomeIcon icon={faTimes} style={{ paddingRight: "5px" }} />}
+            Go back
+          </Button>
           <Button btnType="Important" onClick={this.onSubmitHandler}>
+            {<FontAwesomeIcon icon={faCheck} style={{ paddingRight: "5px" }} />}
             Submit
           </Button>
         </div>

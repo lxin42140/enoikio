@@ -134,6 +134,7 @@ export const fetchAllListings = () => {
           numberOfImages: snapShot.val().numberOfImages,
           status: snapShot.val().status,
           comments: snapShot.val().comments,
+          replies: snapShot.val().replies,
           likedUsers: snapShot.val().likedUsers,
           lessee: snapShot.val().lessee,
         };
@@ -155,6 +156,9 @@ export const fetchAllListings = () => {
               dispatch(updateListing(updatedListing));
             } else if (snapShot.key === "comments") {
               updatedListing.comments = snapShot.val();
+              dispatch(updateListing(updatedListing));
+            } else if (snapShot.key === "replies") {
+              updatedListing.replies = snapShot.val();
               dispatch(updateListing(updatedListing));
             } else if (snapShot.key === "photoURL") {
               updatedListing.photoURL = snapShot.val();
@@ -179,12 +183,15 @@ export const fetchAllListings = () => {
             .child("listings")
             .child(key)
             .on("child_added", (snapShot) => {
+              let updatedListing = Object.assign(
+                [],
+                getState().listing.listings
+              ).filter((listing) => listing.key === key)[0];
               if (snapShot.key === "comments") {
-                let updatedListing = Object.assign(
-                  [],
-                  getState().listing.listings
-                ).filter((listing) => listing.key === key)[0];
                 updatedListing.comments = snapShot.val();
+                dispatch(updateListing(updatedListing));
+              } else if (snapShot.key === "replies") {
+                updatedListing.replies = snapShot.val();
                 dispatch(updateListing(updatedListing));
               }
             });

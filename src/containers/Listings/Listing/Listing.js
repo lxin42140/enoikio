@@ -1,4 +1,4 @@
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import { faHeart, faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import moment from "moment";
 import React, { Component } from "react";
@@ -294,6 +294,12 @@ class Listing extends Component {
                 this.onChangeRentalHandler(event, "COMPLETED_OFFER")
               }
             >
+              {
+                <FontAwesomeIcon
+                  icon={faCheck}
+                  style={{ paddingRight: "5px" }}
+                />
+              }
               Completed
             </Button>
             <Button
@@ -301,6 +307,12 @@ class Listing extends Component {
                 this.onChangeRentalHandler(event, "REJECTED_OFFER")
               }
             >
+              {
+                <FontAwesomeIcon
+                  icon={faTimes}
+                  style={{ paddingRight: "5px" }}
+                />
+              }
               Reject
             </Button>
           </div>

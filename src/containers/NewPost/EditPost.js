@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import { faTrash, faTimes, faCheck } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 
 import classes from "./NewPost.css";
@@ -561,6 +563,12 @@ class EditPost extends Component {
               {typeof image === "string" ? image : image.name}
             </p>
             <Button onClick={() => this.removeImageHandler(image)}>
+              {
+                <FontAwesomeIcon
+                  icon={faTrash}
+                  style={{ paddingRight: "5px" }}
+                />
+              }
               Remove
             </Button>
           </div>
@@ -595,6 +603,12 @@ class EditPost extends Component {
               onClick={this.toggleModalHandler}
               disabled={!this.state.formIsValid || this.state.initialEdit}
             >
+              {
+                <FontAwesomeIcon
+                  icon={faCheck}
+                  style={{ paddingRight: "5px" }}
+                />
+              }
               SUBMIT
             </Button>
             <Button
@@ -605,6 +619,12 @@ class EditPost extends Component {
                 this.props.history.goBack();
               }}
             >
+              {
+                <FontAwesomeIcon
+                  icon={faTimes}
+                  style={{ paddingRight: "5px" }}
+                />
+              }
               Cancel
             </Button>
           </React.Fragment>

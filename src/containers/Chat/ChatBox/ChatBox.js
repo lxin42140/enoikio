@@ -8,7 +8,7 @@ import Button from "../../../components/UI/Button/Button";
 import Spinner from "../../../components/UI/Spinner/Spinner";
 import ChatMessage from "../../../components/Chat/ChatMessage/ChatMessage";
 import Offer from "../Offer/Offer";
-import { faWindowClose } from "@fortawesome/free-solid-svg-icons";
+import { faWindowClose, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as actions from "../../../store/actions/index";
 class ChatBox extends Component {
@@ -137,7 +137,15 @@ class ChatBox extends Component {
                 onKeyDown={this.inputOnKeyDown}
               />
               <span style={{ paddingLeft: "15px" }}>
-                <Button onClick={this.sendMessageHandler}>Send</Button>
+                <Button onClick={this.sendMessageHandler}>
+                  {
+                    <FontAwesomeIcon
+                      icon={faPaperPlane}
+                      style={{ paddingRight: "5px" }}
+                    />
+                  }
+                  Send
+                </Button>
               </span>
             </React.Fragment>
           )}
