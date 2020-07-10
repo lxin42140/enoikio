@@ -88,7 +88,7 @@
 .OtherInfo {
     display: flex;
     flex-flow: row wrap;
-    /* width: 100%; */
+    width: 100%;
     height: 100%;
     box-shadow: 0 3px 10px 0 rgba(44, 44, 45, .07);
     background-color: #fff;
@@ -137,7 +137,7 @@
 @media (max-width: 1000px) {
     body .smallScreen {
         width: 900px;
-        overflow-x: scroll;
         padding-right: 50px;
+        overflow-y: hidden;
     }
 }
