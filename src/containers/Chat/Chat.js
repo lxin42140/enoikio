@@ -10,25 +10,8 @@ import Spinner from "../../components/UI/Spinner/Spinner";
 class Chat extends Component {
   state = {
     initialLoad: true,
-    smallScreen: false,
     showMessages: false,
   };
-
-  componentDidMount() {
-    if (window.innerWidth < 525) {
-      this.setState({ smallScreen: true });
-    } else {
-      this.setState({ smallScreen: false });
-    }
-
-    window.addEventListener("resize", () => {
-      if (window.innerWidth < 525) {
-        this.setState({ smallScreen: true });
-      } else {
-        this.setState({ smallScreen: false });
-      }
-    });
-  }
 
   componentWillUnmount() {
     this.props.dispatchChatCleanUp(this.props.chatContacts);
@@ -74,7 +57,7 @@ class Chat extends Component {
 
     let chatMessages;
 
-    if (!this.state.smallScreen) {
+    if (this.props.windowWidth > 525) {
       chatMessages = (
         <div className={classes.ChatBox}>
           {this.state.initialLoad && this.props.chatContacts.length < 1 ? (
@@ -118,7 +101,7 @@ class Chat extends Component {
       );
     }
 
-    return this.state.smallScreen ? (
+    return this.props.windowWidth <= 525 ? (
       <div className={classes.Chat}>
         {this.state.showMessages ? null : chatContacts}
         {this.state.showMessages ? chatMessages : null}
@@ -149,6 +132,8 @@ const mapStateToProps = (state) => {
     fullChat: state.chat.fullChat,
     fullChatUID: state.chat.fullChatUID,
     fullChatLoading: state.chat.fullChatLoading,
+
+    windowWidth: state.window.width,
   };
 };
 

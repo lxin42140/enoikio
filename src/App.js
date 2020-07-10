@@ -53,6 +53,10 @@ class App extends Component {
     this.props.dispatchFetchAllListings();
     this.props.dispatchFetchAllRequests();
     this.props.history.push("/");
+
+    window.addEventListener("resize", () => {
+      this.props.dispatchSetWidth(window.innerWidth);
+    })
   }
 
   componentDidUpdate() {
@@ -114,6 +118,7 @@ const mapDispatchToProps = (dispatch) => {
     dispatchFetchAllRequests: () => dispatch(actions.fetchAllRequests()),
     dispatchFetchChats: () => dispatch(actions.fetchChats()),
     dispatchAutoSignIn: () => dispatch(actions.autoSignIn()),
+    dispatchSetWidth: (width) => dispatch(actions.setWindowWidth(width)),
   };
 };
 

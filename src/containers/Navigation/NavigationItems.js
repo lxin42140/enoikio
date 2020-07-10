@@ -11,25 +11,8 @@ import * as actions from "../../store/actions/index";
 class NavigationItems extends Component {
   state = {
     showSearchBar: false,
-    smallScreen: false,
     showDropDown: false,
   };
-
-  componentDidMount() {
-    if (window.innerWidth < 525) {
-      this.setState({ smallScreen: true });
-    } else {
-      this.setState({ smallScreen: false });
-    }
-
-    window.addEventListener("resize", () => {
-      if (window.innerWidth < 525) {
-        this.setState({ smallScreen: true });
-      } else {
-        this.setState({ smallScreen: false });
-      }
-    });
-  }
 
   toggleSearchBarHandler = (event) => {
     this.setState((prevState) => ({ showSearchBar: !prevState.showSearchBar }));
@@ -42,7 +25,8 @@ class NavigationItems extends Component {
   render() {
     let nav;
 
-    if (this.state.smallScreen) {
+    //KIV: change this to side menu
+    if (this.props.windowWidth < 525) {
       let dropDown;
       if (this.props.isAuthenticated) {
         dropDown = (
@@ -186,10 +170,16 @@ class NavigationItems extends Component {
   }
 }
 
+const mapStateToProps = (state) => {
+  return {
+    windowWidth: state.window.width,
+  }
+}
+
 const mapDispatchToProps = (dispatch) => {
   return {
     setFilterTermForListing: (filterType) =>
       dispatch(actions.setFilterListings(filterType, "")),
   };
 };
-export default connect(null, mapDispatchToProps)(NavigationItems);
+export default connect(mapStateToProps, mapDispatchToProps)(NavigationItems);

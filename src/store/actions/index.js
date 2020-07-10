@@ -40,3 +40,7 @@ export {
   setFilterListings,
   setFilterProfile,
 } from "./Search"
+
+export {
+  setWindowWidth,
+} from "./Window"
