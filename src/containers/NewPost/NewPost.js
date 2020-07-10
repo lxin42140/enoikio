@@ -124,14 +124,21 @@ class NewPost extends Component {
   };
 
   componentDidUpdate() {
-    console.log(this.state.formIsValid);
-    if (
-      !this.state.dataForm.module.validated &&
-      this.state.dataForm.module.value !== ""
-    ) {
+    if (!this.state.dataForm.module.validated) {
       this.verifyModuleCode();
     }
   }
+
+  validateFormExcludingModule = (prevState) => {
+    for (let element in prevState.dataForm) {
+      if (element === "module") {
+        continue;
+      } else if (!prevState.dataForm[element].valid) {
+        return false;
+      }
+    }
+    return true;
+  };
 
   verifyModuleCode = () => {
     axios
@@ -146,10 +153,7 @@ class NewPost extends Component {
             moduleCodeValid = true;
             this.setState((prevState) => ({
               ...prevState,
-              formIsValid:
-                true &&
-                prevState.formIsValid &&
-                prevState.dataForm.module.valid,
+              formIsValid: this.validateFormExcludingModule(prevState),
               dataForm: {
                 ...prevState.dataForm,
                 module: {

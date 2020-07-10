@@ -21,9 +21,9 @@ class EditPost extends Component {
         },
         value: "",
         validation: false,
-        valid: false,
-        touched: false,
-        validated: false,
+        valid: true,
+        touched: true,
+        validated: true,
         validationError: null,
         moduleName: "",
       },
@@ -37,7 +37,7 @@ class EditPost extends Component {
         validation: {
           required: true,
         },
-        valid: false,
+        valid: true,
         touched: false,
       },
       listingType: {
@@ -166,18 +166,31 @@ class EditPost extends Component {
             dataForm[key].valid = true;
         }
       }
+
       const imageName = [];
       for (let key in this.props.editListing.imageURL) {
         this.props.editListing.imageURL[key] === null
           ? imageName.push(null)
           : imageName.push(this.props.editListing.imageURL[key].name);
       }
+
       this.setState({
         dataForm: dataForm,
         imageAsFile: imageName,
       });
     }
   }
+
+  validateFormExcludingModule = (prevState) => {
+    for (let element in prevState.dataForm) {
+      if (element === "module") {
+        continue;
+      } else if (!prevState.dataForm[element].valid) {
+        return false;
+      }
+    }
+    return true;
+  };
 
   verifyModuleCode = () => {
     axios
@@ -192,10 +205,7 @@ class EditPost extends Component {
             moduleCodeValid = true;
             this.setState((prevState) => ({
               ...prevState,
-              formIsValid:
-                true &&
-                prevState.formIsValid &&
-                prevState.dataForm.module.valid,
+              formIsValid: this.validateFormExcludingModule(prevState),
               dataForm: {
                 ...prevState.dataForm,
                 module: {
@@ -320,6 +330,7 @@ class EditPost extends Component {
     } else {
       updatedFormElement.validated = false;
     }
+
     updatedFormElement.touched = true;
     updatedDataForm[inputIdentifier] = updatedFormElement;
     let formIsValid = true;
@@ -332,6 +343,7 @@ class EditPost extends Component {
         break;
       }
     }
+
     this.setState({
       dataForm: updatedDataForm,
       formIsValid: formIsValid,

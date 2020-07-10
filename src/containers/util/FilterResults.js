@@ -65,11 +65,12 @@ class FilterResults extends Component {
         );
         break;
       case "textbook":
-        filteredListings = this.props.listings.filter(
-          (listing) =>
-            listing.postDetails.textbook.toLowerCase().split(" ").join("") ===
-            this.props.searchObject
-        );
+      filteredListings = this.props.listings.sort()
+        // filteredListings = this.props.listings.filter(
+        //   (listing) =>
+        //     listing.postDetails.textbook.toLowerCase().split(" ").join("") ===
+        //     this.props.searchObject
+        // );
         break;
       case "moduleCode":
         filteredListings = this.props.listings.filter(
@@ -107,6 +108,22 @@ class FilterResults extends Component {
     });
   };
 
+  sort = (strA, strB, searchObject) => {
+    for (let i = 0; i < strA.length; i++) {
+      if (strA.charAt(i) !== strB.charAt(i)) {
+        if (strA.charAt(i) === searchObject.charAt(i)) {
+          return 1;
+        } else if (strB.charAt(i) === searchObject.charAt(i)) {
+          return -1;
+        } else {
+          return 0;
+        }
+      } else if (i >= searchObject.length) {
+        break;
+      }
+    }
+    return 0;
+  };
   render() {
     if (this.state.filterType === "requests") {
       if (
