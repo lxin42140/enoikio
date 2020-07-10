@@ -20,20 +20,20 @@ class SearchBar extends Component {
     showFilterDropDown: false,
     userInput: "",
     filterType: "moduleCode",
-    placeHolder: "module code",
+    placeHolder: "module",
   };
 
   changeFilterHandler = (filter) => {
     let placeHolder = "";
     switch (filter) {
       case "moduleCode":
-        placeHolder = "module code";
+        placeHolder = "module";
         break;
       case "textbook":
-        placeHolder = "textbook title";
+        placeHolder = "textbook";
         break;
       case "searchProfile":
-        placeHolder = "exact profile name";
+        placeHolder = "exact username";
         break;
       default:
         placeHolder = "location";
@@ -92,7 +92,6 @@ class SearchBar extends Component {
       );
       this.props.history.push("/searchResults?search=" + this.state.userInput);
     }
-    this.props.onClick();
   };
 
   onEnterSearchHandler = (event) => {
@@ -107,22 +106,22 @@ class SearchBar extends Component {
         <DropDown
           icon={faUniversity}
           onClick={() => this.changeFilterHandler("moduleCode")}
-          text={"module code"}
+          text={"Module"}
         />
         <DropDown
           icon={faBook}
           onClick={() => this.changeFilterHandler("textbook")}
-          text={"book title"}
+          text={"Textbook"}
         />
         <DropDown
           icon={faLocationArrow}
           onClick={() => this.changeFilterHandler("location")}
-          text={"location"}
+          text={"Location"}
         />
         <DropDown
           icon={faUser}
           onClick={() => this.changeFilterHandler("searchProfile")}
-          text={"profile name"}
+          text={"Username"}
         />
       </React.Fragment>
     );

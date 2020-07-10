@@ -22,7 +22,7 @@
 }
 
 .button {
-    color: rgb(126, 125, 125);
+    color: rgb(107, 106, 106);
     border-style: none;
     width: fit-content;
     cursor: pointer;
@@ -72,7 +72,7 @@
 }
 
 .input::placeholder {
-    color: white;
+    color: grey;
 }
 
 .dropdownContent {
