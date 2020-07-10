@@ -1,4 +1,8 @@
-import { faStar } from "@fortawesome/free-solid-svg-icons";
+import {
+  faStar,
+  faFileUpload,
+  faTimes,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { Component } from "react";
 import { connect } from "react-redux";
@@ -160,40 +164,58 @@ class Profile extends Component {
           <React.Fragment>
             <p style={{ color: "green", fontWeight: "bold" }}>Done!</p>
             <Button onClick={this.cancelEditProfileImageHandler}>
+              {
+                <FontAwesomeIcon
+                  icon={faTimes}
+                  style={{ paddingRight: "5px" }}
+                />
+              }
               Go back
             </Button>
           </React.Fragment>
         ) : (
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <div style={{ paddingBottom: "10px" }}>
-                  <input
-                    type="file"
-                    accept=".png,.jpeg, .jpg"
-                    style={{ width: "fit-content" }}
-                    onChange={this.handleImageAsFile}
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <div style={{ paddingBottom: "10px" }}>
+              <input
+                type="file"
+                accept=".png,.jpeg, .jpg"
+                style={{ width: "fit-content" }}
+                onChange={this.handleImageAsFile}
+              />
+            </div>
+            <div>
+              <Button onClick={this.cancelEditProfileImageHandler}>
+                {
+                  <FontAwesomeIcon
+                    icon={faTimes}
+                    style={{ paddingRight: "5px" }}
                   />
-                </div>
-                <div>
-                  <Button onClick={this.cancelEditProfileImageHandler}>
-                    Cancel
+                }
+                Cancel
               </Button>
-                  <Button
-                    btnType="Important"
-                    onClick={this.submitNewProfileImage}
-                    disabled={this.state.imageAsFile === ""}
-                  >
-                    Upload
+              <Button
+                btnType="Important"
+                onClick={this.submitNewProfileImage}
+                disabled={this.state.imageAsFile === ""}
+              >
+                {
+                  <FontAwesomeIcon
+                    icon={faFileUpload}
+                    style={{ paddingRight: "5px" }}
+                  />
+                }
+                Upload
               </Button>
-                </div>
-              </div>
-            )}
+            </div>
+          </div>
+        )}
       </Modal>
     );
 
@@ -319,11 +341,11 @@ class Profile extends Component {
             style={
               this.state.showPastListing
                 ? {
-                  fontWeight: "bold",
-                  color: "#dd5641",
-                  borderBottom: "3px solid #dd5641",
-                  outline: "none",
-                }
+                    fontWeight: "bold",
+                    color: "#dd5641",
+                    borderBottom: "3px solid #dd5641",
+                    outline: "none",
+                  }
                 : null
             }
           >
@@ -334,11 +356,11 @@ class Profile extends Component {
             style={
               this.state.showRequest
                 ? {
-                  fontWeight: "bold",
-                  color: "#dd5641",
-                  borderBottom: "3px solid #dd5641",
-                  outline: "none",
-                }
+                    fontWeight: "bold",
+                    color: "#dd5641",
+                    borderBottom: "3px solid #dd5641",
+                    outline: "none",
+                  }
                 : null
             }
           >
@@ -349,11 +371,11 @@ class Profile extends Component {
             style={
               this.state.showOnRent
                 ? {
-                  fontWeight: "bold",
-                  color: "#dd5641",
-                  borderBottom: "3px solid #dd5641",
-                  outline: "none",
-                }
+                    fontWeight: "bold",
+                    color: "#dd5641",
+                    borderBottom: "3px solid #dd5641",
+                    outline: "none",
+                  }
                 : null
             }
           >
@@ -364,11 +386,11 @@ class Profile extends Component {
             style={
               this.state.showComments
                 ? {
-                  fontWeight: "bold",
-                  color: "#dd5641",
-                  borderBottom: "3px solid #dd5641",
-                  outline: "none",
-                }
+                    fontWeight: "bold",
+                    color: "#dd5641",
+                    borderBottom: "3px solid #dd5641",
+                    outline: "none",
+                  }
                 : null
             }
           >
@@ -386,8 +408,8 @@ class Profile extends Component {
             ) : this.state.comments.length < 1 ? (
               <h3>Oops..No reviews</h3>
             ) : (
-                    <ul className={classes.Reviews}>{reviews}</ul>
-                  )}
+              <ul className={classes.Reviews}>{reviews}</ul>
+            )}
           </div>
         </div>
       </div>

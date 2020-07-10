@@ -49,9 +49,9 @@
 
 .OfferInput {
     border: none;
-    width: 40%;
+    width: 20rem;
     border-bottom: 2px solid red;
-    margin-bottom: 1%;
+    margin-bottom: 5px;
 }
 
 .OfferInput:focus {

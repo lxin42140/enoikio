@@ -1,10 +1,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import {
-  faComment,
+  faComments,
   faTrash,
   faTimes,
   faHome,
+  faExclamation,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { database } from "../../../firebase/firebase";
@@ -141,7 +142,27 @@ class Request extends Component {
 
         <div className={classes.Info}>
           <p className={classes.Header}>Priority level: </p>
-          <p className={priorityColour.join(" ")}>{this.props.priority}</p>
+          <p className={priorityColour.join(" ")}>
+            <span style={{ paddingRight: "2px" }}>
+              {this.props.priority === "urgent" ? (
+                <span style={{ color: "red" }}>
+                  <FontAwesomeIcon icon={faExclamation} />
+                  <FontAwesomeIcon icon={faExclamation} />
+                  <FontAwesomeIcon icon={faExclamation} />
+                </span>
+              ) : this.props.priority === "moderate" ? (
+                <span style={{ color: "orange" }}>
+                  <FontAwesomeIcon icon={faExclamation} />
+                  <FontAwesomeIcon icon={faExclamation} />
+                </span>
+              ) : (
+                <span style={{ color: "green" }}>
+                  <FontAwesomeIcon icon={faExclamation} />
+                </span>
+              )}
+            </span>
+            {this.props.priority}
+          </p>
         </div>
 
         <div className={classes.Info}>
@@ -165,7 +186,7 @@ class Request extends Component {
             {<FontAwesomeIcon icon={faTimes} style={{ paddingRight: "5px" }} />}
             Go back
           </Button>
-          <Button onClick={this.deleteRequest}>
+          <Button onClick={this.deleteRequest} btnType="Important">
             {<FontAwesomeIcon icon={faTrash} style={{ paddingRight: "5px" }} />}
             Delete
           </Button>
@@ -199,11 +220,10 @@ class Request extends Component {
           <Button>
             {
               <FontAwesomeIcon
-                icon={faComment}
+                icon={faComments}
                 style={{ paddingRight: "5px" }}
               />
             }
-            Chat
           </Button>
         </Link>
       );
@@ -211,7 +231,6 @@ class Request extends Component {
       button = (
         <Button onClick={this.askUserToDelete}>
           {<FontAwesomeIcon icon={faTrash} style={{ paddingRight: "5px" }} />}
-          Delete
         </Button>
       );
     } else {
@@ -224,11 +243,10 @@ class Request extends Component {
           <Button onClick={() => this.onChatHandler(this.props.userId)}>
             {
               <FontAwesomeIcon
-                icon={faComment}
+                icon={faComments}
                 style={{ paddingRight: "5px" }}
               />
             }
-            Chat
           </Button>
         </Link>
       );

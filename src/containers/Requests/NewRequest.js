@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import moment from "moment";
+import axios from "axios";
+import { faTimes, faCheck, faHome } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import classes from "../NewPost/NewPost.css";
 import Input from "../../components/UI/Input/Input";
@@ -20,12 +23,12 @@ class NewRequest extends Component {
           placeholder: "Module code",
         },
         value: "",
-        validation: {
-          required: true,
-          maxLength: 8,
-        },
+        validation: false,
         valid: false,
         touched: false,
+        validated: false,
+        validationError: null,
+        moduleName: "",
       },
       textbook: {
         elementType: "input",
@@ -85,6 +88,83 @@ class NewRequest extends Component {
     showModal: false,
   };
 
+  componentDidUpdate() {
+    if (!this.state.dataForm.module.validated) {
+      this.verifyModuleCode();
+    }
+  }
+
+  validateFormExcludingModule = (prevState) => {
+    for (let element in prevState.dataForm) {
+      if (element === "module") {
+        continue;
+      } else if (!prevState.dataForm[element].valid) {
+        return false;
+      }
+    }
+    return true;
+  };
+
+  verifyModuleCode = () => {
+    axios
+      .get("https://api.nusmods.com/v2/2018-2019/moduleList.json")
+      .then((res) => {
+        let moduleCodeValid = false;
+        for (let i = 0; i < res.data.length; i++) {
+          if (
+            res.data[i].moduleCode.toLowerCase().split(" ").join("") ===
+            this.state.dataForm.module.value.toLowerCase().split(" ").join("")
+          ) {
+            moduleCodeValid = true;
+            this.setState((prevState) => ({
+              ...prevState,
+              formIsValid: this.validateFormExcludingModule(prevState),
+              dataForm: {
+                ...prevState.dataForm,
+                module: {
+                  ...prevState.dataForm.module,
+                  valid: true,
+                  validated: true,
+                  moduleName: res.data[i].title,
+                },
+              },
+            }));
+            break;
+          }
+        }
+        if (!moduleCodeValid) {
+          this.setState((prevState) => ({
+            ...prevState,
+            formIsValid: false,
+            dataForm: {
+              ...prevState.dataForm,
+              module: {
+                ...prevState.dataForm.module,
+                valid: false,
+                validated: true,
+                moduleName: "",
+              },
+            },
+          }));
+        }
+      })
+      .catch((error) => {
+        this.setState((prevState) => ({
+          ...prevState,
+          formIsValid: false,
+          dataForm: {
+            ...prevState.dataForm,
+            module: {
+              ...prevState.dataForm.module,
+              valid: false,
+              validated: true,
+              validationError: error,
+              moduleName: "",
+            },
+          },
+        }));
+      });
+  };
   checkValidity(value, rules) {
     let isValid = true;
     if (rules) {
@@ -106,10 +186,16 @@ class NewRequest extends Component {
       ...updatedDataForm[inputIdentifier],
     };
     updatedFormElement.value = event.target.value;
-    updatedFormElement.valid = this.checkValidity(
-      updatedFormElement.value,
-      updatedFormElement.validation
-    );
+
+    if (inputIdentifier !== "module") {
+      updatedFormElement.valid = this.checkValidity(
+        updatedFormElement.value,
+        updatedFormElement.validation
+      );
+    } else {
+      updatedFormElement.validated = false;
+    }
+
     updatedFormElement.touched = true;
     updatedDataForm[inputIdentifier] = updatedFormElement;
     let formIsValid = true;
@@ -168,17 +254,44 @@ class NewRequest extends Component {
     }
 
     let form = formElementsArray.map((formElement) => {
+      let validationCheck = null;
+      let validationMessage = null;
+      if (formElement.id === "module") {
+        if (formElement.config.validated && formElement.config.valid) {
+          validationMessage = (
+            <p style={{ color: "grey", fontWeight: "bold" }}>
+              {formElement.config.moduleName}
+            </p>
+          );
+        } else if (formElement.config.validated && !formElement.config.valid) {
+          validationMessage = (
+            <p style={{ color: "red", fontWeight: "bold" }}>
+              Module code does not exist!
+            </p>
+          );
+        } else if (formElement.config.validationError) {
+          validationMessage = (
+            <p style={{ color: "red", fontWeight: "bold" }}>
+              {formElement.config.validationError}
+            </p>
+          );
+        }
+        validationCheck = <React.Fragment>{validationMessage}</React.Fragment>;
+      }
       return (
-        <Input
-          key={formElement.id}
-          elementType={formElement.config.elementType}
-          elementConfig={formElement.config.elementConfig}
-          value={formElement.config.value}
-          valid={formElement.config.valid}
-          shouldValidate={formElement.config.validation}
-          touched={formElement.config.touched}
-          change={(event) => this.inputChangedHandler(event, formElement.id)}
-        />
+        <React.Fragment key={formElement.id}>
+          <Input
+            key={formElement.id}
+            elementType={formElement.config.elementType}
+            elementConfig={formElement.config.elementConfig}
+            value={formElement.config.value}
+            valid={formElement.config.valid}
+            shouldValidate={formElement.config.validation}
+            touched={formElement.config.touched}
+            change={(event) => this.inputChangedHandler(event, formElement.id)}
+          />
+          {validationCheck}
+        </React.Fragment>
       );
     });
 
@@ -230,8 +343,14 @@ class NewRequest extends Component {
         </p>
 
         <div style={{ display: "flex", justifyContent: "center" }}>
-          <Button onClick={this.toggleModalHandler}>Go back</Button>
-          <Button onClick={this.onSubmitHandler}>Submit</Button>
+          <Button onClick={this.toggleModalHandler}>
+            {<FontAwesomeIcon icon={faTimes} style={{ paddingRight: "5px" }} />}
+            Go back
+          </Button>
+          <Button onClick={this.onSubmitHandler} btnType="Important">
+            {<FontAwesomeIcon icon={faCheck} style={{ paddingRight: "5px" }} />}
+            Submit
+          </Button>
         </div>
       </Modal>
     );
@@ -249,6 +368,12 @@ class NewRequest extends Component {
         >
           <Link to="/" style={{ paddingRight: "10px" }}>
             <Button onClick={() => this.props.dispatchClearRequestData()}>
+              {
+                <FontAwesomeIcon
+                  icon={faHome}
+                  style={{ paddingRight: "5px" }}
+                />
+              }
               Home
             </Button>
           </Link>

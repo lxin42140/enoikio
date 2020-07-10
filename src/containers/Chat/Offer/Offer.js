@@ -1,6 +1,15 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import moment from "moment";
+import {
+  faDollarSign,
+  faCheck,
+  faTimes,
+  faCalendarAlt,
+  faGlassCheers,
+  faExclamation,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import * as classes from "./Offer.css";
 import Button from "../../../components/UI/Button/Button";
@@ -505,32 +514,56 @@ class Offer extends Component {
       <Modal show={this.state.showPopUp}>
         <div className={classes.Popup}>
           <br />
-          <input
-            type="number"
-            className={classes.OfferInput}
-            onChange={this.priceOfferOnChange}
-            value={this.state.priceOffer}
-            placeholder="Enter offer here..."
-            style={{marginTop: "1%"}}
-          />
+          <div style={{ display: "flex", alignItems: "center" }}>
+            {
+              <FontAwesomeIcon
+                icon={faDollarSign}
+                style={{ paddingRight: "5px", color: "#f3a1a1" }}
+              />
+            }
+            <input
+              type="number"
+              className={classes.OfferInput}
+              onChange={this.priceOfferOnChange}
+              value={this.state.priceOffer}
+              placeholder="Enter offer here..."
+              style={{ marginTop: "1%" }}
+            />
+          </div>
           <br />
           {this.state.interestedListing.listingType === "rent" ? (
             <React.Fragment>
-              <input
-                type="text"
-                className={classes.OfferInput}
-                onChange={this.startRentalOnChange}
-                value={this.state.startRental}
-                placeholder="From DD/MM/YYYY"
-              />
+              <div style={{ display: "flex", alignItems: "center" }}>
+                {
+                  <FontAwesomeIcon
+                    icon={faCalendarAlt}
+                    style={{ paddingRight: "5px", color: "#f3a1a1" }}
+                  />
+                }
+                <input
+                  type="text"
+                  className={classes.OfferInput}
+                  onChange={this.startRentalOnChange}
+                  value={this.state.startRental}
+                  placeholder="From DD/MM/YYYY"
+                />
+              </div>
               <br />
-              <input
-                type="text"
-                className={classes.OfferInput}
-                onChange={this.endRentalOnChange}
-                value={this.state.endRental}
-                placeholder="To DD/MM/YYYY"
-              />
+              <div style={{ display: "flex", alignItems: "center" }}>
+                {
+                  <FontAwesomeIcon
+                    icon={faCalendarAlt}
+                    style={{ paddingRight: "5px", color: "#f3a1a1" }}
+                  />
+                }
+                <input
+                  type="text"
+                  className={classes.OfferInput}
+                  onChange={this.endRentalOnChange}
+                  value={this.state.endRental}
+                  placeholder="To DD/MM/YYYY"
+                />
+              </div>
               <br />
             </React.Fragment>
           ) : null}
@@ -542,9 +575,23 @@ class Offer extends Component {
             }}
           >
             <Button btnType="Important" onClick={this.onConfirmOffer}>
+              {
+                <FontAwesomeIcon
+                  icon={faCheck}
+                  style={{ paddingRight: "5px" }}
+                />
+              }
               Submit Offer
             </Button>
-            <Button onClick={this.onClosePopUpHandler}>Cancel</Button>
+            <Button onClick={this.onClosePopUpHandler}>
+              {
+                <FontAwesomeIcon
+                  icon={faTimes}
+                  style={{ paddingRight: "5px" }}
+                />
+              }
+              Cancel
+            </Button>
           </div>
         </div>
       </Modal>
@@ -558,35 +605,101 @@ class Offer extends Component {
           buttons = (
             <React.Fragment>
               <Button btnType="Important" onClick={this.onAcceptOffer}>
+                {
+                  <FontAwesomeIcon
+                    icon={faCheck}
+                    style={{ paddingRight: "5px" }}
+                  />
+                }
                 Accept offer
               </Button>
               <Button btnType="Important" onClick={this.onRejectOffer}>
+                {
+                  <FontAwesomeIcon
+                    icon={faTimes}
+                    style={{ paddingRight: "5px" }}
+                  />
+                }
                 Reject offer
               </Button>
             </React.Fragment>
           );
           break;
         case "CANCELLED_OFFER":
-          buttons = <p style={{ margin: "5px" }}>No offers made</p>;
+          buttons = (
+            <p style={{ margin: "5px", color: "red" }}>
+              {
+                <FontAwesomeIcon
+                  icon={faTimes}
+                  style={{ paddingRight: "5px" }}
+                />
+              }
+              No offers made
+            </p>
+          );
           break;
         case "INTERESTED_OFFER":
-          buttons = <p style={{ margin: "5px" }}>Indicated interest</p>;
+          buttons = (
+            <p style={{ margin: "5px", color: "#f3a1a1" }}>
+              {
+                <FontAwesomeIcon
+                  icon={faExclamation}
+                  style={{ paddingRight: "5px" }}
+                />
+              }
+              Indicated interest
+            </p>
+          );
           break;
         case "ACCEPTED_OFFER":
           buttons = (
             <React.Fragment>
-              <p style={{ margin: "5px" }}>Accepted offer</p>
+              <p style={{ margin: "5px", color: "green" }}>
+                {
+                  <FontAwesomeIcon
+                    icon={faCheck}
+                    style={{ paddingRight: "5px" }}
+                  />
+                }
+                Accepted offer
+              </p>
               <Button btnType="Important" onClick={this.onRejectOffer}>
+                {
+                  <FontAwesomeIcon
+                    icon={faTimes}
+                    style={{ paddingRight: "5px" }}
+                  />
+                }
                 Reject offer
               </Button>
             </React.Fragment>
           );
           break;
         case "REJECTED_OFFER":
-          buttons = <p style={{ margin: "5px" }}>Rejected offer</p>;
+          buttons = (
+            <p style={{ margin: "5px", color: "red" }}>
+              {
+                <FontAwesomeIcon
+                  icon={faTimes}
+                  style={{ paddingRight: "5px" }}
+                />
+              }
+              Rejected offer
+            </p>
+          );
           break;
         case "COMPLETED_OFFER":
-          buttons = <p style={{ margin: "5px" }}>Rental completed</p>;
+          buttons = (
+            <p style={{ margin: "5px", color: "#f3a1a1" }}>
+              {
+                <FontAwesomeIcon
+                  icon={faGlassCheers}
+                  style={{ paddingRight: "5px" }}
+                />
+              }
+              Rental completed
+            </p>
+          );
           break;
         default:
           break;
@@ -596,18 +709,48 @@ class Offer extends Component {
         case "MADE_OFFER":
           buttons = (
             <Button btnType="Important" onClick={this.onCancelOffer}>
+              {
+                <FontAwesomeIcon
+                  icon={faTimes}
+                  style={{ paddingRight: "5px" }}
+                />
+              }
               Cancel offer
             </Button>
           );
           break;
         case "ACCEPTED_OFFER":
-          buttons = <p style={{ margin: "5px" }}>Accepted offer</p>;
+          buttons = (
+            <p style={{ margin: "5px", color: "green" }}>
+              {
+                <FontAwesomeIcon
+                  icon={faCheck}
+                  style={{ paddingRight: "5px" }}
+                />
+              }
+              Accepted offer
+            </p>
+          );
           break;
         case "CANCELLED_OFFER":
           buttons = (
             <React.Fragment>
-              <p style={{ margin: "5px" }}>Cancelled offer</p>
+              <p style={{ margin: "5px", color: "red" }}>
+                {
+                  <FontAwesomeIcon
+                    icon={faTimes}
+                    style={{ paddingRight: "5px" }}
+                  />
+                }
+                Cancelled offer
+              </p>
               <Button btnType="Important" onClick={this.onShowPopUpHandler}>
+                {
+                  <FontAwesomeIcon
+                    icon={faDollarSign}
+                    style={{ paddingRight: "5px" }}
+                  />
+                }
                 Make offer
               </Button>
             </React.Fragment>
@@ -616,8 +759,22 @@ class Offer extends Component {
         case "REJECTED_OFFER":
           buttons = (
             <React.Fragment>
-              <p style={{ margin: "5px" }}>Offer rejected</p>
+              <p style={{ margin: "5px", color: "red" }}>
+                {
+                  <FontAwesomeIcon
+                    icon={faTimes}
+                    style={{ paddingRight: "5px" }}
+                  />
+                }
+                Offer rejected
+              </p>
               <Button btnType="Important" onClick={this.onShowPopUpHandler}>
+                {
+                  <FontAwesomeIcon
+                    icon={faDollarSign}
+                    style={{ paddingRight: "5px" }}
+                  />
+                }
                 Make another offer
               </Button>
             </React.Fragment>
@@ -626,8 +783,22 @@ class Offer extends Component {
         case "COMPLETED_OFFER":
           buttons = (
             <React.Fragment>
-              <p style={{ margin: "5px" }}>Rental completed</p>
+              <p style={{ margin: "5px", color: "#f3a1a1" }}>
+                {
+                  <FontAwesomeIcon
+                    icon={faGlassCheers}
+                    style={{ paddingRight: "5px" }}
+                  />
+                }
+                Rental completed
+              </p>
               <Button btnType="Important" onClick={this.onShowPopUpHandler}>
+                {
+                  <FontAwesomeIcon
+                    icon={faDollarSign}
+                    style={{ paddingRight: "5px" }}
+                  />
+                }
                 Make another offer
               </Button>
             </React.Fragment>
@@ -637,10 +808,24 @@ class Offer extends Component {
           buttons = (
             <React.Fragment>
               <Button btnType="Important" onClick={this.onShowPopUpHandler}>
+                {
+                  <FontAwesomeIcon
+                    icon={faDollarSign}
+                    style={{ paddingRight: "5px" }}
+                  />
+                }
                 Make offer
               </Button>
               <Button onClick={this.onInterestedOffer}>
-                <span style={{ fontSize: "small" }}>I'm interested!</span>
+                <span style={{ fontSize: "small" }}>
+                  {
+                    <FontAwesomeIcon
+                      icon={faExclamation}
+                      style={{ paddingRight: "5px" }}
+                    />
+                  }
+                  I'm interested
+                </span>
               </Button>
             </React.Fragment>
           );
@@ -648,6 +833,12 @@ class Offer extends Component {
         case "INTERESTED_OFFER":
           buttons = (
             <Button btnType="Important" onClick={this.onShowPopUpHandler}>
+              {
+                <FontAwesomeIcon
+                  icon={faDollarSign}
+                  style={{ paddingRight: "5px" }}
+                />
+              }
               Make offer
             </Button>
           );

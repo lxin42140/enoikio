@@ -3,7 +3,14 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import moment from "moment";
 import axios from "axios";
-import { faTrash, faTimes, faCheck } from "@fortawesome/free-solid-svg-icons";
+import {
+  faTrash,
+  faTimes,
+  faCheck,
+  faHome,
+  faEdit,
+  faFileUpload,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import classes from "./NewPost.css";
@@ -431,7 +438,7 @@ class NewPost extends Component {
         refreshedForm[element].value = "meet-up";
       } else if (element === "module") {
         refreshedForm[element].value = "";
-        refreshedForm[element].validated = false;
+        refreshedForm[element].validated = true;
         refreshedForm[element].validationError = null;
         refreshedForm[element].moduleName = "";
       } else {
@@ -557,12 +564,18 @@ class NewPost extends Component {
             {form}
             <br />
             <div className={classes.ImageText}>{displayImageList}</div>
-            <div style={{ marginBottom: "10px" }}>
+            <div style={{ marginBottom: "10px",color: "#f3a1a1" }}>
+              {
+                <FontAwesomeIcon
+                  icon={faFileUpload}
+                  style={{ paddingRight: "5px" }}
+                />
+              }
               <input
                 type="file"
                 accept=".png,.jpeg, .jpg"
                 multiple
-                style={{ width: "95px" }}
+                style={{ width: "95px",color: "#f3a1a1" }}
                 onChange={this.handleImageAsFile}
                 disabled={this.state.numberOfImages >= 3}
               />
@@ -647,10 +660,19 @@ class NewPost extends Component {
         >
           <Link to="/" style={{ paddingRight: "10px" }}>
             <Button onClick={() => this.props.dispatchClearNewPostData()}>
+              {
+                <FontAwesomeIcon
+                  icon={faHome}
+                  style={{ paddingRight: "5px" }}
+                />
+              }
               Home
             </Button>
           </Link>
-          <Button onClick={this.createNewFormHandler}>New Post</Button>
+          <Button onClick={this.createNewFormHandler}>
+            {<FontAwesomeIcon icon={faEdit} style={{ paddingRight: "5px" }} />}
+            New Post
+          </Button>
         </div>
       </Modal>
     );

@@ -1,7 +1,13 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import { faTrash, faTimes, faCheck } from "@fortawesome/free-solid-svg-icons";
+import {
+  faTrash,
+  faTimes,
+  faCheck,
+  faFileUpload,
+  faHome,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 
@@ -588,7 +594,13 @@ class EditPost extends Component {
             {form}
             <br />
             <div className={classes.ImageText}>{displayImageList}</div>
-            <div style={{ marginBottom: "10px" }}>
+            <div style={{ marginBottom: "10px", color: "#f3a1a1" }}>
+              {
+                <FontAwesomeIcon
+                  icon={faFileUpload}
+                  style={{ paddingRight: "5px" }}
+                />
+              }
               <input
                 type="file"
                 accept=".png,.jpeg, .jpg"
@@ -687,6 +699,12 @@ class EditPost extends Component {
         <div style={{ display: "flex", justifyContent: "center" }}>
           <Link to="/">
             <Button onClick={() => this.props.dispatchClearNewPostData()}>
+              {
+                <FontAwesomeIcon
+                  icon={faHome}
+                  style={{ paddingRight: "5px" }}
+                />
+              }
               Home
             </Button>
           </Link>

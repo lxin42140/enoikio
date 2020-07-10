@@ -27,6 +27,44 @@ class FullListings extends Component {
     });
   };
 
+  sortRequests = (requestArr) => {
+    let swap;
+    let n = requestArr.length - 1;
+    do {
+      swap = false;
+      for (let i = 0; i < n; i++) {
+        if (requestArr[i].date < requestArr[i + 1].date) {
+          swap = true;
+          const temp = requestArr[i];
+          requestArr[i] = requestArr[i + 1];
+          requestArr[i + 1] = temp;
+        }
+      }
+      n--;
+    } while (swap);
+
+    swap = true;
+    n = requestArr.length - 1;
+    do {
+      swap = false;
+      for (let i = 0; i < n; i++) {
+        if (
+          requestArr[i].date === requestArr[i + 1].date &&
+          requestArr[i].requestDetails.priority <
+            requestArr[i + 1].requestDetails.priority
+        ) {
+          swap = true;
+          const temp = requestArr[i];
+          requestArr[i] = requestArr[i + 1];
+          requestArr[i + 1] = temp;
+        }
+      }
+      n--;
+    } while (swap);
+
+    return requestArr;
+  };
+
   render() {
     if (this.props.loading) {
       return <Spinner />;
@@ -146,7 +184,7 @@ class FullListings extends Component {
               </Link>
             )}
           </div>
-          {this.props.allRequests.map((request) => {
+          {this.sortRequests(this.props.allRequests).map((request) => {
             return (
               <Request
                 history={this.props.history}
@@ -170,13 +208,9 @@ class FullListings extends Component {
       <div>
         <div>{toggleSwitch}</div>
         {this.state.viewListing ? (
-          <div className={classes.Listings}>
-            {listings}
-          </div>
+          <div className={classes.Listings}>{listings}</div>
         ) : (
-          <div className={classes.Requests}>
-            {requests}
-          </div>
+          <div className={classes.Requests}>{requests}</div>
         )}
       </div>
     );

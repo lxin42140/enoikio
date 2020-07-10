@@ -3,6 +3,8 @@ import {
   faReply,
   faTimes,
   faCheck,
+  faComment,
+  faClipboardCheck,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import moment from "moment";
@@ -221,11 +223,23 @@ class Comments extends Component {
       <div>
         {this.state.isListingOwner ? (
           <p style={{ margin: "10px 0 5px 10px", textAlign: "center" }}>
+            {
+              <FontAwesomeIcon
+                icon={faComment}
+                style={{ paddingRight: "5px" }}
+              />
+            }
             Write your comment
           </p>
         ) : (
           <React.Fragment>
             <p style={{ margin: "10px 0 5px 10px", textAlign: "center" }}>
+              {
+                <FontAwesomeIcon
+                  icon={faClipboardCheck}
+                  style={{ paddingRight: "5px" }}
+                />
+              }
               Write your review
             </p>
             <div style={{ textAlign: "left", paddingLeft: "10px" }}>

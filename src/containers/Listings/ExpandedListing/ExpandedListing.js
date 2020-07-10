@@ -406,7 +406,10 @@ class ExpandedListing extends Component {
           icon={faWindowClose}
           style={{
             color: "#ff5138",
-            paddingRight: "5px",
+            fontSize: "1.2rem",
+            cursor: "pointer",
+            float: "right",
+            padding: "5px",
           }}
         />
       </div>

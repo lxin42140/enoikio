@@ -2,7 +2,7 @@ import React from "react";
 import moment from "moment";
 
 import * as classes from "./Comment.css";
-import { faStar } from "@fortawesome/free-solid-svg-icons";
+import { faStar, faShare } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const comment = (props) => {
@@ -16,6 +16,7 @@ const comment = (props) => {
   if (props.isReply) {
     comment = (
       <div className={classes.ReplyMessage}>
+        {<FontAwesomeIcon icon={faShare} style={{ paddingRight: "5px", color: "grey" }} />}
         <div style={{ cursor: "pointer" }}>
           <img
             src={props.profilePicture}

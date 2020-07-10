@@ -328,7 +328,7 @@ class Auth extends Component {
         </p>
       );
     } else if (this.props.passwordReset) {
-      message = <p style={{ color: "green" }}>A reset email has been sent.</p>;
+      message = <p style={{ color: "green" }}>A reset email has been sent</p>;
     }
 
     let redirect = null;

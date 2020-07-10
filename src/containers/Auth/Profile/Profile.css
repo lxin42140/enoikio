@@ -112,6 +112,7 @@
 
 .Reviews li {
     display: list-item;
+    text-align: start;
 }
 
 .Selections {
