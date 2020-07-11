@@ -3,6 +3,7 @@ import {
   faBook,
   faTasks,
   faCommentDots,
+  faExclamationTriangle,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
@@ -85,6 +86,15 @@ const profile = (props) => {
       <li>
         <b>Last sign in: </b>
         {props.lastSignIn}
+      </li>
+      <li style={{ cursor: "pointer" }} onClick={props.showReportModal}>
+        {
+          <FontAwesomeIcon
+            icon={faExclamationTriangle}
+            style={{ paddingRight: "5px", color: "red" }}
+          />
+        }
+        <b style={{ color: "red" }}>Report user</b>
       </li>
     </ul>
   );
