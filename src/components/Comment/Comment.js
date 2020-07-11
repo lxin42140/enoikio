@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const comment = (props) => {
   let timeStamp = props.time;
   if (props.date !== moment().format("DD-MM-YYYY")) {
-    timeStamp += " " + props.date;
+    timeStamp = timeStamp + " (" + props.date + ")";
   }
 
   let comment;
@@ -16,7 +16,12 @@ const comment = (props) => {
   if (props.isReply) {
     comment = (
       <div className={classes.ReplyMessage}>
-        {<FontAwesomeIcon icon={faShare} style={{ paddingRight: "5px", color: "grey" }} />}
+        {
+          <FontAwesomeIcon
+            icon={faShare}
+            style={{ paddingRight: "5px", color: "grey" }}
+          />
+        }
         <div style={{ cursor: "pointer" }}>
           <img
             src={props.profilePicture}

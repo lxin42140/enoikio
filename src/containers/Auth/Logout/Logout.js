@@ -2,7 +2,11 @@ import React, { Component } from "react";
 import * as actions from "../../../store/actions/index";
 import { connect } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeartBroken } from "@fortawesome/free-solid-svg-icons";
+import {
+  faHeartBroken,
+  faTimes,
+  faSignOutAlt,
+} from "@fortawesome/free-solid-svg-icons";
 
 import Button from "../../../components/UI/Button/Button";
 class Logout extends Component {
@@ -27,9 +31,18 @@ class Logout extends Component {
         <br />
         <div>
           <Button btnType="Important" onClick={this.onLogoutHandler}>
+            {
+              <FontAwesomeIcon
+                icon={faSignOutAlt}
+                style={{ paddingRight: "5px" }}
+              />
+            }
             Confirm log out
           </Button>
-          <Button onClick={this.onCancelHandler}>Go back</Button>
+          <Button onClick={this.onCancelHandler}>
+            {<FontAwesomeIcon icon={faTimes} style={{ paddingRight: "5px" }} />}
+            Go back
+          </Button>
         </div>
       </React.Fragment>
     );

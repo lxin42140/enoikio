@@ -1,4 +1,9 @@
-import { faStar } from "@fortawesome/free-solid-svg-icons";
+import {
+  faStar,
+  faBook,
+  faTasks,
+  faCommentDots,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import Comment from "../Comment/Comment";
@@ -132,6 +137,7 @@ const profile = (props) => {
               : null
           }
         >
+          {<FontAwesomeIcon icon={faBook} style={{ paddingRight: "5px" }} />}
           Listings
         </button>
         <button
@@ -147,6 +153,7 @@ const profile = (props) => {
               : null
           }
         >
+          {<FontAwesomeIcon icon={faTasks} style={{ paddingRight: "5px" }} />}
           Requests
         </button>
         <button
@@ -162,6 +169,12 @@ const profile = (props) => {
               : null
           }
         >
+          {
+            <FontAwesomeIcon
+              icon={faCommentDots}
+              style={{ paddingRight: "5px" }}
+            />
+          }
           Reviews
         </button>
       </div>

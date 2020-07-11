@@ -180,8 +180,10 @@ class Request extends Component {
     const askForConfirmation = (
       <Modal show={this.state.askUserToDelete}>
         <div>
-          <p>Confirm delete request?</p>
-          <p>This action cannot be undone</p>
+          <p>Confirm delete?</p>
+          <p style={{ fontSize: "small" }}>
+            <i>This action cannot be undone!</i>
+          </p>
           <Button onClick={this.cancelConfirmation}>
             {<FontAwesomeIcon icon={faTimes} style={{ paddingRight: "5px" }} />}
             Go back

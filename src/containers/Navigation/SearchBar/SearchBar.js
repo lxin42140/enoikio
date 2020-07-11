@@ -168,11 +168,6 @@ class SearchBar extends Component {
             </div>
           </div>
         </div>
-        <FontAwesomeIcon
-          icon={faWindowClose}
-          className={classes.closeIcon}
-          onClick={this.onCancelSearchHandler}
-        />
       </React.Fragment>
     );
   }

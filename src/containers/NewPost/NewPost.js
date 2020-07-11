@@ -119,7 +119,7 @@ class NewPost extends Component {
         elementType: "textarea",
         elementConfig: {
           type: "text",
-          placeholder: "Please enter any other information",
+          placeholder: "Please enter any other information...",
         },
         value: "",
         validation: false,

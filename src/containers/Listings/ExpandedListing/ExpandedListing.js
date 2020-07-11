@@ -4,7 +4,7 @@ import {
   faWindowClose,
   faEdit,
   faTrash,
-  faComment,
+  faComments,
   faTimes,
   faHome,
 } from "@fortawesome/free-solid-svg-icons";
@@ -190,7 +190,7 @@ class ExpandedListing extends Component {
           <Button>
             {
               <FontAwesomeIcon
-                icon={faComment}
+                icon={faComments}
                 style={{ paddingRight: "5px" }}
               />
             }
@@ -289,7 +289,7 @@ class ExpandedListing extends Component {
           >
             {
               <FontAwesomeIcon
-                icon={faComment}
+                icon={faComments}
                 style={{ paddingRight: "5px" }}
               />
             }

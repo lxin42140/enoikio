@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBook, faTasks } from "@fortawesome/free-solid-svg-icons";
 import Listing from "./Listing/Listing";
 import Request from "../Requests/Request/Request";
 import Spinner from "../../components/UI/Spinner/Spinner";
@@ -85,6 +86,7 @@ class FullListings extends Component {
               : null
           }
         >
+          {<FontAwesomeIcon icon={faBook} style={{ paddingRight: "5px" }} />}
           Listings
         </button>
         <button
@@ -100,6 +102,12 @@ class FullListings extends Component {
               : null
           }
         >
+          {
+            <FontAwesomeIcon
+              icon={faTasks}
+              style={{ paddingRight: "5px" }}
+            />
+          }
           Requests
         </button>
       </div>

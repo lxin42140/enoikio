@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import { faArrowLeft, faHeart } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import Listing from "../Listings/Listing/Listing";
 import Request from "../Requests/Request/Request";
@@ -216,7 +218,15 @@ class FilterResults extends Component {
             <React.Fragment>
               <h3>Oops...Nothing to see here!</h3>
               <div className={classes.Selections}>
-                <a onClick={() => this.props.history.goBack()}>Go back</a>
+                <a onClick={() => this.props.history.goBack()}>
+                  {
+                    <FontAwesomeIcon
+                      icon={faArrowLeft}
+                      style={{ paddingRight: "5px" }}
+                    />
+                  }
+                  Go back
+                </a>
               </div>
             </React.Fragment>
           );
@@ -227,7 +237,17 @@ class FilterResults extends Component {
         case "onRent":
           return <h3>Oops...No rentals yet</h3>;
         case "favorites":
-          return <h3>Like a post and view it here...</h3>;
+          return (
+            <h3>
+              {
+                <FontAwesomeIcon
+                  icon={faHeart}
+                  style={{ paddingRight: "5px" }}
+                />
+              }
+              a post and view it here...
+            </h3>
+          );
         case "moduleCode":
         case "textbook":
           return (
@@ -236,16 +256,24 @@ class FilterResults extends Component {
               <div className={classes.Selections}>
                 {this.props.isAuthenticated ? (
                   <Link to="/new-request">
-                    <a>Make a request</a>
+                    <a>Submit request</a>
                   </Link>
                 ) : (
                   <Link to="/auth">
-                    <a>Make a request</a>
+                    <a>Submit request</a>
                   </Link>
                 )}
               </div>
               <div className={classes.Selections}>
-                <a onClick={() => this.props.history.goBack()}>Go back</a>
+                <a onClick={() => this.props.history.goBack()}>
+                  {
+                    <FontAwesomeIcon
+                      icon={faArrowLeft}
+                      style={{ paddingRight: "5px" }}
+                    />
+                  }
+                  Go back
+                </a>
               </div>
             </React.Fragment>
           );
@@ -304,7 +332,37 @@ class FilterResults extends Component {
       });
     }
 
-    return <div className={classes.Listings}>{listings}</div>;
+    let requestPrompt = null;
+    if (
+      this.state.filterType === "moduleCode" ||
+      this.state.filterType === "textbook"
+    ) {
+      requestPrompt = (
+        <div style={{ fontSize: "small", paddingTop: "-20px" }}>
+          <p>
+            <i>Not what you are looking for? Make a request!</i>
+          </p>
+          <div className={classes.Selections}>
+            {this.props.isAuthenticated ? (
+              <Link to="/new-request">
+                <a>Submit request</a>
+              </Link>
+            ) : (
+              <Link to="/auth">
+                <a>Submit request</a>
+              </Link>
+            )}
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div>
+        {requestPrompt}
+        <div className={classes.Listings}>{listings}</div>
+      </div>
+    );
   }
 }
 

@@ -312,7 +312,26 @@ class NewRequest extends Component {
               onClick={this.toggleModalHandler}
               disabled={!this.state.formIsValid}
             >
+              {
+                <FontAwesomeIcon
+                  icon={faCheck}
+                  style={{ paddingRight: "5px" }}
+                />
+              }
               SUBMIT
+            </Button>
+            <Button
+              onClick={() => {
+                this.props.history.goBack();
+              }}
+            >
+              {
+                <FontAwesomeIcon
+                  icon={faTimes}
+                  style={{ paddingRight: "5px" }}
+                />
+              }
+              Cancel
             </Button>
           </React.Fragment>
         )}
@@ -343,13 +362,13 @@ class NewRequest extends Component {
         </p>
 
         <div style={{ display: "flex", justifyContent: "center" }}>
-          <Button onClick={this.toggleModalHandler}>
-            {<FontAwesomeIcon icon={faTimes} style={{ paddingRight: "5px" }} />}
-            Go back
-          </Button>
           <Button onClick={this.onSubmitHandler} btnType="Important">
             {<FontAwesomeIcon icon={faCheck} style={{ paddingRight: "5px" }} />}
             Submit
+          </Button>
+          <Button onClick={this.toggleModalHandler}>
+            {<FontAwesomeIcon icon={faTimes} style={{ paddingRight: "5px" }} />}
+            Go back
           </Button>
         </div>
       </Modal>

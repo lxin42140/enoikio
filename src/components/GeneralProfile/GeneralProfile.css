@@ -28,7 +28,7 @@
     font-family: inherit;
     font-size: inherit;
     height: 52px;
-    width: 100px;
+    width: 120px;
     cursor: pointer;
     margin-right: 20px;
 }
@@ -98,6 +98,7 @@
 .Reviews {
     padding-left: 10px;
     list-style-type: none;
+    text-align: start;
 }
 
 .Reviews li {

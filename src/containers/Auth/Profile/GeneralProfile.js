@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ProfileComponent from "../../../components/GeneralProfile/GeneralProfile";
 import { database } from "../../../firebase/firebase";
 import Spinner from "../../../components/UI/Spinner/Spinner";
@@ -133,7 +135,15 @@ class GeneralProfilePage extends Component {
         <React.Fragment>
           <h3>Oops...The user you are looking for doesn't seem to exist</h3>
           <div className={classes.Selections}>
-            <a onClick={() => this.props.history.goBack()}>Go back</a>
+            <a onClick={() => this.props.history.goBack()}>
+              {
+                <FontAwesomeIcon
+                  icon={faArrowLeft}
+                  style={{ paddingRight: "5px" }}
+                />
+              }
+              Go back
+            </a>
           </div>
         </React.Fragment>
       );

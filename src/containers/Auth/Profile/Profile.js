@@ -2,6 +2,10 @@ import {
   faStar,
   faFileUpload,
   faTimes,
+  faBook,
+  faTasks,
+  faHandHoldingUsd,
+  faCommentDots,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { Component } from "react";
@@ -15,7 +19,6 @@ import { database, storage } from "../../../firebase/firebase";
 import * as actions from "../../../store/actions/index";
 import FilterResults from "../../util/FilterResults";
 import * as classes from "./Profile.css";
-
 class Profile extends Component {
   state = {
     showPastListing: true,
@@ -349,6 +352,7 @@ class Profile extends Component {
                 : null
             }
           >
+            {<FontAwesomeIcon icon={faBook} style={{ paddingRight: "5px" }} />}
             Listings
           </button>
           <button
@@ -364,6 +368,7 @@ class Profile extends Component {
                 : null
             }
           >
+            {<FontAwesomeIcon icon={faTasks} style={{ paddingRight: "5px" }} />}
             Requests
           </button>
           <button
@@ -379,6 +384,12 @@ class Profile extends Component {
                 : null
             }
           >
+            {
+              <FontAwesomeIcon
+                icon={faHandHoldingUsd}
+                style={{ paddingRight: "5px" }}
+              />
+            }
             On rent
           </button>
           <button
@@ -394,6 +405,12 @@ class Profile extends Component {
                 : null
             }
           >
+            {
+              <FontAwesomeIcon
+                icon={faCommentDots}
+                style={{ paddingRight: "5px" }}
+              />
+            }
             Reviews
           </button>
         </div>

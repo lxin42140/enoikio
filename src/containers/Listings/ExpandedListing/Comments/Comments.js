@@ -3,8 +3,10 @@ import {
   faReply,
   faTimes,
   faCheck,
-  faComment,
+  faShare,
+  faPen,
   faClipboardCheck,
+  faEnvelope,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import moment from "moment";
@@ -223,12 +225,7 @@ class Comments extends Component {
       <div>
         {this.state.isListingOwner ? (
           <p style={{ margin: "10px 0 5px 10px", textAlign: "center" }}>
-            {
-              <FontAwesomeIcon
-                icon={faComment}
-                style={{ paddingRight: "5px" }}
-              />
-            }
+            {<FontAwesomeIcon icon={faPen} style={{ paddingRight: "5px" }} />}
             Write your comment
           </p>
         ) : (
@@ -309,6 +306,12 @@ class Comments extends Component {
                   (this.state.numStars === 0 || this.state.message === ""))
               }
             >
+              {
+                <FontAwesomeIcon
+                  icon={faEnvelope}
+                  style={{ paddingRight: "5px" }}
+                />
+              }
               Post
             </Button>
           </span>
@@ -333,7 +336,7 @@ class Comments extends Component {
           numStars={reply.numStars}
           content={reply.content}
           profilePicture={reply.profilePicture}
-          onClick={() => this.props.searchProfileHandler(comment.sender)}
+          onClick={() => this.props.searchProfileHandler(reply.sender)}
         />
       ));
 
@@ -363,7 +366,7 @@ class Comments extends Component {
                     <Button onClick={() => this.togglePopUp(comment.key)}>
                       {
                         <FontAwesomeIcon
-                          icon={faReply}
+                          icon={faShare}
                           style={{ paddingRight: "5px" }}
                         />
                       }
@@ -372,7 +375,15 @@ class Comments extends Component {
                   </span>
                 ) : (
                   <Link to="/auth">
-                    <Button>Sign in to reply</Button>
+                    <Button>
+                      {
+                        <FontAwesomeIcon
+                          icon={faShare}
+                          style={{ paddingRight: "5px" }}
+                        />
+                      }
+                      Sign in
+                    </Button>
                   </Link>
                 )}
               </div>
@@ -401,7 +412,7 @@ class Comments extends Component {
             >
               {
                 <FontAwesomeIcon
-                  icon={faCheck}
+                  icon={faEnvelope}
                   style={{ paddingRight: "5px" }}
                 />
               }
