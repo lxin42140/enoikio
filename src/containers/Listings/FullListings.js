@@ -18,8 +18,8 @@ class FullListings extends Component {
   state = {
     viewListing: true,
     viewRequest: false,
-    sortType: "descendingDate",
-    showDropDown: false,
+    // sortType: "descendingDate",
+    // showDropDown: false,
   };
 
   showRequestHandler = () => {
@@ -74,17 +74,17 @@ class FullListings extends Component {
     return requestArr;
   };
 
-  changeSorting = (sortType) => {
-    this.setState({
-      sortType: sortType,
-    });
-  };
+  // changeSorting = (sortType) => {
+  //   this.setState({
+  //     sortType: sortType,
+  //   });
+  // };
 
-  toggleDropDown = () => {
-    this.setState((prevState) => ({
-      showDropDown: !prevState.showDropDown,
-    }));
-  };
+  // toggleDropDown = () => {
+  //   this.setState((prevState) => ({
+  //     showDropDown: !prevState.showDropDown,
+  //   }));
+  // };
   render() {
     if (this.props.loading) {
       return <Spinner />;
@@ -226,30 +226,30 @@ class FullListings extends Component {
       );
     }
 
-    let dropDown;
-    if (this.state.showDropDown) {
-      dropDown = (
-        <React.Fragment>
-          <Dropdown
-            icon={faCalendarPlus}
-            onClick={() => this.changeSorting("descendingDate")}
-            text={"Most recent"}
-          />
-          <Dropdown
-            icon={faCalendarMinus}
-            onClick={() => this.changeSorting("ascendingDate")}
-            text={"Least recent"}
-          />
-          <Dropdown
-            icon={faHeart}
-            onClick={() => this.changeSorting("numFaves")}
-            text={"Number of favorites"}
-          />
-        </React.Fragment>
-      );
-    } else {
-      dropDown = null;
-    }
+    // let dropDown;
+    // if (this.state.showDropDown) {
+    //   dropDown = (
+    //     <React.Fragment>
+    //       <Dropdown
+    //         icon={faCalendarPlus}
+    //         onClick={() => this.changeSorting("descendingDate")}
+    //         text={"Most recent"}
+    //       />
+    //       <Dropdown
+    //         icon={faCalendarMinus}
+    //         onClick={() => this.changeSorting("ascendingDate")}
+    //         text={"Least recent"}
+    //       />
+    //       <Dropdown
+    //         icon={faHeart}
+    //         onClick={() => this.changeSorting("numFaves")}
+    //         text={"Number of favorites"}
+    //       />
+    //     </React.Fragment>
+    //   );
+    // } else {
+    //   dropDown = null;
+    // }
 
     return (
       <div>
