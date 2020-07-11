@@ -102,12 +102,7 @@ class FullListings extends Component {
               : null
           }
         >
-          {
-            <FontAwesomeIcon
-              icon={faTasks}
-              style={{ paddingRight: "5px" }}
-            />
-          }
+          {<FontAwesomeIcon icon={faTasks} style={{ paddingRight: "5px" }} />}
           Requests
         </button>
       </div>
