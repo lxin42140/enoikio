@@ -207,11 +207,26 @@ class FullListings extends Component {
       );
     }
 
+    let dropDown = (
+      <React.Fragment>
+        {/* <DropDown
+          icon={faUniversity}
+          onClick={() => this.changeFilterHandler("moduleCode")}
+          text={"Module"}
+        /> */}
+      </React.Fragment>
+    );
+
     return (
       <div>
         <div>{toggleSwitch}</div>
         {this.state.viewListing ? (
+          <div>
+            <div>
+              <p>sort by</p>
+            </div>
           <div className={classes.Listings}>{listings}</div>
+          </div>
         ) : (
           <div className={classes.Requests}>{requests}</div>
         )}
