@@ -9,7 +9,6 @@ import {
   faLocationArrow,
   faBook,
   faUniversity,
-  faWindowClose,
   faSearch,
   faChevronDown,
   faUser,
@@ -57,7 +56,7 @@ class SearchBar extends Component {
   };
 
   onCancelSearchHandler = (event) => {
-    this.props.onClick();
+    // this.props.onClick();
     if (this.state.userInput !== "") {
       this.props.history.goBack();
     }
@@ -78,19 +77,35 @@ class SearchBar extends Component {
         formattedDisplayName
       ) {
         this.props.setFilterTermForListing("displayName");
-        this.props.history.push("/profile?profile=personal");
+
+        let query =
+          "/profile?from=" +
+          this.props.history.location.pathname +
+          "&&profile=personal";
+
+        this.props.history.push(query);
       } else {
         this.props.setFilterProfile(formattedDisplayName);
-        this.props.history.push(
-          "/searchProfile?profile=" + formattedDisplayName
-        );
+
+        let query =
+          "/searchProfile?from=" +
+          this.props.history.location.pathname +
+          "&&profile=" +
+          formattedDisplayName;
+
+        this.props.history.push(query);
       }
     } else {
       this.props.setFilterTermForListing(
         this.state.filterType,
         this.state.userInput.toLowerCase().split(" ").join("")
       );
-      this.props.history.push("/searchResults?search=" + this.state.userInput);
+      let query =
+        "/searchResults?from=" +
+        this.props.history.location.pathname +
+        "&&search=" +
+        this.state.userInput;
+      this.props.history.push(query);
     }
   };
 

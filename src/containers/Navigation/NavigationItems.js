@@ -189,7 +189,12 @@ class NavigationItems extends Component {
             paddingLeft: "20px",
             paddingRight: "10px",
           }}
-          onClick={this.toggleSearchBarHandler}
+          onClick={() => {
+            this.toggleSearchBarHandler();
+            this.props.history.push(
+              this.props.history.location.search.split("&&")[0].split("=")[1]
+            );
+          }}
         />
       </div>
     ) : (

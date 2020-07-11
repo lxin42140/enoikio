@@ -30,7 +30,7 @@ class GeneralProfilePage extends Component {
 
   componentDidUpdate() {
     let searchQueryName = this.props.history.location.search
-      .split("?")[1]
+      .split("&&")[1]
       .split("=")[1];
     if (
       this.state.formattedDisplayName !== this.props.searchObject &&
@@ -127,7 +127,13 @@ class GeneralProfilePage extends Component {
   searchProfileHandler = (displayName) => {
     let formattedDisplayName = displayName.toLowerCase().split(" ").join("");
     this.props.setFilterProfile(formattedDisplayName);
-    this.props.history.push("/searchProfile?profile=" + formattedDisplayName);
+    let query =
+      "/searchProfile?from=" +
+      this.props.history.location.search.split("&&")[0].split("=")[1] +
+      "&&profile=" +
+      formattedDisplayName;
+
+    this.props.history.push(query);
   };
   render() {
     if (this.state.error) {
