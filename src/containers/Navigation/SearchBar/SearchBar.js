@@ -7,7 +7,7 @@ import DropDown from "./Dropdown/DropDown";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faLocationArrow,
-  faBook,
+  faBookOpen,
   faUniversity,
   faSearch,
   faChevronDown,
@@ -124,7 +124,7 @@ class SearchBar extends Component {
           text={"Module"}
         />
         <DropDown
-          icon={faBook}
+          icon={faBookOpen}
           onClick={() => this.changeFilterHandler("textbook")}
           text={"Textbook"}
         />
@@ -156,7 +156,24 @@ class SearchBar extends Component {
               style={{ height: "100%" }}
               onClick={this.filterDropdownHandler}
             >
-              <button className={classes.button}>Filter by</button>
+              <button className={classes.button}>Filtering by</button>
+              <span
+                style={{
+                  paddingRight: "5px",
+                  color: "grey",
+                  fontSize: "small",
+                }}
+              >
+                {this.state.filterType === "moduleCode" ? (
+                  <FontAwesomeIcon icon={faUniversity} />
+                ) : this.state.filterType === "textbook" ? (
+                  <FontAwesomeIcon icon={faBookOpen} />
+                ) : this.state.filterType === "location" ? (
+                  <FontAwesomeIcon icon={faLocationArrow} />
+                ) : (
+                  <FontAwesomeIcon icon={faUser} />
+                )}
+              </span>
               <FontAwesomeIcon
                 icon={faChevronDown}
                 className={classes.arrowDown}
