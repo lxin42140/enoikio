@@ -7,6 +7,7 @@ import {
   faCheck,
   faFileUpload,
   faHome,
+  faImage,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
@@ -566,6 +567,12 @@ class EditPost extends Component {
             }}
           >
             <p style={{ paddingRight: "10px", textAlign: "center" }}>
+              {
+                <FontAwesomeIcon
+                  icon={faImage}
+                  style={{ paddingRight: "5px", color: "#f3a1a1" }}
+                />
+              }
               {typeof image === "string" ? image : image.name}
             </p>
             <Button onClick={() => this.removeImageHandler(image)}>

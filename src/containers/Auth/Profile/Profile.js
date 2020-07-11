@@ -6,6 +6,7 @@ import {
   faTasks,
   faHandHoldingUsd,
   faCommentDots,
+  faImage
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { Component } from "react";
@@ -186,6 +187,12 @@ class Profile extends Component {
             }}
           >
             <div style={{ paddingBottom: "10px" }}>
+              {
+                <FontAwesomeIcon
+                  icon={faImage}
+                  style={{ paddingRight: "5px", color: "#f3a1a1" }}
+                />
+              }
               <input
                 type="file"
                 accept=".png,.jpeg, .jpg"

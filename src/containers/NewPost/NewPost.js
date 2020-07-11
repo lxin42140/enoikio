@@ -10,6 +10,7 @@ import {
   faHome,
   faEdit,
   faFileUpload,
+  faImage
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -540,6 +541,12 @@ class NewPost extends Component {
           }}
         >
           <p style={{ paddingRight: "10px", textAlign: "center" }}>
+            {
+              <FontAwesomeIcon
+                icon={faImage}
+                style={{ paddingRight: "5px", color: "#f3a1a1" }}
+              />
+            }
             {image.name}
           </p>
           <Button onClick={() => this.removeImageHandler(image)}>
@@ -564,7 +571,7 @@ class NewPost extends Component {
             {form}
             <br />
             <div className={classes.ImageText}>{displayImageList}</div>
-            <div style={{ marginBottom: "10px",color: "#f3a1a1" }}>
+            <div style={{ marginBottom: "10px", color: "#f3a1a1" }}>
               {
                 <FontAwesomeIcon
                   icon={faFileUpload}
@@ -575,7 +582,7 @@ class NewPost extends Component {
                 type="file"
                 accept=".png,.jpeg, .jpg"
                 multiple
-                style={{ width: "95px",color: "#f3a1a1" }}
+                style={{ width: "95px", color: "#f3a1a1" }}
                 onChange={this.handleImageAsFile}
                 disabled={this.state.numberOfImages >= 3}
               />
