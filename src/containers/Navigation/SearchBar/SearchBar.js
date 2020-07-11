@@ -1,9 +1,5 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-
-import classes from "./SearchBar.css";
-import * as actions from "../../../store/actions/index";
-import DropDown from "./Dropdown/DropDown";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faLocationArrow,
@@ -13,6 +9,10 @@ import {
   faChevronDown,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
+
+import classes from "./SearchBar.css";
+import * as actions from "../../../store/actions/index";
+import DropDown from "../../../components/UI/Dropdown/DropDown";
 
 class SearchBar extends Component {
   state = {
