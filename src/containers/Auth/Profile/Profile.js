@@ -7,10 +7,15 @@ import {
   faHandHoldingUsd,
   faCommentDots,
   faImage,
+  faEdit,
+  faLightbulb,
+  faCheck,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import moment from "moment";
+
 import profileImage from "../../../assets/Images/chats/profile";
 import Comment from "../../../components/Comment/Comment";
 import Button from "../../../components/UI/Button/Button";
@@ -20,6 +25,7 @@ import { database, storage } from "../../../firebase/firebase";
 import * as actions from "../../../store/actions/index";
 import FilterResults from "../../util/FilterResults";
 import * as classes from "./Profile.css";
+import Input from "../../../components/UI/Input/Input";
 class Profile extends Component {
   state = {
     showPastListing: true,
@@ -33,6 +39,70 @@ class Profile extends Component {
     comments: [],
     numReviews: 0,
     numStars: 0,
+
+    //
+
+    feedbackPopup: false,
+    showSummary: false,
+    dataForm: {
+      feedback: {
+        elementType: "select",
+        elementConfig: {
+          options: [
+            {
+              value: "Discovered bugs",
+              displayValue: "Discovered bugs",
+            },
+            {
+              value: "Improvements",
+              displayValue: "Improvements",
+            },
+            {
+              value: "Others",
+              displayValue: "Others",
+            },
+          ],
+        },
+        value: "Discovered bugs",
+        validation: false,
+        valid: true,
+        touched: false,
+      },
+      description: {
+        elementType: "textarea",
+        elementConfig: {
+          type: "text",
+          placeholder:
+            "We value all feedback. Please describe your feedback in detail.",
+        },
+        validation: {
+          required: true,
+        },
+        value: "",
+        valid: false,
+        touched: false,
+      },
+      followUp: {
+        elementType: "select",
+        elementConfig: {
+          options: [
+            {
+              value: "I wish to be contacted for follow-up",
+              displayValue: "I wish to be contacted for follow-up",
+            },
+            {
+              value: "I do not wish to be contacted for follow-up",
+              displayValue: "I do not wish to be contacted for follow-up",
+            },
+          ],
+        },
+        value: "I do not wish to be contacted for follow-up",
+        validation: false,
+        valid: true,
+        touched: false,
+      },
+    },
+    formIsValid: false,
   };
 
   componentWillUnmount() {
@@ -161,6 +231,156 @@ class Profile extends Component {
       formattedDisplayName;
 
     this.props.history.push(query);
+  };
+
+  checkValidity(value, rules) {
+    let isValid = true;
+    if (rules) {
+      if (rules.required) {
+        isValid = value.trim() !== "" && isValid;
+      }
+    }
+    return isValid;
+  }
+
+  inputChangedHandler = (event, inputIdentifier) => {
+    const updatedDataForm = {
+      ...this.state.dataForm,
+    };
+    const updatedFormElement = {
+      ...updatedDataForm[inputIdentifier],
+    };
+    updatedFormElement.value = event.target.value;
+
+    updatedFormElement.valid = this.checkValidity(
+      updatedFormElement.value,
+      updatedFormElement.validation
+    );
+
+    updatedFormElement.touched = true;
+    updatedDataForm[inputIdentifier] = updatedFormElement;
+    let formIsValid = true;
+    for (let inputIdentifiers in updatedDataForm) {
+      if (!updatedDataForm[inputIdentifiers].valid) {
+        formIsValid = false;
+        break;
+      }
+    }
+    this.setState({ dataForm: updatedDataForm, formIsValid: formIsValid });
+  };
+  showReportModal = () => {
+    this.setState({
+      feedbackPopup: true,
+    });
+  };
+
+  closeReportModal = () => {
+    this.setState({
+      feedbackPopup: false,
+    });
+  };
+
+  showReportSummary = () => {
+    this.setState({
+      feedbackPopup: false,
+      showSummary: true,
+    });
+  };
+
+  closeReportSummary = () => {
+    this.setState({
+      feedbackPopup: true,
+      showSummary: false,
+    });
+  };
+
+  reset = () => {
+    this.setState({
+      feedbackPopup: false,
+      showSummary: false,
+      dataForm: {
+        feedback: {
+          elementType: "select",
+          elementConfig: {
+            options: [
+              {
+                value: "Discovered bugs",
+                displayValue: "Discovered bugs",
+              },
+              {
+                value: "Improvements",
+                displayValue: "Improvements",
+              },
+              {
+                value: "Others",
+                displayValue: "Others",
+              },
+            ],
+          },
+          value: "Discovered bugs",
+          validation: false,
+          valid: true,
+          touched: false,
+        },
+        description: {
+          elementType: "textarea",
+          elementConfig: {
+            type: "text",
+            placeholder:
+              "We value all feedback. Please describe your feedback in details",
+          },
+          validation: {
+            required: true,
+          },
+          value: "",
+          valid: false,
+          touched: false,
+        },
+        followUp: {
+          elementType: "select",
+          elementConfig: {
+            options: [
+              {
+                value: "I wish to be contacted for follow-up",
+                displayValue: "I wish to be contacted for follow-up",
+              },
+              {
+                value: "I do not wish to be contacted for follow-up",
+                displayValue: "I do not wish to be contacted for follow-up",
+              },
+            ],
+          },
+          value: "I do not wish to be contacted for follow-up",
+          validation: false,
+          valid: true,
+          touched: false,
+        },
+      },
+      formIsValid: false,
+    });
+  };
+
+  submitReportHandler = () => {
+    const date = moment().format("DD/MM/YYYY");
+    const time = moment().format("HH:mm:ss");
+    const unique = this.props.displayName + Date.now();
+    const formData = {};
+
+    for (let key in this.state.dataForm) {
+      formData[key] = this.state.dataForm[key].value;
+    }
+
+    const reportDetails = {
+      unique: unique,
+      date: date,
+      time: time,
+      reportDetails: formData,
+      reportedBy: this.props.displayName,
+    };
+
+    database.ref().child("feedbacks").push({ reportDetails });
+
+    this.reset();
   };
   render() {
     let editProfileImage = (
@@ -328,6 +548,17 @@ class Profile extends Component {
           <b>Last sign in: </b>
           {this.props.lastSignIn}
         </li>
+        <li style={{ cursor: "pointer" }} onClick={this.showReportModal}>
+          <span style={{ color: "orange" }}>
+            {
+              <FontAwesomeIcon
+                icon={faLightbulb}
+                style={{ paddingRight: "5px" }}
+              />
+            }
+            Submit feedback
+          </span>
+        </li>
       </ul>
     );
 
@@ -350,98 +581,188 @@ class Profile extends Component {
       ));
     }
 
-    return (
-      <div className={classes.smallScreen}>
-        <div className={classes.Background} />
-        <div className={classes.Navigation}>
-          <button
-            onClick={this.onShowPastPostHandler}
-            style={
-              this.state.showPastListing
-                ? {
-                    fontWeight: "bold",
-                    color: "#dd5641",
-                    borderBottom: "3px solid #dd5641",
-                    outline: "none",
-                  }
-                : null
-            }
-          >
-            {<FontAwesomeIcon icon={faBook} style={{ paddingRight: "5px" }} />}
-            Listings
-          </button>
-          <button
-            onClick={this.onShowRequestHandler}
-            style={
-              this.state.showRequest
-                ? {
-                    fontWeight: "bold",
-                    color: "#dd5641",
-                    borderBottom: "3px solid #dd5641",
-                    outline: "none",
-                  }
-                : null
-            }
-          >
-            {<FontAwesomeIcon icon={faTasks} style={{ paddingRight: "5px" }} />}
-            Requests
-          </button>
-          <button
-            onClick={this.onShowOnRentHandler}
-            style={
-              this.state.showOnRent
-                ? {
-                    fontWeight: "bold",
-                    color: "#dd5641",
-                    borderBottom: "3px solid #dd5641",
-                    outline: "none",
-                  }
-                : null
-            }
-          >
+    const formElementsArray = [];
+
+    for (let key in this.state.dataForm) {
+      formElementsArray.push({
+        id: key,
+        config: this.state.dataForm[key],
+      });
+    }
+
+    let form = null;
+    if (this.state.feedbackPopup) {
+      form = formElementsArray.map((formElement) => (
+        <Input
+          key={formElement.id}
+          elementType={formElement.config.elementType}
+          elementConfig={formElement.config.elementConfig}
+          value={formElement.config.value}
+          valid={formElement.config.valid}
+          shouldValidate={formElement.config.validation}
+          touched={formElement.config.touched}
+          change={(event) => this.inputChangedHandler(event, formElement.id)}
+        />
+      ));
+    }
+
+    let feedbackPopup = (
+      <Modal show={this.state.feedbackPopup}>
+        {form}
+        <Button
+          btnType="Important"
+          disabled={!this.state.formIsValid}
+          onClick={this.showReportSummary}
+        >
+          {<FontAwesomeIcon icon={faCheck} style={{ paddingRight: "5px" }} />}
+          Review
+        </Button>
+        <Button onClick={this.closeReportModal}>
+          {<FontAwesomeIcon icon={faTimes} style={{ paddingRight: "5px" }} />}
+          Cancel
+        </Button>
+      </Modal>
+    );
+
+    let reportSummary = (
+      <Modal show={this.state.showSummary}>
+        <h1>Confirm feedback details:</h1>
+        <p>
+          <b>feedback area: </b>
+          {this.state.dataForm.feedback.value}
+        </p>
+        <p style={{ textAlign: "start" }}>
+          <b>Description: </b>
+          <br />
+          {this.state.dataForm.description.value}
+        </p>
+        <p style={{ fontSize: "small" }}>
+          <i>{this.state.dataForm.followUp.value}</i>
+        </p>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <Button btnType="Important" onClick={this.submitReportHandler}>
             {
               <FontAwesomeIcon
-                icon={faHandHoldingUsd}
+                icon={faLightbulb}
                 style={{ paddingRight: "5px" }}
               />
             }
-            On rent
-          </button>
-          <button
-            onClick={this.onShowReviewsHandler}
-            style={
-              this.state.showComments
-                ? {
-                    fontWeight: "bold",
-                    color: "#dd5641",
-                    borderBottom: "3px solid #dd5641",
-                    outline: "none",
-                  }
-                : null
-            }
-          >
-            {
-              <FontAwesomeIcon
-                icon={faCommentDots}
-                style={{ paddingRight: "5px" }}
-              />
-            }
-            Reviews
-          </button>
+            Submit
+          </Button>
+          <Button onClick={this.closeReportSummary}>
+            {<FontAwesomeIcon icon={faEdit} style={{ paddingRight: "5px" }} />}
+            Edit
+          </Button>
         </div>
-        <div className={classes.Profile}>
-          <div className={classes.ProfileDetails}>{profile}</div>
-          {editProfileImage}
-          <div className={classes.OtherInfo}>
-            {this.state.showPastListing ||
-            this.state.showOnRent ||
-            this.state.showRequest ? (
-              <FilterResults history={this.props.history} />
-            ) : this.state.comments.length < 1 ? (
-              <h3>Oops..No reviews</h3>
-            ) : (
-              <ul className={classes.Reviews}>{reviews}</ul>
-            )}
+      </Modal>
+    );
+
+    return (
+      <div>
+        {feedbackPopup}
+        {reportSummary}
+        <div className={classes.smallScreen}>
+          <div className={classes.Background} />
+          <div className={classes.Navigation}>
+            <button
+              onClick={this.onShowPastPostHandler}
+              style={
+                this.state.showPastListing
+                  ? {
+                      fontWeight: "bold",
+                      color: "#dd5641",
+                      borderBottom: "3px solid #dd5641",
+                      outline: "none",
+                    }
+                  : null
+              }
+            >
+              {
+                <FontAwesomeIcon
+                  icon={faBook}
+                  style={{ paddingRight: "5px" }}
+                />
+              }
+              Listings
+            </button>
+            <button
+              onClick={this.onShowRequestHandler}
+              style={
+                this.state.showRequest
+                  ? {
+                      fontWeight: "bold",
+                      color: "#dd5641",
+                      borderBottom: "3px solid #dd5641",
+                      outline: "none",
+                    }
+                  : null
+              }
+            >
+              {
+                <FontAwesomeIcon
+                  icon={faTasks}
+                  style={{ paddingRight: "5px" }}
+                />
+              }
+              Requests
+            </button>
+            <button
+              onClick={this.onShowOnRentHandler}
+              style={
+                this.state.showOnRent
+                  ? {
+                      fontWeight: "bold",
+                      color: "#dd5641",
+                      borderBottom: "3px solid #dd5641",
+                      outline: "none",
+                    }
+                  : null
+              }
+            >
+              {
+                <FontAwesomeIcon
+                  icon={faHandHoldingUsd}
+                  style={{ paddingRight: "5px" }}
+                />
+              }
+              On rent
+            </button>
+            <button
+              onClick={this.onShowReviewsHandler}
+              style={
+                this.state.showComments
+                  ? {
+                      fontWeight: "bold",
+                      color: "#dd5641",
+                      borderBottom: "3px solid #dd5641",
+                      outline: "none",
+                    }
+                  : null
+              }
+            >
+              {
+                <FontAwesomeIcon
+                  icon={faCommentDots}
+                  style={{ paddingRight: "5px" }}
+                />
+              }
+              Reviews
+            </button>
+          </div>
+          <div className={classes.Profile}>
+            <div className={classes.ProfileDetails}>{profile}</div>
+            {editProfileImage}
+            <div className={classes.OtherInfo}>
+              {this.state.showPastListing ||
+              this.state.showOnRent ||
+              this.state.showRequest ? (
+                <FilterResults history={this.props.history} />
+              ) : this.state.comments.length < 1 ? (
+                <h3>Oops..No reviews</h3>
+              ) : (
+                <ul className={classes.Reviews}>{reviews}</ul>
+              )}
+            </div>
           </div>
         </div>
       </div>
