@@ -6,7 +6,7 @@ import {
   faTasks,
   faHandHoldingUsd,
   faCommentDots,
-  faImage
+  faImage,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { Component } from "react";
@@ -151,8 +151,16 @@ class Profile extends Component {
 
   searchProfileHandler = (displayName) => {
     let formattedDisplayName = displayName.toLowerCase().split(" ").join("");
+
     this.props.setFilterProfile(formattedDisplayName);
-    this.props.history.push("/searchProfile?profile=" + formattedDisplayName);
+
+    let query =
+      "/searchProfile?from=" +
+      this.props.history.location.pathname +
+      "&&profile=" +
+      formattedDisplayName;
+
+    this.props.history.push(query);
   };
   render() {
     let editProfileImage = (
