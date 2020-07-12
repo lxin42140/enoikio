@@ -397,22 +397,7 @@ class GeneralProfilePage extends Component {
 
   render() {
     if (this.state.error) {
-      return (
-        <React.Fragment>
-          <h3>Oops...The user you are looking for doesn't seem to exist</h3>
-          <div className={classes.Selections}>
-            <a onClick={() => this.props.history.goBack()}>
-              {
-                <FontAwesomeIcon
-                  icon={faArrowLeft}
-                  style={{ paddingRight: "5px" }}
-                />
-              }
-              Go back
-            </a>
-          </div>
-        </React.Fragment>
-      );
+      return <h3>Oops...The user you are looking for doesn't seem to exist</h3>;
     }
 
     if (this.state.loading) {

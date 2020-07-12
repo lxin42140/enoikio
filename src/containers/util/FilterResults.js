@@ -208,7 +208,7 @@ class FilterResults extends Component {
         this.state.searchObject ===
           this.props.displayName.toLowerCase().split(" ").join("")
       ) {
-        return <h3>Submit your request and view it here...</h3>;
+        return <h3>Oops...Post your request and view it here</h3>;
       } else {
         const myRequests = this.state.filteredRequests.map((request) => {
           return (
@@ -233,24 +233,9 @@ class FilterResults extends Component {
     if (this.state.filteredListings.length < 1) {
       switch (this.state.filterType) {
         case "location":
-          return (
-            <React.Fragment>
-              <h3>Oops...Nothing to see here!</h3>
-              <div className={classes.Selections}>
-                <a onClick={() => this.props.history.goBack()}>
-                  {
-                    <FontAwesomeIcon
-                      icon={faArrowLeft}
-                      style={{ paddingRight: "5px" }}
-                    />
-                  }
-                  Go back
-                </a>
-              </div>
-            </React.Fragment>
-          );
+          return <h3>Oops...No available listings at this location</h3>;
         case "displayName":
-          return <h3>Oops...Submit your listing and view it here</h3>;
+          return <h3>Oops...Post your listing and view it here</h3>;
         case "searchProfile":
           return <h3>Oops...This user has no listings</h3>;
         case "onRent":
@@ -258,20 +243,20 @@ class FilterResults extends Component {
         case "favorites":
           return (
             <h3>
+              Oops...
               {
                 <FontAwesomeIcon
                   icon={faHeart}
                   style={{ paddingRight: "5px" }}
                 />
               }
-              a post and view it here...
+              a post and view it here
             </h3>
           );
         case "moduleCode":
-        case "textbook":
           return (
             <React.Fragment>
-              <h3>Oops...No available listings</h3>
+              <h3>Oops...No available listings for this module</h3>
               <div className={classes.Selections}>
                 {this.props.isAuthenticated ? (
                   <Link to="/new-request">
@@ -283,16 +268,22 @@ class FilterResults extends Component {
                   </Link>
                 )}
               </div>
+            </React.Fragment>
+          );
+        case "textbook":
+          return (
+            <React.Fragment>
+              <h3>Oops...No available listings for this textbook</h3>
               <div className={classes.Selections}>
-                <a onClick={() => this.props.history.goBack()}>
-                  {
-                    <FontAwesomeIcon
-                      icon={faArrowLeft}
-                      style={{ paddingRight: "5px" }}
-                    />
-                  }
-                  Go back
-                </a>
+                {this.props.isAuthenticated ? (
+                  <Link to="/new-request">
+                    <a>Submit request</a>
+                  </Link>
+                ) : (
+                  <Link to="/auth">
+                    <a>Submit request</a>
+                  </Link>
+                )}
               </div>
             </React.Fragment>
           );
