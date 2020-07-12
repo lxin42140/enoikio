@@ -7,12 +7,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Listing from "../Listings/Listing/Listing";
 import Request from "../Requests/Request/Request";
 import * as classes from "./FilterResults.css";
+import * as actions from "../../store/actions/index";
 class FilterResults extends Component {
   state = {
     filteredRequests: [],
     filteredListings: [],
     filterType: "",
     searchObject: "",
+    searching: false,
   };
 
   componentDidUpdate() {
@@ -21,6 +23,20 @@ class FilterResults extends Component {
       this.state.searchObject !== this.props.searchObject
     ) {
       this.filter();
+    } else if (!this.props.history.location.search && this.state.searching) {
+      switch (this.props.history.location.pathname) {
+        case "/liked-listings":
+          this.props.setFilterTermForListing("favorites");
+          break;
+        case "/profile":
+          this.props.setFilterTermForListing("displayName", "");
+          break;
+        default:
+          break;
+      }
+      this.setState({
+        searching: false,
+      });
     }
   }
 
@@ -36,6 +52,7 @@ class FilterResults extends Component {
   filter = () => {
     let filteredListings = [];
     let filteredRequests = [];
+    let searching = false;
     switch (this.props.filterType) {
       case "favorites":
         filteredListings = this.props.listings.filter((listing) => {
@@ -80,6 +97,7 @@ class FilterResults extends Component {
           this.filterListing(listing)
         );
         filteredListings = this.sortListing(filteredListings);
+        searching = true;
         break;
       default:
         break;
@@ -89,6 +107,7 @@ class FilterResults extends Component {
       filteredListings: filteredListings,
       filterType: this.props.filterType,
       searchObject: this.props.searchObject,
+      searching: searching,
     });
   };
 
@@ -335,7 +354,8 @@ class FilterResults extends Component {
     let requestPrompt = null;
     if (
       this.state.filterType === "moduleCode" ||
-      this.state.filterType === "textbook"
+      this.state.filterType === "textbook" ||
+      this.state.filterType === "location"
     ) {
       requestPrompt = (
         <div style={{ fontSize: "small", paddingTop: "-20px" }}>
@@ -377,4 +397,10 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(FilterResults);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setFilterTermForListing: (filterType, object) =>
+      dispatch(actions.setFilterListings(filterType, object)),
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(FilterResults);
