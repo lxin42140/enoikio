@@ -128,7 +128,13 @@ class ExpandedListing extends Component {
 
   closeExpandedListing = () => {
     if (this.props.history.location.search) {
-      this.props.history.push(this.props.history.location.search.split("=")[1]);
+      let query = this.props.history.location.search.split("=")[1];
+      if (query.split("&&").length > 1) {
+        // query = query.split("&&")[0];
+        this.props.history.goBack();
+      } else {
+        this.props.history.push(query);
+      }
     } else {
       this.props.history.goBack();
     }

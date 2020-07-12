@@ -658,7 +658,8 @@ class NewPost extends Component {
 
     let successPost = (
       <Modal show={this.props.postUploaded && this.props.imageUploaded}>
-        Successfully posted!
+        <p style={{ color: "green" }}>Successfully posted!</p>
+
         <div
           style={{
             display: "flex",

@@ -47,6 +47,15 @@ class Listing extends Component {
     }
   }
 
+  componentDidUpdate(prevState) {
+    if (prevState.liked !== this.state.liked) {
+      const likedUsers = Object.assign([], this.state.likedUsers);
+      database.ref().child("listings").child(this.props.node).update({
+        likedUsers: likedUsers,
+      });
+    }
+  }
+
   async retrieveImage() {
     let imageIndex = 0;
     while (imageIndex < 3) {
@@ -79,19 +88,14 @@ class Listing extends Component {
     }
   }
 
-  componentDidUpdate(prevState) {
-    if (prevState.liked !== this.state.liked) {
-      const likedUsers = Object.assign([], this.state.likedUsers);
-      database.ref().child("listings").child(this.props.node).update({
-        likedUsers: likedUsers,
-      });
-    }
-  }
-
   expandListingHandler = () => {
     this.props.dispatchExpandedListing(this.props.identifier);
-
-    let query = "?from=" + this.props.history.location.pathname;
+    let query;
+    if (this.props.history.location.search) {
+      query = this.props.history.location.search;
+    } else {
+      query = "?from=" + this.props.history.location.pathname;
+    }
     this.props.history.push("/expanded-listing" + query);
   };
 
