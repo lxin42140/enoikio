@@ -78,6 +78,26 @@ export const resetUserUpdate = () => {
   };
 };
 
+async function updateImageInUserComments(displayName, photoURL) {
+  await database
+    .ref()
+    .child("users")
+    .once("value", (snapShot) => {
+      snapShot.forEach((data) => {
+        const comments = Object.assign([], data.val().comments);
+        for (let index in comments) {
+          if (comments[index].sender === displayName) {
+            comments[index].profilePicture = photoURL;
+          }
+        }
+
+        database.ref().child("users").child(data.key).update({
+          comments: comments,
+        });
+      });
+    });
+}
+
 async function updateImageInListing(displayName, photoURL) {
   await database
     .ref()
@@ -109,7 +129,7 @@ async function updateImageInListing(displayName, photoURL) {
 export const updateUserDetails = (user, photoURL) => {
   return (dispatch) => {
     updateImageInListing(user.displayName, photoURL);
-
+    updateImageInUserComments(user.displayName, photoURL);
     database
       .ref()
       .child("users")
