@@ -207,7 +207,7 @@ class Request extends Component {
       <Modal show={this.state.confirmDelete}>
         <p>Listing deleted</p>
         <Link to="/">
-          <Button>
+          <Button btnType="Important">
             {<FontAwesomeIcon icon={faHome} style={{ paddingRight: "5px" }} />}
             Home
           </Button>
