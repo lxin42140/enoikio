@@ -120,6 +120,19 @@ class ExpandedListing extends Component {
       this.props.history.push(query);
     }
   };
+
+  onRedirectToEditListing = () => {
+    let query = "/edit-post" + this.props.location.search;
+    this.props.history.push(query);
+  };
+
+  closeExpandedListing = () => {
+    if (this.props.history.location.search) {
+      this.props.history.push(this.props.history.location.search.split("=")[1]);
+    } else {
+      this.props.history.goBack();
+    }
+  };
   render() {
     if (this.props.expandedListingLoading || !this.props.expandedListing) {
       return <Spinner />;
@@ -239,8 +252,9 @@ class ExpandedListing extends Component {
               @{this.props.expandedListing.displayName}
             </p>
           </div>
-          <Link to="/edit-post" style={{ paddingRight: "20px" }}>
-            <Button>
+          {/* <Link to="/edit-post" style={{ paddingRight: "20px" }}> */}
+          <span style={{ paddingRight: "20px" }}>
+            <Button onClick={this.onRedirectToEditListing}>
               {
                 <FontAwesomeIcon
                   icon={faEdit}
@@ -249,7 +263,8 @@ class ExpandedListing extends Component {
               }
               Edit
             </Button>
-          </Link>
+          </span>
+          {/* </Link> */}
           <Button
             btnType="Important"
             onClick={this.askUserToDelete}
@@ -405,10 +420,7 @@ class ExpandedListing extends Component {
     );
 
     const goBack = (
-      <div
-        onClick={() => this.props.history.goBack()}
-        style={{ cursor: "pointer" }}
-      >
+      <div onClick={this.closeExpandedListing} style={{ cursor: "pointer" }}>
         <FontAwesomeIcon
           icon={faWindowClose}
           style={{

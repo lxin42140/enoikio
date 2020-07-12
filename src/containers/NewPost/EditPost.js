@@ -119,11 +119,6 @@ class EditPost extends Component {
     showModal: false,
     initialEdit: true,
   };
-
-  componentWillUnmount() {
-    this.props.dispatchClearExpandedListing();
-  }
-
   componentDidUpdate() {
     if (!this.state.dataForm.module.validated) {
       this.verifyModuleCode();
@@ -411,6 +406,10 @@ class EditPost extends Component {
       delete postDetails.comments;
     }
 
+    if (!postDetails.replies) {
+      delete postDetails.replies;
+    }
+
     this.props.dispatchEditPost(postDetails, this.props.editListing.key);
     this.props.dispatchSubmitPhoto(
       this.state.imageAsFile,
@@ -632,10 +631,9 @@ class EditPost extends Component {
             </Button>
             <Button
               onClick={() => {
-                this.props.dispatchExpandedListing(
-                  this.props.editListing.unique
+                this.props.history.push(
+                  "/expanded-listing" + this.props.history.location.search
                 );
-                this.props.history.goBack();
               }}
             >
               {
@@ -703,6 +701,7 @@ class EditPost extends Component {
     let successPost = (
       <Modal show={this.props.postUploaded}>
         Successfully edited!
+        <br />
         <div style={{ display: "flex", justifyContent: "center" }}>
           <Link to="/">
             <Button onClick={() => this.props.dispatchClearNewPostData()}>
@@ -748,10 +747,6 @@ const mapDispatchToProps = (dispatch) => {
     dispatchClearNewPostData: () => dispatch(actions.clearPostData()),
     dispatchEditPost: (editedPost, node) =>
       dispatch(actions.editPost(editedPost, node)),
-    dispatchClearExpandedListing: () =>
-      dispatch(actions.clearExpandedListing()),
-    dispatchExpandedListing: (identifier) =>
-      dispatch(actions.fetchExpandedListing(identifier)),
   };
 };
 

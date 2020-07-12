@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import moment from "moment";
 import React, { Component } from "react";
 import { connect } from "react-redux";
+
 import Button from "../../../components/UI/Button/Button";
 import { database, storage } from "../../../firebase/firebase";
 import * as actions from "../../../store/actions/index";
@@ -12,7 +13,6 @@ import classes from "./Listing.css";
 KIV:
 2. ADJUST MODAL FOR DELETE LISTING / EDIT LISTING FOR SMALLER SCREEN
 */
-
 
 class Listing extends Component {
   state = {
@@ -91,10 +91,8 @@ class Listing extends Component {
   expandListingHandler = () => {
     this.props.dispatchExpandedListing(this.props.identifier);
 
-    this.props.history.push({
-      pathname: "/expanded-listing",
-      search: "?" + this.props.identifier,
-    });
+    let query = "?from=" + this.props.history.location.pathname;
+    this.props.history.push("/expanded-listing" + query);
   };
 
   toggleLikePostHandler = () => {
@@ -219,7 +217,7 @@ class Listing extends Component {
         default:
           break;
       }
-    } 
+    }
 
     const heartIcon = (
       <div style={{ display: "flex", alignItems: "center", marginTop: "auto" }}>
@@ -461,16 +459,16 @@ class Listing extends Component {
                   </li>
                 )}
                 {!smallScreen ? (
-                <React.Fragment>
-                  <li style={{ paddingTop: "5px" }}>
-                    <b>Posted by: </b>
-                    {this.props.userId}
-                  </li>
-                  <li>
-                    <b>Posted on: </b>
-                    {this.props.date}
-                  </li>
-                </React.Fragment>
+                  <React.Fragment>
+                    <li style={{ paddingTop: "5px" }}>
+                      <b>Posted by: </b>
+                      {this.props.userId}
+                    </li>
+                    <li>
+                      <b>Posted on: </b>
+                      {this.props.date}
+                    </li>
+                  </React.Fragment>
                 ) : null}
               </ul>
             </div>

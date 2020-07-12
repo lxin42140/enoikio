@@ -637,7 +637,9 @@ class NewPost extends Component {
           <p>
             <b>Description: </b>
             <br />
-            {this.state.dataForm.description.value}
+            <span style={{ textAlign: "start" }}>
+              {this.state.dataForm.description.value}
+            </span>
           </p>
         )}
 
