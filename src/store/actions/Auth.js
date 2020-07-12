@@ -78,35 +78,38 @@ export const resetUserUpdate = () => {
   };
 };
 
-async function updateImageInListing(listingKey, displayName, photoURL) {
+async function updateImageInListing(displayName, photoURL) {
   await database
     .ref()
     .child("listings")
-    .child(listingKey)
     .once("value", (snapShot) => {
-      const comments = Object.assign([], snapShot.val().comments);
-      for (let index in comments) {
-        if (comments[index].sender === displayName) {
-          comments[index].profilePicture = photoURL;
+      snapShot.forEach((data) => {
+        const comments = Object.assign([], data.val().comments);
+        for (let index in comments) {
+          if (comments[index].sender === displayName) {
+            comments[index].profilePicture = photoURL;
+          }
         }
-      }
 
-      const replies = Object.assign([], snapShot.val().replies);
-      for (let index in replies) {
-        if (replies[index].sender === displayName) {
-          replies[index].profilePicture = photoURL;
+        const replies = Object.assign([], data.val().replies);
+        for (let index in replies) {
+          if (replies[index].sender === displayName) {
+            replies[index].profilePicture = photoURL;
+          }
         }
-      }
 
-      database.ref().child("listings").child(listingKey).update({
-        comments: comments,
-        replies: replies,
+        database.ref().child("listings").child(data.key).update({
+          comments: comments,
+          replies: replies,
+        });
       });
     });
 }
 
 export const updateUserDetails = (user, photoURL) => {
   return (dispatch) => {
+    updateImageInListing(user.displayName, photoURL);
+
     database
       .ref()
       .child("users")
@@ -127,7 +130,6 @@ export const updateUserDetails = (user, photoURL) => {
         database.ref().child("listings").child(snapShot.key).update({
           photoURL: photoURL,
         });
-        updateImageInListing(snapShot.key, user.displayName, photoURL);
       });
 
     user
