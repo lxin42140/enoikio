@@ -72,16 +72,22 @@ class SearchBar extends Component {
         .toLowerCase()
         .split(" ")
         .join("");
+
+      let pathName = this.props.history.location.pathname;
+
+      if (this.props.history.location.search) {
+        pathName = this.props.history.location.search
+          .split("&&")[0]
+          .split("=")[1];
+      }
+
       if (
         this.props.displayName.toLowerCase().split(" ").join("") ===
         formattedDisplayName
       ) {
         this.props.setFilterTermForListing("displayName");
 
-        let query =
-          "/profile?from=" +
-          this.props.history.location.pathname +
-          "&&profile=personal";
+        let query = "/profile?from=" + pathName + "&&profile=personal";
 
         this.props.history.push(query);
       } else {
@@ -89,7 +95,7 @@ class SearchBar extends Component {
 
         let query =
           "/searchProfile?from=" +
-          this.props.history.location.pathname +
+          pathName +
           "&&profile=" +
           formattedDisplayName;
 
@@ -100,11 +106,16 @@ class SearchBar extends Component {
         this.state.filterType,
         this.state.userInput.toLowerCase().split(" ").join("")
       );
+      let pathName = this.props.history.location.pathname;
+
+      if (this.props.history.location.search) {
+        pathName = this.props.history.location.search
+          .split("&&")[0]
+          .split("=")[1];
+      }
+
       let query =
-        "/searchResults?from=" +
-        this.props.history.location.pathname +
-        "&&search=" +
-        this.state.userInput;
+        "/searchResults?from=" + pathName + "&&search=" + this.state.userInput;
       this.props.history.push(query);
     }
   };
