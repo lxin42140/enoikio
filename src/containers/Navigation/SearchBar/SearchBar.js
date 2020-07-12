@@ -56,13 +56,6 @@ class SearchBar extends Component {
     this.setState({ userInput: event.target.value, showFilterDropDown: false });
   };
 
-  onCancelSearchHandler = (event) => {
-    // this.props.onClick();
-    if (this.state.userInput !== "") {
-      this.props.history.goBack();
-    }
-  };
-
   onSearchHandler = (event) => {
     if (this.state.userInput === "") {
       return;
@@ -86,7 +79,7 @@ class SearchBar extends Component {
         this.props.displayName.toLowerCase().split(" ").join("") ===
         formattedDisplayName
       ) {
-        this.props.setFilterTermForListing("displayName");
+        this.props.setFilterTermForListing("displayName", "");
 
         let query = "/profile?from=" + pathName + "&&profile=personal";
 

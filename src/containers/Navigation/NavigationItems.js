@@ -33,6 +33,18 @@ class NavigationItems extends Component {
     this.setState((prevState) => ({ showDropDown: !prevState.showDropDown }));
   };
 
+  cancelSearchHandler = () => {
+    this.toggleSearchBarHandler();
+    if (this.props.history.location.search) {
+      let pathName = this.props.history.location.search
+        .split("&&")[0]
+        .split("=")[1];
+      if (pathName === "/profile") {
+        this.props.setFilterTermForListing("displayName", "");
+      }
+      this.props.history.push(pathName);
+    }
+  };
   render() {
     let nav;
 
@@ -189,12 +201,7 @@ class NavigationItems extends Component {
             paddingLeft: "20px",
             paddingRight: "10px",
           }}
-          onClick={() => {
-            this.toggleSearchBarHandler();
-            this.props.history.push(
-              this.props.history.location.search.split("&&")[0].split("=")[1]
-            );
-          }}
+          onClick={this.cancelSearchHandler}
         />
       </div>
     ) : (
