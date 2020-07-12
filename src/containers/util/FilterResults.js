@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import { faArrowLeft, faHeart } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import Listing from "../Listings/Listing/Listing";
 import Request from "../Requests/Request/Request";
@@ -25,9 +23,6 @@ class FilterResults extends Component {
       this.filter();
     } else if (!this.props.history.location.search && this.state.searching) {
       switch (this.props.history.location.pathname) {
-        case "/liked-listings":
-          this.props.setFilterTermForListing("favorites");
-          break;
         case "/profile":
           this.props.setFilterTermForListing("displayName", "");
           break;
@@ -54,16 +49,6 @@ class FilterResults extends Component {
     let filteredRequests = [];
     let searching = false;
     switch (this.props.filterType) {
-      case "favorites":
-        filteredListings = this.props.listings.filter((listing) => {
-          for (let user in listing.likedUsers) {
-            if (listing.likedUsers[user] === this.props.displayName) {
-              return true;
-            }
-          }
-          return false;
-        });
-        break;
       case "displayName":
         filteredListings = this.props.listings.filter(
           (listing) => listing.displayName === this.props.displayName
@@ -240,19 +225,6 @@ class FilterResults extends Component {
           return <h3>Oops...This user has no listings</h3>;
         case "onRent":
           return <h3>Oops...No rentals yet</h3>;
-        case "favorites":
-          return (
-            <h3>
-              Oops...
-              {
-                <FontAwesomeIcon
-                  icon={faHeart}
-                  style={{ paddingRight: "5px" }}
-                />
-              }
-              a post and view it here
-            </h3>
-          );
         case "moduleCode":
           return (
             <React.Fragment>
