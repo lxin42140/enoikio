@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import {
-  faArrowLeft,
   faExclamationTriangle,
   faTimes,
   faCheck,
@@ -12,7 +11,6 @@ import moment from "moment";
 import ProfileComponent from "../../../components/GeneralProfile/GeneralProfile";
 import { database } from "../../../firebase/firebase";
 import Spinner from "../../../components/UI/Spinner/Spinner";
-import * as classes from "./Profile.css";
 import * as actions from "../../../store/actions/index";
 import Modal from "../../../components/UI/Modal/Modal";
 import Input from "../../../components/UI/Input/Input";
