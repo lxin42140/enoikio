@@ -42,6 +42,7 @@ class SearchBar extends Component {
       showFilterDropDown: false,
       filterType: filter,
       placeHolder: placeHolder,
+      userInput: "",
     });
   };
 
