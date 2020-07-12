@@ -498,6 +498,7 @@ class GeneralProfilePage extends Component {
         <ProfileComponent
           //report user
           showReportModal={this.showReportModal}
+          isAuthenticated={this.props.isAuthenticated}
           //
           history={this.props.history}
           showPastListing={this.state.showPastListing}
@@ -528,6 +529,7 @@ const mapStateToProps = (state) => {
     filterType: state.search.filterType,
     searchObject: state.search.searchObject,
     displayName: state.auth.displayName,
+    isAuthenticated: state.auth.user !== null,
   };
 };
 
