@@ -78,6 +78,33 @@ export const resetUserUpdate = () => {
   };
 };
 
+async function updateImageInListing(listingKey, displayName, photoURL) {
+  await database
+    .ref()
+    .child("listings")
+    .child(listingKey)
+    .once("value", (snapShot) => {
+      const comments = Object.assign([], snapShot.val().comments);
+      for (let index in comments) {
+        if (comments[index].sender === displayName) {
+          comments[index].profilePicture = photoURL;
+        }
+      }
+
+      const replies = Object.assign([], snapShot.val().replies);
+      for (let index in replies) {
+        if (replies[index].sender === displayName) {
+          replies[index].profilePicture = photoURL;
+        }
+      }
+
+      database.ref().child("listings").child(listingKey).update({
+        comments: comments,
+        replies: replies,
+      });
+    });
+}
+
 export const updateUserDetails = (user, photoURL) => {
   return (dispatch) => {
     database
@@ -100,6 +127,7 @@ export const updateUserDetails = (user, photoURL) => {
         database.ref().child("listings").child(snapShot.key).update({
           photoURL: photoURL,
         });
+        updateImageInListing(snapShot.key, user.displayName, photoURL);
       });
 
     user
