@@ -17,95 +17,32 @@ import {
 import classes from "./NavigationItems.css";
 import NavigationItem from "./NavigationItem/NavigationItem";
 import SearchBar from "./SearchBar/SearchBar";
+import SideDrawer from "../../components/Navigation/SideDrawer"
 import * as actions from "../../store/actions/index";
 
 class NavigationItems extends Component {
   state = {
     showSearchBar: false,
-    showDropDown: false,
+    showSideBar: false,
   };
 
   toggleSearchBarHandler = (event) => {
     this.setState((prevState) => ({ showSearchBar: !prevState.showSearchBar }));
   };
 
-  toggleDropDown = () => {
-    this.setState((prevState) => ({ showDropDown: !prevState.showDropDown }));
+  showSideBar = () => {
+    this.setState({ showSideBar: true })
+  }
+
+  hideSideBar = () => {
+    this.setState({ showSideBar: false });
   };
 
+  //TODO:
+  //1. FIX TRANSITION OF SIDEBAR
+  //2. NEED TO ADJUST FOR WHEN USER SCROLL WHEN SIDEBAR IS AVAILABLE
   render() {
     let nav;
-
-    //KIV: change this to side menu
-    // if (this.props.windowWidth < 525) {
-    //   let dropDown;
-    //   if (this.props.isAuthenticated) {
-    //     dropDown = (
-    //       <React.Fragment>
-    //         <NavigationItem link="/" exact onClick={this.toggleDropDown}>
-    //           Home
-    //         </NavigationItem>
-    //         <NavigationItem link="/new-post" onClick={this.toggleDropDown}>
-    //           New Post
-    //         </NavigationItem>
-    //         <NavigationItem
-    //           link="/liked-listings"
-    //           onClick={() => {
-    //             this.props.setFilterTerm("favorites");
-    //             this.toggleDropDown();
-    //           }}
-    //         >
-    //           Favorites
-    //         </NavigationItem>
-    //         <NavigationItem link="/chats" onClick={this.toggleDropDown}>
-    //           Chats
-    //         </NavigationItem>
-    //         <NavigationItem
-    //           link="/profile"
-    //           onClick={() => {
-    //             this.props.setFilterTerm("displayName");
-    //             this.toggleDropDown();
-    //           }}
-    //         >
-    //           Profile
-    //         </NavigationItem>
-    //         <NavigationItem link="/logout" onClick={this.toggleDropDown}>
-    //           Log out
-    //         </NavigationItem>
-    //       </React.Fragment>
-    //     );
-    //   } else {
-    //     dropDown = (
-    //       <React.Fragment>
-    //         <NavigationItem link="/" exact onClick={this.toggleDropDown}>
-    //           Home
-    //         </NavigationItem>
-    //         <NavigationItem link="/auth" onClick={this.toggleDropDown}>
-    //           Log in
-    //         </NavigationItem>
-    //       </React.Fragment>
-    //     );
-    //   }
-
-    //   nav = (
-    //     <div className={classes.filter}>
-    //       <div className={classes.Button}>
-    //         <FontAwesomeIcon
-    //           icon={faBars}
-    //           style={{
-    //             color: "white",
-    //             fontSize: "1.5rem",
-    //             paddingTop: "12px",
-    //           }}
-    //           onClick={this.toggleDropDown}
-    //         />
-    //       </div>
-    //       <div className={classes.dropdownContent}>
-    //         {this.state.showDropDown ? dropDown : null}
-    //       </div>
-    //     </div>
-    //   );
-    // } else {
 
     if (this.state.showSearchBar) {
       nav = (
@@ -113,71 +50,149 @@ class NavigationItems extends Component {
           <SearchBar history={this.props.history} />
         </React.Fragment>
       );
-    } else if (!this.props.isAuthenticated) {
-      nav = (
-        <React.Fragment>
-          <NavigationItem link="/" exact>
-            {<FontAwesomeIcon icon={faHome} style={{ paddingRight: "5px" }} />}
+    } else
+      if (this.props.windowWidth < 750) {
+        let sideBar;
+        if (this.props.isAuthenticated) {
+          sideBar = (
+            <SideDrawer
+              open={this.state.showSideBar}
+              closed={this.hideSideBar}>
+              <NavigationItem link="/" exact onClick={this.hideSideBar}>
+                {<FontAwesomeIcon icon={faHome} style={{ paddingRight: "5px" }} />}
+              Home
+            </NavigationItem>
+              <NavigationItem link="/new-post" onClick={this.hideSideBar}>
+                {<FontAwesomeIcon icon={faEdit} style={{ paddingRight: "5px" }} />}
+              New Post
+            </NavigationItem>
+              <NavigationItem
+                link="/liked-listings"
+                onClick={() => {
+                  this.props.setFilterTermForListing("favorites");
+                  this.hideSideBar();
+                }}
+              >
+                {<FontAwesomeIcon icon={faHeart} style={{ paddingRight: "5px" }} />}
+              Favorites
+            </NavigationItem>
+              <NavigationItem link="/chats" onClick={this.hideSideBar}>
+                {<FontAwesomeIcon icon={faComments} style={{ paddingRight: "5px" }} />}
+              Chats
+            </NavigationItem>
+              <NavigationItem
+                link="/profile"
+                onClick={() => {
+                  this.props.setFilterTermForListing("displayName");
+                  this.hideSideBar();
+                }}
+              >
+                {<FontAwesomeIcon icon={faUser} style={{ paddingRight: "5px" }} />}
+              Profile
+            </NavigationItem>
+              <NavigationItem link="/logout" onClick={this.hideSideBar}>
+                {<FontAwesomeIcon icon={faSignOutAlt} style={{ paddingRight: "5px" }} />}
+              Log out
+            </NavigationItem>
+            </SideDrawer>
+          );
+        } else {
+          sideBar = (
+            <SideDrawer
+              open={this.state.showSideBar}
+              closed={this.hideSideBar}>
+              <NavigationItem link="/" exact onClick={this.hideSideBar}>
+                {<FontAwesomeIcon icon={faHome} style={{ paddingRight: "5px" }} />}
+              Home
+            </NavigationItem>
+              <NavigationItem link="/auth" onClick={this.hideSideBar}>
+                {<FontAwesomeIcon icon={faSignOutAlt} style={{ paddingRight: "5px" }} />}
+              Log in
+            </NavigationItem>
+            </SideDrawer>
+          );
+        }
+
+        nav = (
+          <div className={classes.filter}>
+            <div
+              className={classes.Button}
+              onClick={this.state.showSideBar ?
+                this.hideSideBar :
+                this.showSideBar}>
+              <FontAwesomeIcon
+                icon={faBars}
+                style={{
+                  color: "white",
+                  fontSize: "1.5rem",
+                  paddingLeft: "20px",
+                  paddingRight: "10px",
+                }}
+              />
+            Menu
+          </div>
+            <div className={classes.dropdownContent}>
+              {this.state.showSideBar ? sideBar : null}
+            </div>
+          </div>
+        );
+
+      } else {
+        if (!this.props.isAuthenticated) {
+          nav = (
+            <React.Fragment>
+              <NavigationItem link="/" exact>
+                {<FontAwesomeIcon icon={faHome} style={{ paddingRight: "5px" }} />}
             Home
           </NavigationItem>
-          <NavigationItem link="/auth">
-            {
-              <FontAwesomeIcon
-                icon={faSignInAlt}
-                style={{ paddingRight: "5px" }}
-              />
-            }
+              <NavigationItem link="/auth">
+                {
+                  <FontAwesomeIcon
+                    icon={faSignInAlt}
+                    style={{ paddingRight: "5px" }}
+                  />
+                }
             Log In
           </NavigationItem>
-        </React.Fragment>
-      );
-    } else {
-      nav = (
-        <React.Fragment>
-          <NavigationItem link="/" exact>
-            {<FontAwesomeIcon icon={faHome} style={{ paddingRight: "5px" }} />}
+            </React.Fragment>
+          );
+        } else {
+          nav = (
+            <React.Fragment>
+              <NavigationItem link="/" exact>
+                {<FontAwesomeIcon icon={faHome} style={{ paddingRight: "5px" }} />}
             Home
           </NavigationItem>
-          <NavigationItem link="/new-post">
-            {<FontAwesomeIcon icon={faEdit} style={{ paddingRight: "5px" }} />}
+              <NavigationItem link="/new-post">
+                {<FontAwesomeIcon icon={faEdit} style={{ paddingRight: "5px" }} />}
             New Post
           </NavigationItem>
-          <NavigationItem
-            link="/liked-listings"
-            onClick={() => this.props.setFilterTermForListing("favorites")}
-          >
-            {<FontAwesomeIcon icon={faHeart} style={{ paddingRight: "5px" }} />}
+              <NavigationItem
+                link="/liked-listings"
+                onClick={() => this.props.setFilterTermForListing("favorites")}
+              >
+                {<FontAwesomeIcon icon={faHeart} style={{ paddingRight: "5px" }} />}
             Favorites
           </NavigationItem>
-          <NavigationItem link="/chats">
-            {
-              <FontAwesomeIcon
-                icon={faComments}
-                style={{ paddingRight: "5px" }}
-              />
-            }
+              <NavigationItem link="/chats">
+                {<FontAwesomeIcon icon={faComments} style={{ paddingRight: "5px" }} />}
             Chats
           </NavigationItem>
-          <NavigationItem
-            link="/profile?profile=personal"
-            onClick={() => this.props.setFilterTermForListing("displayName")}
-          >
-            {<FontAwesomeIcon icon={faUser} style={{ paddingRight: "5px" }} />}
+              <NavigationItem
+                link="/profile?profile=personal"
+                onClick={() => this.props.setFilterTermForListing("displayName")}
+              >
+                {<FontAwesomeIcon icon={faUser} style={{ paddingRight: "5px" }} />}
             Profile
           </NavigationItem>
-          <NavigationItem link="/logout">
-            {
-              <FontAwesomeIcon
-                icon={faSignOutAlt}
-                style={{ paddingRight: "5px" }}
-              />
-            }
+              <NavigationItem link="/logout">
+                {<FontAwesomeIcon icon={faSignOutAlt} style={{ paddingRight: "5px" }} />}
             Log out
           </NavigationItem>
-        </React.Fragment>
-      );
-    }
-    // }
+            </React.Fragment>
+          );
+        }
+      }
 
     let searchIcon = this.state.showSearchBar ? (
       <div className={classes.SearchIcon}>
@@ -198,19 +213,19 @@ class NavigationItems extends Component {
         />
       </div>
     ) : (
-      <div className={classes.SearchIcon}>
-        <FontAwesomeIcon
-          icon={faSearch}
-          style={{
-            color: "white",
-            fontSize: "1.5rem",
-            paddingLeft: "20px",
-            paddingRight: "10px",
-          }}
-          onClick={this.toggleSearchBarHandler}
-        />
-      </div>
-    );
+        <div className={classes.SearchIcon}>
+          <FontAwesomeIcon
+            icon={faSearch}
+            style={{
+              color: "white",
+              fontSize: "1.5rem",
+              paddingLeft: "20px",
+              paddingRight: "10px",
+            }}
+            onClick={this.toggleSearchBarHandler}
+          />
+        </div>
+      );
 
     let backgroundColor = { backgroundColor: "#fd8673" };
     if (this.state.showSearchBar) {
@@ -218,10 +233,10 @@ class NavigationItems extends Component {
     }
 
     return (
-      <ul className={classes.NavigationItems} style={backgroundColor}>
+      <div className={classes.NavigationItems} style={backgroundColor}>
         {nav}
         {searchIcon}
-      </ul>
+      </div>
     );
   }
 }

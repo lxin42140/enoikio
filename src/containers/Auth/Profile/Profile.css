@@ -7,13 +7,62 @@
     background-size: 50%;
     padding: 0px;
     margin-top: -40px;
-    margin-bottom: -45px;
 }
 
-.Navigation {
-    margin-top: 50px;
+/* Whole profile below background */
+.Profile {
     display: flex;
-    justify-content: center;
+    flex-direction: row;
+    height: 100%;
+    width: 100%;
+}
+
+/*-------------------LEFT (TOP) SIDE--------------------*/
+
+/* User information (image + email, date)*/
+.UserDetails {
+    width: 40%;
+    height: 100%;
+    margin: 0px;
+
+    position: relative;
+    top: -48px;
+
+    text-align: left;
+    font-size: 14px;
+    color: grey;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.ProfileImage {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    border: 5px solid white;
+}
+
+/*-------------------RIGHT (BOTTOM) SIDE--------------------*/
+
+/* Navigation + listings/requests/onRent/comments */
+.Information {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+}
+
+/* Navigation bar and dropdown */
+.DropDown,
+.Navigation {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
     align-items: center;
     font-size: 17px;
     color: grey;
@@ -22,21 +71,37 @@
     border-bottom: 1px solid #e7ebee;
 }
 
+.DropDownContent {
+    width: fit-content;
+}
+
+.arrowDown {
+    font-weight: bold;
+    color: #dd5641;
+    border-bottom: 3px solid #dd5641;
+    outline: none;
+    height: 52px;
+    align-items: center;
+    cursor: pointer;
+}
+
+.DropDown button,
 .Navigation button {
     border: none;
     background-color: white;
     font-family: inherit;
     font-size: inherit;
     height: 52px;
-    width: 120px;
+    width: 125px;
     cursor: pointer;
-    margin-right: 20px;
 }
 
+.DropDown button:hover,
 .Navigation button:hover {
     background-color: #e7ebee;
 }
 
+.DropDown button:hover,
 .Navigation button:active,
 .Navigation button:focus {
     font-weight: bold;
@@ -45,47 +110,18 @@
     outline: none;
 }
 
-/**------------------------------*/
-.Profile {
-    display: flex;
-    flex-direction: row;
-    height: 100%;
-    width: 100%;
+/* Dropdown */
+.filter {
+    width: inherit;
+    height: fit-content;
+    align-items: center;
+    z-index: 1;
+    display: block;
+    position: absolute;
 }
 
-/**---------------------------------*/
-.ProfileDetails {
-    flex: 0 0 324px;
-    min-width: 324px;
-    width: 40%;
-    height: 100%;
-    padding: 0 24px 0 0;
-    margin: 0px;
-    margin-left: -30px;
-}
-
-.ProfileImage {
-    width: 152px;
-    height: 152px;
-    margin-top: -140px;
-    border-radius: 50%;
-    border: 5px solid white;
-}
-
-.ProfileList {
-    list-style: none;
-    text-align: left;
-    font-size: 14px;
-    color: grey;
-}
-
-.ProfileList li {
-    padding: 5px 0;
-}
-
-/**---------------------------------*/
-
-.OtherInfo {
+/* Listings/Requests/onRent/comments outermost div */
+.Details {
     display: flex;
     flex-flow: row wrap;
     width: 100%;
@@ -93,16 +129,6 @@
     box-shadow: 0 3px 10px 0 rgba(44, 44, 45, .07);
     background-color: #fff;
     border-radius: 8px;
-}
-
-.Requests {
-    display: flex;
-    box-sizing: border-box;
-    justify-content: flex-start;
-    flex-wrap: wrap;
-    line-height: 21px;
-    text-size-adjust: 100%;
-    overflow-y: hidden;
 }
 
 .Reviews {
@@ -115,30 +141,32 @@
     text-align: start;
 }
 
-.Selections {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    font-size: medium;
-    margin-bottom: 5px;
-    margin-top: 10px;
+/*------------------------------------------------------------------*/
+
+/* Change navigation bar in profile to dropdown when below 950px */
+@media (max-width: 950px) {
+    .DropDown {
+        flex-direction: column;
+        height: 100%;
+    }
+
+    .Navigation {
+        width: fit-content;
+    }
+
+    .Navigation:hover {
+        background-color: #e7ebee;
+    }
 }
 
-.Selections a {
-    padding: 0 10px;
-    color: grey;
-}
+/* Any screen smaller than iPad */
+@media (max-width: 765px) {
+    .Profile {
+        flex-direction: column;
+        align-items: center;
+    }
 
-.Selections a:hover {
-    cursor: pointer;
-    color: #dd5641;
-}
-
-@media (max-width: 1000px) {
-    body .smallScreen {
-        width: 900px;
-        padding-right: 50px;
-        overflow-y: hidden;
+    .ProfileDetails {
+        width: 100%;
     }
 }

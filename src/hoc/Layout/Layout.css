@@ -6,7 +6,13 @@
     padding-right: 5%
 }
 
-@media (max-width: 1000px) {
+/* @media (max-width: 1000px) {
+    .Content {
+        overflow-x: auto;
+    }
+} */
+
+@media (max-width: 320px) {
     .Content {
         overflow-x: auto;
     }

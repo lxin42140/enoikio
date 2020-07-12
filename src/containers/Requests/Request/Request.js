@@ -83,9 +83,13 @@ class Request extends Component {
       priorityColour.push(classes.Low);
     }
 
-    let request = this.props.showInProfile ? (
+    const contentStyle = this.props.isProfile ? classes.ProfileContent : classes.Content;
+    const textbookStyle = this.props.isProfile ? classes.ProfileTextbook : classes.Textbook;
+    const infoStyle = this.props.isProfile ? classes.ProfileInfo : classes.Info;
+    
+    const request = (
       <div
-        className={classes.ProfileContent}
+        className={contentStyle}
         style={this.props.isProfile ? null : { cursor: "pointer" }}
         onClick={() =>
           this.props.isProfile
@@ -93,54 +97,18 @@ class Request extends Component {
             : this.searchProfileHandler(this.props.userId)
         }
       >
-        <div className={classes.ProfileTextbook}>
+        <div className={textbookStyle}>
           <p>
             {this.props.module}:《{this.props.textbook}》
           </p>
         </div>
 
-        <div className={classes.ProfileInfo}>
+        <div className={infoStyle}>
           <p className={classes.Header}>Request type: </p>
           <p className={defaultDetails.join(" ")}>{this.props.requestType}</p>
         </div>
 
-        <div className={classes.ProfileInfo}>
-          <p className={classes.Header}>Priority level: </p>
-          <p className={priorityColour.join(" ")}>{this.props.priority}</p>
-        </div>
-
-        <div className={classes.ProfileInfo}>
-          <p className={classes.Header}>Posted by: </p>
-          <p className={defaultDetails.join(" ")}>{this.props.userId}</p>
-        </div>
-
-        <div className={classes.ProfileInfo}>
-          <p className={classes.Header}>Posted on: </p>
-          <p className={defaultDetails.join(" ")}>{this.props.date}</p>
-        </div>
-      </div>
-    ) : (
-      <div
-        className={classes.Content}
-        style={this.props.isProfile ? null : { cursor: "pointer" }}
-        onClick={() =>
-          this.props.isProfile
-            ? null
-            : this.searchProfileHandler(this.props.userId)
-        }
-      >
-        <div className={classes.Textbook}>
-          <p>
-            {this.props.module}:《{this.props.textbook}》
-          </p>
-        </div>
-
-        <div className={classes.Info}>
-          <p className={classes.Header}>Request type: </p>
-          <p className={defaultDetails.join(" ")}>{this.props.requestType}</p>
-        </div>
-
-        <div className={classes.Info}>
+        <div className={infoStyle}>
           <p className={classes.Header}>Priority level: </p>
           <p className={priorityColour.join(" ")}>
             <span style={{ paddingRight: "2px" }}>
@@ -165,12 +133,12 @@ class Request extends Component {
           </p>
         </div>
 
-        <div className={classes.Info}>
+        <div className={infoStyle}>
           <p className={classes.Header}>Posted by: </p>
           <p className={defaultDetails.join(" ")}>{this.props.userId}</p>
         </div>
 
-        <div className={classes.Info}>
+        <div className={infoStyle}>
           <p className={classes.Header}>Posted on: </p>
           <p className={defaultDetails.join(" ")}>{this.props.date}</p>
         </div>

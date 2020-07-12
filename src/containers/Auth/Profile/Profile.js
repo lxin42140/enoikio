@@ -6,7 +6,8 @@ import {
   faTasks,
   faHandHoldingUsd,
   faCommentDots,
-  faImage
+  faImage,
+  faChevronDown
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { Component } from "react";
@@ -20,12 +21,15 @@ import { database, storage } from "../../../firebase/firebase";
 import * as actions from "../../../store/actions/index";
 import FilterResults from "../../util/FilterResults";
 import * as classes from "./Profile.css";
+
 class Profile extends Component {
   state = {
     showPastListing: true,
     showOnRent: false,
     showRequest: false,
     showComments: false,
+
+    showDropDown: false,
 
     imageAsFile: "",
     editProfileImage: false,
@@ -154,6 +158,11 @@ class Profile extends Component {
     this.props.setFilterProfile(formattedDisplayName);
     this.props.history.push("/searchProfile?profile=" + formattedDisplayName);
   };
+
+  toggleDropDown = (prevState) => {
+    this.setState(prevState => ({showDropDown: !prevState.showDropDown }))
+  }
+
   render() {
     let editProfileImage = (
       <Modal show={this.state.editProfileImage}>
@@ -178,54 +187,54 @@ class Profile extends Component {
             </Button>
           </React.Fragment>
         ) : (
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <div style={{ paddingBottom: "10px" }}>
-              {
-                <FontAwesomeIcon
-                  icon={faImage}
-                  style={{ paddingRight: "5px", color: "#f3a1a1" }}
-                />
-              }
-              <input
-                type="file"
-                accept=".png,.jpeg, .jpg"
-                style={{ width: "fit-content" }}
-                onChange={this.handleImageAsFile}
-              />
-            </div>
-            <div>
-              <Button onClick={this.cancelEditProfileImageHandler}>
-                {
-                  <FontAwesomeIcon
-                    icon={faTimes}
-                    style={{ paddingRight: "5px" }}
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <div style={{ paddingBottom: "10px" }}>
+                  {
+                    <FontAwesomeIcon
+                      icon={faImage}
+                      style={{ paddingRight: "5px", color: "#f3a1a1" }}
+                    />
+                  }
+                  <input
+                    type="file"
+                    accept=".png,.jpeg, .jpg"
+                    style={{ width: "fit-content" }}
+                    onChange={this.handleImageAsFile}
                   />
-                }
+                </div>
+                <div>
+                  <Button onClick={this.cancelEditProfileImageHandler}>
+                    {
+                      <FontAwesomeIcon
+                        icon={faTimes}
+                        style={{ paddingRight: "5px" }}
+                      />
+                    }
                 Cancel
               </Button>
-              <Button
-                btnType="Important"
-                onClick={this.submitNewProfileImage}
-                disabled={this.state.imageAsFile === ""}
-              >
-                {
-                  <FontAwesomeIcon
-                    icon={faFileUpload}
-                    style={{ paddingRight: "5px" }}
-                  />
-                }
+                  <Button
+                    btnType="Important"
+                    onClick={this.submitNewProfileImage}
+                    disabled={this.state.imageAsFile === ""}
+                  >
+                    {
+                      <FontAwesomeIcon
+                        icon={faFileUpload}
+                        style={{ paddingRight: "5px" }}
+                      />
+                    }
                 Upload
               </Button>
-            </div>
-          </div>
-        )}
+                </div>
+              </div>
+            )}
       </Modal>
     );
 
@@ -234,10 +243,10 @@ class Profile extends Component {
         style={{
           textAlign: "left",
           fontSize: "20px",
-          display: "flex",
           alignItems: "center",
         }}
       >
+        <p>
         <FontAwesomeIcon
           icon={faStar}
           style={
@@ -267,9 +276,7 @@ class Profile extends Component {
           style={
             this.state.numStars > 4 ? { color: "#ff5138" } : { color: "gray" }
           }
-        />
-        <p>
-          (
+        /> (
           {this.state.numReviews <= 1
             ? this.state.numReviews + " review"
             : this.state.numReviews + " reviews"}
@@ -278,9 +285,132 @@ class Profile extends Component {
       </div>
     );
 
+    const activeButtonStyle = {
+      fontWeight: "bold",
+      color: "#dd5641",
+      borderBottom: "3px solid #dd5641",
+      outline: "none",
+    };
+
+    let tabs = (
+      <div className={classes.DropDown}>
+        <button
+          onClick={() => {
+            this.onShowPastPostHandler();
+            this.props.windowWidth <= 950 ? 
+            this.toggleDropDown() : 
+            null}}
+          style={this.state.showPastListing ? 
+            activeButtonStyle : 
+            null} >
+          {<FontAwesomeIcon icon={faBook} style={{ paddingRight: "5px" }} />}
+            Listings
+        </button>
+        <button
+          onClick={() => {
+            this.onShowRequestHandler();
+            this.props.windowWidth <= 950 ? 
+            this.toggleDropDown() : 
+            null}}
+          style={ this.state.showRequest ? 
+            activeButtonStyle : 
+            null} >
+          {<FontAwesomeIcon icon={faTasks} style={{ paddingRight: "5px" }} />}
+            Requests
+          </button>
+        <button
+          onClick={() => {
+            this.onShowOnRentHandler();
+            this.props.windowWidth <= 950 ? 
+            this.toggleDropDown() : 
+            null}}
+            style={ this.state.showOnRent ? 
+              activeButtonStyle : 
+              null} >
+          {<FontAwesomeIcon icon={faHandHoldingUsd} style={{ paddingRight: "5px" }} />}
+            On rent
+        </button>
+        <button
+          onClick={() => {
+            this.onShowReviewsHandler();
+            this.props.windowWidth <= 950 ? 
+            this.toggleDropDown() : 
+            null}}
+            style={ this.state.showComments ? 
+              activeButtonStyle : 
+              null} >
+          {<FontAwesomeIcon icon={faCommentDots} style={{ paddingRight: "5px" }} />}
+            Reviews
+        </button>
+      </div>
+    );
+
+    let navigation;
+
+    if (this.props.windowWidth > 950) {
+      navigation = tabs;
+    } else {
+      const currentItemShowing = (
+        <div
+          className={classes.Navigation}
+          onClick={this.toggleDropDown}>
+          {this.state.showPastListing ?
+            <button style={activeButtonStyle}>
+              <FontAwesomeIcon
+                icon={faBook}
+                style={{
+                  paddingRight: "5px",
+                }} />
+            Listings
+          </button> : this.state.showRequest ?
+              <button style={activeButtonStyle}>
+                <FontAwesomeIcon
+                  icon={faTasks}
+                  style={{
+                    paddingRight: "5px",
+                  }} />
+            Requests
+          </button> : this.state.showOnRent ?
+                <button style={activeButtonStyle}>
+                  <FontAwesomeIcon
+                    icon={faHandHoldingUsd}
+                    style={{
+                      paddingRight: "5px",
+                    }} />
+            On Rent
+          </button> :
+                <button style={activeButtonStyle}>
+                  <FontAwesomeIcon
+                    icon={faHandHoldingUsd}
+                    style={{
+                      paddingRight: "5px",
+                    }} />
+             Reviews
+           </button>}
+           <div>
+            <FontAwesomeIcon
+              icon={faChevronDown}
+              className={classes.arrowDown}
+            />
+          </div>
+        </div>
+      );
+
+      const dropDown = this.state.showDropDown ?
+        tabs : 
+        null;
+
+      navigation = (
+        <div className={classes.DropDownContent}>
+          {currentItemShowing}
+          <div className={classes.filter}>{dropDown}</div>
+        </div>
+      );
+    }
+
     let profile = (
-      <ul className={classes.ProfileList}>
-        <li onClick={this.editProfileImageHandler}>
+      <div className={classes.UserDetails}>
+        <div onClick={this.editProfileImageHandler}>
           <img
             className={classes.ProfileImage}
             src={
@@ -289,38 +419,32 @@ class Profile extends Component {
             alt="profile"
             style={{ cursor: "pointer" }}
           />
-        </li>
-        <li
+        </div>
+        <div>
+        <p
           style={{
             fontSize: "30px",
             lineHeight: "38px",
             fontWeight: "400",
             color: "black",
-            marginTop: "-20px",
           }}
         >
-          @{this.props.displayName}
-        </li>
-        <li
-          style={{
-            marginTop: "-30px",
-          }}
-        >
-          {numStar}
-        </li>
-        <li>
+          @{this.props.displayName} {numStar}
+        </p>
+        <p>
           <b>Email: </b>
           {this.props.email}
-        </li>
-        <li>
+        </p>
+        <p>
           <b>Date joined: </b>
           {this.props.dateJoined}
-        </li>
-        <li>
+        </p>
+        <p>
           <b>Last sign in: </b>
           {this.props.lastSignIn}
-        </li>
-      </ul>
+        </p>
+        </div>
+      </div>
     );
 
     let reviews = null;
@@ -343,100 +467,27 @@ class Profile extends Component {
     }
 
     return (
-      <div className={classes.smallScreen}>
+      <React.Fragment>
         <div className={classes.Background} />
-        <div className={classes.Navigation}>
-          <button
-            onClick={this.onShowPastPostHandler}
-            style={
-              this.state.showPastListing
-                ? {
-                    fontWeight: "bold",
-                    color: "#dd5641",
-                    borderBottom: "3px solid #dd5641",
-                    outline: "none",
-                  }
-                : null
-            }
-          >
-            {<FontAwesomeIcon icon={faBook} style={{ paddingRight: "5px" }} />}
-            Listings
-          </button>
-          <button
-            onClick={this.onShowRequestHandler}
-            style={
-              this.state.showRequest
-                ? {
-                    fontWeight: "bold",
-                    color: "#dd5641",
-                    borderBottom: "3px solid #dd5641",
-                    outline: "none",
-                  }
-                : null
-            }
-          >
-            {<FontAwesomeIcon icon={faTasks} style={{ paddingRight: "5px" }} />}
-            Requests
-          </button>
-          <button
-            onClick={this.onShowOnRentHandler}
-            style={
-              this.state.showOnRent
-                ? {
-                    fontWeight: "bold",
-                    color: "#dd5641",
-                    borderBottom: "3px solid #dd5641",
-                    outline: "none",
-                  }
-                : null
-            }
-          >
-            {
-              <FontAwesomeIcon
-                icon={faHandHoldingUsd}
-                style={{ paddingRight: "5px" }}
-              />
-            }
-            On rent
-          </button>
-          <button
-            onClick={this.onShowReviewsHandler}
-            style={
-              this.state.showComments
-                ? {
-                    fontWeight: "bold",
-                    color: "#dd5641",
-                    borderBottom: "3px solid #dd5641",
-                    outline: "none",
-                  }
-                : null
-            }
-          >
-            {
-              <FontAwesomeIcon
-                icon={faCommentDots}
-                style={{ paddingRight: "5px" }}
-              />
-            }
-            Reviews
-          </button>
-        </div>
         <div className={classes.Profile}>
-          <div className={classes.ProfileDetails}>{profile}</div>
+          {profile}
           {editProfileImage}
-          <div className={classes.OtherInfo}>
-            {this.state.showPastListing ||
-            this.state.showOnRent ||
-            this.state.showRequest ? (
-              <FilterResults history={this.props.history} />
-            ) : this.state.comments.length < 1 ? (
-              <h3>Oops..No reviews</h3>
-            ) : (
-              <ul className={classes.Reviews}>{reviews}</ul>
-            )}
+          <div className={classes.Information}>
+            {navigation}
+            <div className={classes.Details}>
+              {this.state.showPastListing ||
+                this.state.showOnRent ||
+                this.state.showRequest ? (
+                  <FilterResults history={this.props.history} />
+                ) : this.state.comments.length < 1 ? (
+                  <h3>Oops..No reviews</h3>
+                ) : (
+                    <ul className={classes.Reviews}>{reviews}</ul>
+                  )}
+            </div>
           </div>
         </div>
-      </div>
+      </React.Fragment>
     );
   }
 }
@@ -452,6 +503,7 @@ const mapStateToProps = (state) => {
     lastSignIn: state.auth.lastSignIn,
     updatingUserDetails: state.auth.updatingUserDetails,
     updatedUserDetails: state.auth.updatedUserDetails,
+    windowWidth: state.window.width,
   };
 };
 

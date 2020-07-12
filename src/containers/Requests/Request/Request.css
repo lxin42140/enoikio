@@ -20,15 +20,7 @@
   text-align: left
 }
 
-.Content {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  width: 100%;
-  /* padding-right: 10px; */
-  padding-left: 5px;
-}
-
+.Content,
 .ProfileContent {
   display: flex;
   flex-direction: row;
@@ -38,31 +30,18 @@
   padding-left: 5px;
 }
 
-.Textbook {
-  width: 55%;
-}
-
+.Textbook,
 .ProfileTextbook {
   width: 55%;
 }
 
-.Textbook p {
-  font-size: 14px;
-  color: black;
-}
-
+.Textbook p,
 .ProfileTextbook p {
   font-size: 14px;
   color: black;
 }
 
-.Info {
-  width: 15%;
-  font-size: 12px;
-  flex-direction: row;
-  padding: 10px;
-}
-
+.Info,
 .ProfileInfo {
   width: 15%;
   font-size: 12px;
@@ -108,6 +87,28 @@
 
 .Low {
   color: green;
+}
+
+@media (max-width: 950px) {
+  .ProfileContent {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  body .ProfileTextbook {
+    width: 100%;
+  }
+
+  body .ProfileInfo {
+    margin-top: 3px;
+    margin-bottom: 3px;
+    padding: 0px;
+    width: 100%;
+  }
+
+  .ProfileInfo p {
+    display: inline;
+  }
 }
 
 @media (max-width: 660px) {
