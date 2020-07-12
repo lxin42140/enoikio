@@ -21,14 +21,12 @@ class FilterResults extends Component {
       this.state.searchObject !== this.props.searchObject
     ) {
       this.filter();
-    } else if (!this.props.history.location.search && this.state.searching) {
-      switch (this.props.history.location.pathname) {
-        case "/profile":
-          this.props.setFilterTermForListing("displayName", "");
-          break;
-        default:
-          break;
-      }
+    } else if (
+      !this.props.history.location.search &&
+      this.state.searching &&
+      this.props.history.location.pathname === "/profile"
+    ) {
+      this.props.setFilterTermForListing("displayName", "");
       this.setState({
         searching: false,
       });

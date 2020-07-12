@@ -207,15 +207,15 @@ class GeneralProfilePage extends Component {
   };
 
   onCancelSearchHandler = () => {
-    // if (this.props.history.location.search) {
-    //   const pathName = this.props.history.location.search
-    //     .split("&&")[0]
-    //     .split("=")[1];
+    if (this.props.history.location.search) {
+      const pathName = this.props.history.location.search
+        .split("&&")[0]
+        .split("=")[1];
 
-    //   this.props.history.push(pathName);
-    // } else {
-    this.props.history.goBack();
-    // }
+      this.props.history.push(pathName);
+    } else {
+      this.props.history.goBack();
+    }
   };
 
   searchProfileHandler = (displayName) => {
@@ -229,11 +229,16 @@ class GeneralProfilePage extends Component {
     } else {
       this.props.setFilterProfile(formattedDisplayName);
 
+      let pathName = this.props.history.location.pathname;
+
+      if (this.props.history.location.search) {
+        pathName = this.props.history.location.search
+          .split("&&")[0]
+          .split("=")[1];
+      }
+
       let query =
-        "/searchProfile?from=" +
-        this.props.history.location.pathname +
-        "&&profile=" +
-        formattedDisplayName;
+        "/searchProfile?from=" + pathName + "&&profile=" + formattedDisplayName;
 
       this.props.history.push(query);
     }

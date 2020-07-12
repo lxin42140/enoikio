@@ -10,6 +10,21 @@ class Favorites extends Component {
     filteredListings: [],
   };
 
+  componentDidUpdate() {
+    let updatedFilterListing = this.props.listings.filter((listing) => {
+      for (let user in listing.likedUsers) {
+        if (listing.likedUsers[user] === this.props.displayName) {
+          return true;
+        }
+      }
+      return false;
+    });
+    if (updatedFilterListing.length !== this.state.filteredListings.length) {
+      this.setState({
+        filteredListings: updatedFilterListing,
+      });
+    }
+  }
   componentDidMount() {
     const filteredListings = this.props.listings.filter((listing) => {
       for (let user in listing.likedUsers) {
