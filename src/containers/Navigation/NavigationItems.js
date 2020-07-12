@@ -159,7 +159,7 @@ class NavigationItems extends Component {
             Chats
           </NavigationItem>
           <NavigationItem
-            link="/profile?profile=personal"
+            link="/profile"
             onClick={() => this.props.setFilterTermForListing("displayName")}
           >
             {<FontAwesomeIcon icon={faUser} style={{ paddingRight: "5px" }} />}

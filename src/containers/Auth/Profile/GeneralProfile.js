@@ -212,14 +212,23 @@ class GeneralProfilePage extends Component {
 
   searchProfileHandler = (displayName) => {
     let formattedDisplayName = displayName.toLowerCase().split(" ").join("");
-    this.props.setFilterProfile(formattedDisplayName);
-    let query =
-      "/searchProfile?from=" +
-      this.props.history.location.search.split("&&")[0].split("=")[1] +
-      "&&profile=" +
-      formattedDisplayName;
+    if (
+      this.props.displayName.toLowerCase().split(" ").join("") ===
+      formattedDisplayName
+    ) {
+      this.props.setFilterTermForListing("displayName");
+      this.props.history.push("/profile");
+    } else {
+      this.props.setFilterProfile(formattedDisplayName);
 
-    this.props.history.push(query);
+      let query =
+        "/searchProfile?from=" +
+        this.props.history.location.pathname +
+        "&&profile=" +
+        formattedDisplayName;
+
+      this.props.history.push(query);
+    }
   };
 
   checkValidity(value, rules) {

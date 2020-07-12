@@ -44,10 +44,17 @@ class Request extends Component {
       formattedDisplayName
     ) {
       this.props.setFilterTermForListing("displayName");
-      this.props.history.push("/profile?profile=personal");
+      this.props.history.push("/profile");
     } else {
       this.props.setFilterProfile(formattedDisplayName);
-      this.props.history.push("/searchProfile?profile=" + formattedDisplayName);
+
+      let query =
+        "/searchProfile?from=" +
+        this.props.history.location.pathname +
+        "&&profile=" +
+        formattedDisplayName;
+
+      this.props.history.push(query);
     }
   };
 
