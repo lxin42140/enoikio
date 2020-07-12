@@ -213,6 +213,7 @@ class GeneralProfilePage extends Component {
         .split("=")[1];
 
       this.props.history.push(pathName);
+      this.props.setFilterTermForListing("displayName", "");
     } else {
       this.props.history.goBack();
     }
