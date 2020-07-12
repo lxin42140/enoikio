@@ -10,7 +10,7 @@ import {
   faHome,
   faEdit,
   faFileUpload,
-  faImage
+  faImage,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -637,7 +637,9 @@ class NewPost extends Component {
           <p>
             <b>Description: </b>
             <br />
-            {this.state.dataForm.description.value}
+            <span style={{ textAlign: "start" }}>
+              {this.state.dataForm.description.value}
+            </span>
           </p>
         )}
 
@@ -656,7 +658,8 @@ class NewPost extends Component {
 
     let successPost = (
       <Modal show={this.props.postUploaded && this.props.imageUploaded}>
-        Successfully posted!
+        <p style={{ color: "green" }}>Successfully posted!</p>
+
         <div
           style={{
             display: "flex",
@@ -666,7 +669,10 @@ class NewPost extends Component {
           }}
         >
           <Link to="/" style={{ paddingRight: "10px" }}>
-            <Button onClick={() => this.props.dispatchClearNewPostData()}>
+            <Button
+              btnType="Important"
+              onClick={() => this.props.dispatchClearNewPostData()}
+            >
               {
                 <FontAwesomeIcon
                   icon={faHome}

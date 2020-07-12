@@ -7,11 +7,16 @@ import {
   faHandHoldingUsd,
   faCommentDots,
   faImage,
-  faChevronDown
+  faChevronDown,
+  faEdit,
+  faLightbulb,
+  faCheck,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import moment from "moment";
+
 import profileImage from "../../../assets/Images/chats/profile";
 import Comment from "../../../components/Comment/Comment";
 import Button from "../../../components/UI/Button/Button";
@@ -21,6 +26,7 @@ import { database, storage } from "../../../firebase/firebase";
 import * as actions from "../../../store/actions/index";
 import FilterResults from "../../util/FilterResults";
 import * as classes from "./Profile.css";
+import Input from "../../../components/UI/Input/Input";
 
 class Profile extends Component {
   state = {
@@ -37,6 +43,70 @@ class Profile extends Component {
     comments: [],
     numReviews: 0,
     numStars: 0,
+
+    //
+
+    feedbackPopup: false,
+    showSummary: false,
+    dataForm: {
+      feedback: {
+        elementType: "select",
+        elementConfig: {
+          options: [
+            {
+              value: "Discovered bugs",
+              displayValue: "Discovered bugs",
+            },
+            {
+              value: "Improvements",
+              displayValue: "Improvements",
+            },
+            {
+              value: "Others",
+              displayValue: "Others",
+            },
+          ],
+        },
+        value: "Discovered bugs",
+        validation: false,
+        valid: true,
+        touched: false,
+      },
+      description: {
+        elementType: "textarea",
+        elementConfig: {
+          type: "text",
+          placeholder:
+            "We value all feedback. Please describe your feedback in detail.",
+        },
+        validation: {
+          required: true,
+        },
+        value: "",
+        valid: false,
+        touched: false,
+      },
+      followUp: {
+        elementType: "select",
+        elementConfig: {
+          options: [
+            {
+              value: "I wish to be contacted for follow-up",
+              displayValue: "I wish to be contacted for follow-up",
+            },
+            {
+              value: "I do not wish to be contacted for follow-up",
+              displayValue: "I do not wish to be contacted for follow-up",
+            },
+          ],
+        },
+        value: "I do not wish to be contacted for follow-up",
+        validation: false,
+        valid: true,
+        touched: false,
+      },
+    },
+    formIsValid: false,
   };
 
   componentWillUnmount() {
@@ -155,12 +225,170 @@ class Profile extends Component {
 
   searchProfileHandler = (displayName) => {
     let formattedDisplayName = displayName.toLowerCase().split(" ").join("");
+
     this.props.setFilterProfile(formattedDisplayName);
-    this.props.history.push("/searchProfile?profile=" + formattedDisplayName);
+
+    let query =
+      "/searchProfile?from=" +
+      this.props.history.location.pathname +
+      "&&profile=" +
+      formattedDisplayName;
+
+    this.props.history.push(query);
+  };
+
+  checkValidity(value, rules) {
+    let isValid = true;
+    if (rules) {
+      if (rules.required) {
+        isValid = value.trim() !== "" && isValid;
+      }
+    }
+    return isValid;
+  }
+
+  inputChangedHandler = (event, inputIdentifier) => {
+    const updatedDataForm = {
+      ...this.state.dataForm,
+    };
+    const updatedFormElement = {
+      ...updatedDataForm[inputIdentifier],
+    };
+    updatedFormElement.value = event.target.value;
+
+    updatedFormElement.valid = this.checkValidity(
+      updatedFormElement.value,
+      updatedFormElement.validation
+    );
+
+    updatedFormElement.touched = true;
+    updatedDataForm[inputIdentifier] = updatedFormElement;
+    let formIsValid = true;
+    for (let inputIdentifiers in updatedDataForm) {
+      if (!updatedDataForm[inputIdentifiers].valid) {
+        formIsValid = false;
+        break;
+      }
+    }
+    this.setState({ dataForm: updatedDataForm, formIsValid: formIsValid });
+  };
+  showReportModal = () => {
+    this.setState({
+      feedbackPopup: true,
+    });
+  };
+
+  closeReportModal = () => {
+    this.setState({
+      feedbackPopup: false,
+    });
+  };
+
+  showReportSummary = () => {
+    this.setState({
+      feedbackPopup: false,
+      showSummary: true,
+    });
+  };
+
+  closeReportSummary = () => {
+    this.setState({
+      feedbackPopup: true,
+      showSummary: false,
+    });
+  };
+
+  reset = () => {
+    this.setState({
+      feedbackPopup: false,
+      showSummary: false,
+      dataForm: {
+        feedback: {
+          elementType: "select",
+          elementConfig: {
+            options: [
+              {
+                value: "Discovered bugs",
+                displayValue: "Discovered bugs",
+              },
+              {
+                value: "Improvements",
+                displayValue: "Improvements",
+              },
+              {
+                value: "Others",
+                displayValue: "Others",
+              },
+            ],
+          },
+          value: "Discovered bugs",
+          validation: false,
+          valid: true,
+          touched: false,
+        },
+        description: {
+          elementType: "textarea",
+          elementConfig: {
+            type: "text",
+            placeholder:
+              "We value all feedback. Please describe your feedback in details",
+          },
+          validation: {
+            required: true,
+          },
+          value: "",
+          valid: false,
+          touched: false,
+        },
+        followUp: {
+          elementType: "select",
+          elementConfig: {
+            options: [
+              {
+                value: "I wish to be contacted for follow-up",
+                displayValue: "I wish to be contacted for follow-up",
+              },
+              {
+                value: "I do not wish to be contacted for follow-up",
+                displayValue: "I do not wish to be contacted for follow-up",
+              },
+            ],
+          },
+          value: "I do not wish to be contacted for follow-up",
+          validation: false,
+          valid: true,
+          touched: false,
+        },
+      },
+      formIsValid: false,
+    });
+  };
+
+  submitReportHandler = () => {
+    const date = moment().format("DD/MM/YYYY");
+    const time = moment().format("HH:mm:ss");
+    const unique = this.props.displayName + Date.now();
+    const formData = {};
+
+    for (let key in this.state.dataForm) {
+      formData[key] = this.state.dataForm[key].value;
+    }
+
+    const reportDetails = {
+      unique: unique,
+      date: date,
+      time: time,
+      reportDetails: formData,
+      reportedBy: this.props.displayName,
+    };
+
+    database.ref().child("feedbacks").push({ reportDetails });
+
+    this.reset();
   };
 
   toggleDropDown = (prevState) => {
-    this.setState(prevState => ({showDropDown: !prevState.showDropDown }))
+    this.setState(prevState => ({ showDropDown: !prevState.showDropDown }))
   }
 
   render() {
@@ -247,36 +475,36 @@ class Profile extends Component {
         }}
       >
         <p>
-        <FontAwesomeIcon
-          icon={faStar}
-          style={
-            this.state.numStars > 0 ? { color: "#ff5138" } : { color: "gray" }
-          }
-        />
-        <FontAwesomeIcon
-          icon={faStar}
-          style={
-            this.state.numStars > 1 ? { color: "#ff5138" } : { color: "gray" }
-          }
-        />
-        <FontAwesomeIcon
-          icon={faStar}
-          style={
-            this.state.numStars > 2 ? { color: "#ff5138" } : { color: "gray" }
-          }
-        />
-        <FontAwesomeIcon
-          icon={faStar}
-          style={
-            this.state.numStars > 3 ? { color: "#ff5138" } : { color: "gray" }
-          }
-        />
-        <FontAwesomeIcon
-          icon={faStar}
-          style={
-            this.state.numStars > 4 ? { color: "#ff5138" } : { color: "gray" }
-          }
-        /> (
+          <FontAwesomeIcon
+            icon={faStar}
+            style={
+              this.state.numStars > 0 ? { color: "#ff5138" } : { color: "gray" }
+            }
+          />
+          <FontAwesomeIcon
+            icon={faStar}
+            style={
+              this.state.numStars > 1 ? { color: "#ff5138" } : { color: "gray" }
+            }
+          />
+          <FontAwesomeIcon
+            icon={faStar}
+            style={
+              this.state.numStars > 2 ? { color: "#ff5138" } : { color: "gray" }
+            }
+          />
+          <FontAwesomeIcon
+            icon={faStar}
+            style={
+              this.state.numStars > 3 ? { color: "#ff5138" } : { color: "gray" }
+            }
+          />
+          <FontAwesomeIcon
+            icon={faStar}
+            style={
+              this.state.numStars > 4 ? { color: "#ff5138" } : { color: "gray" }
+            }
+          /> (
           {this.state.numReviews <= 1
             ? this.state.numReviews + " review"
             : this.state.numReviews + " reviews"}
@@ -297,11 +525,12 @@ class Profile extends Component {
         <button
           onClick={() => {
             this.onShowPastPostHandler();
-            this.props.windowWidth <= 950 ? 
-            this.toggleDropDown() : 
-            null}}
-          style={this.state.showPastListing ? 
-            activeButtonStyle : 
+            this.props.windowWidth <= 950 ?
+              this.toggleDropDown() :
+              null
+          }}
+          style={this.state.showPastListing ?
+            activeButtonStyle :
             null} >
           {<FontAwesomeIcon icon={faBook} style={{ paddingRight: "5px" }} />}
             Listings
@@ -309,11 +538,12 @@ class Profile extends Component {
         <button
           onClick={() => {
             this.onShowRequestHandler();
-            this.props.windowWidth <= 950 ? 
-            this.toggleDropDown() : 
-            null}}
-          style={ this.state.showRequest ? 
-            activeButtonStyle : 
+            this.props.windowWidth <= 950 ?
+              this.toggleDropDown() :
+              null
+          }}
+          style={this.state.showRequest ?
+            activeButtonStyle :
             null} >
           {<FontAwesomeIcon icon={faTasks} style={{ paddingRight: "5px" }} />}
             Requests
@@ -321,24 +551,26 @@ class Profile extends Component {
         <button
           onClick={() => {
             this.onShowOnRentHandler();
-            this.props.windowWidth <= 950 ? 
-            this.toggleDropDown() : 
-            null}}
-            style={ this.state.showOnRent ? 
-              activeButtonStyle : 
-              null} >
+            this.props.windowWidth <= 950 ?
+              this.toggleDropDown() :
+              null
+          }}
+          style={this.state.showOnRent ?
+            activeButtonStyle :
+            null} >
           {<FontAwesomeIcon icon={faHandHoldingUsd} style={{ paddingRight: "5px" }} />}
             On rent
         </button>
         <button
           onClick={() => {
             this.onShowReviewsHandler();
-            this.props.windowWidth <= 950 ? 
-            this.toggleDropDown() : 
-            null}}
-            style={ this.state.showComments ? 
-              activeButtonStyle : 
-              null} >
+            this.props.windowWidth <= 950 ?
+              this.toggleDropDown() :
+              null
+          }}
+          style={this.state.showComments ?
+            activeButtonStyle :
+            null} >
           {<FontAwesomeIcon icon={faCommentDots} style={{ paddingRight: "5px" }} />}
             Reviews
         </button>
@@ -387,7 +619,7 @@ class Profile extends Component {
                     }} />
              Reviews
            </button>}
-           <div>
+          <div>
             <FontAwesomeIcon
               icon={faChevronDown}
               className={classes.arrowDown}
@@ -397,7 +629,7 @@ class Profile extends Component {
       );
 
       const dropDown = this.state.showDropDown ?
-        tabs : 
+        tabs :
         null;
 
       navigation = (
@@ -421,28 +653,39 @@ class Profile extends Component {
           />
         </div>
         <div>
-        <p
-          style={{
-            fontSize: "30px",
-            lineHeight: "38px",
-            fontWeight: "400",
-            color: "black",
-          }}
-        >
-          @{this.props.displayName} {numStar}
-        </p>
-        <p>
-          <b>Email: </b>
-          {this.props.email}
-        </p>
-        <p>
-          <b>Date joined: </b>
-          {this.props.dateJoined}
-        </p>
-        <p>
-          <b>Last sign in: </b>
-          {this.props.lastSignIn}
-        </p>
+          <p
+            style={{
+              fontSize: "30px",
+              lineHeight: "38px",
+              fontWeight: "400",
+              color: "black",
+            }}
+          >
+            @{this.props.displayName} {numStar}
+          </p>
+          <p>
+            <b>Email: </b>
+            {this.props.email}
+          </p>
+          <p>
+            <b>Date joined: </b>
+            {this.props.dateJoined}
+          </p>
+          <p>
+            <b>Last sign in: </b>
+            {this.props.lastSignIn}
+          </p>
+          <p style={{ cursor: "pointer" }} onClick={this.showReportModal}>
+            <span style={{ color: "orange" }}>
+              {
+                <FontAwesomeIcon
+                  icon={faLightbulb}
+                  style={{ paddingRight: "5px" }}
+                />
+              }
+            Submit feedback
+          </span>
+          </p>
         </div>
       </div>
     );
@@ -466,8 +709,104 @@ class Profile extends Component {
       ));
     }
 
+    // return (
+    //   <React.Fragment>
+    //     <div className={classes.Background} />
+    //     <div className={classes.Profile}>
+    //       {profile}
+    //       {editProfileImage}
+    //       <div className={classes.Information}>
+    //         {navigation}
+    //         <div className={classes.Details}>
+    //           {this.state.showPastListing ||
+    //             this.state.showOnRent ||
+    //             this.state.showRequest ? (
+    //               <FilterResults history={this.props.history} />
+    //             ) : this.state.comments.length < 1 ? (
+    //               <h3>Oops..No reviews</h3>
+    //             ) : (
+    //                 <ul className={classes.Reviews}>{reviews}</ul>
+    //               )}
+    const formElementsArray = [];
+
+    for (let key in this.state.dataForm) {
+      formElementsArray.push({
+        id: key,
+        config: this.state.dataForm[key],
+      });
+    }
+
+    let form = null;
+    if (this.state.feedbackPopup) {
+      form = formElementsArray.map((formElement) => (
+        <Input
+          key={formElement.id}
+          elementType={formElement.config.elementType}
+          elementConfig={formElement.config.elementConfig}
+          value={formElement.config.value}
+          valid={formElement.config.valid}
+          shouldValidate={formElement.config.validation}
+          touched={formElement.config.touched}
+          change={(event) => this.inputChangedHandler(event, formElement.id)}
+        />
+      ));
+    }
+
+    let feedbackPopup = (
+      <Modal show={this.state.feedbackPopup}>
+        {form}
+        <Button
+          btnType="Important"
+          disabled={!this.state.formIsValid}
+          onClick={this.showReportSummary}
+        >
+          {<FontAwesomeIcon icon={faCheck} style={{ paddingRight: "5px" }} />}
+          Review
+        </Button>
+        <Button onClick={this.closeReportModal}>
+          {<FontAwesomeIcon icon={faTimes} style={{ paddingRight: "5px" }} />}
+          Cancel
+        </Button>
+      </Modal>
+    );
+
+    let reportSummary = (
+      <Modal show={this.state.showSummary}>
+        <h1>Confirm feedback details:</h1>
+        <p>
+          <b>feedback area: </b>
+          {this.state.dataForm.feedback.value}
+        </p>
+        <p style={{ textAlign: "start" }}>
+          <b>Description: </b>
+          <br />
+          {this.state.dataForm.description.value}
+        </p>
+        <p style={{ fontSize: "small" }}>
+          <i>{this.state.dataForm.followUp.value}</i>
+        </p>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <Button btnType="Important" onClick={this.submitReportHandler}>
+            {
+              <FontAwesomeIcon
+                icon={faLightbulb}
+                style={{ paddingRight: "5px" }}
+              />
+            }
+            Submit
+          </Button>
+          <Button onClick={this.closeReportSummary}>
+            {<FontAwesomeIcon icon={faEdit} style={{ paddingRight: "5px" }} />}
+            Edit
+          </Button>
+        </div>
+      </Modal>
+    );
+
     return (
       <React.Fragment>
+        {feedbackPopup}
+        {reportSummary}
         <div className={classes.Background} />
         <div className={classes.Profile}>
           {profile}
@@ -491,6 +830,25 @@ class Profile extends Component {
     );
   }
 }
+
+// return (
+//   <React.Fragment>
+// <div className={classes.Background} />
+// <div className={classes.Profile}>
+//   {profile}
+//   {editProfileImage}
+//   <div className={classes.Information}>
+//     {navigation}
+//     <div className={classes.Details}>
+//       {this.state.showPastListing ||
+//         this.state.showOnRent ||
+//         this.state.showRequest ? (
+//           <FilterResults history={this.props.history} />
+//         ) : this.state.comments.length < 1 ? (
+//           <h3>Oops..No reviews</h3>
+//         ) : (
+//             <ul className={classes.Reviews}>{reviews}</ul>
+//           )}
 
 const mapStateToProps = (state) => {
   return {

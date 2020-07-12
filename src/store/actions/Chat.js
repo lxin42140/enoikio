@@ -1,6 +1,5 @@
 import * as actionTypes from "./actionTypes";
-import { database, storage } from "../../firebase/firebase";
-import profileImage from "../../assets/Images/chats/profile";
+import { database } from "../../firebase/firebase";
 
 export const fetchChatContactsInit = () => {
   return {
@@ -88,13 +87,13 @@ export const fetchChats = () => {
       .ref()
       .child("chats")
       .on("child_added", (snapShot) => {
-        dispatch(fetchChatContactsInit());
         if (
           snapShot.val().userA === getState().auth.displayName ||
           snapShot.val().userB === getState().auth.displayName
         ) {
-          const existingChatNames = getState().chat.existingChatNames;
-          const chatContacts = getState().chat.chatContacts;
+          dispatch(fetchChatContactsInit());
+          let existingChatNames = getState().chat.existingChatNames;
+          let chatContacts = getState().chat.chatContacts;
           let lastMessage = "";
           let chatSummary = null;
           let userName = snapShot.val().userA;
@@ -109,40 +108,63 @@ export const fetchChats = () => {
             userName = snapShot.val().userB;
           }
 
-          getProfileImage(userName).then((profilePic) => {
-            chatSummary = {
-              UID: snapShot.key,
-              userName: userName,
-              lastMessage: lastMessage,
-              profilePic: profilePic,
-            };
+          let chatKey = snapShot.key;
+          let formattedUserName = userName.split(" ").join("").toLowerCase();
 
-            existingChatNames.push(userName);
-            chatContacts.push(chatSummary);
-            chatContacts.reverse();
-            dispatch(
-              fetchChatContactsSuccess(false, chatContacts, existingChatNames)
-            );
-          });
+          database
+            .ref()
+            .child("users")
+            .orderByChild("formattedDisplayName")
+            .equalTo(formattedUserName)
+            .on("value", (snapShot) => {
+              snapShot.forEach((data) => {
+                const index = existingChatNames.indexOf(userName);
+                let deletedIndex = null;
+                let deletedLastMessage = "";
+                if (index > -1) {
+                  chatContacts = chatContacts.filter((chat, index) => {
+                    if (chat.userName === userName) {
+                      deletedIndex = index;
+                      deletedLastMessage = chat.lastMessage;
+                      return false;
+                    }
+                    return true;
+                  });
+                } else {
+                  existingChatNames.push(userName);
+                }
+
+                if (deletedIndex) {
+                  lastMessage = deletedLastMessage;
+                }
+
+                chatSummary = {
+                  UID: chatKey,
+                  userName: userName,
+                  lastMessage: lastMessage,
+                  profilePic: data.val().photoURL,
+                };
+
+                if (deletedIndex) {
+                  chatContacts.splice(deletedIndex, 0, chatSummary);
+                } else {
+                  chatContacts.push(chatSummary);
+                  chatContacts.reverse();
+                }
+
+                dispatch(
+                  fetchChatContactsSuccess(
+                    false,
+                    chatContacts,
+                    existingChatNames
+                  )
+                );
+              });
+            });
         }
       });
   };
 };
-
-async function getProfileImage(userName) {
-  let profilePic;
-  await storage
-    .ref()
-    .child("userProfilePictures")
-    .child(userName)
-    .getDownloadURL()
-    .then(
-      (url) => (profilePic = url),
-      (error) => (profilePic = profileImage)
-    );
-
-  return profilePic;
-}
 
 export const fetchFullChat = (chatUID, profilePic) => {
   return (dispatch, getState) => {

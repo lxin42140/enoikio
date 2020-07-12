@@ -38,6 +38,19 @@ class NavigationItems extends Component {
     this.setState({ showSideBar: false });
   };
 
+  cancelSearchHandler = () => {
+    this.toggleSearchBarHandler();
+    if (this.props.history.location.search) {
+      let pathName = this.props.history.location.search
+        .split("&&")[0]
+        .split("=")[1];
+      if (pathName === "/profile") {
+        this.props.setFilterTermForListing("displayName", "");
+      }
+      this.props.history.push(pathName);
+    }
+  };
+
   //TODO:
   //1. FIX TRANSITION OF SIDEBAR
   //2. NEED TO ADJUST FOR WHEN USER SCROLL WHEN SIDEBAR IS AVAILABLE
@@ -204,12 +217,7 @@ class NavigationItems extends Component {
             paddingLeft: "20px",
             paddingRight: "10px",
           }}
-          onClick={() => {
-            this.toggleSearchBarHandler();
-            this.props.history.push(
-              this.props.history.location.search.split("&&")[0].split("=")[1]
-            );
-          }}
+          onClick={this.cancelSearchHandler}
         />
       </div>
     ) : (

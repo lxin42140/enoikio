@@ -47,6 +47,9 @@ const asyncGeneralProfile = asyncComponent(() => {
   return import("./containers/Auth/Profile/GeneralProfile");
 });
 
+const asyncFavorites = asyncComponent(() => {
+  return import("./containers/Listings/Favorites/Favorites");
+});
 class App extends Component {
   componentDidMount() {
     this.props.dispatchAutoSignIn();
@@ -56,7 +59,7 @@ class App extends Component {
 
     window.addEventListener("resize", () => {
       this.props.dispatchSetWidth(window.innerWidth);
-    })
+    });
   }
 
   componentDidUpdate() {
@@ -69,9 +72,9 @@ class App extends Component {
     let routes = (
       <Switch>
         <Route path="/" exact component={Listings} />
-        <Route path="/searchResults" component={asyncFilteredResults} />
         <Route path="/expanded-listing" component={asyncExpandedListing} />
         <Route path="/auth" component={asyncAuth} />
+        <Route path="/searchResults" component={asyncFilteredResults} />
         <Route path="/searchProfile" component={asyncGeneralProfile} />
         <Redirect to="/" />
       </Switch>
@@ -81,17 +84,16 @@ class App extends Component {
       routes = (
         <Switch>
           <Route path="/" exact component={Listings} />
-          <Route path="/searchResults" component={asyncFilteredResults} />
-          <Route path="/searchProfile" component={asyncGeneralProfile} />
           <Route path="/new-post" component={asyncNewPost} />
           <Route path="/edit-post" component={asyncEditPost} />
           <Route path="/new-request" component={asyncNewRequest} />
           <Route path="/expanded-listing" component={asyncExpandedListing} />
-          <Route path="/post-history" component={asyncFilteredResults} />
-          <Route path="/liked-listings" component={asyncFilteredResults} />
+          <Route path="/liked-listings" component={asyncFavorites} />
           <Route path="/chats" component={asyncChat} />
           <Route path="/profile" component={asyncProfile} />
           <Route path="/logout" component={asyncLogOut} />
+          <Route path="/searchResults" component={asyncFilteredResults} />
+          <Route path="/searchProfile" component={asyncGeneralProfile} />
           <Redirect to="/" />
         </Switch>
       );

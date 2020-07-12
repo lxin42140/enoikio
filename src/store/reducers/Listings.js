@@ -8,9 +8,6 @@ const initialState = {
 
   expandedListing: null,
   expandedListingLoading: false,
-
-  // filterType: "",
-  // searchObject: "",
   
   interestedListing: null,
 };
@@ -44,13 +41,6 @@ const clearExpandedListing = (state, action) => {
     expandedListingLoading: false,
   });
 };
-
-// const filterListings = (state, filterType, searchObject) => {
-//   return updateObject(state, {
-//     filterType: filterType,
-//     searchObject: searchObject,
-//   });
-// };
 
 const interestedListing = (state, interestedListing) => {
   return updateObject(state, {
@@ -103,9 +93,6 @@ const reducer = (state = initialState, action) => {
       return setExpandedListing(state, action.expandedListing);
     case actionTypes.CLEAR_EXPANDED_LISTING:
       return clearExpandedListing(state, action);
-
-    // case actionTypes.FILTER_LISTINGS:
-    //   return filterListings(state, action.filterType, action.searchObject);
 
     case actionTypes.SET_INTERESTED_LISTING:
       return interestedListing(state, action.interestedListing);

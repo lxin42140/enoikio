@@ -282,9 +282,9 @@ class Offer extends Component {
               interestedListing.textbook +
               "》: $" +
               this.state.priceOffer +
-              ". Rental duration: from " +
+              ". Rental start date: " +
               this.state.startRental +
-              " to " +
+              ". Rental end date:  " +
               this.state.endRental,
             type: "MADE_OFFER",
             interestedListing: interestedListing,
@@ -509,7 +509,14 @@ class Offer extends Component {
     if (this.state.interestedListing === "") {
       return null;
     }
+    let minOffer =
+      Math.round(
+        ((Number(this.state.interestedListing.price) / 100) * 75 +
+          Number.EPSILON) *
+          100
+      ) / 100;
 
+    let offerPlaceHolder = "Enter offer (min $" + minOffer + ") here...";
     let offerPopUp = (
       <Modal show={this.state.showPopUp}>
         <div className={classes.Popup}>
@@ -526,7 +533,7 @@ class Offer extends Component {
               className={classes.OfferInput}
               onChange={this.priceOfferOnChange}
               value={this.state.priceOffer}
-              placeholder="Enter offer here..."
+              placeholder={offerPlaceHolder}
               style={{ marginTop: "1%" }}
             />
           </div>
@@ -545,7 +552,7 @@ class Offer extends Component {
                   className={classes.OfferInput}
                   onChange={this.startRentalOnChange}
                   value={this.state.startRental}
-                  placeholder="From DD/MM/YYYY"
+                  placeholder="Start rental date: DD/MM/YYYY"
                 />
               </div>
               <br />
@@ -561,7 +568,7 @@ class Offer extends Component {
                   className={classes.OfferInput}
                   onChange={this.endRentalOnChange}
                   value={this.state.endRental}
-                  placeholder="To DD/MM/YYYY"
+                  placeholder="End rental date: DD/MM/YYYY"
                 />
               </div>
               <br />

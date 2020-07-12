@@ -107,10 +107,36 @@ class ExpandedListing extends Component {
       formattedDisplayName
     ) {
       this.props.setFilterTermForListing("displayName");
-      this.props.history.push("/profile?profile=" + this.props.displayName);
+      this.props.history.push("/profile");
     } else {
       this.props.setFilterProfile(formattedDisplayName);
-      this.props.history.push("/searchProfile?profile=" + formattedDisplayName);
+
+      let query =
+        "/searchProfile?from=" +
+        this.props.history.location.pathname +
+        "&&profile=" +
+        formattedDisplayName;
+
+      this.props.history.push(query);
+    }
+  };
+
+  onRedirectToEditListing = () => {
+    let query = "/edit-post" + this.props.location.search;
+    this.props.history.push(query);
+  };
+
+  closeExpandedListing = () => {
+    if (this.props.history.location.search) {
+      let query = this.props.history.location.search.split("=")[1];
+      if (query.split("&&").length > 1) {
+        // query = query.split("&&")[0];
+        this.props.history.goBack();
+      } else {
+        this.props.history.push(query);
+      }
+    } else {
+      this.props.history.goBack();
     }
   };
   render() {
@@ -232,8 +258,9 @@ class ExpandedListing extends Component {
               @{this.props.expandedListing.displayName}
             </p>
           </div>
-          <Link to="/edit-post" style={{ paddingRight: "20px" }}>
-            <Button>
+          {/* <Link to="/edit-post" style={{ paddingRight: "20px" }}> */}
+          <span style={{ paddingRight: "20px" }}>
+            <Button onClick={this.onRedirectToEditListing}>
               {
                 <FontAwesomeIcon
                   icon={faEdit}
@@ -242,7 +269,8 @@ class ExpandedListing extends Component {
               }
               Edit
             </Button>
-          </Link>
+          </span>
+          {/* </Link> */}
           <Button
             btnType="Important"
             onClick={this.askUserToDelete}
@@ -398,10 +426,7 @@ class ExpandedListing extends Component {
     );
 
     const goBack = (
-      <div
-        onClick={() => this.props.history.goBack()}
-        style={{ cursor: "pointer" }}
-      >
+      <div onClick={this.closeExpandedListing} style={{ cursor: "pointer" }}>
         <FontAwesomeIcon
           icon={faWindowClose}
           style={{

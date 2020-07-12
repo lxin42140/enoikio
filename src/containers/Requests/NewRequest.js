@@ -376,7 +376,8 @@ class NewRequest extends Component {
 
     let successPost = (
       <Modal show={this.props.requestUploaded}>
-        Request successfully posted!
+        <p style={{ color: "green" }}>Request successfully posted!</p>
+
         <div
           style={{
             display: "flex",

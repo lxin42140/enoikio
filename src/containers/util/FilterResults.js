@@ -1,18 +1,18 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import { faArrowLeft, faHeart } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import Listing from "../Listings/Listing/Listing";
 import Request from "../Requests/Request/Request";
 import * as classes from "./FilterResults.css";
+import * as actions from "../../store/actions/index";
 class FilterResults extends Component {
   state = {
     filteredRequests: [],
     filteredListings: [],
     filterType: "",
     searchObject: "",
+    searching: false,
   };
 
   componentDidUpdate() {
@@ -21,6 +21,15 @@ class FilterResults extends Component {
       this.state.searchObject !== this.props.searchObject
     ) {
       this.filter();
+    } else if (
+      !this.props.history.location.search &&
+      this.state.searching &&
+      this.props.history.location.pathname === "/profile"
+    ) {
+      this.props.setFilterTermForListing("displayName", "");
+      this.setState({
+        searching: false,
+      });
     }
   }
 
@@ -36,17 +45,8 @@ class FilterResults extends Component {
   filter = () => {
     let filteredListings = [];
     let filteredRequests = [];
+    let searching = false;
     switch (this.props.filterType) {
-      case "favorites":
-        filteredListings = this.props.listings.filter((listing) => {
-          for (let user in listing.likedUsers) {
-            if (listing.likedUsers[user] === this.props.displayName) {
-              return true;
-            }
-          }
-          return false;
-        });
-        break;
       case "displayName":
         filteredListings = this.props.listings.filter(
           (listing) => listing.displayName === this.props.displayName
@@ -80,6 +80,7 @@ class FilterResults extends Component {
           this.filterListing(listing)
         );
         filteredListings = this.sortListing(filteredListings);
+        searching = true;
         break;
       default:
         break;
@@ -89,6 +90,7 @@ class FilterResults extends Component {
       filteredListings: filteredListings,
       filterType: this.props.filterType,
       searchObject: this.props.searchObject,
+      searching: searching,
     });
   };
 
@@ -189,7 +191,7 @@ class FilterResults extends Component {
         this.state.searchObject ===
           this.props.displayName.toLowerCase().split(" ").join("")
       ) {
-        return <h3>Submit your request and view it here...</h3>;
+        return <h3>Oops...Post your request and view it here</h3>;
       } else {
         const myRequests = this.state.filteredRequests.map((request) => {
           return (
@@ -214,45 +216,17 @@ class FilterResults extends Component {
     if (this.state.filteredListings.length < 1) {
       switch (this.state.filterType) {
         case "location":
-          return (
-            <React.Fragment>
-              <h3>Oops...Nothing to see here!</h3>
-              <div className={classes.Selections}>
-                <a onClick={() => this.props.history.goBack()}>
-                  {
-                    <FontAwesomeIcon
-                      icon={faArrowLeft}
-                      style={{ paddingRight: "5px" }}
-                    />
-                  }
-                  Go back
-                </a>
-              </div>
-            </React.Fragment>
-          );
+          return <h3>Oops...No available listings at this location</h3>;
         case "displayName":
-          return <h3>Oops...Submit your listing and view it here</h3>;
+          return <h3>Oops...Post your listing and view it here</h3>;
         case "searchProfile":
           return <h3>Oops...This user has no listings</h3>;
         case "onRent":
           return <h3>Oops...No rentals yet</h3>;
-        case "favorites":
-          return (
-            <h3>
-              {
-                <FontAwesomeIcon
-                  icon={faHeart}
-                  style={{ paddingRight: "5px" }}
-                />
-              }
-              a post and view it here...
-            </h3>
-          );
         case "moduleCode":
-        case "textbook":
           return (
             <React.Fragment>
-              <h3>Oops...No available listings</h3>
+              <h3>Oops...No available listings for this module</h3>
               <div className={classes.Selections}>
                 {this.props.isAuthenticated ? (
                   <Link to="/new-request">
@@ -264,16 +238,22 @@ class FilterResults extends Component {
                   </Link>
                 )}
               </div>
+            </React.Fragment>
+          );
+        case "textbook":
+          return (
+            <React.Fragment>
+              <h3>Oops...No available listings for this textbook</h3>
               <div className={classes.Selections}>
-                <a onClick={() => this.props.history.goBack()}>
-                  {
-                    <FontAwesomeIcon
-                      icon={faArrowLeft}
-                      style={{ paddingRight: "5px" }}
-                    />
-                  }
-                  Go back
-                </a>
+                {this.props.isAuthenticated ? (
+                  <Link to="/new-request">
+                    <a>Submit request</a>
+                  </Link>
+                ) : (
+                  <Link to="/auth">
+                    <a>Submit request</a>
+                  </Link>
+                )}
               </div>
             </React.Fragment>
           );
@@ -335,7 +315,8 @@ class FilterResults extends Component {
     let requestPrompt = null;
     if (
       this.state.filterType === "moduleCode" ||
-      this.state.filterType === "textbook"
+      this.state.filterType === "textbook" ||
+      this.state.filterType === "location"
     ) {
       requestPrompt = (
         <div style={{ fontSize: "small", paddingTop: "-20px" }}>
@@ -377,4 +358,10 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(FilterResults);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setFilterTermForListing: (filterType, object) =>
+      dispatch(actions.setFilterListings(filterType, object)),
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(FilterResults);

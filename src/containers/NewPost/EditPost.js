@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
 import {
   faTrash,
   faTimes,
@@ -119,11 +118,6 @@ class EditPost extends Component {
     showModal: false,
     initialEdit: true,
   };
-
-  componentWillUnmount() {
-    this.props.dispatchClearExpandedListing();
-  }
-
   componentDidUpdate() {
     if (!this.state.dataForm.module.validated) {
       this.verifyModuleCode();
@@ -411,6 +405,10 @@ class EditPost extends Component {
       delete postDetails.comments;
     }
 
+    if (!postDetails.replies) {
+      delete postDetails.replies;
+    }
+
     this.props.dispatchEditPost(postDetails, this.props.editListing.key);
     this.props.dispatchSubmitPhoto(
       this.state.imageAsFile,
@@ -632,10 +630,9 @@ class EditPost extends Component {
             </Button>
             <Button
               onClick={() => {
-                this.props.dispatchExpandedListing(
-                  this.props.editListing.unique
+                this.props.history.push(
+                  "/expanded-listing" + this.props.history.location.search
                 );
-                this.props.history.goBack();
               }}
             >
               {
@@ -694,27 +691,46 @@ class EditPost extends Component {
         )}
 
         <div style={{ display: "flex", justifyContent: "center" }}>
-          <Button onClick={this.toggleModalHandler}>Go back</Button>
-          <Button onClick={this.onSubmitHandler}>Submit</Button>
+          <Button btnType="Important" onClick={this.onSubmitHandler}>
+            {<FontAwesomeIcon icon={faCheck} style={{ paddingRight: "5px" }} />}
+            Submit
+          </Button>
+          <Button onClick={this.toggleModalHandler}>
+            {<FontAwesomeIcon icon={faTimes} style={{ paddingRight: "5px" }} />}
+            Go back
+          </Button>
         </div>
       </Modal>
     );
 
     let successPost = (
       <Modal show={this.props.postUploaded}>
-        Successfully edited!
+        <br />
+        <p style={{ color: "green" }}>Successfully edited!</p>
+        <br />
         <div style={{ display: "flex", justifyContent: "center" }}>
-          <Link to="/">
-            <Button onClick={() => this.props.dispatchClearNewPostData()}>
-              {
-                <FontAwesomeIcon
-                  icon={faHome}
-                  style={{ paddingRight: "5px" }}
-                />
-              }
-              Home
-            </Button>
-          </Link>
+          <Button
+            btnType="Important"
+            onClick={() => {
+              this.props.dispatchClearNewPostData();
+              this.props.history.push("/");
+            }}
+          >
+            {<FontAwesomeIcon icon={faHome} style={{ paddingRight: "5px" }} />}
+            Home
+          </Button>
+          <Button
+            onClick={() => {
+              this.props.dispatchClearNewPostData();
+              this.props.dispatchExpandedListing(this.props.editListing.unique);
+              this.props.history.push(
+                "/expanded-listing" + this.props.history.location.search
+              );
+            }}
+          >
+            {<FontAwesomeIcon icon={faTimes} style={{ paddingRight: "5px" }} />}
+            Go back
+          </Button>
         </div>
       </Modal>
     );
@@ -748,8 +764,6 @@ const mapDispatchToProps = (dispatch) => {
     dispatchClearNewPostData: () => dispatch(actions.clearPostData()),
     dispatchEditPost: (editedPost, node) =>
       dispatch(actions.editPost(editedPost, node)),
-    dispatchClearExpandedListing: () =>
-      dispatch(actions.clearExpandedListing()),
     dispatchExpandedListing: (identifier) =>
       dispatch(actions.fetchExpandedListing(identifier)),
   };

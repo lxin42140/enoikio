@@ -1,0 +1,23 @@
+.dropDownElement a {
+    height: 20px;
+    width: 85px;
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+}
+
+.dropDownElement a:hover {
+    background-color: #ffb3a7;
+    color: rgb(252, 31, 31);
+    cursor: pointer;
+    color: white
+}
+
+.dropDownElement {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}

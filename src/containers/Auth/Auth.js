@@ -239,6 +239,21 @@ class Auth extends Component {
         continue;
       }
 
+      let config = this.state.controls[key];
+
+      if (this.state.isSignUp) {
+        switch (key) {
+          case "email":
+            config.elementConfig.placeholder = "Enter a valid email address";
+            break;
+          case "password":
+            config.elementConfig.placeholder =
+              "Enter a password of at least 6 characters";
+            break;
+          default:
+            break;
+        }
+      }
       formElementArray.push({
         id: key,
         config: this.state.controls[key],

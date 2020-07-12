@@ -1,18 +1,18 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-
-import classes from "./SearchBar.css";
-import * as actions from "../../../store/actions/index";
-import DropDown from "./Dropdown/DropDown";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faLocationArrow,
-  faBook,
+  faBookOpen,
   faUniversity,
   faSearch,
   faChevronDown,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
+
+import classes from "./SearchBar.css";
+import * as actions from "../../../store/actions/index";
+import DropDown from "../../../components/UI/Dropdown/DropDown";
 
 class SearchBar extends Component {
   state = {
@@ -42,6 +42,7 @@ class SearchBar extends Component {
       showFilterDropDown: false,
       filterType: filter,
       placeHolder: placeHolder,
+      userInput: "",
     });
   };
 
@@ -55,13 +56,6 @@ class SearchBar extends Component {
     this.setState({ userInput: event.target.value, showFilterDropDown: false });
   };
 
-  onCancelSearchHandler = (event) => {
-    // this.props.onClick();
-    if (this.state.userInput !== "") {
-      this.props.history.goBack();
-    }
-  };
-
   onSearchHandler = (event) => {
     if (this.state.userInput === "") {
       return;
@@ -72,16 +66,22 @@ class SearchBar extends Component {
         .toLowerCase()
         .split(" ")
         .join("");
+
+      let pathName = this.props.history.location.pathname;
+
+      if (this.props.history.location.search) {
+        pathName = this.props.history.location.search
+          .split("&&")[0]
+          .split("=")[1];
+      }
+
       if (
         this.props.displayName.toLowerCase().split(" ").join("") ===
         formattedDisplayName
       ) {
-        this.props.setFilterTermForListing("displayName");
+        this.props.setFilterTermForListing("displayName", "");
 
-        let query =
-          "/profile?from=" +
-          this.props.history.location.pathname +
-          "&&profile=personal";
+        let query = "/profile?from=" + pathName + "&&profile=personal";
 
         this.props.history.push(query);
       } else {
@@ -89,7 +89,7 @@ class SearchBar extends Component {
 
         let query =
           "/searchProfile?from=" +
-          this.props.history.location.pathname +
+          pathName +
           "&&profile=" +
           formattedDisplayName;
 
@@ -100,11 +100,16 @@ class SearchBar extends Component {
         this.state.filterType,
         this.state.userInput.toLowerCase().split(" ").join("")
       );
+      let pathName = this.props.history.location.pathname;
+
+      if (this.props.history.location.search) {
+        pathName = this.props.history.location.search
+          .split("&&")[0]
+          .split("=")[1];
+      }
+
       let query =
-        "/searchResults?from=" +
-        this.props.history.location.pathname +
-        "&&search=" +
-        this.state.userInput;
+        "/searchResults?from=" + pathName + "&&search=" + this.state.userInput;
       this.props.history.push(query);
     }
   };
@@ -124,7 +129,7 @@ class SearchBar extends Component {
           text={"Module"}
         />
         <DropDown
-          icon={faBook}
+          icon={faBookOpen}
           onClick={() => this.changeFilterHandler("textbook")}
           text={"Textbook"}
         />
@@ -156,7 +161,24 @@ class SearchBar extends Component {
               style={{ height: "100%" }}
               onClick={this.filterDropdownHandler}
             >
-              <button className={classes.button}>Filter by</button>
+              <button className={classes.button}>Filtering by</button>
+              <span
+                style={{
+                  paddingRight: "5px",
+                  color: "grey",
+                  fontSize: "small",
+                }}
+              >
+                {this.state.filterType === "moduleCode" ? (
+                  <FontAwesomeIcon icon={faUniversity} />
+                ) : this.state.filterType === "textbook" ? (
+                  <FontAwesomeIcon icon={faBookOpen} />
+                ) : this.state.filterType === "location" ? (
+                  <FontAwesomeIcon icon={faLocationArrow} />
+                ) : (
+                  <FontAwesomeIcon icon={faUser} />
+                )}
+              </span>
               <FontAwesomeIcon
                 icon={faChevronDown}
                 className={classes.arrowDown}

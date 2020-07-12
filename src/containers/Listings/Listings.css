@@ -71,6 +71,7 @@
     outline: none;
 }
 
+
 @media (max-width: 616px) {
     .Listings {
         justify-content: center;

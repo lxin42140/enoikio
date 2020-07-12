@@ -4,13 +4,14 @@ import {
   faTasks,
   faCommentDots,
   faExclamationTriangle,
+  faWindowClose,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
+import { Link } from "react-router-dom";
 import Comment from "../Comment/Comment";
 import FilterListings from "../../containers/util/FilterResults";
 import * as classes from "./GeneralProfile.css";
-import { faWindowClose } from "@fortawesome/free-solid-svg-icons";
 
 const profile = (props) => {
   const numStar = (
@@ -87,15 +88,29 @@ const profile = (props) => {
         <b>Last sign in: </b>
         {props.lastSignIn}
       </li>
-      <li style={{ cursor: "pointer" }} onClick={props.showReportModal}>
-        {
-          <FontAwesomeIcon
-            icon={faExclamationTriangle}
-            style={{ paddingRight: "5px", color: "red" }}
-          />
-        }
-        <b style={{ color: "red" }}>Report user</b>
-      </li>
+      {props.isAuthenticated ? (
+        <li style={{ cursor: "pointer" }} onClick={props.showReportModal}>
+          {
+            <FontAwesomeIcon
+              icon={faExclamationTriangle}
+              style={{ paddingRight: "5px", color: "red" }}
+            />
+          }
+          <b style={{ color: "red" }}>Report user</b>
+        </li>
+      ) : (
+        <li style={{ cursor: "pointer" }}>
+          <Link to="/auth" style={{ textDecoration: "none" }}>
+            {
+              <FontAwesomeIcon
+                icon={faExclamationTriangle}
+                style={{ paddingRight: "5px", color: "red" }}
+              />
+            }
+            <b style={{ color: "red" }}>Report user</b>
+          </Link>
+        </li>
+      )}
     </ul>
   );
 

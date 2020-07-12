@@ -3,11 +3,11 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBook, faTasks } from "@fortawesome/free-solid-svg-icons";
+
 import Listing from "./Listing/Listing";
 import Request from "../Requests/Request/Request";
 import Spinner from "../../components/UI/Spinner/Spinner";
 import classes from "./Listings.css";
-
 class FullListings extends Component {
   state = {
     viewListing: true,
@@ -29,23 +29,10 @@ class FullListings extends Component {
   };
 
   sortRequests = (requestArr) => {
-    let swap;
-    let n = requestArr.length - 1;
-    do {
-      swap = false;
-      for (let i = 0; i < n; i++) {
-        if (requestArr[i].date < requestArr[i + 1].date) {
-          swap = true;
-          const temp = requestArr[i];
-          requestArr[i] = requestArr[i + 1];
-          requestArr[i + 1] = temp;
-        }
-      }
-      n--;
-    } while (swap);
+    requestArr = this.sortByDate(requestArr);
 
-    swap = true;
-    n = requestArr.length - 1;
+    let swap = true;
+    let n = requestArr.length - 1;
     do {
       swap = false;
       for (let i = 0; i < n; i++) {
@@ -66,6 +53,24 @@ class FullListings extends Component {
     return requestArr;
   };
 
+  sortByDate = (arr) => {
+    let swap;
+    let n = arr.length - 1;
+    do {
+      swap = false;
+      for (let i = 0; i < n; i++) {
+        if (arr[i].date < arr[i + 1].date) {
+          swap = true;
+          const temp = arr[i];
+          arr[i] = arr[i + 1];
+          arr[i + 1] = temp;
+        }
+      }
+      n--;
+    } while (swap);
+
+    return arr;
+  };
   render() {
     if (this.props.loading) {
       return <Spinner />;
@@ -102,12 +107,7 @@ class FullListings extends Component {
               : null
           }
         >
-          {
-            <FontAwesomeIcon
-              icon={faTasks}
-              style={{ paddingRight: "5px" }}
-            />
-          }
+          {<FontAwesomeIcon icon={faTasks} style={{ paddingRight: "5px" }} />}
           Requests
         </button>
       </div>
@@ -117,7 +117,7 @@ class FullListings extends Component {
     if (this.props.fullListings.length < 1) {
       listings = <h3>Oops..No available listings</h3>;
     } else {
-      listings = this.props.fullListings.map((listing) => {
+      listings = this.sortByDate(this.props.fullListings).map((listing) => {
         if (listing.postDetails.deliveryMethod === "mail") {
           return (
             <Listing
