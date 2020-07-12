@@ -1,6 +1,5 @@
 import * as actionTypes from "./actionTypes";
-import { database, storage } from "../../firebase/firebase";
-import profileImage from "../../assets/Images/chats/profile";
+import { database } from "../../firebase/firebase";
 
 export const fetchChatContactsInit = () => {
   return {
