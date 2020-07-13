@@ -1,22 +1,29 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import {
-  faArrowLeft,
   faExclamationTriangle,
   faTimes,
   faCheck,
   faEdit,
+  faStar,
+  faBook,
+  faTasks,
+  faHandHoldingUsd,
+  faCommentDots,
+  faChevronDown,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import moment from "moment";
-import ProfileComponent from "../../../components/GeneralProfile/GeneralProfile";
 import { database } from "../../../firebase/firebase";
 import Spinner from "../../../components/UI/Spinner/Spinner";
-import * as classes from "./Profile.css";
 import * as actions from "../../../store/actions/index";
 import Modal from "../../../components/UI/Modal/Modal";
 import Input from "../../../components/UI/Input/Input";
 import Button from "../../../components/UI/Button/Button";
+import classes from "./Profile.css";
+import FilterResults from "../../util/FilterResults";
+import Comment from "../../../components/Comment/Comment";
+import { Link } from "react-router-dom";
 
 class GeneralProfilePage extends Component {
   state = {
@@ -26,6 +33,8 @@ class GeneralProfilePage extends Component {
     showPastListing: true,
     showRequests: false,
     showComments: false,
+
+    showDropDown: false,
 
     formattedDisplayName: "",
 
@@ -115,16 +124,18 @@ class GeneralProfilePage extends Component {
   };
 
   componentDidUpdate() {
-    let searchQueryName = this.props.history.location.search
-      .split("&&")[1]
-      .split("=")[1];
-    if (
-      this.state.formattedDisplayName !== this.props.searchObject &&
-      this.props.filterType === "searchProfile"
-    ) {
-      this.fetchUserProfile();
-    } else if (searchQueryName !== this.state.formattedDisplayName) {
-      this.searchProfileHandler(searchQueryName);
+    if (this.props.history.location.search) {
+      let searchQueryName = this.props.history.location.search
+        .split("&&")[1]
+        .split("=")[1];
+      if (
+        this.state.formattedDisplayName !== this.props.searchObject &&
+        this.props.filterType === "searchProfile"
+      ) {
+        this.fetchUserProfile();
+      } else if (searchQueryName !== this.state.formattedDisplayName) {
+        this.searchProfileHandler(searchQueryName);
+      }
     } else if (this.state.showPastListing && this.state.showRequests) {
       this.setState({ showRequests: false });
     }
@@ -156,7 +167,7 @@ class GeneralProfilePage extends Component {
               error: false,
 
               showPastListing: true,
-              showRequest: false,
+              showRequests: false,
               showComments: false,
 
               formattedDisplayName: this.props.searchObject,
@@ -207,19 +218,42 @@ class GeneralProfilePage extends Component {
   };
 
   onCancelSearchHandler = () => {
-    this.props.history.goBack();
+    if (this.props.history.location.search) {
+      const pathName = this.props.history.location.search
+        .split("&&")[0]
+        .split("=")[1];
+
+      this.props.history.push(pathName);
+      this.props.setFilterTermForListing("displayName", "");
+    } else {
+      this.props.history.goBack();
+    }
   };
 
   searchProfileHandler = (displayName) => {
     let formattedDisplayName = displayName.toLowerCase().split(" ").join("");
-    this.props.setFilterProfile(formattedDisplayName);
-    let query =
-      "/searchProfile?from=" +
-      this.props.history.location.search.split("&&")[0].split("=")[1] +
-      "&&profile=" +
-      formattedDisplayName;
+    if (
+      this.props.displayName.toLowerCase().split(" ").join("") ===
+      formattedDisplayName
+    ) {
+      this.props.setFilterTermForListing("displayName");
+      this.props.history.push("/profile");
+    } else {
+      this.props.setFilterProfile(formattedDisplayName);
 
-    this.props.history.push(query);
+      let pathName = this.props.history.location.pathname;
+
+      if (this.props.history.location.search) {
+        pathName = this.props.history.location.search
+          .split("&&")[0]
+          .split("=")[1];
+      }
+
+      let query =
+        "/searchProfile?from=" + pathName + "&&profile=" + formattedDisplayName;
+
+      this.props.history.push(query);
+    }
   };
 
   checkValidity(value, rules) {
@@ -386,24 +420,13 @@ class GeneralProfilePage extends Component {
     this.reset();
   };
 
+  toggleDropDown = (prevState) => {
+    this.setState(prevState => ({ showDropDown: !prevState.showDropDown }))
+  }
+
   render() {
     if (this.state.error) {
-      return (
-        <React.Fragment>
-          <h3>Oops...The user you are looking for doesn't seem to exist</h3>
-          <div className={classes.Selections}>
-            <a onClick={() => this.props.history.goBack()}>
-              {
-                <FontAwesomeIcon
-                  icon={faArrowLeft}
-                  style={{ paddingRight: "5px" }}
-                />
-              }
-              Go back
-            </a>
-          </div>
-        </React.Fragment>
-      );
+      return <h3>Oops...The user you are looking for doesn't seem to exist</h3>;
     }
 
     if (this.state.loading) {
@@ -483,34 +506,255 @@ class GeneralProfilePage extends Component {
       </Modal>
     );
 
+    const numStar = (
+      <div
+        style={{
+          textAlign: "left",
+          fontSize: "20px",
+          alignItems: "center",
+        }}
+      >
+        <p>
+          <FontAwesomeIcon
+            icon={faStar}
+            style={
+              this.state.numStars > 0 ? { color: "#ff5138" } : { color: "gray" }
+            }
+          />
+          <FontAwesomeIcon
+            icon={faStar}
+            style={
+              this.state.numStars > 1 ? { color: "#ff5138" } : { color: "gray" }
+            }
+          />
+          <FontAwesomeIcon
+            icon={faStar}
+            style={
+              this.state.numStars > 2 ? { color: "#ff5138" } : { color: "gray" }
+            }
+          />
+          <FontAwesomeIcon
+            icon={faStar}
+            style={
+              this.state.numStars > 3 ? { color: "#ff5138" } : { color: "gray" }
+            }
+          />
+          <FontAwesomeIcon
+            icon={faStar}
+            style={
+              this.state.numStars > 4 ? { color: "#ff5138" } : { color: "gray" }
+            }
+          /> (
+          {this.state.numReviews <= 1
+            ? this.state.numReviews + " review"
+            : this.state.numReviews + " reviews"}
+          )
+        </p>
+      </div>
+    );
+
+    const activeButtonStyle = {
+      fontWeight: "bold",
+      color: "#dd5641",
+      borderBottom: "3px solid #dd5641",
+      outline: "none",
+    };
+
+    let tabs = (
+      <div className={classes.DropDown}>
+        <button
+          onClick={() => {
+            this.onShowPastPostHandler();
+            this.props.windowWidth <= 950 ?
+              this.toggleDropDown() :
+              null
+          }}
+          style={this.state.showPastListing ?
+            activeButtonStyle :
+            null} >
+          {<FontAwesomeIcon icon={faBook} style={{ paddingRight: "5px" }} />}
+            Listings
+        </button>
+        <button
+          onClick={() => {
+            this.onShowRequestHandler();
+            this.props.windowWidth <= 950 ?
+              this.toggleDropDown() :
+              null
+          }}
+          style={this.state.showRequests ?
+            activeButtonStyle :
+            null} >
+          {<FontAwesomeIcon icon={faTasks} style={{ paddingRight: "5px" }} />}
+            Requests
+          </button>
+        <button
+          onClick={() => {
+            this.onShowReviewsHandler();
+            this.props.windowWidth <= 950 ?
+              this.toggleDropDown() :
+              null
+          }}
+          style={this.state.showComments ?
+            activeButtonStyle :
+            null} >
+          {<FontAwesomeIcon icon={faCommentDots} style={{ paddingRight: "5px" }} />}
+            Reviews
+        </button>
+      </div>
+    );
+
+    let navigation;
+
+    if (this.props.windowWidth > 950) {
+      navigation = tabs;
+    } else {
+      const currentItemShowing = (
+        <div
+          className={classes.Navigation}
+          onClick={this.toggleDropDown}>
+          {this.state.showPastListing ?
+            <button style={activeButtonStyle}>
+              <FontAwesomeIcon
+                icon={faBook}
+                style={{
+                  paddingRight: "5px",
+                }} />
+            Listings
+          </button> : this.state.showRequests ?
+              <button style={activeButtonStyle}>
+                <FontAwesomeIcon
+                  icon={faTasks}
+                  style={{
+                    paddingRight: "5px",
+                  }} />
+            Requests
+          </button> :
+              <button style={activeButtonStyle}>
+                <FontAwesomeIcon
+                  icon={faHandHoldingUsd}
+                  style={{
+                    paddingRight: "5px",
+                  }} />
+             Reviews
+           </button>}
+          <div>
+            <FontAwesomeIcon
+              icon={faChevronDown}
+              className={classes.arrowDown}
+            />
+          </div>
+        </div>
+      );
+
+      const dropDown = this.state.showDropDown ?
+        tabs :
+        null;
+
+      navigation = (
+        <div className={classes.DropDownContent}>
+          {currentItemShowing}
+          <div className={classes.filter}>{dropDown}</div>
+        </div>
+      );
+    }
+
+    let profile = (
+      <div className={classes.UserDetails}>
+        <div>
+          <img
+            className={classes.ProfileImage}
+            src={this.state.photoURL}
+            alt="profile"
+          />
+        </div>
+        <div>
+          <p
+            style={{
+              fontSize: "30px",
+              lineHeight: "38px",
+              fontWeight: "400",
+              color: "black",
+            }}
+          >
+            @{this.state.displayName} {numStar}
+          </p>
+          <p>
+            <b>Date joined: </b>
+            {this.state.dateJoined}
+          </p>
+          <p>
+            <b>Last sign in: </b>
+            {this.state.lastSignIn}
+          </p>
+          {this.props.isAuthenticated ? (
+            <p style={{ cursor: "pointer" }} onClick={this.showReportModal}>
+              {
+                <FontAwesomeIcon
+                  icon={faExclamationTriangle}
+                  style={{ paddingRight: "5px", color: "red" }}
+                />
+              }
+              <b style={{ color: "red" }}>Report user</b>
+            </p>
+          ) : (
+              <p style={{ cursor: "pointer" }}>
+                <Link to="/auth" style={{ textDecoration: "none" }}>
+                  {
+                    <FontAwesomeIcon
+                      icon={faExclamationTriangle}
+                      style={{ paddingRight: "5px", color: "red" }}
+                    />
+                  }
+                  <b style={{ color: "red" }}>Report user</b>
+                </Link>
+              </p>
+            )}
+        </div>
+      </div>
+    );
+
+    let reviews = null;
+    if (this.state.showComments) {
+      reviews = this.state.comments.map((comment) => (
+        <li key={comment.key}>
+          <Comment
+            isListingOwner={comment.isListingOwner}
+            profilePicture={comment.profilePicture}
+            sender={comment.sender}
+            date={comment.date}
+            time={comment.time}
+            numStars={comment.numStars}
+            content={comment.content}
+            key={comment.key}
+            onClick={() => this.searchProfileHandler(comment.sender)}
+          />
+        </li>
+      ));
+    }
+
     return (
-      <div>
+      <React.Fragment>
         {reportUser}
         {reportSummary}
-        <ProfileComponent
-          //report user
-          showReportModal={this.showReportModal}
-          //
-          history={this.props.history}
-          showPastListing={this.state.showPastListing}
-          showRequests={this.state.showRequests}
-          showComments={this.state.showComments}
-          onShowPastPostHandler={this.onShowPastPostHandler}
-          onShowRequestHandler={this.onShowRequestHandler}
-          onShowReviewsHandler={this.onShowReviewsHandler}
-          onCancelSearchHandler={this.onCancelSearchHandler}
-          searchProfileHandler={this.searchProfileHandler}
-          // from firebase
-          numStars={this.state.numStars}
-          numReviews={this.state.numReviews}
-          comments={this.state.comments}
-          photoURL={this.state.photoURL}
-          displayName={this.state.displayName}
-          email={this.state.email}
-          dateJoined={this.state.dateJoined}
-          lastSignIn={this.state.lastSignIn}
-        />
-      </div>
+        <div className={classes.Background} />
+        <div className={classes.Profile}>
+          {profile}
+          <div className={classes.Information}>
+            {navigation}
+            <div className={classes.Details}>
+              {this.state.showPastListing ||
+                this.state.showRequests ? (
+                  <FilterResults history={this.props.history} />
+                ) : this.state.comments.length < 1 ? (
+                  <h3>Oops..No reviews</h3>
+                ) : (
+                    <ul className={classes.Reviews}>{reviews}</ul>
+                  )}
+            </div>
+          </div>
+        </div>
+      </React.Fragment>
     );
   }
 }
@@ -520,6 +764,8 @@ const mapStateToProps = (state) => {
     filterType: state.search.filterType,
     searchObject: state.search.searchObject,
     displayName: state.auth.displayName,
+    isAuthenticated: state.auth.user !== null,
+    windowWidth: state.window.width,
   };
 };
 

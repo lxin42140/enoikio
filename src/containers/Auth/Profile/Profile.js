@@ -709,24 +709,6 @@ class Profile extends Component {
       ));
     }
 
-    // return (
-    //   <React.Fragment>
-    //     <div className={classes.Background} />
-    //     <div className={classes.Profile}>
-    //       {profile}
-    //       {editProfileImage}
-    //       <div className={classes.Information}>
-    //         {navigation}
-    //         <div className={classes.Details}>
-    //           {this.state.showPastListing ||
-    //             this.state.showOnRent ||
-    //             this.state.showRequest ? (
-    //               <FilterResults history={this.props.history} />
-    //             ) : this.state.comments.length < 1 ? (
-    //               <h3>Oops..No reviews</h3>
-    //             ) : (
-    //                 <ul className={classes.Reviews}>{reviews}</ul>
-    //               )}
     const formElementsArray = [];
 
     for (let key in this.state.dataForm) {
@@ -830,25 +812,6 @@ class Profile extends Component {
     );
   }
 }
-
-// return (
-//   <React.Fragment>
-// <div className={classes.Background} />
-// <div className={classes.Profile}>
-//   {profile}
-//   {editProfileImage}
-//   <div className={classes.Information}>
-//     {navigation}
-//     <div className={classes.Details}>
-//       {this.state.showPastListing ||
-//         this.state.showOnRent ||
-//         this.state.showRequest ? (
-//           <FilterResults history={this.props.history} />
-//         ) : this.state.comments.length < 1 ? (
-//           <h3>Oops..No reviews</h3>
-//         ) : (
-//             <ul className={classes.Reviews}>{reviews}</ul>
-//           )}
 
 const mapStateToProps = (state) => {
   return {
