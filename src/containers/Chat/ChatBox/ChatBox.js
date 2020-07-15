@@ -65,9 +65,11 @@ class ChatBox extends Component {
   };
 
   searchProfileHandler = (displayName) => {
+    const pathName = this.props.history.location.pathname;
     let formattedDisplayName = displayName.toLowerCase().split(" ").join("");
     this.props.setFilterProfile(formattedDisplayName);
-    this.props.history.push("/searchProfile?profile=" + formattedDisplayName);
+    const query = "/searchProfile?from=" + pathName + "&&profile=" + formattedDisplayName;
+    this.props.history.push(query);
   };
 
   render() {
@@ -76,9 +78,11 @@ class ChatBox extends Component {
         <div
           className={classes.ChatBoxHeader}
           style={{ cursor: "pointer" }}
-          onClick={() => this.searchProfileHandler(this.props.recipient)}
         >
-          <div className={classes.DisplayName}>
+          <div 
+            className={classes.DisplayName}
+            onClick={() => this.searchProfileHandler(this.props.recipient)}
+            >
             <h4>{this.props.recipient}</h4>
           </div>
           <div
