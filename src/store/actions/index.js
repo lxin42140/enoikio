@@ -43,4 +43,5 @@ export {
 
 export {
   setWindowWidth,
+  toggleSideBar,
 } from "./Window"

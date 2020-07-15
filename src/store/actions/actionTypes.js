@@ -65,3 +65,4 @@ export const RESET_RECIPIENT = "RESET_RECIPIENT";
 
 /*----------------------Window----------------------*/
 export const SET_WINDOW_WIDTH = "SET_WINDOW_WIDTH";
+export const TOGGLE_SIDE_BAR = "TOGGLE_SIDE_BAR";

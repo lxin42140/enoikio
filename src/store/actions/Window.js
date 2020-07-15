@@ -6,3 +6,9 @@ export const setWindowWidth = (width) => {
     width: width,
   };
 };
+
+export const toggleSideBar = () => {
+  return {
+    type: actionTypes.TOGGLE_SIDE_BAR,
+  }
+}

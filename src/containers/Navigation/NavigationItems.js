@@ -31,11 +31,13 @@ class NavigationItems extends Component {
   };
 
   showSideBar = () => {
-    this.setState({ showSideBar: true })
-  }
+    this.setState({ showSideBar: true });
+    this.props.dispatchToggleSideBar();
+  };
 
   hideSideBar = () => {
     this.setState({ showSideBar: false });
+    this.props.dispatchToggleSideBar();
   };
 
   cancelSearchHandler = () => {
@@ -53,7 +55,6 @@ class NavigationItems extends Component {
 
   //TODO:
   //1. FIX TRANSITION OF SIDEBAR
-  //2. NEED TO ADJUST FOR WHEN USER SCROLL WHEN SIDEBAR IS AVAILABLE
   render() {
     let nav;
 
@@ -259,6 +260,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     setFilterTermForListing: (filterType) =>
       dispatch(actions.setFilterListings(filterType, "")),
+    dispatchToggleSideBar: () => 
+      dispatch(actions.toggleSideBar()),
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(NavigationItems);
