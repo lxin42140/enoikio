@@ -6,11 +6,10 @@
     padding-right: 5%
 }
 
-/* @media (max-width: 1000px) {
-    .Content {
-        overflow-x: auto;
-    }
-} */
+.LockScroll {
+    position: fixed;
+    top: 0;
+}
 
 @media (max-width: 320px) {
     .Content {

@@ -7,13 +7,18 @@ import NavigationItems from "../../containers/Navigation/NavigationItems";
 
 class Layout extends Component {
   render() {
+    const style = [classes.Content];
+    if (this.props.lockScroll) {
+      style.push(classes.LockScroll);
+    }
+
     return (
       <React.Fragment>
         <NavigationItems
           isAuthenticated={this.props.isAuthenticated}
           history={this.props.history}
         />
-        <main className={classes.Content}>{this.props.children}</main>
+        <main className={style.join(" ")}>{this.props.children}</main>
       </React.Fragment>
     );
   }
@@ -22,6 +27,7 @@ class Layout extends Component {
 const mapStateToProps = (state) => {
   return {
     isAuthenticated: state.auth.user !== null,
+    lockScroll: state.window.showSideBar === true,
   };
 };
 
