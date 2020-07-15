@@ -153,10 +153,6 @@
     .Navigation {
         width: fit-content;
     }
-
-    .Navigation:hover {
-        background-color: #e7ebee;
-    }
 }
 
 /* Any screen smaller than iPad */

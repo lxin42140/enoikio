@@ -474,42 +474,40 @@ class Profile extends Component {
           alignItems: "center",
         }}
       >
-        <p>
-          <FontAwesomeIcon
-            icon={faStar}
-            style={
-              this.state.numStars > 0 ? { color: "#ff5138" } : { color: "gray" }
-            }
-          />
-          <FontAwesomeIcon
-            icon={faStar}
-            style={
-              this.state.numStars > 1 ? { color: "#ff5138" } : { color: "gray" }
-            }
-          />
-          <FontAwesomeIcon
-            icon={faStar}
-            style={
-              this.state.numStars > 2 ? { color: "#ff5138" } : { color: "gray" }
-            }
-          />
-          <FontAwesomeIcon
-            icon={faStar}
-            style={
-              this.state.numStars > 3 ? { color: "#ff5138" } : { color: "gray" }
-            }
-          />
-          <FontAwesomeIcon
-            icon={faStar}
-            style={
-              this.state.numStars > 4 ? { color: "#ff5138" } : { color: "gray" }
-            }
-          /> (
-          {this.state.numReviews <= 1
-            ? this.state.numReviews + " review"
-            : this.state.numReviews + " reviews"}
+        <FontAwesomeIcon
+          icon={faStar}
+          style={
+            this.state.numStars > 0 ? { color: "#ff5138" } : { color: "gray" }
+          }
+        />
+        <FontAwesomeIcon
+          icon={faStar}
+          style={
+            this.state.numStars > 1 ? { color: "#ff5138" } : { color: "gray" }
+          }
+        />
+        <FontAwesomeIcon
+          icon={faStar}
+          style={
+            this.state.numStars > 2 ? { color: "#ff5138" } : { color: "gray" }
+          }
+        />
+        <FontAwesomeIcon
+          icon={faStar}
+          style={
+            this.state.numStars > 3 ? { color: "#ff5138" } : { color: "gray" }
+          }
+        />
+        <FontAwesomeIcon
+          icon={faStar}
+          style={
+            this.state.numStars > 4 ? { color: "#ff5138" } : { color: "gray" }
+          }
+        /> (
+        {this.state.numReviews <= 1
+          ? this.state.numReviews + " review"
+          : this.state.numReviews + " reviews"}
           )
-        </p>
       </div>
     );
 
@@ -529,7 +527,8 @@ class Profile extends Component {
               this.toggleDropDown() :
               null
           }}
-          style={this.state.showPastListing ?
+          style={this.props.filterType === "displayName" && 
+          !this.state.showComments ?
             activeButtonStyle :
             null} >
           {<FontAwesomeIcon icon={faBook} style={{ paddingRight: "5px" }} />}
@@ -542,7 +541,8 @@ class Profile extends Component {
               this.toggleDropDown() :
               null
           }}
-          style={this.state.showRequest ?
+          style={this.props.filterType === "requests" && 
+          !this.state.showComments ?
             activeButtonStyle :
             null} >
           {<FontAwesomeIcon icon={faTasks} style={{ paddingRight: "5px" }} />}
@@ -555,7 +555,7 @@ class Profile extends Component {
               this.toggleDropDown() :
               null
           }}
-          style={this.state.showOnRent ?
+          style={this.props.filterType === "onRent" && !this.state.showComments ?
             activeButtonStyle :
             null} >
           {<FontAwesomeIcon icon={faHandHoldingUsd} style={{ paddingRight: "5px" }} />}
@@ -586,39 +586,41 @@ class Profile extends Component {
         <div
           className={classes.Navigation}
           onClick={this.toggleDropDown}>
-          {this.state.showPastListing ?
-            <button style={activeButtonStyle}>
-              <FontAwesomeIcon
-                icon={faBook}
-                style={{
-                  paddingRight: "5px",
-                }} />
-            Listings
-          </button> : this.state.showRequest ?
+          <div>
+            {this.state.showPastListing ?
               <button style={activeButtonStyle}>
                 <FontAwesomeIcon
-                  icon={faTasks}
+                  icon={faBook}
                   style={{
                     paddingRight: "5px",
                   }} />
+            Listings
+          </button> : this.state.showRequest ?
+                <button style={activeButtonStyle}>
+                  <FontAwesomeIcon
+                    icon={faTasks}
+                    style={{
+                      paddingRight: "5px",
+                    }} />
             Requests
           </button> : this.state.showOnRent ?
-                <button style={activeButtonStyle}>
-                  <FontAwesomeIcon
-                    icon={faHandHoldingUsd}
-                    style={{
-                      paddingRight: "5px",
-                    }} />
+                  <button style={activeButtonStyle}>
+                    <FontAwesomeIcon
+                      icon={faHandHoldingUsd}
+                      style={{
+                        paddingRight: "5px",
+                      }} />
             On Rent
           </button> :
-                <button style={activeButtonStyle}>
-                  <FontAwesomeIcon
-                    icon={faHandHoldingUsd}
-                    style={{
-                      paddingRight: "5px",
-                    }} />
+                  <button style={activeButtonStyle}>
+                    <FontAwesomeIcon
+                      icon={faHandHoldingUsd}
+                      style={{
+                        paddingRight: "5px",
+                      }} />
              Reviews
            </button>}
+          </div>
           <div>
             <FontAwesomeIcon
               icon={faChevronDown}
@@ -661,8 +663,9 @@ class Profile extends Component {
               color: "black",
             }}
           >
-            @{this.props.displayName} {numStar}
+            @{this.props.displayName} 
           </p>
+          {numStar}
           <p>
             <b>Email: </b>
             {this.props.email}
@@ -825,6 +828,7 @@ const mapStateToProps = (state) => {
     updatingUserDetails: state.auth.updatingUserDetails,
     updatedUserDetails: state.auth.updatedUserDetails,
     windowWidth: state.window.width,
+    filterType: state.search.filterType,
   };
 };
 

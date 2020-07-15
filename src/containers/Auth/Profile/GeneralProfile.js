@@ -514,42 +514,40 @@ class GeneralProfilePage extends Component {
           alignItems: "center",
         }}
       >
-        <p>
-          <FontAwesomeIcon
-            icon={faStar}
-            style={
-              this.state.numStars > 0 ? { color: "#ff5138" } : { color: "gray" }
-            }
-          />
-          <FontAwesomeIcon
-            icon={faStar}
-            style={
-              this.state.numStars > 1 ? { color: "#ff5138" } : { color: "gray" }
-            }
-          />
-          <FontAwesomeIcon
-            icon={faStar}
-            style={
-              this.state.numStars > 2 ? { color: "#ff5138" } : { color: "gray" }
-            }
-          />
-          <FontAwesomeIcon
-            icon={faStar}
-            style={
-              this.state.numStars > 3 ? { color: "#ff5138" } : { color: "gray" }
-            }
-          />
-          <FontAwesomeIcon
-            icon={faStar}
-            style={
-              this.state.numStars > 4 ? { color: "#ff5138" } : { color: "gray" }
-            }
-          /> (
-          {this.state.numReviews <= 1
-            ? this.state.numReviews + " review"
-            : this.state.numReviews + " reviews"}
+        <FontAwesomeIcon
+          icon={faStar}
+          style={
+            this.state.numStars > 0 ? { color: "#ff5138" } : { color: "gray" }
+          }
+        />
+        <FontAwesomeIcon
+          icon={faStar}
+          style={
+            this.state.numStars > 1 ? { color: "#ff5138" } : { color: "gray" }
+          }
+        />
+        <FontAwesomeIcon
+          icon={faStar}
+          style={
+            this.state.numStars > 2 ? { color: "#ff5138" } : { color: "gray" }
+          }
+        />
+        <FontAwesomeIcon
+          icon={faStar}
+          style={
+            this.state.numStars > 3 ? { color: "#ff5138" } : { color: "gray" }
+          }
+        />
+        <FontAwesomeIcon
+          icon={faStar}
+          style={
+            this.state.numStars > 4 ? { color: "#ff5138" } : { color: "gray" }
+          }
+        /> (
+        {this.state.numReviews <= 1
+          ? this.state.numReviews + " review"
+          : this.state.numReviews + " reviews"}
           )
-        </p>
       </div>
     );
 
@@ -677,8 +675,9 @@ class GeneralProfilePage extends Component {
               color: "black",
             }}
           >
-            @{this.state.displayName} {numStar}
+            @{this.state.displayName}
           </p>
+            {numStar}
           <p>
             <b>Date joined: </b>
             {this.state.dateJoined}
