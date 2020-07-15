@@ -206,9 +206,9 @@ class Offer extends Component {
       true
     ).isValid();
 
-    let startRentalDate = Number(this.state.startRental.split("/").join(""));
-    let endRentalDate = Number(this.state.endRental.split("/").join(""));
-    let today = Number(moment().format("DDMMYYYY"));
+    let startRentalDate = Number(this.state.startRental.split("/").reverse().join(""));
+    let endRentalDate = Number(this.state.endRental.split("/").reverse().join(""));
+    let today = Number(moment().format("YYYYMMDD"));
 
     if (startRentalDate < today) {
       startDateIsValid = false;
