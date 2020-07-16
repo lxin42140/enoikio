@@ -129,12 +129,8 @@ class ExpandedListing extends Component {
   closeExpandedListing = () => {
     if (this.props.history.location.search) {
       let query = this.props.history.location.search.split("=")[1];
-      if (query.split("&&").length > 1) {
-        // query = query.split("&&")[0];
-        this.props.history.goBack();
-      } else {
-        this.props.history.push(query);
-      }
+      query = query.split("&&")[0];
+      this.props.history.push(query);
     } else {
       this.props.history.goBack();
     }
@@ -212,17 +208,15 @@ class ExpandedListing extends Component {
             @{this.props.expandedListing.displayName}
           </p>
         </div>
-        <Link to="/auth">
-          <Button>
-            {
-              <FontAwesomeIcon
-                icon={faComments}
-                style={{ paddingRight: "5px" }}
-              />
-            }
-            Chat to make offer
-          </Button>
-        </Link>
+        <Button onClick={() => this.props.history.push("/auth")}>
+          {
+            <FontAwesomeIcon
+              icon={faComments}
+              style={{ paddingRight: "5px" }}
+            />
+          }
+          Chat to make offer
+        </Button>
       </React.Fragment>
     );
 

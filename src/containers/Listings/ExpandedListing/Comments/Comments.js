@@ -434,7 +434,7 @@ class Comments extends Component {
 
     return (
       <div className={classes.Comments}>
-        {replyPopup}
+        {this.state.toggleReply ? replyPopup : null}
         {this.props.isAuthenticated ? (
           commentInput
         ) : (

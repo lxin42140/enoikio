@@ -615,34 +615,42 @@ class EditPost extends Component {
                 disabled={count >= 3}
               />
             </div>
-            <Button
-              btnType="Important"
-              onClick={this.toggleModalHandler}
-              disabled={!this.state.formIsValid || this.state.initialEdit}
-            >
-              {
-                <FontAwesomeIcon
-                  icon={faCheck}
-                  style={{ paddingRight: "5px" }}
-                />
-              }
-              SUBMIT
-            </Button>
-            <Button
-              onClick={() => {
-                this.props.history.push(
-                  "/expanded-listing" + this.props.history.location.search
-                );
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
               }}
             >
-              {
-                <FontAwesomeIcon
-                  icon={faTimes}
-                  style={{ paddingRight: "5px" }}
-                />
-              }
-              Cancel
-            </Button>
+              <Button
+                btnType="Important"
+                onClick={this.toggleModalHandler}
+                disabled={!this.state.formIsValid || this.state.initialEdit}
+              >
+                {
+                  <FontAwesomeIcon
+                    icon={faCheck}
+                    style={{ paddingRight: "5px" }}
+                  />
+                }
+                SUBMIT
+              </Button>
+              <Button
+                onClick={() => {
+                  this.props.history.push(
+                    "/expanded-listing" + this.props.history.location.search
+                  );
+                }}
+              >
+                {
+                  <FontAwesomeIcon
+                    icon={faTimes}
+                    style={{ paddingRight: "5px" }}
+                  />
+                }
+                Cancel
+              </Button>
+            </div>
           </React.Fragment>
         )}
       </div>

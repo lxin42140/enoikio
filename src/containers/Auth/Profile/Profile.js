@@ -861,8 +861,8 @@ class Profile extends Component {
 
     return (
       <div className={classes.profile}>
-        {feedbackPopup}
-        {reportSummary}
+        {this.state.feedbackPopup ? feedbackPopup : null}
+        {this.state.showSummary ? reportSummary : null}
         <div className={classes.Background} />
         <div className={classes.Profile}>
           {profile}

@@ -428,7 +428,11 @@ class GeneralProfilePage extends Component {
 
   render() {
     if (this.state.error) {
-      return <h3>Oops...The user you are looking for doesn't seem to exist</h3>;
+      return (
+        <h3 style={{ color: "grey" }}>
+          Oops...The user you are looking for doesn't seem to exist
+        </h3>
+      );
     }
 
     if (this.state.loading) {
@@ -781,8 +785,8 @@ class GeneralProfilePage extends Component {
 
     return (
       <div className={classes.profile}>
-        {reportUser}
-        {reportSummary}
+        {this.state.reportUserPopup ? reportUser : null}
+        {this.state.showSummary ? reportSummary : null}
         <div className={classes.Background}>
           <FontAwesomeIcon
             icon={faWindowClose}
