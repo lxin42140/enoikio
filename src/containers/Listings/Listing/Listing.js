@@ -245,173 +245,165 @@ class Listing extends Component {
 
     let listing;
 
-    if (this.props.filterType) {
-      switch (this.props.filterType) {
-        case "onRent":
-          listing = (
-            <React.Fragment>
-              <div
-                onClick={this.expandListingHandler}
-                style={{ cursor: "pointer", marginBottom: "-30px" }}
-              >
-                <div
-                  className={
-                    this.props.textbook.split(" ").length > 4
-                      ? classes.TextBookLongTitle
-                      : classes.Textbook
-                  }
-                >
-                  <p>
-                    {this.props.module}:《{this.props.textbook}》
-                  </p>
-                </div>
-                <div style={{ textAlign: "center", height: "150px" }}>
-                  <img
-                    src={this.state.image}
-                    alt={
-                      this.state.error
-                        ? "Unable to load image"
-                        : "Loading image..."
-                    }
-                    style={{
-                      flex: "none",
-                      objectFit: "cover",
-                      width: "150px",
-                      height: "150px",
-                      borderRadius: "4px",
-                    }}
-                  />
-                </div>
-                <div>
-                  <ul className={classes.Description}>
-                    <li>
-                      <b>Rental duration:</b>
-                      {this.props.status.split("from")[1]}
-                    </li>
-                    <li>
-                      <b>Lessee: </b> {this.props.lessee}
-                    </li>
-                  </ul>
-                </div>
-              </div>
-              <div
+    if (this.props.filterType && this.props.filterType === "onRent") {
+      listing = (
+        <React.Fragment>
+          <div
+            onClick={this.expandListingHandler}
+            style={{ cursor: "pointer", marginBottom: "-30px" }}
+          >
+            <div
+              className={
+                this.props.textbook.split(" ").length > 4
+                  ? classes.TextBookLongTitle
+                  : classes.Textbook
+              }
+            >
+              <p>
+                {this.props.module}:《{this.props.textbook}》
+              </p>
+            </div>
+            <div style={{ textAlign: "center", height: "150px" }}>
+              <img
+                src={this.state.image}
+                alt={
+                  this.state.error ? "Unable to load image" : "Loading image..."
+                }
                 style={{
-                  display: "flex",
-                  alignItems: "center",
-                  marginTop: "auto",
-                  justifyContent: "center",
+                  flex: "none",
+                  objectFit: "cover",
+                  width: "150px",
+                  height: "150px",
+                  borderRadius: "4px",
                 }}
-              >
-                <Button
-                  btnType="Important"
-                  onClick={(event) =>
-                    this.onChangeRentalHandler(event, "COMPLETED_OFFER")
-                  }
-                >
-                  {
-                    <FontAwesomeIcon
-                      icon={faCheck}
-                      style={{ paddingRight: "5px" }}
-                    />
-                  }
-                  Completed
-                </Button>
-                <Button
-                  onClick={(event) =>
-                    this.onChangeRentalHandler(event, "REJECTED_OFFER")
-                  }
-                >
-                  {
-                    <FontAwesomeIcon
-                      icon={faTimes}
-                      style={{ paddingRight: "5px" }}
-                    />
-                  }
-                  Reject
-                </Button>
-              </div>
-            </React.Fragment>
-          );
-          break;
-        case "displayName":
-          listing = (
-            <React.Fragment>
-              <div
-                onClick={this.expandListingHandler}
-                style={{ cursor: "pointer", marginBottom: "-30px" }}
-              >
-                <div
-                  className={
-                    this.props.textbook.split(" ").length > 4
-                      ? classes.TextBookLongTitle
-                      : classes.Textbook
-                  }
-                >
-                  <p>
-                    {this.props.module}:《{this.props.textbook}》
+              />
+            </div>
+            <div>
+              <ul className={classes.Description}>
+                <li>
+                  <b>Rental duration:</b>
+                  {this.props.status.split("from")[1]}
+                </li>
+                <li>
+                  <b>Lessee: </b> {this.props.lessee}
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              marginTop: "auto",
+              justifyContent: "center",
+            }}
+          >
+            <Button
+              btnType="Important"
+              onClick={(event) =>
+                this.onChangeRentalHandler(event, "COMPLETED_OFFER")
+              }
+            >
+              {
+                <FontAwesomeIcon
+                  icon={faCheck}
+                  style={{ paddingRight: "5px" }}
+                />
+              }
+              Completed
+            </Button>
+            <Button
+              onClick={(event) =>
+                this.onChangeRentalHandler(event, "REJECTED_OFFER")
+              }
+            >
+              {
+                <FontAwesomeIcon
+                  icon={faTimes}
+                  style={{ paddingRight: "5px" }}
+                />
+              }
+              Reject
+            </Button>
+          </div>
+        </React.Fragment>
+      );
+    } else if (
+      this.props.filterType &&
+      this.props.filterType === "displayName"
+    ) {
+      listing = (
+        <React.Fragment>
+          <div
+            onClick={this.expandListingHandler}
+            style={{ cursor: "pointer", marginBottom: "-30px" }}
+          >
+            <div
+              className={
+                this.props.textbook.split(" ").length > 4
+                  ? classes.TextBookLongTitle
+                  : classes.Textbook
+              }
+            >
+              <p>
+                {this.props.module}:《{this.props.textbook}》
+              </p>
+            </div>
+            <div style={{ textAlign: "center", height: "200px" }}>
+              <img
+                src={this.state.image}
+                alt={
+                  this.state.error ? "Unable to load image" : "Loading image..."
+                }
+                style={{
+                  flex: "none",
+                  objectFit: "cover",
+                  width: "200px",
+                  height: "200px",
+                }}
+              />
+            </div>
+            <div>
+              <ul className={classes.Description}>
+                <li>
+                  <b>Type: </b>
+                  {this.props.listingType}
+                </li>
+                <li>
+                  <p style={{ margin: "0px" }}>
+                    <b>Status: </b>
+                    {this.props.status}
                   </p>
-                </div>
-                <div style={{ textAlign: "center", height: "200px" }}>
-                  <img
-                    src={this.state.image}
-                    alt={
-                      this.state.error
-                        ? "Unable to load image"
-                        : "Loading image..."
-                    }
-                    style={{
-                      flex: "none",
-                      objectFit: "cover",
-                      width: "200px",
-                      height: "200px",
-                    }}
-                  />
-                </div>
-                <div>
-                  <ul className={classes.Description}>
-                    <li>
-                      <b>Type: </b>
-                      {this.props.listingType}
-                    </li>
-                    <li>
-                      <p style={{ margin: "0px" }}>
-                        <b>Status: </b>
-                        {this.props.status}
-                      </p>
-                    </li>
-                    {this.props.listingType === "rent" ? (
-                      <li>
-                        <b>Price: </b>${this.props.price} /month
-                      </li>
-                    ) : (
-                      <li>
-                        <b>Price: </b>${this.props.price}
-                      </li>
-                    )}
-                    <li>
-                      <b>Delivery method: </b>
-                      {this.props.deliveryMethod}
-                    </li>
-                    {this.props.deliveryMethod === "mail" ? null : (
-                      <li>
-                        <b>Location: </b>
-                        {this.props.location}
-                      </li>
-                    )}
-                    <li>
-                      <b>Posted on: </b>
-                      {this.props.date}
-                    </li>
-                  </ul>
-                </div>
-              </div>
-              {heartIcon}
-            </React.Fragment>
-          );
-          break;
-        default:
-          break;
-      }
+                </li>
+                {this.props.listingType === "rent" ? (
+                  <li>
+                    <b>Price: </b>${this.props.price} /month
+                  </li>
+                ) : (
+                  <li>
+                    <b>Price: </b>${this.props.price}
+                  </li>
+                )}
+                <li>
+                  <b>Delivery method: </b>
+                  {this.props.deliveryMethod}
+                </li>
+                {this.props.deliveryMethod === "mail" ? null : (
+                  <li>
+                    <b>Location: </b>
+                    {this.props.location}
+                  </li>
+                )}
+                <li>
+                  <b>Posted on: </b>
+                  {this.props.date}
+                </li>
+              </ul>
+            </div>
+          </div>
+          {heartIcon}
+        </React.Fragment>
+      );
     } else {
       listing = (
         <React.Fragment>

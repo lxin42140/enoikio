@@ -112,7 +112,7 @@ class NavigationItems extends Component {
               Chats
             </NavigationItem>
             <NavigationItem
-              link="/profile"
+              link="/profile?from=/profile&&profile=personal"
               onClick={() => {
                 this.props.setFilterTermForListing("displayName");
                 this.hideSideBar();
@@ -253,7 +253,7 @@ class NavigationItems extends Component {
               Chats
             </NavigationItem>
             <NavigationItem
-              link="/profile?profile=personal"
+              link="/profile?from=/profile&&profile=personal"
               onClick={() => this.props.setFilterTermForListing("displayName")}
             >
               {

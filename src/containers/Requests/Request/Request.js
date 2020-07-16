@@ -44,7 +44,7 @@ class Request extends Component {
       formattedDisplayName
     ) {
       this.props.setFilterTermForListing("displayName");
-      this.props.history.push("/profile");
+      this.props.history.push("/profile?from=/profile&&profile=personal");
     } else {
       this.props.setFilterProfile(formattedDisplayName);
 

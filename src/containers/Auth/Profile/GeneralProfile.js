@@ -123,6 +123,10 @@ class GeneralProfilePage extends Component {
     formIsValid: false,
   };
 
+  componentDidMount() {
+    this.fetchUserProfile();
+  }
+
   componentDidUpdate() {
     if (this.props.history.location.search) {
       let searchQueryName = this.props.history.location.search
@@ -139,9 +143,6 @@ class GeneralProfilePage extends Component {
     } else if (this.state.showPastListing && this.state.showRequests) {
       this.setState({ showRequests: false });
     }
-  }
-  componentDidMount() {
-    this.fetchUserProfile();
   }
 
   fetchUserProfile = () => {

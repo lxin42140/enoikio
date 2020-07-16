@@ -100,6 +100,7 @@ class SearchBar extends Component {
         this.state.filterType,
         this.state.userInput.toLowerCase().split(" ").join("")
       );
+      
       let pathName = this.props.history.location.pathname;
 
       if (this.props.history.location.search) {
