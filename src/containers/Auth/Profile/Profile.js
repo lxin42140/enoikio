@@ -516,11 +516,19 @@ class Profile extends Component {
       </div>
     );
 
-    const activeButtonStyle = {
-      fontWeight: "bold",
-      color: "#dd5641",
-      outline: "none",
-    };
+    const activeButtonStyle =
+      this.props.windowWidth <= 950
+        ? {
+            fontWeight: "bold",
+            color: "#dd5641",
+            outline: "none",
+          }
+        : {
+            fontWeight: "bold",
+            color: "#dd5641",
+            outline: "none",
+            borderBottom: "3px solid #dd5641",
+          };
 
     let tabs = (
       <div className={classes.DropDown}>
@@ -852,7 +860,7 @@ class Profile extends Component {
     );
 
     return (
-      <React.Fragment>
+      <div className={classes.profile}>
         {feedbackPopup}
         {reportSummary}
         <div className={classes.Background} />
@@ -874,7 +882,7 @@ class Profile extends Component {
             </div>
           </div>
         </div>
-      </React.Fragment>
+      </div>
     );
   }
 }
