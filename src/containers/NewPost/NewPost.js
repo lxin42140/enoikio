@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
 import moment from "moment";
 import axios from "axios";
 import {
@@ -605,61 +604,74 @@ class NewPost extends Component {
 
     let postSummary = (
       <Modal show={this.state.showModal}>
-        <h1>Confirm listing details:</h1>
-        <p>
-          <b>Module code: </b>
-          {this.state.dataForm.module.value}
-        </p>
-        <p>
-          <b>Textbook: </b>《{this.state.dataForm.textbook.value}》
-        </p>
-        <p>
-          <b>Type: </b>
-          {this.state.dataForm.listingType.value}
-        </p>
-        <p>
-          <b>Price: </b>
-          {this.state.dataForm.listingType.value === "rent"
-            ? this.state.dataForm.rentalPrice.value
-            : this.state.dataForm.sellingPrice.value}
-        </p>
-        <p>
-          <b>Delivery method: </b>
-          {this.state.dataForm.deliveryMethod.value}
-        </p>
-        {this.state.dataForm.deliveryMethod.value === "mail" ? null : (
+        <div className={classes.postSummary}>
+          <h1>Confirm listing details:</h1>
           <p>
-            <b>Location: </b>
-            {this.state.dataForm.location.value}
+            <b>Module code: </b>
+            {this.state.dataForm.module.value}
           </p>
-        )}
-        {this.state.dataForm.description.value === "" ? null : (
           <p>
-            <b>Description: </b>
-            <br />
-            <span style={{ textAlign: "start" }}>
-              {this.state.dataForm.description.value}
-            </span>
+            <b>Textbook: </b>《{this.state.dataForm.textbook.value}》
           </p>
-        )}
+          <p>
+            <b>Type: </b>
+            {this.state.dataForm.listingType.value}
+          </p>
+          <p>
+            <b>Price: </b>
+            {this.state.dataForm.listingType.value === "rent"
+              ? this.state.dataForm.rentalPrice.value
+              : this.state.dataForm.sellingPrice.value}
+          </p>
+          <p>
+            <b>Delivery method: </b>
+            {this.state.dataForm.deliveryMethod.value}
+          </p>
+          {this.state.dataForm.deliveryMethod.value === "mail" ? null : (
+            <p>
+              <b>Location: </b>
+              {this.state.dataForm.location.value}
+            </p>
+          )}
+          {this.state.dataForm.description.value === "" ? null : (
+            <p>
+              <b>Description: </b>
+              <br />
+              <span style={{ textAlign: "start" }}>
+                {this.state.dataForm.description.value}
+              </span>
+            </p>
+          )}
 
-        <div style={{ display: "flex", justifyContent: "center" }}>
-          <Button onClick={this.toggleModalHandler}>
-            {<FontAwesomeIcon icon={faTimes} style={{ paddingRight: "5px" }} />}
-            Go back
-          </Button>
-          <Button btnType="Important" onClick={this.onSubmitHandler}>
-            {<FontAwesomeIcon icon={faCheck} style={{ paddingRight: "5px" }} />}
-            Submit
-          </Button>
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <Button onClick={this.toggleModalHandler}>
+              {
+                <FontAwesomeIcon
+                  icon={faTimes}
+                  style={{ paddingRight: "5px" }}
+                />
+              }
+              Go back
+            </Button>
+            <Button btnType="Important" onClick={this.onSubmitHandler}>
+              {
+                <FontAwesomeIcon
+                  icon={faCheck}
+                  style={{ paddingRight: "5px" }}
+                />
+              }
+              Submit
+            </Button>
+          </div>
         </div>
       </Modal>
     );
 
     let successPost = (
       <Modal show={this.props.postUploaded && this.props.imageUploaded}>
+        <br />
         <p style={{ color: "green" }}>Successfully posted!</p>
-
+        <br />
         <div
           style={{
             display: "flex",
@@ -668,10 +680,13 @@ class NewPost extends Component {
             paddingTop: "20px",
           }}
         >
-          <Link to="/" style={{ paddingRight: "10px" }}>
+          <span style={{ paddingRight: "10px" }}>
             <Button
               btnType="Important"
-              onClick={() => this.props.dispatchClearNewPostData()}
+              onClick={() => {
+                this.props.dispatchClearNewPostData();
+                this.props.history.push("/");
+              }}
             >
               {
                 <FontAwesomeIcon
@@ -681,7 +696,7 @@ class NewPost extends Component {
               }
               Home
             </Button>
-          </Link>
+          </span>
           <Button onClick={this.createNewFormHandler}>
             {<FontAwesomeIcon icon={faEdit} style={{ paddingRight: "5px" }} />}
             New Post

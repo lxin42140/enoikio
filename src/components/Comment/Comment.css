@@ -53,3 +53,9 @@
     overflow-wrap: break-word;
     width: fit-content;
 }
+
+@media (max-width: 685px) {
+    .CommentText {
+        font-size: small;
+    }
+}

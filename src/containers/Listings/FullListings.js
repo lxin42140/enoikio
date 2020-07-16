@@ -216,9 +216,19 @@ class FullListings extends Component {
       <div>
         <div>{toggleSwitch}</div>
         {this.state.viewListing ? (
-          <div className={classes.Listings}>{listings}</div>
+          <div>
+            <div className={classes.Listings}>{listings}</div>
+            <h3 style={{ color: "grey", textAlign: "center" }}>
+              Oops...No more listings!
+            </h3>
+          </div>
         ) : (
-          <div className={classes.Requests}>{requests}</div>
+          <div>
+            <div className={classes.Requests}>{requests}</div>
+            <h3 style={{ color: "grey", textAlign: "center" }}>
+              Oops...No more requests!
+            </h3>
+          </div>
         )}
       </div>
     );

@@ -16,12 +16,6 @@
     box-shadow: 0 0 5px 2px #d3d3d3;
 }
 
-@media (max-width: 616px) {
-    .Normal {
-        height: 420px;
-    }
-}
-
 .Shortened {
     display: flex;
     flex-direction: column;
@@ -79,7 +73,6 @@
     text-align: center;
 }
 
-/*TODO: fix image size to relative, affects the dimensions of each listing*/
 .Image {
     width: 200px;
     height: 200px;
@@ -108,4 +101,10 @@
 
 .Disabled {
     color: white;
+}
+
+@media (max-width: 616px) {
+    .Normal {
+        height: 420px;
+    }
 }

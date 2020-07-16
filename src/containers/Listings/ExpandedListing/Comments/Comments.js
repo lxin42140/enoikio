@@ -224,13 +224,13 @@ class Comments extends Component {
     let commentInput = (
       <div>
         {this.state.isListingOwner ? (
-          <p style={{ margin: "10px 0 5px 10px", textAlign: "center" }}>
+          <p className={classes.commentHeader}>
             {<FontAwesomeIcon icon={faPen} style={{ paddingRight: "5px" }} />}
             Write your comment
           </p>
         ) : (
           <React.Fragment>
-            <p style={{ margin: "10px 0 5px 10px", textAlign: "center" }}>
+            <p className={classes.commentHeader}>
               {
                 <FontAwesomeIcon
                   icon={faClipboardCheck}
@@ -239,7 +239,7 @@ class Comments extends Component {
               }
               Write your review
             </p>
-            <div style={{ textAlign: "left", paddingLeft: "10px" }}>
+            <div className={classes.reviewStars}>
               <FontAwesomeIcon
                 icon={faStar}
                 style={
@@ -297,7 +297,7 @@ class Comments extends Component {
             placeholder="Type here..."
             onChange={this.inputChangeHandler}
           />
-          <span style={{ paddingLeft: "15px" }}>
+          <span className={classes.postButton}>
             <Button
               onClick={this.submitCommentHandler}
               disabled={
@@ -370,7 +370,7 @@ class Comments extends Component {
                           style={{ paddingRight: "5px" }}
                         />
                       }
-                      Reply
+                      {this.props.windowWidth <= 685 ? null : "Reply"}
                     </Button>
                   </span>
                 ) : (
@@ -382,7 +382,7 @@ class Comments extends Component {
                           style={{ paddingRight: "5px" }}
                         />
                       }
-                      Sign in
+                      {this.props.windowWidth <= 685 ? null : "Sign in"}
                     </Button>
                   </Link>
                 )}
@@ -466,6 +466,7 @@ const mapStateToProps = (state) => {
     isAuthenticated: state.auth.user !== null,
     displayName: state.auth.displayName,
     photoURL: state.auth.photoURL,
+    windowWidth: state.window.width,
   };
 };
 export default connect(mapStateToProps)(Comments);

@@ -32,13 +32,6 @@
     outline: none;
 }
 
-@media all and (max-width:30em) {
-    .Button {
-        display: block;
-        margin: 0.2em auto;
-    }
-}
-
 /* .Button:first-of-type {
     margin-left: 0;
     padding-left: 0;
@@ -53,4 +46,17 @@
 .Button:disabled {
     opacity: 0.6;
     cursor: not-allowed;
+}
+
+@media all and (max-width:30em) {
+    .Button {
+        display: block;
+        margin: 0.2em auto;
+    }
+}
+
+@media (max-width: 616px) {
+    .Button {
+        font-size: x-small;
+    }
 }

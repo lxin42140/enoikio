@@ -206,8 +206,12 @@ class Offer extends Component {
       true
     ).isValid();
 
-    let startRentalDate = Number(this.state.startRental.split("/").reverse().join(""));
-    let endRentalDate = Number(this.state.endRental.split("/").reverse().join(""));
+    let startRentalDate = Number(
+      this.state.startRental.split("/").reverse().join("")
+    );
+    let endRentalDate = Number(
+      this.state.endRental.split("/").reverse().join("")
+    );
     let today = Number(moment().format("YYYYMMDD"));
 
     if (startRentalDate < today) {
@@ -634,7 +638,10 @@ class Offer extends Component {
           break;
         case "CANCELLED_OFFER":
           buttons = (
-            <p style={{ margin: "5px", color: "red" }}>
+            <p
+              className={classes.promptMessage}
+              style={{ margin: "5px", color: "red" }}
+            >
               {
                 <FontAwesomeIcon
                   icon={faTimes}
@@ -647,7 +654,10 @@ class Offer extends Component {
           break;
         case "INTERESTED_OFFER":
           buttons = (
-            <p style={{ margin: "5px", color: "#f3a1a1" }}>
+            <p
+              className={classes.promptMessage}
+              style={{ margin: "5px", color: "#f3a1a1" }}
+            >
               {
                 <FontAwesomeIcon
                   icon={faExclamation}
@@ -661,7 +671,10 @@ class Offer extends Component {
         case "ACCEPTED_OFFER":
           buttons = (
             <React.Fragment>
-              <p style={{ margin: "5px", color: "green" }}>
+              <p
+                className={classes.promptMessage}
+                style={{ margin: "5px", color: "green" }}
+              >
                 {
                   <FontAwesomeIcon
                     icon={faCheck}
@@ -684,7 +697,10 @@ class Offer extends Component {
           break;
         case "REJECTED_OFFER":
           buttons = (
-            <p style={{ margin: "5px", color: "red" }}>
+            <p
+              className={classes.promptMessage}
+              style={{ margin: "5px", color: "red" }}
+            >
               {
                 <FontAwesomeIcon
                   icon={faTimes}
@@ -697,7 +713,10 @@ class Offer extends Component {
           break;
         case "COMPLETED_OFFER":
           buttons = (
-            <p style={{ margin: "5px", color: "#f3a1a1" }}>
+            <p
+              className={classes.promptMessage}
+              style={{ margin: "5px", color: "#f3a1a1" }}
+            >
               {
                 <FontAwesomeIcon
                   icon={faGlassCheers}
@@ -728,7 +747,10 @@ class Offer extends Component {
           break;
         case "ACCEPTED_OFFER":
           buttons = (
-            <p style={{ margin: "5px", color: "green" }}>
+            <p
+              className={classes.promptMessage}
+              style={{ margin: "5px", color: "green" }}
+            >
               {
                 <FontAwesomeIcon
                   icon={faCheck}
@@ -742,7 +764,10 @@ class Offer extends Component {
         case "CANCELLED_OFFER":
           buttons = (
             <React.Fragment>
-              <p style={{ margin: "5px", color: "red" }}>
+              <p
+                className={classes.promptMessage}
+                style={{ margin: "5px", color: "red" }}
+              >
                 {
                   <FontAwesomeIcon
                     icon={faTimes}
@@ -766,7 +791,10 @@ class Offer extends Component {
         case "REJECTED_OFFER":
           buttons = (
             <React.Fragment>
-              <p style={{ margin: "5px", color: "red" }}>
+              <p
+                className={classes.promptMessage}
+                style={{ margin: "5px", color: "red" }}
+              >
                 {
                   <FontAwesomeIcon
                     icon={faTimes}
@@ -790,7 +818,10 @@ class Offer extends Component {
         case "COMPLETED_OFFER":
           buttons = (
             <React.Fragment>
-              <p style={{ margin: "5px", color: "#f3a1a1" }}>
+              <p
+                className={classes.promptMessage}
+                style={{ margin: "5px", color: "#f3a1a1" }}
+              >
                 {
                   <FontAwesomeIcon
                     icon={faGlassCheers}

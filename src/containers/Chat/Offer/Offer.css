@@ -57,3 +57,13 @@
 .OfferInput:focus {
     outline: none;
 }
+
+@media (max-width: 616px) {
+    .InterestedListingDetails {
+        font-size: small;
+    }
+
+    .promptMessage {
+        font-size: small;
+    }
+}

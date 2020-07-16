@@ -258,7 +258,6 @@ class ExpandedListing extends Component {
               @{this.props.expandedListing.displayName}
             </p>
           </div>
-          {/* <Link to="/edit-post" style={{ paddingRight: "20px" }}> */}
           <span style={{ paddingRight: "20px" }}>
             <Button onClick={this.onRedirectToEditListing}>
               {
@@ -270,7 +269,6 @@ class ExpandedListing extends Component {
               Edit
             </Button>
           </span>
-          {/* </Link> */}
           <Button
             btnType="Important"
             onClick={this.askUserToDelete}
@@ -330,10 +328,10 @@ class ExpandedListing extends Component {
     const listingInformation = (
       <React.Fragment>
         <div className={classes.listingDetails}>
-          <h1>
+          <h3 style={{ textAlign: "left" }}>
             {this.props.expandedListing.postDetails.module}:《
             {this.props.expandedListing.postDetails.textbook}》
-          </h1>
+          </h3>
           <ul className={classes.Description}>
             <li>
               <b>Type: </b>
@@ -461,17 +459,10 @@ class ExpandedListing extends Component {
       <Modal show={this.state.confirmDelete}>
         <div style={{ display: "block" }}>
           <p>Listing deleted</p>
-          <Link to="/">
-            <Button>
-              {
-                <FontAwesomeIcon
-                  icon={faHome}
-                  style={{ paddingRight: "5px" }}
-                />
-              }
-              Home
-            </Button>
-          </Link>
+          <Button onClick={() => this.props.history.push("/")}>
+            {<FontAwesomeIcon icon={faHome} style={{ paddingRight: "5px" }} />}
+            Home
+          </Button>
         </div>
       </Modal>
     );

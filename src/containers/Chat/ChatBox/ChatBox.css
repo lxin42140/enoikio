@@ -18,8 +18,11 @@
     width: 95%;
 }
 
-.Back {
+.goBackButton {
     width: 5%;
+    cursor: pointer;
+    color: #ff5138;
+    padding-right: 5px;
 }
 
 .ChatBoxMessages {
@@ -48,6 +51,7 @@
 .input:focus {
     outline: none;
 }
+
 
 @media (max-width: 375px) {
     .ChatBox {

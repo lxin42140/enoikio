@@ -93,3 +93,9 @@
 .closeIcon:hover {
     cursor: pointer;
 }
+
+@media (max-width: 750px) {
+    .searchBox {
+        width: 60%;
+    }
+}

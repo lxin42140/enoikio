@@ -94,7 +94,7 @@ class Chat extends Component {
             recipientProfilePic={this.props.recipientProfilePic}
             photoURL={this.props.photoURL}
             smallScreen
-            click={this.onGoBackHandler}
+            onClick={this.onGoBackHandler}
             history={this.props.history}
           />
         </div>

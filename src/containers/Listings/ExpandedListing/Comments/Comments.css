@@ -5,10 +5,29 @@
     flex: 1 1 auto;
 }
 
-.CommentMessages {
-    padding-left: 10px;
-    list-style-type: none;
+.commentHeader {
+    margin: 10px 0 5px 10px;
+    text-align: center;
+}
+
+.postButton {
+    padding-left: 1.7%
+}
+
+
+.reviewStars {
     text-align: left;
+    padding-left: 10px;
+}
+
+.textarea {
+    padding-left: 10px;
+    border-style: none;
+    width: 90%;
+}
+
+.textarea:focus {
+    outline: none;
 }
 
 .li {
@@ -21,14 +40,10 @@
     align-items: center;
 }
 
-.textarea {
+.CommentMessages {
     padding-left: 10px;
-    border-style: none;
-    width: 90%;
-}
-
-.textarea:focus {
-    outline: none;
+    list-style-type: none;
+    text-align: left;
 }
 
 .AuthPrompt:link,
@@ -44,4 +59,21 @@
 .AuthPrompt:active {
     color: #ff5138;
     text-decoration: underline;
+}
+
+@media (max-width: 685px) {
+
+    .NewComment {
+        flex-direction: column;
+    }
+
+    .commentHeader {
+        font-size: small;
+    }
+
+    .reviewStars {
+        text-align: center;
+        font-size: small;
+    }
+
 }

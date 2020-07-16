@@ -68,38 +68,26 @@ class ChatBox extends Component {
     const pathName = this.props.history.location.pathname;
     let formattedDisplayName = displayName.toLowerCase().split(" ").join("");
     this.props.setFilterProfile(formattedDisplayName);
-    const query = "/searchProfile?from=" + pathName + "&&profile=" + formattedDisplayName;
+    const query =
+      "/searchProfile?from=" + pathName + "&&profile=" + formattedDisplayName;
     this.props.history.push(query);
   };
 
   render() {
     return (
       <div className={classes.ChatBox}>
-        <div
-          className={classes.ChatBoxHeader}
-          style={{ cursor: "pointer" }}
-        >
-          <div 
+        <div className={classes.ChatBoxHeader} style={{ cursor: "pointer" }}>
+          <div
             className={classes.DisplayName}
             onClick={() => this.searchProfileHandler(this.props.recipient)}
-            >
+          >
             <h4>{this.props.recipient}</h4>
           </div>
-          <div
-            onClick={this.props.click}
-            className={classes.Back}
-            style={{ cursor: "pointer" }}
-          >
-            {this.props.smallScreen ? (
-              <FontAwesomeIcon
-                icon={faWindowClose}
-                style={{
-                  color: "#ff5138",
-                  paddingRight: "5px",
-                }}
-              />
-            ) : null}
-          </div>
+          {this.props.smallScreen ? (
+            <div onClick={this.props.onClick} className={classes.goBackButton}>
+              <FontAwesomeIcon icon={faWindowClose} />
+            </div>
+          ) : null}
         </div>
         <Offer
           fullChat={this.props.fullChat}
