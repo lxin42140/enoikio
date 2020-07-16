@@ -57,7 +57,7 @@ class Chat extends Component {
 
     let chatMessages;
 
-    if (this.props.windowWidth > 525) {
+    if (this.props.windowWidth > 700) {
       chatMessages = (
         <div className={classes.ChatBox}>
           {this.state.initialLoad && this.props.chatContacts.length < 1 ? (
@@ -101,7 +101,7 @@ class Chat extends Component {
       );
     }
 
-    return this.props.windowWidth <= 525 ? (
+    return this.props.windowWidth <= 700 ? (
       <div className={classes.Chat}>
         {this.state.showMessages ? null : chatContacts}
         {this.state.showMessages ? chatMessages : null}
