@@ -394,50 +394,17 @@ class Profile extends Component {
   render() {
     let editProfileImage = (
       <Modal show={this.state.editProfileImage}>
-        {this.props.updatingUserDetails ? (
-          <React.Fragment>
-            <Spinner />
-            <p style={{ color: "red", fontWeight: "bold" }}>
-              Please do not close window...
-            </p>
-          </React.Fragment>
-        ) : this.props.updatedUserDetails ? (
-          <React.Fragment>
-            <p style={{ color: "green", fontWeight: "bold" }}>Done!</p>
-            <Button onClick={this.cancelEditProfileImageHandler}>
-              {
-                <FontAwesomeIcon
-                  icon={faTimes}
-                  style={{ paddingRight: "5px" }}
-                />
-              }
-              Go back
-            </Button>
-          </React.Fragment>
-        ) : (
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <div style={{ paddingBottom: "10px" }}>
-              {
-                <FontAwesomeIcon
-                  icon={faImage}
-                  style={{ paddingRight: "5px", color: "#f3a1a1" }}
-                />
-              }
-              <input
-                type="file"
-                accept=".png,.jpeg, .jpg"
-                style={{ width: "fit-content" }}
-                onChange={this.handleImageAsFile}
-              />
-            </div>
-            <div>
+        <div className={classes.reportSummary}>
+          {this.props.updatingUserDetails ? (
+            <React.Fragment>
+              <Spinner />
+              <p style={{ color: "red", fontWeight: "bold" }}>
+                Please do not close window...
+              </p>
+            </React.Fragment>
+          ) : this.props.updatedUserDetails ? (
+            <React.Fragment>
+              <p style={{ color: "green", fontWeight: "bold" }}>Done!</p>
               <Button onClick={this.cancelEditProfileImageHandler}>
                 {
                   <FontAwesomeIcon
@@ -445,24 +412,61 @@ class Profile extends Component {
                     style={{ paddingRight: "5px" }}
                   />
                 }
-                Cancel
+                Go back
               </Button>
-              <Button
-                btnType="Important"
-                onClick={this.submitNewProfileImage}
-                disabled={this.state.imageAsFile === ""}
-              >
+            </React.Fragment>
+          ) : (
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <div style={{ paddingBottom: "10px" }}>
                 {
                   <FontAwesomeIcon
-                    icon={faFileUpload}
-                    style={{ paddingRight: "5px" }}
+                    icon={faImage}
+                    style={{ paddingRight: "5px", color: "#f3a1a1" }}
                   />
                 }
-                Upload
-              </Button>
+                <input
+                  type="file"
+                  accept=".png,.jpeg, .jpg"
+                  style={{ width: "fit-content" }}
+                  onChange={this.handleImageAsFile}
+                />
+              </div>
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <span style={{ paddingRight: "5px" }}>
+                  <Button onClick={this.cancelEditProfileImageHandler}>
+                    {
+                      <FontAwesomeIcon
+                        icon={faTimes}
+                        style={{ paddingRight: "5px" }}
+                      />
+                    }
+                    Cancel
+                  </Button>
+                </span>
+                <Button
+                  btnType="Important"
+                  onClick={this.submitNewProfileImage}
+                  disabled={this.state.imageAsFile === ""}
+                >
+                  {
+                    <FontAwesomeIcon
+                      icon={faFileUpload}
+                      style={{ paddingRight: "5px" }}
+                    />
+                  }
+                  Upload
+                </Button>
+              </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </Modal>
     );
 
@@ -504,7 +508,7 @@ class Profile extends Component {
             this.state.numStars > 4 ? { color: "#ff5138" } : { color: "gray" }
           }
         />
-        (
+        <br />(
         {this.state.numReviews <= 1
           ? this.state.numReviews + " review"
           : this.state.numReviews + " reviews"}
@@ -515,7 +519,6 @@ class Profile extends Component {
     const activeButtonStyle = {
       fontWeight: "bold",
       color: "#dd5641",
-      borderBottom: "3px solid #dd5641",
       outline: "none",
     };
 
@@ -524,7 +527,9 @@ class Profile extends Component {
         <button
           onClick={() => {
             this.onShowPastPostHandler();
-            this.props.windowWidth <= 950 ? this.toggleDropDown() : null;
+            if (this.props.windowWidth <= 950) {
+              this.toggleDropDown();
+            }
           }}
           style={
             this.props.filterType === "displayName" && !this.state.showComments
@@ -538,7 +543,9 @@ class Profile extends Component {
         <button
           onClick={() => {
             this.onShowRequestHandler();
-            this.props.windowWidth <= 950 ? this.toggleDropDown() : null;
+            if (this.props.windowWidth <= 950) {
+              this.toggleDropDown();
+            }
           }}
           style={
             this.props.filterType === "requests" && !this.state.showComments
@@ -552,7 +559,9 @@ class Profile extends Component {
         <button
           onClick={() => {
             this.onShowOnRentHandler();
-            this.props.windowWidth <= 950 ? this.toggleDropDown() : null;
+            if (this.props.windowWidth <= 950) {
+              this.toggleDropDown();
+            }
           }}
           style={
             this.props.filterType === "onRent" && !this.state.showComments
@@ -571,7 +580,9 @@ class Profile extends Component {
         <button
           onClick={() => {
             this.onShowReviewsHandler();
-            this.props.windowWidth <= 950 ? this.toggleDropDown() : null;
+            if (this.props.windowWidth <= 950) {
+              this.toggleDropDown();
+            }
           }}
           style={this.state.showComments ? activeButtonStyle : null}
         >
@@ -603,6 +614,12 @@ class Profile extends Component {
                   }}
                 />
                 Listings
+                <FontAwesomeIcon
+                  icon={faChevronDown}
+                  style={{
+                    paddingLeft: "5px",
+                  }}
+                />
               </button>
             ) : this.state.showRequest ? (
               <button style={activeButtonStyle}>
@@ -613,6 +630,12 @@ class Profile extends Component {
                   }}
                 />
                 Requests
+                <FontAwesomeIcon
+                  icon={faChevronDown}
+                  style={{
+                    paddingLeft: "1px",
+                  }}
+                />
               </button>
             ) : this.state.showOnRent ? (
               <button style={activeButtonStyle}>
@@ -623,6 +646,12 @@ class Profile extends Component {
                   }}
                 />
                 On Rent
+                <FontAwesomeIcon
+                  icon={faChevronDown}
+                  style={{
+                    paddingLeft: "5px",
+                  }}
+                />
               </button>
             ) : (
               <button style={activeButtonStyle}>
@@ -633,14 +662,14 @@ class Profile extends Component {
                   }}
                 />
                 Reviews
+                <FontAwesomeIcon
+                  icon={faChevronDown}
+                  style={{
+                    paddingLeft: "5px",
+                  }}
+                />
               </button>
             )}
-          </div>
-          <div>
-            <FontAwesomeIcon
-              icon={faChevronDown}
-              className={classes.arrowDown}
-            />
           </div>
         </div>
       );
@@ -752,51 +781,72 @@ class Profile extends Component {
 
     let feedbackPopup = (
       <Modal show={this.state.feedbackPopup}>
-        {form}
-        <Button
-          btnType="Important"
-          disabled={!this.state.formIsValid}
-          onClick={this.showReportSummary}
-        >
-          {<FontAwesomeIcon icon={faCheck} style={{ paddingRight: "5px" }} />}
-          Review
-        </Button>
-        <Button onClick={this.closeReportModal}>
-          {<FontAwesomeIcon icon={faTimes} style={{ paddingRight: "5px" }} />}
-          Cancel
-        </Button>
+        <div className={classes.reportSummary}>
+          {form}
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <Button
+              btnType="Important"
+              disabled={!this.state.formIsValid}
+              onClick={this.showReportSummary}
+            >
+              {
+                <FontAwesomeIcon
+                  icon={faCheck}
+                  style={{ paddingRight: "5px" }}
+                />
+              }
+              Review
+            </Button>
+            <Button onClick={this.closeReportModal}>
+              {
+                <FontAwesomeIcon
+                  icon={faTimes}
+                  style={{ paddingRight: "5px" }}
+                />
+              }
+              Cancel
+            </Button>
+          </div>
+        </div>
       </Modal>
     );
 
     let reportSummary = (
       <Modal show={this.state.showSummary}>
-        <h1>Confirm feedback details:</h1>
-        <p>
-          <b>feedback area: </b>
-          {this.state.dataForm.feedback.value}
-        </p>
-        <p style={{ textAlign: "start" }}>
-          <b>Description: </b>
-          <br />
-          {this.state.dataForm.description.value}
-        </p>
-        <p style={{ fontSize: "small" }}>
-          <i>{this.state.dataForm.followUp.value}</i>
-        </p>
-        <div style={{ display: "flex", justifyContent: "center" }}>
-          <Button btnType="Important" onClick={this.submitReportHandler}>
-            {
-              <FontAwesomeIcon
-                icon={faLightbulb}
-                style={{ paddingRight: "5px" }}
-              />
-            }
-            Submit
-          </Button>
-          <Button onClick={this.closeReportSummary}>
-            {<FontAwesomeIcon icon={faEdit} style={{ paddingRight: "5px" }} />}
-            Edit
-          </Button>
+        <div className={classes.reportSummary}>
+          <h1>Confirm feedback details:</h1>
+          <p>
+            <b>feedback area: </b>
+            {this.state.dataForm.feedback.value}
+          </p>
+          <p>
+            <b>Description: </b>
+            <br />
+            {this.state.dataForm.description.value}
+          </p>
+          <p style={{ fontSize: "small" }}>
+            <i>{this.state.dataForm.followUp.value}</i>
+          </p>
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <Button btnType="Important" onClick={this.submitReportHandler}>
+              {
+                <FontAwesomeIcon
+                  icon={faLightbulb}
+                  style={{ paddingRight: "5px" }}
+                />
+              }
+              Submit
+            </Button>
+            <Button onClick={this.closeReportSummary}>
+              {
+                <FontAwesomeIcon
+                  icon={faEdit}
+                  style={{ paddingRight: "5px" }}
+                />
+              }
+              Edit
+            </Button>
+          </div>
         </div>
       </Modal>
     );
@@ -817,7 +867,7 @@ class Profile extends Component {
               this.state.showRequest ? (
                 <FilterResults history={this.props.history} />
               ) : this.state.comments.length < 1 ? (
-                <h3>Oops..No reviews</h3>
+                <h3 style={{ color: "grey" }}>Oops..No reviews</h3>
               ) : (
                 <ul className={classes.Reviews}>{reviews}</ul>
               )}

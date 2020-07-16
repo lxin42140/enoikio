@@ -11,6 +11,7 @@ import {
   faHandHoldingUsd,
   faCommentDots,
   faChevronDown,
+  faWindowClose,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import moment from "moment";
@@ -422,8 +423,8 @@ class GeneralProfilePage extends Component {
   };
 
   toggleDropDown = (prevState) => {
-    this.setState(prevState => ({ showDropDown: !prevState.showDropDown }))
-  }
+    this.setState((prevState) => ({ showDropDown: !prevState.showDropDown }));
+  };
 
   render() {
     if (this.state.error) {
@@ -458,51 +459,72 @@ class GeneralProfilePage extends Component {
 
     let reportUser = (
       <Modal show={this.state.reportUserPopup}>
-        {form}
-        <Button
-          btnType="Important"
-          disabled={!this.state.formIsValid}
-          onClick={this.showReportSummary}
-        >
-          {<FontAwesomeIcon icon={faCheck} style={{ paddingRight: "5px" }} />}
-          Review
-        </Button>
-        <Button onClick={this.closeReportModal}>
-          {<FontAwesomeIcon icon={faTimes} style={{ paddingRight: "5px" }} />}
-          Cancel
-        </Button>
+        <div className={classes.reportSummary}>
+          {form}
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <Button
+              btnType="Important"
+              disabled={!this.state.formIsValid}
+              onClick={this.showReportSummary}
+            >
+              {
+                <FontAwesomeIcon
+                  icon={faCheck}
+                  style={{ paddingRight: "5px" }}
+                />
+              }
+              Review
+            </Button>
+            <Button onClick={this.closeReportModal}>
+              {
+                <FontAwesomeIcon
+                  icon={faTimes}
+                  style={{ paddingRight: "5px" }}
+                />
+              }
+              Cancel
+            </Button>
+          </div>
+        </div>
       </Modal>
     );
 
     let reportSummary = (
       <Modal show={this.state.showSummary}>
-        <h1>Confirm report details:</h1>
-        <p>
-          <b>Issue: </b>
-          {this.state.dataForm.issue.value}
-        </p>
-        <p style={{ textAlign: "start" }}>
-          <b>Description: </b>
-          <br />
-          {this.state.dataForm.description.value}
-        </p>
-        <p style={{ fontSize: "small" }}>
-          <i>{this.state.dataForm.followUp.value}</i>
-        </p>
-        <div style={{ display: "flex", justifyContent: "center" }}>
-          <Button btnType="Important" onClick={this.submitReportHandler}>
-            {
-              <FontAwesomeIcon
-                icon={faExclamationTriangle}
-                style={{ paddingRight: "5px" }}
-              />
-            }
-            Report
-          </Button>
-          <Button onClick={this.closeReportSummary}>
-            {<FontAwesomeIcon icon={faEdit} style={{ paddingRight: "5px" }} />}
-            Edit
-          </Button>
+        <div className={classes.reportSummary}>
+          <h1>Confirm report details:</h1>
+          <p>
+            <b>Issue: </b>
+            {this.state.dataForm.issue.value}
+          </p>
+          <p>
+            <b>Description: </b>
+            <br />
+            {this.state.dataForm.description.value}
+          </p>
+          <p style={{ fontSize: "small" }}>
+            <i>{this.state.dataForm.followUp.value}</i>
+          </p>
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <Button btnType="Important" onClick={this.submitReportHandler}>
+              {
+                <FontAwesomeIcon
+                  icon={faExclamationTriangle}
+                  style={{ paddingRight: "5px" }}
+                />
+              }
+              Report
+            </Button>
+            <Button onClick={this.closeReportSummary}>
+              {
+                <FontAwesomeIcon
+                  icon={faEdit}
+                  style={{ paddingRight: "5px" }}
+                />
+              }
+              Edit
+            </Button>
+          </div>
         </div>
       </Modal>
     );
@@ -544,18 +566,18 @@ class GeneralProfilePage extends Component {
           style={
             this.state.numStars > 4 ? { color: "#ff5138" } : { color: "gray" }
           }
-        /> (
+        />
+        <br />(
         {this.state.numReviews <= 1
           ? this.state.numReviews + " review"
           : this.state.numReviews + " reviews"}
-          )
+        )
       </div>
     );
 
     const activeButtonStyle = {
       fontWeight: "bold",
       color: "#dd5641",
-      borderBottom: "3px solid #dd5641",
       outline: "none",
     };
 
@@ -564,41 +586,43 @@ class GeneralProfilePage extends Component {
         <button
           onClick={() => {
             this.onShowPastPostHandler();
-            this.props.windowWidth <= 950 ?
-              this.toggleDropDown() :
-              null
+            if (this.props.windowWidth <= 950) {
+              this.toggleDropDown();
+            }
           }}
-          style={this.state.showPastListing ?
-            activeButtonStyle :
-            null} >
+          style={this.state.showPastListing ? activeButtonStyle : null}
+        >
           {<FontAwesomeIcon icon={faBook} style={{ paddingRight: "5px" }} />}
-            Listings
+          Listings
         </button>
         <button
           onClick={() => {
             this.onShowRequestHandler();
-            this.props.windowWidth <= 950 ?
-              this.toggleDropDown() :
-              null
+            if (this.props.windowWidth <= 950) {
+              this.toggleDropDown();
+            }
           }}
-          style={this.state.showRequests ?
-            activeButtonStyle :
-            null} >
+          style={this.state.showRequests ? activeButtonStyle : null}
+        >
           {<FontAwesomeIcon icon={faTasks} style={{ paddingRight: "5px" }} />}
-            Requests
-          </button>
+          Requests
+        </button>
         <button
           onClick={() => {
             this.onShowReviewsHandler();
-            this.props.windowWidth <= 950 ?
-              this.toggleDropDown() :
-              null
+            if (this.props.windowWidth <= 950) {
+              this.toggleDropDown();
+            }
           }}
-          style={this.state.showComments ?
-            activeButtonStyle :
-            null} >
-          {<FontAwesomeIcon icon={faCommentDots} style={{ paddingRight: "5px" }} />}
-            Reviews
+          style={this.state.showComments ? activeButtonStyle : null}
+        >
+          {
+            <FontAwesomeIcon
+              icon={faCommentDots}
+              style={{ paddingRight: "5px" }}
+            />
+          }
+          Reviews
         </button>
       </div>
     );
@@ -609,46 +633,60 @@ class GeneralProfilePage extends Component {
       navigation = tabs;
     } else {
       const currentItemShowing = (
-        <div
-          className={classes.Navigation}
-          onClick={this.toggleDropDown}>
-          {this.state.showPastListing ?
+        <div className={classes.Navigation} onClick={this.toggleDropDown}>
+          {this.state.showPastListing ? (
             <button style={activeButtonStyle}>
               <FontAwesomeIcon
                 icon={faBook}
                 style={{
                   paddingRight: "5px",
-                }} />
-            Listings
-          </button> : this.state.showRequests ?
-              <button style={activeButtonStyle}>
-                <FontAwesomeIcon
-                  icon={faTasks}
-                  style={{
-                    paddingRight: "5px",
-                  }} />
-            Requests
-          </button> :
-              <button style={activeButtonStyle}>
-                <FontAwesomeIcon
-                  icon={faHandHoldingUsd}
-                  style={{
-                    paddingRight: "5px",
-                  }} />
-             Reviews
-           </button>}
-          <div>
-            <FontAwesomeIcon
-              icon={faChevronDown}
-              className={classes.arrowDown}
-            />
-          </div>
+                }}
+              />
+              Listings
+              <FontAwesomeIcon
+                icon={faChevronDown}
+                style={{
+                  paddingLeft: "5px",
+                }}
+              />
+            </button>
+          ) : this.state.showRequests ? (
+            <button style={activeButtonStyle}>
+              <FontAwesomeIcon
+                icon={faTasks}
+                style={{
+                  paddingRight: "5px",
+                }}
+              />
+              Requests
+              <FontAwesomeIcon
+                icon={faChevronDown}
+                style={{
+                  paddingLeft: "1px",
+                }}
+              />
+            </button>
+          ) : (
+            <button style={activeButtonStyle}>
+              <FontAwesomeIcon
+                icon={faHandHoldingUsd}
+                style={{
+                  paddingRight: "5px",
+                }}
+              />
+              Reviews
+              <FontAwesomeIcon
+                icon={faChevronDown}
+                style={{
+                  paddingLeft: "5px",
+                }}
+              />
+            </button>
+          )}
         </div>
       );
 
-      const dropDown = this.state.showDropDown ?
-        tabs :
-        null;
+      const dropDown = this.state.showDropDown ? tabs : null;
 
       navigation = (
         <div className={classes.DropDownContent}>
@@ -678,7 +716,7 @@ class GeneralProfilePage extends Component {
           >
             @{this.state.displayName}
           </p>
-            {numStar}
+          {numStar}
           <p>
             <b>Date joined: </b>
             {this.state.dateJoined}
@@ -698,18 +736,18 @@ class GeneralProfilePage extends Component {
               <b style={{ color: "red" }}>Report user</b>
             </p>
           ) : (
-              <p style={{ cursor: "pointer" }}>
-                <Link to="/auth" style={{ textDecoration: "none" }}>
-                  {
-                    <FontAwesomeIcon
-                      icon={faExclamationTriangle}
-                      style={{ paddingRight: "5px", color: "red" }}
-                    />
-                  }
-                  <b style={{ color: "red" }}>Report user</b>
-                </Link>
-              </p>
-            )}
+            <p style={{ cursor: "pointer" }}>
+              <Link to="/auth" style={{ textDecoration: "none" }}>
+                {
+                  <FontAwesomeIcon
+                    icon={faExclamationTriangle}
+                    style={{ paddingRight: "5px", color: "red" }}
+                  />
+                }
+                <b style={{ color: "red" }}>Report user</b>
+              </Link>
+            </p>
+          )}
         </div>
       </div>
     );
@@ -737,20 +775,31 @@ class GeneralProfilePage extends Component {
       <React.Fragment>
         {reportUser}
         {reportSummary}
-        <div className={classes.Background} />
+        <div className={classes.Background}>
+          <FontAwesomeIcon
+            icon={faWindowClose}
+            onClick={this.onCancelSearchHandler}
+            style={{
+              color: "white",
+              fontSize: "1.2rem",
+              cursor: "pointer",
+              float: "right",
+              padding: "5px",
+            }}
+          />
+        </div>
         <div className={classes.Profile}>
           {profile}
           <div className={classes.Information}>
             {navigation}
             <div className={classes.Details}>
-              {this.state.showPastListing ||
-                this.state.showRequests ? (
-                  <FilterResults history={this.props.history} />
-                ) : this.state.comments.length < 1 ? (
-                  <h3>Oops..No reviews</h3>
-                ) : (
-                    <ul className={classes.Reviews}>{reviews}</ul>
-                  )}
+              {this.state.showPastListing || this.state.showRequests ? (
+                <FilterResults history={this.props.history} />
+              ) : this.state.comments.length < 1 ? (
+                <h3 style={{ color: "grey" }}>Oops..No reviews</h3>
+              ) : (
+                <ul className={classes.Reviews}>{reviews}</ul>
+              )}
             </div>
           </div>
         </div>

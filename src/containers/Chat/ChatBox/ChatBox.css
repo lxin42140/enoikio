@@ -23,6 +23,7 @@
     cursor: pointer;
     color: #ff5138;
     padding-right: 5px;
+    margin-top: -30px;
 }
 
 .ChatBoxMessages {

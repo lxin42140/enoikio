@@ -185,13 +185,21 @@ class FilterResults extends Component {
         this.state.searchObject !==
           this.props.displayName.toLowerCase().split(" ").join("")
       ) {
-        return <h3>Oops...This user did not make any requests</h3>;
+        return (
+          <h3 style={{ color: "grey" }}>
+            Oops...This user did not make any requests
+          </h3>
+        );
       } else if (
         this.state.filteredRequests.length < 1 &&
         this.state.searchObject ===
           this.props.displayName.toLowerCase().split(" ").join("")
       ) {
-        return <h3>Oops...Post your request and view it here</h3>;
+        return (
+          <h3 style={{ color: "grey" }}>
+            Oops...Post your request and view it here
+          </h3>
+        );
       } else {
         const myRequests = this.state.filteredRequests.map((request) => {
           return (
@@ -216,17 +224,29 @@ class FilterResults extends Component {
     if (this.state.filteredListings.length < 1) {
       switch (this.state.filterType) {
         case "location":
-          return <h3>Oops...No available listings at this location</h3>;
+          return (
+            <h3 style={{ color: "grey" }}>
+              Oops...No available listings at this location
+            </h3>
+          );
         case "displayName":
-          return <h3>Oops...Post your listing and view it here</h3>;
+          return (
+            <h3 style={{ color: "grey" }}>
+              Oops...Post your listing and view it here
+            </h3>
+          );
         case "searchProfile":
-          return <h3>Oops...This user has no listings</h3>;
+          return (
+            <h3 style={{ color: "grey" }}>Oops...This user has no listings</h3>
+          );
         case "onRent":
-          return <h3>Oops...No rentals yet</h3>;
+          return <h3 style={{ color: "grey" }}>Oops...No rentals yet</h3>;
         case "moduleCode":
           return (
             <React.Fragment>
-              <h3>Oops...No available listings for this module</h3>
+              <h3 style={{ color: "grey" }}>
+                Oops...No available listings for this module
+              </h3>
               <div className={classes.Selections}>
                 {this.props.isAuthenticated ? (
                   <Link to="/new-request">
@@ -243,7 +263,9 @@ class FilterResults extends Component {
         case "textbook":
           return (
             <React.Fragment>
-              <h3>Oops...No available listings for this textbook</h3>
+              <h3 style={{ color: "grey" }}>
+                Oops...No available listings for this textbook
+              </h3>
               <div className={classes.Selections}>
                 {this.props.isAuthenticated ? (
                   <Link to="/new-request">
