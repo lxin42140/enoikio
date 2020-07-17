@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 
 import Listing from "../Listings/Listing/Listing";
 import Request from "../Requests/Request/Request";
@@ -178,6 +178,12 @@ class FilterResults extends Component {
     } while (swap);
     return listingArr;
   };
+
+  onRedirectToNewRequest = () => {
+    let path = this.props.history.location.search.split("&&")[0];
+    path = "/new-request" + path;
+    this.props.history.push(path);
+  };
   render() {
     if (this.state.filterType === "requests") {
       if (
@@ -250,13 +256,11 @@ class FilterResults extends Component {
               </h3>
               <div className={classes.Selections}>
                 {this.props.isAuthenticated ? (
-                  <Link to="/new-request">
-                    <a>Submit request</a>
-                  </Link>
+                  <a onClick={this.onRedirectToNewRequest}>Submit request</a>
                 ) : (
-                  <Link to="/auth">
-                    <a>Submit request</a>
-                  </Link>
+                  <a onClick={() => this.props.history.push("/auth")}>
+                    Submit request
+                  </a>
                 )}
               </div>
             </React.Fragment>
@@ -269,13 +273,11 @@ class FilterResults extends Component {
               </h3>
               <div className={classes.Selections}>
                 {this.props.isAuthenticated ? (
-                  <Link to="/new-request">
-                    <a>Submit request</a>
-                  </Link>
+                  <a onClick={this.onRedirectToNewRequest}>Submit request</a>
                 ) : (
-                  <Link to="/auth">
-                    <a>Submit request</a>
-                  </Link>
+                  <a onClick={() => this.props.history.push("/auth")}>
+                    Submit request
+                  </a>
                 )}
               </div>
             </React.Fragment>
@@ -348,13 +350,11 @@ class FilterResults extends Component {
           </p>
           <div className={classes.Selections}>
             {this.props.isAuthenticated ? (
-              <Link to="/new-request">
-                <a>Submit request</a>
-              </Link>
+              <a onClick={this.onRedirectToNewRequest}>Submit request</a>
             ) : (
-              <Link to="/auth">
-                <a>Submit request</a>
-              </Link>
+              <a onClick={() => this.props.history.push("/auth")}>
+                Submit request
+              </a>
             )}
           </div>
         </div>

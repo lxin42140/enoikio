@@ -306,32 +306,40 @@ class NewRequest extends Component {
         ) : (
           <React.Fragment>
             {form}
-            <Button
-              btnType="Important"
-              onClick={this.toggleModalHandler}
-              disabled={!this.state.formIsValid}
-            >
-              {
-                <FontAwesomeIcon
-                  icon={faCheck}
-                  style={{ paddingRight: "5px" }}
-                />
-              }
-              SUBMIT
-            </Button>
-            <Button
-              onClick={() => {
-                this.props.history.goBack();
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
               }}
             >
-              {
-                <FontAwesomeIcon
-                  icon={faTimes}
-                  style={{ paddingRight: "5px" }}
-                />
-              }
-              Cancel
-            </Button>
+              <Button
+                btnType="Important"
+                onClick={this.toggleModalHandler}
+                disabled={!this.state.formIsValid}
+              >
+                {
+                  <FontAwesomeIcon
+                    icon={faCheck}
+                    style={{ paddingRight: "5px" }}
+                  />
+                }
+                SUBMIT
+              </Button>
+              <Button
+                onClick={() => {
+                  this.props.history.goBack();
+                }}
+              >
+                {
+                  <FontAwesomeIcon
+                    icon={faTimes}
+                    style={{ paddingRight: "5px" }}
+                  />
+                }
+                Cancel
+              </Button>
+            </div>
           </React.Fragment>
         )}
       </div>
