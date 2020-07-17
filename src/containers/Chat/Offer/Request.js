@@ -415,7 +415,7 @@ class Request extends Component {
       .ref()
       .child("requests")
       .child(this.state.interestedListing.key)
-      .remove()
+      .remove();
   };
 
   onRejectOffer = () => {
@@ -449,7 +449,7 @@ class Request extends Component {
 
   showConfirmRequestPopUp = () => {
     this.setState({ showConfirmRequestPopUp: true });
-  }
+  };
 
   closeConfirmRequestPopUpHandler = () => {
     this.setState({
@@ -458,7 +458,7 @@ class Request extends Component {
       startRental: "",
       endRental: "",
     });
-  }
+  };
 
   render() {
     if (this.state.interestedListing === "") {
@@ -476,7 +476,6 @@ class Request extends Component {
             value={this.state.priceOffer}
             placeholder="Enter offer here..."
           />
-
           <div
             style={{
               display: "flex",
@@ -487,6 +486,7 @@ class Request extends Component {
             <Button btnType="Important" onClick={this.initialOffer}>
               Submit Offer
             </Button>
+            <span style={{ paddingRight: "3px" }} />
             <Button onClick={this.onClosePopUpHandler}>Cancel</Button>
           </div>
         </div>
@@ -526,7 +526,7 @@ class Request extends Component {
             </React.Fragment>
           ) : null}
 
-          < div
+          <div
             style={{
               display: "flex",
               alignItems: "center",
@@ -536,10 +536,13 @@ class Request extends Component {
             <Button btnType="Important" onClick={this.confirmDetails}>
               Submit Offer
             </Button>
-            <Button onClick={this.closeConfirmRequestPopUpHandler}>Cancel</Button>
+            <span style={{ paddingRight: "3px" }} />
+            <Button onClick={this.closeConfirmRequestPopUpHandler}>
+              Cancel
+            </Button>
           </div>
         </div>
-      </Modal >
+      </Modal>
     );
 
     let buttons;
@@ -549,7 +552,10 @@ class Request extends Component {
         case "MADE_OFFER":
           buttons = (
             <React.Fragment>
-              <Button btnType="Important" onClick={this.showConfirmRequestPopUp}>
+              <Button
+                btnType="Important"
+                onClick={this.showConfirmRequestPopUp}
+              >
                 Accept offer
               </Button>
               <Button btnType="Important" onClick={this.onRejectOffer}>
@@ -587,10 +593,10 @@ class Request extends Component {
             <React.Fragment>
               <Button btnType="Important" onClick={this.onAcceptOffer}>
                 Accept offer
-            </Button>
+              </Button>
               <Button btnType="Important" onClick={this.onRejectOffer}>
                 Reject offer
-            </Button>
+              </Button>
             </React.Fragment>
           );
           break;

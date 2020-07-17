@@ -170,15 +170,6 @@ class Request extends Component {
               justifyContent: "center",
             }}
           >
-            <Button onClick={this.cancelConfirmation}>
-              {
-                <FontAwesomeIcon
-                  icon={faTimes}
-                  style={{ paddingRight: "5px" }}
-                />
-              }
-              Go back
-            </Button>
             <Button onClick={this.deleteRequest} btnType="Important">
               {
                 <FontAwesomeIcon
@@ -187,6 +178,16 @@ class Request extends Component {
                 />
               }
               Delete
+            </Button>
+            <span style={{ paddingRight: "3px" }} />
+            <Button onClick={this.cancelConfirmation}>
+              {
+                <FontAwesomeIcon
+                  icon={faTimes}
+                  style={{ paddingRight: "5px" }}
+                />
+              }
+              Go back
             </Button>
           </div>
         </div>
@@ -210,6 +211,7 @@ class Request extends Component {
             {<FontAwesomeIcon icon={faHome} style={{ paddingRight: "5px" }} />}
             Home
           </Button>
+          <span style={{ paddingRight: "3px" }} />
           <Button onClick={this.closePopup}>
             {<FontAwesomeIcon icon={faTrash} style={{ paddingRight: "5px" }} />}
             Close

@@ -440,28 +440,28 @@ class Profile extends Component {
               </div>
               <div style={{ display: "flex", alignItems: "center" }}>
                 <span style={{ paddingRight: "5px" }}>
-                  <Button onClick={this.cancelEditProfileImageHandler}>
+                  <Button
+                    btnType="Important"
+                    onClick={this.submitNewProfileImage}
+                    disabled={this.state.imageAsFile === ""}
+                  >
                     {
                       <FontAwesomeIcon
-                        icon={faTimes}
+                        icon={faFileUpload}
                         style={{ paddingRight: "5px" }}
                       />
                     }
-                    Cancel
+                    Upload
                   </Button>
                 </span>
-                <Button
-                  btnType="Important"
-                  onClick={this.submitNewProfileImage}
-                  disabled={this.state.imageAsFile === ""}
-                >
+                <Button onClick={this.cancelEditProfileImageHandler}>
                   {
                     <FontAwesomeIcon
-                      icon={faFileUpload}
+                      icon={faTimes}
                       style={{ paddingRight: "5px" }}
                     />
                   }
-                  Upload
+                  Cancel
                 </Button>
               </div>
             </div>

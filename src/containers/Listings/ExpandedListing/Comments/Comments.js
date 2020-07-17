@@ -404,7 +404,7 @@ class Comments extends Component {
             placeholder="Type reply here..."
             onChange={this.replyOnChange}
           />
-          <span style={{ paddingLeft: "15px" }}>
+          <div className={classes.replyComment}>
             <Button
               btnType="Important"
               disabled={this.state.replyMessage === ""}
@@ -418,6 +418,7 @@ class Comments extends Component {
               }
               Post
             </Button>
+            <span style={{ paddingRight: "3px" }} />
             <Button onClick={() => this.togglePopUp("")}>
               {
                 <FontAwesomeIcon
@@ -427,7 +428,7 @@ class Comments extends Component {
               }
               Cancel
             </Button>
-          </span>
+          </div>
         </div>
       </Modal>
     );

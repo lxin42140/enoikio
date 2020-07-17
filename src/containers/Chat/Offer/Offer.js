@@ -585,15 +585,17 @@ class Offer extends Component {
               justifyContent: "center",
             }}
           >
-            <Button btnType="Important" onClick={this.onConfirmOffer}>
-              {
-                <FontAwesomeIcon
-                  icon={faCheck}
-                  style={{ paddingRight: "5px" }}
-                />
-              }
-              Submit Offer
-            </Button>
+            <span style={{ paddingRight: "3px" }}>
+              <Button btnType="Important" onClick={this.onConfirmOffer}>
+                {
+                  <FontAwesomeIcon
+                    icon={faCheck}
+                    style={{ paddingRight: "5px" }}
+                  />
+                }
+                Submit Offer
+              </Button>
+            </span>
             <Button onClick={this.onClosePopUpHandler}>
               {
                 <FontAwesomeIcon

@@ -66,4 +66,8 @@
     .promptMessage {
         font-size: small;
     }
+
+    .OfferInput {
+        width: 10rem;
+    }
 }

@@ -436,15 +436,35 @@ class ExpandedListing extends Component {
       <Modal show={this.state.askUserToDelete}>
         <div>
           <p>Confirm delete listing?</p>
-          <p>This action cannot be undone</p>
-          <Button onClick={this.cancelConfirmation}>
-            {<FontAwesomeIcon icon={faTimes} style={{ paddingRight: "5px" }} />}
-            Go back
-          </Button>
-          <Button onClick={this.confirmDelete} btnType="Important">
-            {<FontAwesomeIcon icon={faTrash} style={{ paddingRight: "5px" }} />}
-            Delete
-          </Button>
+          <i style={{ fontSize: "small" }}>This action cannot be undone</i>
+          <br/>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Button onClick={this.confirmDelete} btnType="Important">
+              {
+                <FontAwesomeIcon
+                  icon={faTrash}
+                  style={{ paddingRight: "5px" }}
+                />
+              }
+              Delete
+            </Button>
+            <span style={{ paddingRight: "3px" }} />
+            <Button onClick={this.cancelConfirmation}>
+              {
+                <FontAwesomeIcon
+                  icon={faTimes}
+                  style={{ paddingRight: "5px" }}
+                />
+              }
+              Go back
+            </Button>
+          </div>
         </div>
       </Modal>
     );

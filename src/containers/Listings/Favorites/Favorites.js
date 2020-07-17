@@ -103,6 +103,7 @@ class Favorites extends Component {
     return (
       <div>
         <div className={classes.Listings}>{listings}</div>
+        <h3 style={{ color: "grey" }}>Oops...No more favorites</h3>
       </div>
     );
   }

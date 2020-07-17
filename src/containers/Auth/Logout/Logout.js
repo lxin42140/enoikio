@@ -29,7 +29,13 @@ class Logout extends Component {
         />
         <br />
         <br />
-        <div>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
           <Button btnType="Important" onClick={this.onLogoutHandler}>
             {
               <FontAwesomeIcon

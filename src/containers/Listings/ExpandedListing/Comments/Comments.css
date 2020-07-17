@@ -77,4 +77,10 @@
         font-size: small;
     }
 
+    .replyComment {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
 }

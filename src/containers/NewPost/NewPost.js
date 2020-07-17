@@ -644,15 +644,6 @@ class NewPost extends Component {
           )}
 
           <div style={{ display: "flex", justifyContent: "center" }}>
-            <Button onClick={this.toggleModalHandler}>
-              {
-                <FontAwesomeIcon
-                  icon={faTimes}
-                  style={{ paddingRight: "5px" }}
-                />
-              }
-              Go back
-            </Button>
             <Button btnType="Important" onClick={this.onSubmitHandler}>
               {
                 <FontAwesomeIcon
@@ -661,6 +652,16 @@ class NewPost extends Component {
                 />
               }
               Submit
+            </Button>
+            <span style={{ paddingRight: "3px" }} />
+            <Button onClick={this.toggleModalHandler}>
+              {
+                <FontAwesomeIcon
+                  icon={faTimes}
+                  style={{ paddingRight: "5px" }}
+                />
+              }
+              Go back
             </Button>
           </div>
         </div>
@@ -680,23 +681,17 @@ class NewPost extends Component {
             paddingTop: "20px",
           }}
         >
-          <span style={{ paddingRight: "10px" }}>
-            <Button
-              btnType="Important"
-              onClick={() => {
-                this.props.dispatchClearNewPostData();
-                this.props.history.push("/");
-              }}
-            >
-              {
-                <FontAwesomeIcon
-                  icon={faHome}
-                  style={{ paddingRight: "5px" }}
-                />
-              }
-              Home
-            </Button>
-          </span>
+          <Button
+            btnType="Important"
+            onClick={() => {
+              this.props.dispatchClearNewPostData();
+              this.props.history.push("/");
+            }}
+          >
+            {<FontAwesomeIcon icon={faHome} style={{ paddingRight: "5px" }} />}
+            Home
+          </Button>
+          <span style={{ paddingRight: "3px" }} />
           <Button onClick={this.createNewFormHandler}>
             {<FontAwesomeIcon icon={faEdit} style={{ paddingRight: "5px" }} />}
             New Post

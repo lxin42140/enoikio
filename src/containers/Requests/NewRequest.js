@@ -385,6 +385,7 @@ class NewRequest extends Component {
               }
               Submit
             </Button>
+            <span style={{ paddingRight: "3px" }} />
             <Button onClick={this.toggleModalHandler}>
               {
                 <FontAwesomeIcon

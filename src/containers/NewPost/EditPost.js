@@ -482,6 +482,14 @@ class EditPost extends Component {
     this.setState((prevState) => ({ showModal: !prevState.showModal }));
   };
 
+  goBackToExpandedListing = () => {
+    this.props.dispatchClearNewPostData();
+    this.props.dispatchExpandedListing(this.props.editListing.unique);
+    this.props.history.push(
+      "/expanded-listing" + this.props.history.location.search
+    );
+  };
+
   render() {
     if (this.props.editListingLoading) {
       return <Spinner />;
@@ -702,15 +710,6 @@ class EditPost extends Component {
           )}
 
           <div style={{ display: "flex", justifyContent: "center" }}>
-            <Button onClick={this.toggleModalHandler}>
-              {
-                <FontAwesomeIcon
-                  icon={faTimes}
-                  style={{ paddingRight: "5px" }}
-                />
-              }
-              Go back
-            </Button>
             <Button btnType="Important" onClick={this.onSubmitHandler}>
               {
                 <FontAwesomeIcon
@@ -719,6 +718,16 @@ class EditPost extends Component {
                 />
               }
               Submit
+            </Button>
+            <span style={{ paddingRight: "3px" }} />
+            <Button onClick={this.toggleModalHandler}>
+              {
+                <FontAwesomeIcon
+                  icon={faTimes}
+                  style={{ paddingRight: "5px" }}
+                />
+              }
+              Go back
             </Button>
           </div>
         </div>
@@ -741,15 +750,8 @@ class EditPost extends Component {
             {<FontAwesomeIcon icon={faHome} style={{ paddingRight: "5px" }} />}
             Home
           </Button>
-          <Button
-            onClick={() => {
-              this.props.dispatchClearNewPostData();
-              this.props.dispatchExpandedListing(this.props.editListing.unique);
-              this.props.history.push(
-                "/expanded-listing" + this.props.history.location.search
-              );
-            }}
-          >
+          <span style={{ paddingRight: "3px" }} />
+          <Button onClick={this.goBackToExpandedListing}>
             {<FontAwesomeIcon icon={faTimes} style={{ paddingRight: "5px" }} />}
             Go back
           </Button>
