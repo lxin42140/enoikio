@@ -11,7 +11,6 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
 import Button from "../../../components/UI/Button/Button";
 import Modal from "../../../components/UI/Modal/Modal";
 import Spinner from "../../../components/UI/Spinner/Spinner";
@@ -437,7 +436,7 @@ class ExpandedListing extends Component {
         <div>
           <p>Confirm delete listing?</p>
           <i style={{ fontSize: "small" }}>This action cannot be undone</i>
-          <br/>
+          <br />
           <div
             style={{
               display: "flex",
