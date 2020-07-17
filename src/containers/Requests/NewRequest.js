@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
 import moment from "moment";
 import axios from "axios";
 import { faTimes, faCheck, faHome } from "@fortawesome/free-solid-svg-icons";
@@ -344,32 +343,50 @@ class NewRequest extends Component {
 
     let postSummary = (
       <Modal show={this.state.showModal}>
-        <h1>Confirm request details:</h1>
-        <p>
-          <b>Module code: </b>
-          {this.state.dataForm.module.value}
-        </p>
-        <p>
-          <b>Textbook: </b>《{this.state.dataForm.textbook.value}》
-        </p>
-        <p>
-          <b>Request type: </b>
-          {this.state.dataForm.requestType.value}
-        </p>
-        <p>
-          <b>Priority level: </b>
-          {this.state.dataForm.priority.value}
-        </p>
+        <div className={classes.postSummary}>
+          <h1>Confirm request details:</h1>
+          <p>
+            <b>Module code: </b>
+            {this.state.dataForm.module.value}
+          </p>
+          <p>
+            <b>Textbook: </b>《{this.state.dataForm.textbook.value}》
+          </p>
+          <p>
+            <b>Request type: </b>
+            {this.state.dataForm.requestType.value}
+          </p>
+          <p>
+            <b>Priority level: </b>
+            {this.state.dataForm.priority.value}
+          </p>
 
-        <div style={{ display: "flex", justifyContent: "center" }}>
-          <Button onClick={this.onSubmitHandler} btnType="Important">
-            {<FontAwesomeIcon icon={faCheck} style={{ paddingRight: "5px" }} />}
-            Submit
-          </Button>
-          <Button onClick={this.toggleModalHandler}>
-            {<FontAwesomeIcon icon={faTimes} style={{ paddingRight: "5px" }} />}
-            Go back
-          </Button>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Button onClick={this.onSubmitHandler} btnType="Important">
+              {
+                <FontAwesomeIcon
+                  icon={faCheck}
+                  style={{ paddingRight: "5px" }}
+                />
+              }
+              Submit
+            </Button>
+            <Button onClick={this.toggleModalHandler}>
+              {
+                <FontAwesomeIcon
+                  icon={faTimes}
+                  style={{ paddingRight: "5px" }}
+                />
+              }
+              Go back
+            </Button>
+          </div>
         </div>
       </Modal>
     );
@@ -377,27 +394,15 @@ class NewRequest extends Component {
     let successPost = (
       <Modal show={this.props.requestUploaded}>
         <p style={{ color: "green" }}>Request successfully posted!</p>
-
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            paddingTop: "20px",
+        <Button
+          onClick={() => {
+            this.props.dispatchClearRequestData();
+            this.props.history.push("/");
           }}
         >
-          <Link to="/" style={{ paddingRight: "10px" }}>
-            <Button onClick={() => this.props.dispatchClearRequestData()}>
-              {
-                <FontAwesomeIcon
-                  icon={faHome}
-                  style={{ paddingRight: "5px" }}
-                />
-              }
-              Home
-            </Button>
-          </Link>
-        </div>
+          {<FontAwesomeIcon icon={faHome} style={{ paddingRight: "5px" }} />}
+          Home
+        </Button>
       </Modal>
     );
 

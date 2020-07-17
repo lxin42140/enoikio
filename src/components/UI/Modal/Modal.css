@@ -21,3 +21,10 @@
         width: calc(100% - 240px);
     }
 }
+
+@media (max-width: 600px) {
+    .Modal {
+        left: 60px;
+        width: calc(100% - 100px);
+    }
+}

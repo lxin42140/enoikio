@@ -90,10 +90,14 @@ class Request extends Component {
       priorityColour.push(classes.Low);
     }
 
-    const contentStyle = this.props.isProfile ? classes.ProfileContent : classes.Content;
-    const textbookStyle = this.props.isProfile ? classes.ProfileTextbook : classes.Textbook;
+    const contentStyle = this.props.isProfile
+      ? classes.ProfileContent
+      : classes.Content;
+    const textbookStyle = this.props.isProfile
+      ? classes.ProfileTextbook
+      : classes.Textbook;
     const infoStyle = this.props.isProfile ? classes.ProfileInfo : classes.Info;
-    
+
     const request = (
       <div
         className={contentStyle}
@@ -159,14 +163,32 @@ class Request extends Component {
           <p style={{ fontSize: "small" }}>
             <i>This action cannot be undone!</i>
           </p>
-          <Button onClick={this.cancelConfirmation}>
-            {<FontAwesomeIcon icon={faTimes} style={{ paddingRight: "5px" }} />}
-            Go back
-          </Button>
-          <Button onClick={this.deleteRequest} btnType="Important">
-            {<FontAwesomeIcon icon={faTrash} style={{ paddingRight: "5px" }} />}
-            Delete
-          </Button>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Button onClick={this.cancelConfirmation}>
+              {
+                <FontAwesomeIcon
+                  icon={faTimes}
+                  style={{ paddingRight: "5px" }}
+                />
+              }
+              Go back
+            </Button>
+            <Button onClick={this.deleteRequest} btnType="Important">
+              {
+                <FontAwesomeIcon
+                  icon={faTrash}
+                  style={{ paddingRight: "5px" }}
+                />
+              }
+              Delete
+            </Button>
+          </div>
         </div>
       </Modal>
     );
@@ -174,16 +196,25 @@ class Request extends Component {
     const confirmDeleteModal = (
       <Modal show={this.state.confirmDelete}>
         <p>Listing deleted</p>
-        <Link to="/">
-          <Button btnType="Important">
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Button
+            btnType="Important"
+            onClick={() => this.props.history.push("/")}
+          >
             {<FontAwesomeIcon icon={faHome} style={{ paddingRight: "5px" }} />}
             Home
           </Button>
-        </Link>
-        <Button onClick={this.closePopup}>
-          {<FontAwesomeIcon icon={faTrash} style={{ paddingRight: "5px" }} />}
-          Close
-        </Button>
+          <Button onClick={this.closePopup}>
+            {<FontAwesomeIcon icon={faTrash} style={{ paddingRight: "5px" }} />}
+            Close
+          </Button>
+        </div>
       </Modal>
     );
 

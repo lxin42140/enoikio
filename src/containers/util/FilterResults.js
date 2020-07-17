@@ -214,6 +214,7 @@ class FilterResults extends Component {
               userId={request.displayName}
               date={request.date}
               priority={request.requestDetails.priority}
+              history={this.props.history}
             />
           );
         });
