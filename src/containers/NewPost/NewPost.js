@@ -561,7 +561,7 @@ class NewPost extends Component {
         <h4>
           {this.props.uploadingImage || this.props.uploadingPost
             ? "Submitting..."
-            : "Enter Rental Details"}
+            : "Enter Listing Details"}
         </h4>
         {this.props.uploadingImage || this.props.uploadingPost ? (
           <Spinner />
@@ -569,6 +569,18 @@ class NewPost extends Component {
           <React.Fragment>
             {form}
             <br />
+            {this.state.numberOfImages < 3 ? (
+              <p style={{ fontSize: "small" }}>
+                Image limit: {3 - Number(this.state.numberOfImages)} images
+                remaining
+              </p>
+            ) : (
+              <p
+                style={{ fontSize: "small", color: "red", fontWeight: "bold" }}
+              >
+                Maximum number of images reached
+              </p>
+            )}
             <div className={classes.ImageText}>{displayImageList}</div>
             <div style={{ marginBottom: "10px", color: "#f3a1a1" }}>
               {
@@ -642,28 +654,17 @@ class NewPost extends Component {
               </span>
             </p>
           )}
-
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <Button btnType="Important" onClick={this.onSubmitHandler}>
-              {
-                <FontAwesomeIcon
-                  icon={faCheck}
-                  style={{ paddingRight: "5px" }}
-                />
-              }
-              Submit
-            </Button>
-            <span style={{ paddingRight: "3px" }} />
-            <Button onClick={this.toggleModalHandler}>
-              {
-                <FontAwesomeIcon
-                  icon={faTimes}
-                  style={{ paddingRight: "5px" }}
-                />
-              }
-              Go back
-            </Button>
-          </div>
+        </div>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <Button btnType="Important" onClick={this.onSubmitHandler}>
+            {<FontAwesomeIcon icon={faCheck} style={{ paddingRight: "5px" }} />}
+            Submit
+          </Button>
+          <span style={{ paddingRight: "3px" }} />
+          <Button onClick={this.toggleModalHandler}>
+            {<FontAwesomeIcon icon={faTimes} style={{ paddingRight: "5px" }} />}
+            Go back
+          </Button>
         </div>
       </Modal>
     );
@@ -672,7 +673,6 @@ class NewPost extends Component {
       <Modal show={this.props.postUploaded && this.props.imageUploaded}>
         <br />
         <p style={{ color: "green" }}>Successfully posted!</p>
-        <br />
         <div
           style={{
             display: "flex",

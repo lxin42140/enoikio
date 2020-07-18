@@ -517,6 +517,7 @@ class EditPost extends Component {
     let form = formElementsArray.map((formElement) => {
       let validationCheck = null;
       let validationMessage = null;
+      let disabled = false;
       if (formElement.id === "module") {
         if (formElement.config.validated && formElement.config.valid) {
           validationMessage = (
@@ -539,6 +540,11 @@ class EditPost extends Component {
         }
         validationCheck = <React.Fragment>{validationMessage}</React.Fragment>;
       }
+
+      if (formElement.id === "listingType") {
+        disabled = true;
+      }
+
       return (
         <React.Fragment key={formElement.id}>
           <Input
@@ -549,6 +555,7 @@ class EditPost extends Component {
             valid={formElement.config.valid}
             shouldValidate={formElement.config.validation}
             touched={formElement.config.touched}
+            disabled={disabled}
             change={(event) => this.inputChangedHandler(event, formElement.id)}
           />
           {validationCheck}
@@ -708,28 +715,17 @@ class EditPost extends Component {
               </span>
             </p>
           )}
-
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <Button btnType="Important" onClick={this.onSubmitHandler}>
-              {
-                <FontAwesomeIcon
-                  icon={faCheck}
-                  style={{ paddingRight: "5px" }}
-                />
-              }
-              Submit
-            </Button>
-            <span style={{ paddingRight: "3px" }} />
-            <Button onClick={this.toggleModalHandler}>
-              {
-                <FontAwesomeIcon
-                  icon={faTimes}
-                  style={{ paddingRight: "5px" }}
-                />
-              }
-              Go back
-            </Button>
-          </div>
+        </div>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <Button btnType="Important" onClick={this.onSubmitHandler}>
+            {<FontAwesomeIcon icon={faCheck} style={{ paddingRight: "5px" }} />}
+            Submit
+          </Button>
+          <span style={{ paddingRight: "3px" }} />
+          <Button onClick={this.toggleModalHandler}>
+            {<FontAwesomeIcon icon={faTimes} style={{ paddingRight: "5px" }} />}
+            Go back
+          </Button>
         </div>
       </Modal>
     );
@@ -738,7 +734,6 @@ class EditPost extends Component {
       <Modal show={this.props.postUploaded}>
         <br />
         <p style={{ color: "green" }}>Successfully edited!</p>
-        <br />
         <div style={{ display: "flex", justifyContent: "center" }}>
           <Button
             btnType="Important"

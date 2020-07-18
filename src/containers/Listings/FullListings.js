@@ -175,7 +175,6 @@ class FullListings extends Component {
               </Link>
             )}
           </div>
-          <h3>No requests at the moment</h3>
         </React.Fragment>
       );
     } else {

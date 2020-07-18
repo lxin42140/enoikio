@@ -436,7 +436,7 @@ class ExpandedListing extends Component {
         <div>
           <p>Confirm delete listing?</p>
           <i style={{ fontSize: "small" }}>This action cannot be undone</i>
-          <br />
+          <span style={{ paddingBottom: "10px" }} />
           <div
             style={{
               display: "flex",
@@ -472,7 +472,10 @@ class ExpandedListing extends Component {
       <Modal show={this.state.confirmDelete}>
         <div style={{ display: "block" }}>
           <p>Listing deleted</p>
-          <Button onClick={() => this.props.history.push("/")}>
+          <Button
+            btnType="Important"
+            onClick={() => this.props.history.push("/")}
+          >
             {<FontAwesomeIcon icon={faHome} style={{ paddingRight: "5px" }} />}
             Home
           </Button>

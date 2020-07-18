@@ -241,19 +241,21 @@ class Auth extends Component {
 
       let config = this.state.controls[key];
 
-      if (this.state.isSignUp) {
-        switch (key) {
-          case "email":
-            config.elementConfig.placeholder = "Enter a valid email address";
-            break;
-          case "password":
-            config.elementConfig.placeholder =
-              "Enter a password of at least 6 characters";
-            break;
-          default:
-            break;
-        }
+      switch (key) {
+        case "email":
+          config.elementConfig.placeholder = this.state.isSignUp
+            ? "Enter a valid email address"
+            : "Enter your email";
+          break;
+        case "password":
+          config.elementConfig.placeholder = this.state.isSignUp
+            ? "Enter a password of at least 6 characters"
+            : "Enter your password";
+          break;
+        default:
+          break;
       }
+
       formElementArray.push({
         id: key,
         config: this.state.controls[key],

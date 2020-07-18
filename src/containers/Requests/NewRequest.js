@@ -368,34 +368,23 @@ class NewRequest extends Component {
             <b>Priority level: </b>
             {this.state.dataForm.priority.value}
           </p>
-
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Button onClick={this.onSubmitHandler} btnType="Important">
-              {
-                <FontAwesomeIcon
-                  icon={faCheck}
-                  style={{ paddingRight: "5px" }}
-                />
-              }
-              Submit
-            </Button>
-            <span style={{ paddingRight: "3px" }} />
-            <Button onClick={this.toggleModalHandler}>
-              {
-                <FontAwesomeIcon
-                  icon={faTimes}
-                  style={{ paddingRight: "5px" }}
-                />
-              }
-              Go back
-            </Button>
-          </div>
+        </div>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Button onClick={this.onSubmitHandler} btnType="Important">
+            {<FontAwesomeIcon icon={faCheck} style={{ paddingRight: "5px" }} />}
+            Submit
+          </Button>
+          <span style={{ paddingRight: "3px" }} />
+          <Button onClick={this.toggleModalHandler}>
+            {<FontAwesomeIcon icon={faTimes} style={{ paddingRight: "5px" }} />}
+            Go back
+          </Button>
         </div>
       </Modal>
     );

@@ -195,16 +195,28 @@ class Offer extends Component {
    */
   dateValidation = () => {
     const dateFormat = "DD/MM/YYYY";
+
     let startDateIsValid = moment(
       this.state.startRental,
       dateFormat,
       true
     ).isValid();
+
+    if (!startDateIsValid) {
+      alert("Please double check start date format");
+      return false;
+    }
+
     let endDateIsValid = moment(
       this.state.endRental,
       dateFormat,
       true
     ).isValid();
+
+    if (!endDateIsValid) {
+      alert("Please double check end date format");
+      return false;
+    }
 
     let startRentalDate = Number(
       this.state.startRental.split("/").reverse().join("")
@@ -215,21 +227,12 @@ class Offer extends Component {
     let today = Number(moment().format("YYYYMMDD"));
 
     if (startRentalDate < today) {
-      startDateIsValid = false;
-    }
-
-    if (!startDateIsValid) {
-      alert("Please enter a valid start date");
+      alert("Start rental date cannot be earlier than current date");
       return false;
     }
 
     if (endRentalDate < startRentalDate) {
       alert("Please enter a valid rental period");
-      return false;
-    }
-
-    if (!endDateIsValid) {
-      alert("Please enter a valid end date");
       return false;
     }
 
@@ -556,7 +559,7 @@ class Offer extends Component {
                   className={classes.OfferInput}
                   onChange={this.startRentalOnChange}
                   value={this.state.startRental}
-                  placeholder="Start rental date: DD/MM/YYYY"
+                  placeholder="Start rental date: DD/MM/YYYY format"
                 />
               </div>
               <br />
@@ -572,12 +575,16 @@ class Offer extends Component {
                   className={classes.OfferInput}
                   onChange={this.endRentalOnChange}
                   value={this.state.endRental}
-                  placeholder="End rental date: DD/MM/YYYY"
+                  placeholder="End rental date: DD/MM/YYYY format"
                 />
               </div>
               <br />
             </React.Fragment>
           ) : null}
+          <i style={{ fontSize: "small", paddingBottom: "5px" }}>
+            Please note that rental duration should not exceed 12 months
+          </i>
+          <br />
           <div
             style={{
               display: "flex",
