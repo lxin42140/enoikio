@@ -100,7 +100,7 @@ class SearchBar extends Component {
         this.state.filterType,
         this.state.userInput.toLowerCase().split(" ").join("")
       );
-      
+
       let pathName = this.props.history.location.pathname;
 
       if (this.props.history.location.search) {
@@ -122,27 +122,42 @@ class SearchBar extends Component {
   };
 
   render() {
+    const activeDropDownStyle = { backgroundColor: "#ffb3a7" };
     let dropDown = (
       <React.Fragment>
         <DropDown
           icon={faUniversity}
           onClick={() => this.changeFilterHandler("moduleCode")}
           text={"Module"}
+          style={
+            this.state.filterType === "moduleCode" ? activeDropDownStyle : null
+          }
         />
         <DropDown
           icon={faBookOpen}
           onClick={() => this.changeFilterHandler("textbook")}
           text={"Textbook"}
+          style={
+            this.state.filterType === "textbook" ? activeDropDownStyle : null
+          }
         />
         <DropDown
           icon={faLocationArrow}
           onClick={() => this.changeFilterHandler("location")}
           text={"Location"}
+          style={
+            this.state.filterType === "location" ? activeDropDownStyle : null
+          }
         />
         <DropDown
           icon={faUser}
           onClick={() => this.changeFilterHandler("searchProfile")}
           text={"Username"}
+          style={
+            this.state.filterType === "searchProfile"
+              ? activeDropDownStyle
+              : null
+          }
         />
       </React.Fragment>
     );

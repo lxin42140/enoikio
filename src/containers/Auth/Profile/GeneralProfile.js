@@ -463,32 +463,20 @@ class GeneralProfilePage extends Component {
 
     let reportUser = (
       <Modal show={this.state.reportUserPopup}>
-        <div className={classes.reportSummary}>
-          {form}
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <Button
-              btnType="Important"
-              disabled={!this.state.formIsValid}
-              onClick={this.showReportSummary}
-            >
-              {
-                <FontAwesomeIcon
-                  icon={faCheck}
-                  style={{ paddingRight: "5px" }}
-                />
-              }
-              Review
-            </Button>
-            <Button onClick={this.closeReportModal}>
-              {
-                <FontAwesomeIcon
-                  icon={faTimes}
-                  style={{ paddingRight: "5px" }}
-                />
-              }
-              Cancel
-            </Button>
-          </div>
+        <div className={classes.reportSummary}>{form}</div>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <Button
+            btnType="Important"
+            disabled={!this.state.formIsValid}
+            onClick={this.showReportSummary}
+          >
+            {<FontAwesomeIcon icon={faCheck} style={{ paddingRight: "5px" }} />}
+            Review
+          </Button>
+          <Button onClick={this.closeReportModal}>
+            {<FontAwesomeIcon icon={faTimes} style={{ paddingRight: "5px" }} />}
+            Cancel
+          </Button>
         </div>
       </Modal>
     );
@@ -508,27 +496,35 @@ class GeneralProfilePage extends Component {
           </p>
           <p style={{ fontSize: "small" }}>
             <i>{this.state.dataForm.followUp.value}</i>
+            <br />
+            <i style={{ fontSize: "x-small" }}>
+              {this.state.dataForm.followUp.value ===
+              "I wish to be contacted for follow-up"
+                ? "(You will be contacted via registered email address)"
+                : null}
+            </i>
           </p>
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <Button btnType="Important" onClick={this.submitReportHandler}>
-              {
-                <FontAwesomeIcon
-                  icon={faExclamationTriangle}
-                  style={{ paddingRight: "5px" }}
-                />
-              }
-              Report
-            </Button>
-            <Button onClick={this.closeReportSummary}>
-              {
-                <FontAwesomeIcon
-                  icon={faEdit}
-                  style={{ paddingRight: "5px" }}
-                />
-              }
-              Edit
-            </Button>
-          </div>
+        </div>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Button btnType="Important" onClick={this.submitReportHandler}>
+            {
+              <FontAwesomeIcon
+                icon={faExclamationTriangle}
+                style={{ paddingRight: "5px" }}
+              />
+            }
+            Report
+          </Button>
+          <Button onClick={this.closeReportSummary}>
+            {<FontAwesomeIcon icon={faEdit} style={{ paddingRight: "5px" }} />}
+            Edit
+          </Button>
         </div>
       </Modal>
     );
@@ -787,7 +783,7 @@ class GeneralProfilePage extends Component {
       <div className={classes.profile}>
         {this.state.reportUserPopup ? reportUser : null}
         {this.state.showSummary ? reportSummary : null}
-        <div className={classes.Background}>
+        <div className={classes.nonPersonalBackground}>
           <FontAwesomeIcon
             icon={faWindowClose}
             onClick={this.onCancelSearchHandler}

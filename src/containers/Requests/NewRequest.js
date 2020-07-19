@@ -397,6 +397,7 @@ class NewRequest extends Component {
             this.props.dispatchClearRequestData();
             this.props.history.push("/");
           }}
+          btnType="Important"
         >
           {<FontAwesomeIcon icon={faHome} style={{ paddingRight: "5px" }} />}
           Home

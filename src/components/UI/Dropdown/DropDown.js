@@ -9,7 +9,9 @@ const dropDown = (props) => {
         icon={props.icon}
         style={{ padding: "0 3px", fontSize: "1rem", color: "#ff9f90" }}
       />
-      <a onClick={props.onClick}>{props.text}</a>
+      <a onClick={props.onClick} style={props.style}>
+        {props.text}
+      </a>
     </span>
   );
 };

@@ -20,6 +20,7 @@
 .Selections a {
     padding: 0 10px;
     color: grey;
+    text-decoration: underline;
 }
 
 .Selections a:hover {

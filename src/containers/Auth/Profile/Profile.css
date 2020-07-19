@@ -5,6 +5,16 @@
 .Background {
     width: 100%;
     height: 128px;
+    background-color: #f3705c;
+    /* background-image: url(https://mweb-cdn.karousell.com/build/profile-bg-aad22df….jpg); */
+    background-repeat: repeat;
+    background-size: 50%;
+    padding: 0px;
+}
+
+.nonPersonalBackground {
+    width: 100%;
+    height: 128px;
     background-color: #ffcdc5;
     /* background-image: url(https://mweb-cdn.karousell.com/build/profile-bg-aad22df….jpg); */
     background-repeat: repeat;
@@ -147,7 +157,8 @@
 }
 
 .reportSummary {
-    text-align: center
+    text-align: left;
+    padding-left: 20%;
 }
 
 /*------------------------------------------------------------------*/

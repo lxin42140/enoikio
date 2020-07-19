@@ -1,8 +1,6 @@
 import {
   faStar,
-  faReply,
   faTimes,
-  faCheck,
   faShare,
   faPen,
   faClipboardCheck,
