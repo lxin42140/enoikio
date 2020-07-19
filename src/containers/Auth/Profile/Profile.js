@@ -416,15 +416,8 @@ class Profile extends Component {
               </Button>
             </React.Fragment>
           ) : (
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <div style={{ paddingBottom: "10px" }}>
+            <div style={{ paddingRight: "20%" }}>
+              <div style={{ paddingBottom: "10px", textAlign: "center" }}>
                 {
                   <FontAwesomeIcon
                     icon={faImage}
@@ -438,7 +431,13 @@ class Profile extends Component {
                   onChange={this.handleImageAsFile}
                 />
               </div>
-              <div style={{ display: "flex", alignItems: "center" }}>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
                 <span style={{ paddingRight: "5px" }}>
                   <Button
                     btnType="Important"
