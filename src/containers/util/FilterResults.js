@@ -124,7 +124,11 @@ class FilterResults extends Component {
       diffCount === str.length ||
       diffCount === this.props.searchObject.length
     ) {
-      return false;
+      if (str.indexOf(this.props.searchObject) > -1) {
+        return true;
+      } else {
+        return false;
+      }
     } else {
       return true;
     }
@@ -224,7 +228,14 @@ class FilterResults extends Component {
             />
           );
         });
-        return <div className={classes.Listings}>{myRequests}</div>;
+        return (
+          <div>
+            <div className={classes.Listings}>{myRequests}</div>
+            <h3 style={{ color: "grey", textAlign: "center" }}>
+              Oops...No more requests!
+            </h3>
+          </div>
+        );
       }
     }
 
@@ -365,6 +376,11 @@ class FilterResults extends Component {
       <div>
         {requestPrompt}
         <div className={classes.Listings}>{listings}</div>
+        {this.state.filterType === "onRent" ? null : (
+          <h3 style={{ color: "grey", textAlign: "center" }}>
+            Oops...No more listings!
+          </h3>
+        )}
       </div>
     );
   }
