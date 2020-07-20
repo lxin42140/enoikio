@@ -333,23 +333,11 @@ class ExpandedListing extends Component {
             <li>
               <b>Status: </b>
               {this.props.expandedListing.status === "available" ? (
-                <span
-                  style={{
-                    color: "grey",
-                    fontSize: "16px",
-                    fontWeight: "bolder",
-                  }}
-                >
+                <span className={classes.keyInformation}>
                   {this.props.expandedListing.status}
                 </span>
               ) : (
-                <span
-                  style={{
-                    color: "grey",
-                    fontSize: "18px",
-                    fontWeight: "bolder",
-                  }}
-                >
+                <span className={classes.keyInformation}>
                   {this.props.expandedListing.status}
                 </span>
               )}
@@ -357,26 +345,14 @@ class ExpandedListing extends Component {
             {this.props.expandedListing.postDetails.listingType === "rent" ? (
               <li>
                 <b>Price: </b>
-                <span
-                  style={{
-                    color: "grey",
-                    fontSize: "20px",
-                    fontWeight: "bolder",
-                  }}
-                >
+                <span className={classes.keyInformation}>
                   ${this.props.expandedListing.postDetails.price} /month
                 </span>
               </li>
             ) : (
               <li>
                 <b>Price: </b>
-                <span
-                  style={{
-                    color: "grey",
-                    fontSize: "20px",
-                    fontWeight: "bolder",
-                  }}
-                >
+                <span className={classes.keyInformation}>
                   ${this.props.expandedListing.postDetails.price}
                 </span>
               </li>

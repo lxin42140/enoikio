@@ -93,6 +93,12 @@
     padding-bottom: 5px;
 }
 
+.keyInformation {
+    color: grey;
+    font-size: 20px;
+    font-weight: bolder;
+}
+
 @media (max-width: 685px) {
     .Content {
         display: flex;
@@ -114,4 +120,7 @@
         width: 100%;
     }
 
+    .keyInformation {
+        font-size: 15px;
+    }
 }
