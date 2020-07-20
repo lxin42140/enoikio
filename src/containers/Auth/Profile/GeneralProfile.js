@@ -530,13 +530,7 @@ class GeneralProfilePage extends Component {
     );
 
     const numStar = (
-      <div
-        style={{
-          textAlign: "left",
-          fontSize: "20px",
-          alignItems: "center",
-        }}
-      >
+      <div className={classes.starReviews}>
         <FontAwesomeIcon
           icon={faStar}
           style={
@@ -714,14 +708,7 @@ class GeneralProfilePage extends Component {
           />
         </div>
         <div>
-          <p
-            style={{
-              fontSize: "30px",
-              lineHeight: "38px",
-              fontWeight: "400",
-              color: "black",
-            }}
-          >
+        <p className={classes.displayName}>
             @{this.state.displayName}
           </p>
           {numStar}

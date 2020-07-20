@@ -53,6 +53,13 @@
     padding-right: 10px;
 }
 
+.displayName {
+    font-size: 30px;
+    line-height: 38px;
+    font-weight: 400;
+    color: black
+}
+
 .ProfileImage {
     width: 200px;
     height: 200px;
@@ -60,6 +67,11 @@
     border: 5px solid white;
 }
 
+.starReviews {
+    text-align: left;
+    font-size: 20px;
+    align-items: center
+}
 /*-------------------RIGHT (BOTTOM) SIDE--------------------*/
 
 /* Navigation + listings/requests/onRent/comments */
@@ -188,5 +200,27 @@
 
     .ProfileDetails {
         width: 100%;
+    }
+
+    .ProfileImage {
+        width: 150px;
+        height: 150px;
+    }
+
+    .UserDetails {
+        font-size: small;
+        width: 100%
+    }
+
+    .displayName {
+        margin-top: 0px;
+        font-size: 25px;
+        line-height: 15px;
+        text-align: center;
+        padding-right: 15px;
+    }
+
+    .starReviews{
+        font-size: 13px;
     }
 }

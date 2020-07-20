@@ -470,13 +470,7 @@ class Profile extends Component {
     );
 
     const numStar = (
-      <div
-        style={{
-          textAlign: "left",
-          fontSize: "20px",
-          alignItems: "center",
-        }}
-      >
+      <div className={classes.starReviews}>
         <FontAwesomeIcon
           icon={faStar}
           style={
@@ -704,16 +698,7 @@ class Profile extends Component {
           />
         </div>
         <div>
-          <p
-            style={{
-              fontSize: "30px",
-              lineHeight: "38px",
-              fontWeight: "400",
-              color: "black",
-            }}
-          >
-            @{this.props.displayName}
-          </p>
+          <p className={classes.displayName}>@{this.props.displayName}</p>
           {numStar}
           <p>
             <b>Email: </b>
