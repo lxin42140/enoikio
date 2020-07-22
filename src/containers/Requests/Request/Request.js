@@ -236,7 +236,6 @@ class Request extends Component {
               style={{ paddingRight: "5px" }}
             />
           }
-          Chat
         </Button>
         // </Link>
       );
@@ -244,7 +243,6 @@ class Request extends Component {
       button = (
         <Button onClick={this.askUserToDelete}>
           {<FontAwesomeIcon icon={faTrash} style={{ paddingRight: "5px" }} />}
-          Delete
         </Button>
       );
     } else {
@@ -261,7 +259,6 @@ class Request extends Component {
               style={{ paddingRight: "5px" }}
             />
           }
-          Chat
         </Button>
         // </Link>
       );
