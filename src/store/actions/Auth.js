@@ -161,7 +161,7 @@ export const updateUserDetails = (user, photoURL) => {
       })
       .catch((error) => {
         let message = error.message.split("-").join(" ");
-        message = "Oops, something went wrong. Please try again later!";
+        // message = "Oops, something went wrong. Please try again later!";
         dispatch(authFail(message));
       });
   };
@@ -297,7 +297,7 @@ export const signIn = (email, password) => {
       })
       .catch((error) => {
         let message = error.message.split("-").join(" ");
-        message = "Oops, something went wrong. Please try again later!";
+        // message = "Oops, something went wrong. Please try again later!";
         dispatch(authFail(message));
       });
   };
