@@ -30,6 +30,15 @@ class FilterResults extends Component {
       this.setState({
         searching: false,
       });
+    } else if (
+      this.state.filterType === "requests" &&
+      this.props.allRequests.filter(
+        (request) =>
+          request.displayName.toLowerCase().split(" ").join("") ===
+          this.props.searchObject
+      ).length !== this.state.filteredRequests.length
+    ) {
+      this.filter();
     }
   }
 
@@ -229,7 +238,7 @@ class FilterResults extends Component {
           );
         });
         return (
-          <div style={{width: "100%"}}>
+          <div style={{ width: "100%" }}>
             <div className={classes.Listings}>{myRequests}</div>
             <h3 style={{ color: "grey", textAlign: "center" }}>
               Oops...No more requests!

@@ -9,7 +9,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { database } from "../../../firebase/firebase";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import Modal from "../../../components/UI/Modal/Modal";
 import * as actions from "../../../store/actions/index";
 
