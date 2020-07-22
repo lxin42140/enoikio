@@ -411,7 +411,9 @@ class ExpandedListing extends Component {
       <Modal show={this.state.askUserToDelete}>
         <div>
           <p>Confirm delete listing?</p>
-          <i style={{ fontSize: "small", color: "red"}}>This action cannot be undone</i>
+          <i style={{ fontSize: "small", color: "red" }}>
+            This action cannot be undone
+          </i>
           <span style={{ paddingBottom: "10px" }} />
           <div
             style={{
@@ -447,7 +449,7 @@ class ExpandedListing extends Component {
     const confirmDeleteModal = (
       <Modal show={this.state.confirmDelete}>
         <div style={{ display: "block" }}>
-          <p style={{color: "red", fontWeight: "bold"}}>Listing deleted</p>
+          <p style={{ color: "red", fontWeight: "bold" }}>Listing deleted</p>
           <Button
             btnType="Important"
             onClick={() => this.props.history.push("/")}
@@ -475,6 +477,7 @@ class ExpandedListing extends Component {
             identifier={this.props.expandedListing.key}
             userName={this.props.expandedListing.displayName}
             searchProfileHandler={this.searchProfileHandler}
+            history={this.props.history}
           />
         </div>
         {this.state.askUserToDelete ? askForConfirmation : null}

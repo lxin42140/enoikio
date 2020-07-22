@@ -372,17 +372,17 @@ class Comments extends Component {
                     </Button>
                   </span>
                 ) : (
-                  <Link to="/auth">
-                    <Button>
-                      {
-                        <FontAwesomeIcon
-                          icon={faShare}
-                          style={{ paddingRight: "5px" }}
-                        />
-                      }
-                      {this.props.windowWidth <= 685 ? null : "Sign in"}
-                    </Button>
-                  </Link>
+                  // <Link to="/auth">
+                  <Button onClick={() => this.props.history.push("/auth")}>
+                    {
+                      <FontAwesomeIcon
+                        icon={faShare}
+                        style={{ paddingRight: "5px" }}
+                      />
+                    }
+                    {this.props.windowWidth <= 685 ? null : "Sign in"}
+                  </Button>
+                  // </Link>
                 )}
               </div>
             </div>

@@ -304,7 +304,7 @@ class Auth extends Component {
     const formContent = this.props.loading ? (
       <Spinner />
     ) : (
-      <div style={{ paddingBottom: "15px" }}>
+      <div className={classes.formStyling}>
         {form}
         {this.state.isResetPassword ? (
           <Button
