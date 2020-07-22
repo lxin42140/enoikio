@@ -391,7 +391,7 @@ class NewRequest extends Component {
 
     let successPost = (
       <Modal show={this.props.requestUploaded}>
-        <p style={{ color: "green" }}>Request successfully posted!</p>
+        <p style={{ color: "green", fontWeight: "bold" }}>Request successfully posted!</p>
         <Button
           onClick={() => {
             this.props.dispatchClearRequestData();

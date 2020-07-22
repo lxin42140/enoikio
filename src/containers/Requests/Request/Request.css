@@ -5,7 +5,6 @@
   width: 90%;
 }
 
-/*TODO: fix listing size to relative*/
 .Request {
   display: flex;
   justify-content: space-between;

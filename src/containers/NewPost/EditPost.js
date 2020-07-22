@@ -733,7 +733,7 @@ class EditPost extends Component {
     let successPost = (
       <Modal show={this.props.postUploaded}>
         <br />
-        <p style={{ color: "green" }}>Successfully edited!</p>
+        <p style={{ color: "green", fontWeight: "bold" }}>Successfully edited!</p>
         <div style={{ display: "flex", justifyContent: "center" }}>
           <Button
             btnType="Important"

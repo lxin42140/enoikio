@@ -402,7 +402,7 @@ class Profile extends Component {
             </div>
           ) : this.props.updatedUserDetails ? (
             <div className={classes.PopUpColumnFlex}>
-              <p style={{ color: "green", fontWeight: "bold" }}>Done!</p>
+              <p style={{ color: "green", fontWeight: "bold" }}>Uploaded!</p>
               <Button onClick={this.cancelEditProfileImageHandler}>
                 {
                   <FontAwesomeIcon

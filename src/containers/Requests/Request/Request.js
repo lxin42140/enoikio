@@ -160,7 +160,7 @@ class Request extends Component {
       <Modal show={this.state.askUserToDelete}>
         <div>
           <p>Confirm delete?</p>
-          <p style={{ fontSize: "small" }}>
+          <p style={{ fontSize: "small", color: "red" }}>
             <i>This action cannot be undone!</i>
           </p>
           <div
@@ -196,7 +196,7 @@ class Request extends Component {
 
     const confirmDeleteModal = (
       <Modal show={this.state.confirmDelete}>
-        <p>Listing deleted</p>
+        <p style={{ color: "red", fontWeight: "bold" }}>Listing deleted</p>
         <div
           style={{
             display: "flex",
