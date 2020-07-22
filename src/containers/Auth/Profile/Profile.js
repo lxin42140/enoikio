@@ -394,14 +394,14 @@ class Profile extends Component {
       <Modal show={this.state.editProfileImage}>
         <div className={classes.reportSummary}>
           {this.props.updatingUserDetails ? (
-            <React.Fragment>
+            <div className={classes.PopUpColumnFlex}>
               <Spinner />
               <p style={{ color: "red", fontWeight: "bold" }}>
                 Please do not close window...
               </p>
-            </React.Fragment>
+            </div>
           ) : this.props.updatedUserDetails ? (
-            <div className={classes.EditProfileImageModal}>
+            <div className={classes.PopUpColumnFlex}>
               <p style={{ color: "green", fontWeight: "bold" }}>Done!</p>
               <Button onClick={this.cancelEditProfileImageHandler}>
                 {
@@ -414,13 +414,10 @@ class Profile extends Component {
               </Button>
             </div>
           ) : (
-            <div style={{ paddingRight: "20%" }}>
-              <div
+            <div className={classes.PopUpColumnFlex}>
+              <span
                 style={{
                   paddingBottom: "10px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
                 }}
               >
                 {
@@ -435,7 +432,7 @@ class Profile extends Component {
                   style={{ width: "fit-content" }}
                   onChange={this.handleImageAsFile}
                 />
-              </div>
+              </span>
               <div
                 style={{
                   display: "flex",

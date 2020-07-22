@@ -67,12 +67,12 @@
     border: 5px solid white;
 }
 
-.EditProfileImageModal {
+.PopUpColumnFlex {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding-right: 20%;
+    /* padding-right: 20%; */
 }
 
 .starReviews {
