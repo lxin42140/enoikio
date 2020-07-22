@@ -229,7 +229,7 @@ class FilterResults extends Component {
           );
         });
         return (
-          <div>
+          <div style={{width: "100%"}}>
             <div className={classes.Listings}>{myRequests}</div>
             <h3 style={{ color: "grey", textAlign: "center" }}>
               Oops...No more requests!
