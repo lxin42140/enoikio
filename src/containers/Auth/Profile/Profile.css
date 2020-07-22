@@ -137,14 +137,14 @@
     background-color: #e7ebee;
 } */
 
-/* .DropDown button:hover, */
-/* .Navigation button:active,
+.DropDown button:hover,
+.Navigation button:active,
 .Navigation button:focus {
-    font-weight: bold;
+    /* font-weight: bold;
     color: #dd5641;
-    border-bottom: 2px solid #dd5641;
+    border-bottom: 2px solid #dd5641; */
     outline: none;
-} */
+}
 
 /* Dropdown */
 .filter {
