@@ -38,7 +38,7 @@
 .NewComment {
     padding: 10px 0 10px 0;
     display: flex;
-    align-items: center;
+    align-items: stretch;
 }
 
 .CommentMessages {
@@ -79,6 +79,7 @@
 
     .replyComment {
         display: flex;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
     }

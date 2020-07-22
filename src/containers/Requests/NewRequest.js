@@ -391,17 +391,28 @@ class NewRequest extends Component {
 
     let successPost = (
       <Modal show={this.props.requestUploaded}>
-        <p style={{ color: "green", fontWeight: "bold" }}>Request successfully posted!</p>
-        <Button
-          onClick={() => {
-            this.props.dispatchClearRequestData();
-            this.props.history.push("/");
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
           }}
-          btnType="Important"
         >
-          {<FontAwesomeIcon icon={faHome} style={{ paddingRight: "5px" }} />}
-          Home
-        </Button>
+          <p style={{ color: "green", fontWeight: "bold" }}>
+            Request successfully posted!
+          </p>
+          <Button
+            onClick={() => {
+              this.props.dispatchClearRequestData();
+              this.props.history.push("/");
+            }}
+            btnType="Important"
+          >
+            {<FontAwesomeIcon icon={faHome} style={{ paddingRight: "5px" }} />}
+            Home
+          </Button>
+        </div>
       </Modal>
     );
 

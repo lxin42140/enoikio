@@ -409,7 +409,14 @@ class ExpandedListing extends Component {
 
     const askForConfirmation = (
       <Modal show={this.state.askUserToDelete}>
-        <div>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
           <p>Confirm delete listing?</p>
           <i style={{ fontSize: "small", color: "red" }}>
             This action cannot be undone
@@ -448,7 +455,14 @@ class ExpandedListing extends Component {
 
     const confirmDeleteModal = (
       <Modal show={this.state.confirmDelete}>
-        <div style={{ display: "block" }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
           <p style={{ color: "red", fontWeight: "bold" }}>Listing deleted</p>
           <Button
             btnType="Important"

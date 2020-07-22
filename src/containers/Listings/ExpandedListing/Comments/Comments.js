@@ -401,6 +401,7 @@ class Comments extends Component {
             value={this.state.replyMessage}
             placeholder="Type reply here..."
             onChange={this.replyOnChange}
+            style={{paddingRight: "5px"}}
           />
           <div className={classes.replyComment}>
             <Button

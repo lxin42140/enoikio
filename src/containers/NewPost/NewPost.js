@@ -566,7 +566,14 @@ class NewPost extends Component {
         {this.props.uploadingImage || this.props.uploadingPost ? (
           <Spinner />
         ) : (
-          <React.Fragment>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
             {form}
             <br />
             {this.state.numberOfImages < 3 ? (
@@ -605,7 +612,7 @@ class NewPost extends Component {
             >
               SUBMIT
             </Button>
-          </React.Fragment>
+          </div>
         )}
       </div>
     );
@@ -672,7 +679,9 @@ class NewPost extends Component {
     let successPost = (
       <Modal show={this.props.postUploaded && this.props.imageUploaded}>
         <br />
-        <p style={{ color: "green", fontWeight: "bold" }}>Listing successfully posted!</p>
+        <p style={{ color: "green", fontWeight: "bold" }}>
+          Listing successfully posted!
+        </p>
         <div
           style={{
             display: "flex",

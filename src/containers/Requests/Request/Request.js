@@ -76,6 +76,8 @@ class Request extends Component {
         UID: UID,
       });
     }
+
+    this.props.history.push("/chats");
   };
 
   render() {
@@ -196,7 +198,7 @@ class Request extends Component {
 
     const confirmDeleteModal = (
       <Modal show={this.state.confirmDelete}>
-        <p style={{ color: "red", fontWeight: "bold" }}>Listing deleted</p>
+        <p style={{ color: "green", fontWeight: "bold" }}>Listing deleted</p>
         <div
           style={{
             display: "flex",
@@ -226,39 +228,42 @@ class Request extends Component {
 
     if (!this.props.isAuthenticated) {
       button = (
-        <Link to="/auth">
-          <Button>
-            {
-              <FontAwesomeIcon
-                icon={faComments}
-                style={{ paddingRight: "5px" }}
-              />
-            }
-          </Button>
-        </Link>
+        // <Link to="/auth">
+        <Button onClick={() => this.props.history.push("/auth")}>
+          {
+            <FontAwesomeIcon
+              icon={faComments}
+              style={{ paddingRight: "5px" }}
+            />
+          }
+          Chat
+        </Button>
+        // </Link>
       );
     } else if (isOwner) {
       button = (
         <Button onClick={this.askUserToDelete}>
           {<FontAwesomeIcon icon={faTrash} style={{ paddingRight: "5px" }} />}
+          Delete
         </Button>
       );
     } else {
       button = (
-        <Link
-          to={{
-            pathname: "/chats",
-          }}
-        >
-          <Button onClick={() => this.onChatHandler(this.props.userId)}>
-            {
-              <FontAwesomeIcon
-                icon={faComments}
-                style={{ paddingRight: "5px" }}
-              />
-            }
-          </Button>
-        </Link>
+        // <Link
+        //   to={{
+        //     pathname: "/chats",
+        //   }}
+        // >
+        <Button onClick={() => this.onChatHandler(this.props.userId)}>
+          {
+            <FontAwesomeIcon
+              icon={faComments}
+              style={{ paddingRight: "5px" }}
+            />
+          }
+          Chat
+        </Button>
+        // </Link>
       );
     }
 
