@@ -409,7 +409,7 @@ class Listing extends Component {
         <React.Fragment>
           <div
             onClick={this.expandListingHandler}
-            style={{ cursor: "pointer", marginBottom: "-30px" }}
+            style={{ cursor: "pointer" }}
           >
             <div
               className={

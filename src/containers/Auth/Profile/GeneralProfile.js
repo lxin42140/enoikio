@@ -464,7 +464,13 @@ class GeneralProfilePage extends Component {
     let reportUser = (
       <Modal show={this.state.reportUserPopup}>
         <div className={classes.reportSummary}>{form}</div>
-        <div style={{ display: "flex", justifyContent: "center" }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
           <Button
             btnType="Important"
             disabled={!this.state.formIsValid}
@@ -572,9 +578,9 @@ class GeneralProfilePage extends Component {
     const activeButtonStyle =
       this.props.windowWidth <= 950
         ? {
-            fontWeight: "bold",
             color: "#dd5641",
             outline: "none",
+            width: "100%",
           }
         : {
             fontWeight: "bold",
@@ -708,9 +714,7 @@ class GeneralProfilePage extends Component {
           />
         </div>
         <div>
-        <p className={classes.displayName}>
-            @{this.state.displayName}
-          </p>
+          <p className={classes.displayName}>@{this.state.displayName}</p>
           {numStar}
           <p>
             <b>Date joined: </b>

@@ -136,7 +136,6 @@ class ChatBox extends Component {
                       style={{ paddingRight: "5px" }}
                     />
                   }
-                  Send
                 </Button>
               </span>
             </React.Fragment>

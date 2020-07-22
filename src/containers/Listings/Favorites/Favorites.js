@@ -44,8 +44,13 @@ class Favorites extends Component {
       return (
         <h3>
           Oops...
-          {<FontAwesomeIcon icon={faHeart} style={{ paddingRight: "5px" }} />}a
-          post and view it here
+          {
+            <FontAwesomeIcon
+              icon={faHeart}
+              style={{ paddingRight: "5px", color: "red" }}
+            />
+          }
+          a post and view it here
         </h3>
       );
     }

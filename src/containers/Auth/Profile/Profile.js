@@ -44,8 +44,6 @@ class Profile extends Component {
     numReviews: 0,
     numStars: 0,
 
-    //
-
     feedbackPopup: false,
     showSummary: false,
     dataForm: {
@@ -403,7 +401,7 @@ class Profile extends Component {
               </p>
             </React.Fragment>
           ) : this.props.updatedUserDetails ? (
-            <React.Fragment>
+            <div className={classes.EditProfileImageModal}>
               <p style={{ color: "green", fontWeight: "bold" }}>Done!</p>
               <Button onClick={this.cancelEditProfileImageHandler}>
                 {
@@ -414,10 +412,17 @@ class Profile extends Component {
                 }
                 Go back
               </Button>
-            </React.Fragment>
+            </div>
           ) : (
             <div style={{ paddingRight: "20%" }}>
-              <div style={{ paddingBottom: "10px", textAlign: "center" }}>
+              <div
+                style={{
+                  paddingBottom: "10px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
                 {
                   <FontAwesomeIcon
                     icon={faImage}
@@ -512,9 +517,9 @@ class Profile extends Component {
     const activeButtonStyle =
       this.props.windowWidth <= 950
         ? {
-            fontWeight: "bold",
             color: "#dd5641",
             outline: "none",
+            width: "100%",
           }
         : {
             fontWeight: "bold",
@@ -861,7 +866,7 @@ class Profile extends Component {
               this.state.showRequest ? (
                 <FilterResults history={this.props.history} />
               ) : this.state.comments.length < 1 ? (
-                <h3 style={{ color: "grey" }}>Oops..No reviews</h3>
+                <h3 style={{ color: "grey" }}>Oops...No reviews</h3>
               ) : (
                 <ul className={classes.Reviews}>{reviews}</ul>
               )}

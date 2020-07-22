@@ -2,7 +2,7 @@
 .Normal {
     display: flex;
     flex-direction: column;
-    height: 505px;
+    height: 490px;
     width: 250px;
     overflow-y: auto;
     border: 1px solid #ccc;

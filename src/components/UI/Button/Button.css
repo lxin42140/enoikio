@@ -1,7 +1,7 @@
 .Button {
     width: fit-content;
     box-sizing: content-box;
-    min-width: 50px;
+    min-width: 20px;
     height: 25px;
     border-radius: 2em;
     cursor: pointer;
@@ -32,11 +32,6 @@
 .Button:focus {
     outline: none;
 }
-
-/* .Button:first-of-type {
-    margin-left: 0;
-    padding-left: 0;
-} */
 
 .Important {
     border-style: none;

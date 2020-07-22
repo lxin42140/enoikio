@@ -2,7 +2,7 @@
     display: flex;
     padding: 8px 16px 8px 0;
     border-bottom: 1px solid #f0f1f1;
-    max-width: 89%;
+    max-width: 90%
 }
 
 .ReplyMessage {
@@ -48,14 +48,15 @@
 
 .CommentText {
     position: relative;
-    max-width: 100%;
+    width: 100%;
     color: #444;
     overflow-wrap: break-word;
-    width: fit-content;
+    /* width: fit-content; */
 }
 
 @media (max-width: 685px) {
     .CommentText {
         font-size: small;
+        min-width: 200px;
     }
 }
