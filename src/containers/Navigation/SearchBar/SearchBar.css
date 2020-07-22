@@ -97,5 +97,15 @@
 @media (max-width: 750px) {
     .searchBox {
         width: 60%;
+        padding-right: 15px;
+    }
+
+    .Searchbar {
+        padding-left: 5px;
+    }
+
+    .input::placeholder {
+        padding-left: 5px;
+        font-size: small;
     }
 }

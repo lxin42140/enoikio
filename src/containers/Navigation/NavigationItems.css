@@ -10,12 +10,6 @@
   justify-content: flex-end;
 }
 
-@media (max-width: 749px) {
-  .NavigationItems {
-    justify-content: space-between;
-  }
-}
-
 .SearchIcon:hover {
   cursor: pointer;
 }
@@ -45,4 +39,10 @@
 .Button:active,
 .Button:focus {
   outline: none;
+}
+
+@media (max-width: 749px) {
+  .NavigationItems {
+    justify-content: space-between;
+  }
 }
