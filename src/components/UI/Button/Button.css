@@ -15,6 +15,9 @@
     border: 2px solid #ff5138;
     transition-duration: 0.2s;
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     /* font-style: none; */
 }
 
