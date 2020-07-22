@@ -8,7 +8,6 @@ import {
   faStar,
   faBook,
   faTasks,
-  faHandHoldingUsd,
   faCommentDots,
   faChevronDown,
   faWindowClose,
@@ -25,6 +24,7 @@ import classes from "./Profile.css";
 import FilterResults from "../../util/FilterResults";
 import Comment from "../../../components/Comment/Comment";
 import { Link } from "react-router-dom";
+import DropDown from "../../../components/UI/Dropdown/DropDown";
 
 class GeneralProfilePage extends Component {
   state = {
@@ -575,6 +575,8 @@ class GeneralProfilePage extends Component {
       </div>
     );
 
+    const activeDropDownStyle = { backgroundColor: "#ffb3a7" };
+
     const activeButtonStyle =
       this.props.windowWidth <= 950
         ? {
@@ -589,9 +591,43 @@ class GeneralProfilePage extends Component {
             borderBottom: "3px solid #dd5641",
           };
 
-    let tabs = (
-      <div className={classes.DropDown}>
-        <button
+    let navigationDropDown = (
+      <div className={classes.dropdownContent}>
+        <DropDown
+          icon={faBook}
+          onClick={() => {
+            this.onShowPastPostHandler();
+            this.toggleDropDown();
+          }}
+          text={"Listings"}
+          style={this.state.showPastListing ? activeDropDownStyle : null}
+        />
+        <DropDown
+          icon={faTasks}
+          onClick={() => {
+            this.onShowRequestHandler();
+            this.toggleDropDown();
+          }}
+          text={"Requests"}
+          style={this.state.showRequests ? activeDropDownStyle : null}
+        />
+        <DropDown
+          icon={faCommentDots}
+          onClick={() => {
+            this.onShowReviewsHandler();
+            this.toggleDropDown();
+          }}
+          text={"Reviews"}
+          style={this.state.showComments ? activeDropDownStyle : null}
+        />
+      </div>
+    );
+
+    // let tabs = (
+    //   <div className={classes.dropdownContent}>
+    //     {dropDown}
+    // {
+    /* <button
           onClick={() => {
             this.onShowPastPostHandler();
             if (this.props.windowWidth <= 950) {
@@ -631,78 +667,183 @@ class GeneralProfilePage extends Component {
             />
           }
           Reviews
+        </button> */
+    // }
+    //   </div>
+    // );
+
+    let navigationBar = (
+      <div className={classes.Navigation}>
+        <button
+          onClick={() => {
+            this.onShowPastPostHandler();
+          }}
+          style={this.state.showPastListing ? activeButtonStyle : null}
+        >
+          {<FontAwesomeIcon icon={faBook} style={{ paddingRight: "5px" }} />}
+          Listings
+        </button>
+        <button
+          onClick={() => {
+            this.onShowRequestHandler();
+          }}
+          style={this.state.showRequests ? activeButtonStyle : null}
+        >
+          {<FontAwesomeIcon icon={faTasks} style={{ paddingRight: "5px" }} />}
+          Requests
+        </button>
+        <button
+          onClick={() => {
+            this.onShowReviewsHandler();
+          }}
+          style={this.state.showComments ? activeButtonStyle : null}
+        >
+          {
+            <FontAwesomeIcon
+              icon={faCommentDots}
+              style={{ paddingRight: "5px" }}
+            />
+          }
+          Reviews
         </button>
       </div>
     );
 
     let navigation;
 
-    if (this.props.windowWidth > 950) {
-      navigation = tabs;
-    } else {
+    if (this.props.windowWidth <= 950) {
       const currentItemShowing = (
         <div className={classes.Navigation} onClick={this.toggleDropDown}>
-          {this.state.showPastListing ? (
-            <button style={activeButtonStyle}>
-              <FontAwesomeIcon
-                icon={faBook}
-                style={{
-                  paddingRight: "5px",
-                }}
-              />
-              Listings
-              <FontAwesomeIcon
-                icon={faChevronDown}
-                style={{
-                  paddingLeft: "5px",
-                }}
-              />
-            </button>
-          ) : this.state.showRequests ? (
-            <button style={activeButtonStyle}>
-              <FontAwesomeIcon
-                icon={faTasks}
-                style={{
-                  paddingRight: "5px",
-                }}
-              />
-              Requests
-              <FontAwesomeIcon
-                icon={faChevronDown}
-                style={{
-                  paddingLeft: "1px",
-                }}
-              />
-            </button>
-          ) : (
-            <button style={activeButtonStyle}>
-              <FontAwesomeIcon
-                icon={faHandHoldingUsd}
-                style={{
-                  paddingRight: "5px",
-                }}
-              />
-              Reviews
-              <FontAwesomeIcon
-                icon={faChevronDown}
-                style={{
-                  paddingLeft: "5px",
-                }}
-              />
-            </button>
-          )}
+          <div>
+            {this.state.showPastListing ? (
+              <button style={activeButtonStyle}>
+                <FontAwesomeIcon
+                  icon={faBook}
+                  style={{
+                    paddingRight: "5px",
+                  }}
+                />
+                Listings
+                <FontAwesomeIcon
+                  icon={faChevronDown}
+                  style={{
+                    paddingLeft: "5px",
+                  }}
+                />
+              </button>
+            ) : this.state.showRequest ? (
+              <button style={activeButtonStyle}>
+                <FontAwesomeIcon
+                  icon={faTasks}
+                  style={{
+                    paddingRight: "5px",
+                  }}
+                />
+                Requests
+                <FontAwesomeIcon
+                  icon={faChevronDown}
+                  style={{
+                    paddingLeft: "1px",
+                  }}
+                />
+              </button>
+            ) : (
+              <button style={activeButtonStyle}>
+                <FontAwesomeIcon
+                  icon={faCommentDots}
+                  style={{
+                    paddingRight: "5px",
+                  }}
+                />
+                Reviews
+                <FontAwesomeIcon
+                  icon={faChevronDown}
+                  style={{
+                    paddingLeft: "5px",
+                  }}
+                />
+              </button>
+            )}
+          </div>
         </div>
       );
-
-      const dropDown = this.state.showDropDown ? tabs : null;
 
       navigation = (
         <div className={classes.DropDownContent}>
           {currentItemShowing}
-          <div className={classes.filter}>{dropDown}</div>
+          {this.state.showDropDown ? navigationDropDown : null}
         </div>
       );
+    } else {
+      navigation = navigationBar;
     }
+
+    // if (this.props.windowWidth > 950) {
+    //   navigation = tabs;
+    // } else {
+    //   const currentItemShowing = (
+    //     <div className={classes.Navigation} onClick={this.toggleDropDown}>
+    //       {this.state.showPastListing ? (
+    //         <button style={activeButtonStyle}>
+    //           <FontAwesomeIcon
+    //             icon={faBook}
+    //             style={{
+    //               paddingRight: "5px",
+    //             }}
+    //           />
+    //           Listings
+    //           <FontAwesomeIcon
+    //             icon={faChevronDown}
+    //             style={{
+    //               paddingLeft: "5px",
+    //             }}
+    //           />
+    //         </button>
+    //       ) : this.state.showRequests ? (
+    //         <button style={activeButtonStyle}>
+    //           <FontAwesomeIcon
+    //             icon={faTasks}
+    //             style={{
+    //               paddingRight: "5px",
+    //             }}
+    //           />
+    //           Requests
+    //           <FontAwesomeIcon
+    //             icon={faChevronDown}
+    //             style={{
+    //               paddingLeft: "1px",
+    //             }}
+    //           />
+    //         </button>
+    //       ) : (
+    //         <button style={activeButtonStyle}>
+    //           <FontAwesomeIcon
+    //             icon={faCommentDots}
+    //             style={{
+    //               paddingRight: "5px",
+    //             }}
+    //           />
+    //           Reviews
+    //           <FontAwesomeIcon
+    //             icon={faChevronDown}
+    //             style={{
+    //               paddingLeft: "5px",
+    //             }}
+    //           />
+    //         </button>
+    //       )}
+    //     </div>
+    //   );
+
+    //   const dropDown = this.state.showDropDown ? tabs : null;
+
+    //   navigation = (
+    //     <div className={classes.DropDownContent}>
+    //       {currentItemShowing}
+    //       <div className={classes.filter}>{dropDown}</div>
+    //     </div>
+    //   );
+    // }
 
     let profile = (
       <div className={classes.UserDetails}>

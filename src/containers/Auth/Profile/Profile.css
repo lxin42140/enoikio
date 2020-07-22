@@ -92,12 +92,13 @@
 }
 
 /* Navigation bar and dropdown */
-.DropDown,
+/* .DropDown, */
 .Navigation {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
+    text-align: start;
     font-size: 17px;
     color: grey;
     width: 100%;
@@ -105,8 +106,17 @@
     border-bottom: 1px solid #e7ebee;
 }
 
-.DropDownContent {
+.navigationContent {
     width: fit-content;
+}
+
+.dropdownContent {
+    display: block;
+    position: absolute;
+    background-color: #f1f1f1;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    cursor: pointer
 }
 
 /* .arrowDown {
@@ -119,7 +129,7 @@
     cursor: pointer;
 } */
 
-.DropDown button,
+/* .DropDown button, */
 .Navigation button {
     border: none;
     background-color: white;
@@ -147,14 +157,14 @@
 } */
 
 /* Dropdown */
-.filter {
+/* .filter {
     width: inherit;
     height: fit-content;
     align-items: center;
     z-index: 1;
     display: block;
     position: absolute;
-}
+} */
 
 /* Listings/Requests/onRent/comments outermost div */
 .Details {

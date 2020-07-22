@@ -27,7 +27,7 @@ import * as actions from "../../../store/actions/index";
 import FilterResults from "../../util/FilterResults";
 import * as classes from "./Profile.css";
 import Input from "../../../components/UI/Input/Input";
-
+import DropDown from "../../../components/UI/Dropdown/DropDown";
 class Profile extends Component {
   state = {
     showPastListing: true,
@@ -390,6 +390,7 @@ class Profile extends Component {
   };
 
   render() {
+    // edit profile image
     let editProfileImage = (
       <Modal show={this.state.editProfileImage}>
         <div className={classes.reportSummary}>
@@ -511,6 +512,9 @@ class Profile extends Component {
       </div>
     );
 
+    // navigation bar and drop down
+    const activeDropDownStyle = { backgroundColor: "#ffb3a7" };
+
     const activeButtonStyle =
       this.props.windowWidth <= 950
         ? {
@@ -525,14 +529,64 @@ class Profile extends Component {
             borderBottom: "3px solid #dd5641",
           };
 
-    let tabs = (
-      <div className={classes.DropDown}>
+    let navigationDropDown = (
+      <div className={classes.dropdownContent}>
+        <DropDown
+          icon={faBook}
+          onClick={() => {
+            this.onShowPastPostHandler();
+            this.toggleDropDown();
+          }}
+          text={"Listings"}
+          style={
+            this.props.filterType === "displayName" && !this.state.showComments
+              ? activeDropDownStyle
+              : null
+          }
+        />
+        <DropDown
+          icon={faTasks}
+          onClick={() => {
+            this.onShowRequestHandler();
+            this.toggleDropDown();
+          }}
+          text={"Requests"}
+          style={
+            this.props.filterType === "requests" && !this.state.showComments
+              ? activeDropDownStyle
+              : null
+          }
+        />
+        <DropDown
+          icon={faHandHoldingUsd}
+          onClick={() => {
+            this.onShowOnRentHandler();
+            this.toggleDropDown();
+          }}
+          text={"On Rent"}
+          style={
+            this.props.filterType === "onRent" && !this.state.showComments
+              ? activeDropDownStyle
+              : null
+          }
+        />
+        <DropDown
+          icon={faCommentDots}
+          onClick={() => {
+            this.onShowReviewsHandler();
+            this.toggleDropDown();
+          }}
+          text={"Reviews"}
+          style={this.state.showComments ? activeDropDownStyle : null}
+        />
+      </div>
+    );
+
+    let navigationBar = (
+      <div className={classes.Navigation}>
         <button
           onClick={() => {
             this.onShowPastPostHandler();
-            if (this.props.windowWidth <= 950) {
-              this.toggleDropDown();
-            }
           }}
           style={
             this.props.filterType === "displayName" && !this.state.showComments
@@ -546,9 +600,6 @@ class Profile extends Component {
         <button
           onClick={() => {
             this.onShowRequestHandler();
-            if (this.props.windowWidth <= 950) {
-              this.toggleDropDown();
-            }
           }}
           style={
             this.props.filterType === "requests" && !this.state.showComments
@@ -562,9 +613,6 @@ class Profile extends Component {
         <button
           onClick={() => {
             this.onShowOnRentHandler();
-            if (this.props.windowWidth <= 950) {
-              this.toggleDropDown();
-            }
           }}
           style={
             this.props.filterType === "onRent" && !this.state.showComments
@@ -583,9 +631,6 @@ class Profile extends Component {
         <button
           onClick={() => {
             this.onShowReviewsHandler();
-            if (this.props.windowWidth <= 950) {
-              this.toggleDropDown();
-            }
           }}
           style={this.state.showComments ? activeButtonStyle : null}
         >
@@ -602,9 +647,7 @@ class Profile extends Component {
 
     let navigation;
 
-    if (this.props.windowWidth > 950) {
-      navigation = tabs;
-    } else {
+    if (this.props.windowWidth <= 950) {
       const currentItemShowing = (
         <div className={classes.Navigation} onClick={this.toggleDropDown}>
           <div>
@@ -659,7 +702,7 @@ class Profile extends Component {
             ) : (
               <button style={activeButtonStyle}>
                 <FontAwesomeIcon
-                  icon={faHandHoldingUsd}
+                  icon={faCommentDots}
                   style={{
                     paddingRight: "5px",
                   }}
@@ -677,14 +720,14 @@ class Profile extends Component {
         </div>
       );
 
-      const dropDown = this.state.showDropDown ? tabs : null;
-
       navigation = (
         <div className={classes.DropDownContent}>
           {currentItemShowing}
-          <div className={classes.filter}>{dropDown}</div>
+          {this.state.showDropDown ? navigationDropDown : null}
         </div>
       );
+    } else {
+      navigation = navigationBar;
     }
 
     let profile = (
