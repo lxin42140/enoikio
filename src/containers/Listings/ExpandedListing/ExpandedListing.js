@@ -463,7 +463,7 @@ class ExpandedListing extends Component {
             alignItems: "center",
           }}
         >
-          <p style={{ color: "red", fontWeight: "bold" }}>Listing deleted</p>
+          <p style={{ color: "green", fontWeight: "bold" }}>Listing deleted</p>
           <Button
             btnType="Important"
             onClick={() => this.props.history.push("/")}
