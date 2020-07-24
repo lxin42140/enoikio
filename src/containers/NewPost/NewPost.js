@@ -467,6 +467,11 @@ class NewPost extends Component {
   };
 
   render() {
+    if (this.props.error) {
+      console.log('inside here');
+      return (<p style={{ color: "red", fontSize: "small" }}>{this.props.error}</p>);
+    }
+
     const formElementsArray = [];
 
     for (let key in this.state.dataForm) {
@@ -727,6 +732,7 @@ const mapStateToProps = (state) => {
     imageUploaded: state.newPost.imageUploaded,
     displayName: state.auth.displayName,
     photoURL: state.auth.photoURL,
+    error: state.newPost.error,
   };
 };
 

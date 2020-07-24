@@ -91,8 +91,23 @@ export const setInterestedListing = (listing) => {
           dispatch(interestedListing(result));
         },
         (error) => {
-          const message = error.message.split("-").join(" ");
-          dispatch(fetchListingFail(message));
+          // const message = error.message.split("-").join(" ");
+          // dispatch(fetchListingFail(message));
+          // .catch(error => {
+          switch (error.code) {
+            case('storage/unauthenticated'):
+              dispatch(fetchListingFail("Oops, you are unauthenticated. Log in and try again!"));
+              break;
+            case ('storage/canceled'):
+              dispatch(fetchListingFail("Oops, you have cancelled the operation. Please try again!"));
+              break;
+            case('storage/invalid-url'):
+              dispatch(fetchListingFail("Oops, the URL is invalid. Please try again!"));
+              break;
+            default:
+              dispatch(fetchListingFail("Oops, something went wrong. Please try again later!"))
+          }
+          // });
         }
       );
   };
@@ -114,6 +129,21 @@ export const fetchAllListings = () => {
       .child("listings")
       .on("child_removed", (snapShot) => {
         dispatch(removedListing(snapShot.key));
+      }, error => {
+        let message;
+        switch (error.getCode()) {
+          case (-24): //NETWORK_ERROR
+          case (-4): //DISCONNECTED
+            message = "Oops, please check your network connection and try again!";
+            break;
+          case (-10): //UNAVAILABLE
+          case (-2): //OPERATION_FAILED
+            message = "Oops, the service is currently unavailable. Please try again later!";
+            break;
+          default:
+            message = "Oops, something went wrong. Please try again later!";
+        }
+        dispatch(fetchListingFail(message));
       });
 
     database
@@ -175,6 +205,21 @@ export const fetchAllListings = () => {
               };
               dispatch(updateListing(updatedListing));
             }
+          }, error => {
+            let message;
+            switch (error.getCode()) {
+              case (-24): //NETWORK_ERROR
+              case (-4): //DISCONNECTED
+                message = "Oops, please check your network connection and try again!";
+                break;
+              case (-10): //UNAVAILABLE
+              case (-2): //OPERATION_FAILED
+                message = "Oops, the service is currently unavailable. Please try again later!";
+                break;
+              default:
+                message = "Oops, something went wrong. Please try again later!";
+            }
+            dispatch(fetchListingFail(message));
           });
 
         if (!snapShot.val().comments) {
@@ -194,17 +239,47 @@ export const fetchAllListings = () => {
                 updatedListing.replies = snapShot.val();
                 dispatch(updateListing(updatedListing));
               }
+            }, error => {
+              let message;
+              switch (error.getCode()) {
+                case (-24): //NETWORK_ERROR
+                case (-4): //DISCONNECTED
+                  message = "Oops, please check your network connection and try again!";
+                  break;
+                case (-10): //UNAVAILABLE
+                case (-2): //OPERATION_FAILED
+                  message = "Oops, the service is currently unavailable. Please try again later!";
+                  break;
+                default:
+                  message = "Oops, something went wrong. Please try again later!";
+              }
+              dispatch(fetchListingFail(message));
             });
         }
 
         result.push(listing);
         result.reverse();
         dispatch(fetchListingSuccess(result));
-      });
-    // .catch((error) => {
-    //   const message = error.message.split("-").join(" ");
-    //   dispatch(fetchListingFail(message));
-    // });
+      }, error => {
+        let message;
+        switch (error.getCode()) {
+          case (-24): //NETWORK_ERROR
+          case (-4): //DISCONNECTED
+            message = "Oops, please check your network connection and try again!";
+            break;
+          case (-10): //UNAVAILABLE
+          case (-2): //OPERATION_FAILED
+            message = "Oops, the service is currently unavailable. Please try again later!";
+            break;
+          default:
+            message = "Oops, something went wrong. Please try again later!";
+        }
+        dispatch(fetchListingFail(message));
+      })
+      // .catch((error) => {
+      //   const message = error.message.split("-").join(" ");
+      //   dispatch(fetchListingFail(message));
+      // });
   };
 };
 
@@ -218,11 +293,24 @@ export const fetchExpandedListing = (identifier) => {
       (imageURL) => {
         expandedListing.imageURL = imageURL;
         dispatch(setExpandedListing(expandedListing));
+      },
+      (error) => {
+        // const message = error.message.split("-").join(" ");
+        // dispatch(fetchListingFail(message));
+        switch (error.code) {
+          case('storage/unauthenticated'):
+            dispatch(fetchListingFail("Oops, you are unauthenticated. Log in and try again!"));
+            break;
+          case ('storage/canceled'):
+            dispatch(fetchListingFail("Oops, you have cancelled the operation. Please try again!"));
+            break;
+          case('storage/invalid-url'):
+            dispatch(fetchListingFail("Oops, the URL is invalid. Please try again!"));
+            break;
+          default:
+            dispatch(fetchListingFail("Oops, something went wrong. Please try again later!"))
+        }
       }
-      // (error) => {
-      //   const message = error.message.split("-").join(" ");
-      //   dispatch(fetchListingFail(message));
-      // }
     );
   };
 };
@@ -230,7 +318,6 @@ export const fetchExpandedListing = (identifier) => {
 async function getDownloadURL(numImage, identifier, key) {
   const imageURL = [];
   while (key < numImage) {
-    // console.log(imageURL);
     const ref = storage
       .ref()
       .child("listingPictures")

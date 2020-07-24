@@ -9,11 +9,6 @@ import { database, storage } from "../../../firebase/firebase";
 import * as actions from "../../../store/actions/index";
 import classes from "./Listing.css";
 
-/*
-KIV:
-2. ADJUST MODAL FOR DELETE LISTING / EDIT LISTING FOR SMALLER SCREEN
-*/
-
 class Listing extends Component {
   state = {
     image: "",
@@ -21,6 +16,7 @@ class Listing extends Component {
     error: false,
     liked: false,
     likedUsers: [],
+    errorMessage: "",
   };
 
   componentDidMount() {
@@ -52,6 +48,24 @@ class Listing extends Component {
       const likedUsers = Object.assign([], this.state.likedUsers);
       database.ref().child("listings").child(this.props.node).update({
         likedUsers: likedUsers,
+      })
+      .catch(error => {
+        let message;
+        switch (error.getCode()) {
+          case (-24): //NETWORK_ERROR
+          case (-4): //DISCONNECTED
+            message = "Oops, please check your network connection and try again!";
+            break;
+          case (-10): //UNAVAILABLE
+          case (-2): //OPERATION_FAILED
+            message = "Oops, the service is currently unavailable. Please try again later!";
+            break;
+          default:
+            message = "Oops, something went wrong. Please try again later!";
+        }
+        this.setState({ 
+          errorMessage: message, 
+        })
       });
     }
   }
@@ -187,6 +201,23 @@ class Listing extends Component {
                   });
               }
             });
+          }, error => {
+            let message;
+            switch (error.getCode()) {
+              case (-24): //NETWORK_ERROR
+              case (-4): //DISCONNECTED
+                message = "Oops, please check your network connection and try again!";
+                break;
+              case (-10): //UNAVAILABLE
+              case (-2): //OPERATION_FAILED
+                message = "Oops, the service is currently unavailable. Please try again later!";
+                break;
+              default:
+                message = "Oops, something went wrong. Please try again later!";
+            }
+            this.setState({ 
+              errorMessage: message, 
+            })
           });
       });
 
@@ -196,6 +227,24 @@ class Listing extends Component {
       .update({
         lessee: "none",
         status: "available",
+      })
+      .catch(error => {
+        let message;
+        switch (error.getCode()) {
+          case (-24): //NETWORK_ERROR
+          case (-4): //DISCONNECTED
+            message = "Oops, please check your network connection and try again!";
+            break;
+          case (-10): //UNAVAILABLE
+          case (-2): //OPERATION_FAILED
+            message = "Oops, the service is currently unavailable. Please try again later!";
+            break;
+          default:
+            message = "Oops, something went wrong. Please try again later!";
+        }
+        this.setState({ 
+          errorMessage: message, 
+        })
       });
   };
 
@@ -482,7 +531,7 @@ class Listing extends Component {
       );
     }
 
-    return <div className={ListingStyle}>{listing}</div>;
+    return <div className={ListingStyle}>{this.state.errorMessage ? this.state.errorMessage : listing}</div>;
   }
 }
 

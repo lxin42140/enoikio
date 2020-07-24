@@ -26,6 +26,7 @@ class Offer extends Component {
     fullChatUID: "",
     showPopUp: false,
     isListingOwner: false,
+    errorMessage: "",
   };
 
   componentDidMount() {
@@ -315,6 +316,24 @@ class Offer extends Component {
                 showPopUp: false,
                 offerType: "MADE_OFFER",
               });
+            })
+            .catch(error => {
+              let message;
+              switch (error.getCode()) {
+                case (-24): //NETWORK_ERROR
+                case (-4): //DISCONNECTED
+                  message = "Oops, please check your network connection and try again!";
+                  break;
+                case (-10): //UNAVAILABLE
+                case (-2): //OPERATION_FAILED
+                  message = "Oops, the service is currently unavailable. Please try again later!";
+                  break;
+                default:
+                  message = "Oops, something went wrong. Please try again later!";
+              }
+              this.setState({ 
+                errorMessage: message, 
+              })
             });
         }
       } else {
@@ -346,6 +365,24 @@ class Offer extends Component {
               showPopUp: false,
               offerType: "MADE_OFFER",
             });
+          })
+          .catch(error => {
+            let message;
+            switch (error.getCode()) {
+              case (-24): //NETWORK_ERROR
+              case (-4): //DISCONNECTED
+                message = "Oops, please check your network connection and try again!";
+                break;
+              case (-10): //UNAVAILABLE
+              case (-2): //OPERATION_FAILED
+                message = "Oops, the service is currently unavailable. Please try again later!";
+                break;
+              default:
+                message = "Oops, something went wrong. Please try again later!";
+            }
+            this.setState({ 
+              errorMessage: message, 
+            })
           });
       }
     }
@@ -379,6 +416,24 @@ class Offer extends Component {
         this.setState({
           offerType: "INTERESTED_OFFER",
         });
+      })
+      .catch(error => {
+        let message;
+        switch (error.getCode()) {
+          case (-24): //NETWORK_ERROR
+          case (-4): //DISCONNECTED
+            message = "Oops, please check your network connection and try again!";
+            break;
+          case (-10): //UNAVAILABLE
+          case (-2): //OPERATION_FAILED
+            message = "Oops, the service is currently unavailable. Please try again later!";
+            break;
+          default:
+            message = "Oops, something went wrong. Please try again later!";
+        }
+        this.setState({ 
+          errorMessage: message, 
+        })
       });
   };
 
@@ -410,6 +465,24 @@ class Offer extends Component {
         this.setState({
           offerType: "CANCELLED_OFFER",
         });
+      })
+      .catch(error => {
+        let message;
+        switch (error.getCode()) {
+          case (-24): //NETWORK_ERROR
+          case (-4): //DISCONNECTED
+            message = "Oops, please check your network connection and try again!";
+            break;
+          case (-10): //UNAVAILABLE
+          case (-2): //OPERATION_FAILED
+            message = "Oops, the service is currently unavailable. Please try again later!";
+            break;
+          default:
+            message = "Oops, something went wrong. Please try again later!";
+        }
+        this.setState({ 
+          errorMessage: message, 
+        })
       });
   };
 
@@ -439,6 +512,24 @@ class Offer extends Component {
         this.setState({
           offerType: "ACCEPTED_OFFER",
         });
+      })
+      .catch(error => {
+        let message;
+        switch (error.getCode()) {
+          case (-24): //NETWORK_ERROR
+          case (-4): //DISCONNECTED
+            message = "Oops, please check your network connection and try again!";
+            break;
+          case (-10): //UNAVAILABLE
+          case (-2): //OPERATION_FAILED
+            message = "Oops, the service is currently unavailable. Please try again later!";
+            break;
+          default:
+            message = "Oops, something went wrong. Please try again later!";
+        }
+        this.setState({ 
+          errorMessage: message, 
+        })
       });
 
     let status =
@@ -466,7 +557,25 @@ class Offer extends Component {
       .ref()
       .child("listings")
       .child(this.state.interestedListing.key)
-      .update(updates);
+      .update(updates)
+      .catch(error => {
+        let message;
+        switch (error.getCode()) {
+          case (-24): //NETWORK_ERROR
+          case (-4): //DISCONNECTED
+            message = "Oops, please check your network connection and try again!";
+            break;
+          case (-10): //UNAVAILABLE
+          case (-2): //OPERATION_FAILED
+            message = "Oops, the service is currently unavailable. Please try again later!";
+            break;
+          default:
+            message = "Oops, something went wrong. Please try again later!";
+        }
+        this.setState({ 
+          errorMessage: message, 
+        })
+      });
   };
 
   onRejectOffer = () => {
@@ -496,6 +605,24 @@ class Offer extends Component {
           offerType: "REJECTED_OFFER",
           lessee: "none",
         });
+      })
+      .catch(error => {
+        let message;
+        switch (error.getCode()) {
+          case (-24): //NETWORK_ERROR
+          case (-4): //DISCONNECTED
+            message = "Oops, please check your network connection and try again!";
+            break;
+          case (-10): //UNAVAILABLE
+          case (-2): //OPERATION_FAILED
+            message = "Oops, the service is currently unavailable. Please try again later!";
+            break;
+          default:
+            message = "Oops, something went wrong. Please try again later!";
+        }
+        this.setState({ 
+          errorMessage: message, 
+        })
       });
 
     let newOffers = Object.assign(
@@ -509,6 +636,24 @@ class Offer extends Component {
       .update({
         offers: newOffers,
         status: "available",
+      })
+      .catch(error => {
+        let message;
+        switch (error.getCode()) {
+          case (-24): //NETWORK_ERROR
+          case (-4): //DISCONNECTED
+            message = "Oops, please check your network connection and try again!";
+            break;
+          case (-10): //UNAVAILABLE
+          case (-2): //OPERATION_FAILED
+            message = "Oops, the service is currently unavailable. Please try again later!";
+            break;
+          default:
+            message = "Oops, something went wrong. Please try again later!";
+        }
+        this.setState({ 
+          errorMessage: message, 
+        })
       });
   };
 
@@ -896,6 +1041,10 @@ class Offer extends Component {
     }
 
     return (
+      this.state.errorMessage ? 
+      <div className={classes.InterestedListing}>
+        <p style={{ color: "red", fontSize: "small" }}>{this.state.errorMessage}</p> 
+      </div> : 
       <React.Fragment>
         <div className={classes.InterestedListing}>
           <div style={{ margin: "16px" }}>

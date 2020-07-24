@@ -14,6 +14,7 @@ import * as actions from "../../../store/actions/index";
 class ChatBox extends Component {
   state = {
     message: "",
+    errorMessage: "",
   };
 
   componentDidUpdate() {
@@ -56,7 +57,25 @@ class ChatBox extends Component {
       database
         .ref()
         .child("chats/" + this.props.fullChatUID)
-        .update({ chatHistory: chatHistory });
+        .update({ chatHistory: chatHistory })
+        .catch(error => {
+          let message;
+          switch (error.getCode()) {
+            case (-24): //NETWORK_ERROR
+            case (-4): //DISCONNECTED
+              message = "Oops, please check your network connection and try again!";
+              break;
+            case (-10): //UNAVAILABLE
+            case (-2): //OPERATION_FAILED
+              message = "Oops, the service is currently unavailable. Please try again later!";
+              break;
+            default:
+              message = "Oops, something went wrong. Please try again later!";
+          }
+          this.setState({ 
+            errorMessage: message, 
+          })
+        });
 
       this.setState({
         message: "",
@@ -75,6 +94,11 @@ class ChatBox extends Component {
 
   render() {
     return (
+      this.state.errorMessage ? (
+        <div className={classes.ChatBox}>
+          <p style={{ color: "red", fontSize: "small" }}>{this.state.errorMessage}</p>
+        </div>
+      ) :
       <div className={classes.ChatBox}>
         <div className={classes.ChatBoxHeader} style={{ cursor: "pointer" }}>
           <div

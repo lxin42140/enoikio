@@ -20,6 +20,7 @@ class Request extends Component {
   state = {
     askUserToDelete: false,
     confirmDelete: false,
+    errorMessage: "",
   };
 
   cancelConfirmation = () => {
@@ -59,9 +60,34 @@ class Request extends Component {
   };
 
   deleteRequest = () => {
-    database.ref().child("requests").child(this.props.node).remove();
+    let hasError = false;
 
-    this.setState({ confirmDelete: true, askUserToDelete: false });
+    database
+      .ref()
+      .child("requests")
+      .child(this.props.node)
+      .remove()
+      .catch(error => {
+        hasError = true;
+        let message;
+        switch (error.getCode()) {
+          case (-24): //NETWORK_ERROR
+          case (-4): //DISCONNECTED
+            message = "Oops, please check your network connection and try again!";
+            break;
+          case (-10): //UNAVAILABLE
+          case (-2): //OPERATION_FAILED
+            message = "Oops, the service is currently unavailable. Please try again later!";
+            break;
+          default:
+            message = "Oops, something went wrong. Please try again later!";
+        }
+        this.setState({ 
+          errorMessage: message, 
+        })
+      });
+
+    !hasError ? this.setState({ confirmDelete: true, askUserToDelete: false }) : null;
   };
 
   onChatHandler = (chatDisplayName) => {
@@ -222,6 +248,24 @@ class Request extends Component {
       </Modal>
     );
 
+    const errorModal = (
+      <Modal show={this.state.errorMessage}>
+        <p style={{ color: "red", fontSize: "small" }}>{this.state.errorMessage}</p>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Button onClick={this.closePopup}>
+            {<FontAwesomeIcon icon={faTrash} style={{ paddingRight: "5px" }} />}
+            Close
+          </Button>
+        </div>
+      </Modal>
+    );
+
     const isOwner = this.props.displayName === this.props.userId;
 
     let button;
@@ -272,6 +316,7 @@ class Request extends Component {
         </div>
         {this.state.askUserToDelete ? askForConfirmation : null}
         {this.state.confirmDelete ? confirmDeleteModal : null}
+        {this.state.errorMessage ? errorModal : null}
       </div>
     );
   }

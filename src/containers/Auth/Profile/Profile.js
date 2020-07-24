@@ -35,6 +35,8 @@ class Profile extends Component {
     showRequest: false,
     showComments: false,
 
+    reportError: "",
+
     showDropDown: false,
 
     imageAsFile: "",
@@ -380,7 +382,29 @@ class Profile extends Component {
       reportedBy: this.props.displayName,
     };
 
-    database.ref().child("feedbacks").push({ reportDetails });
+    database
+      .ref()
+      .child("feedbacks")
+      .push({ reportDetails })
+      .catch(error => {
+        let message;
+        switch (error.getCode()) {
+          case (-24): //NETWORK_ERROR
+          case (-4): //DISCONNECTED
+            message = "Oops, please check your network connection and try again!";
+            break;
+          case (-10): //UNAVAILABLE
+          case (-2): //OPERATION_FAILED
+            message = "Oops, the service is currently unavailable. Please try again later!";
+            break;
+          default:
+            message = "Oops, something went wrong. Please try again later!";
+        }
+        this.setState({ 
+          reportError: message, 
+          showSummary: false, 
+        })
+      });
 
     this.reset();
   };
@@ -890,10 +914,31 @@ class Profile extends Component {
       </Modal>
     );
 
+    let reportErrorPopUp = (
+      <Modal show={this.state.showSummary}>
+        <div className={classes.reportSummary}>
+          <p style={{ color: "red", fontSize: "small" }}>{this.state.reportError}</p>
+        </div>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Button onClick={this.closeReportSummary}>
+            {<FontAwesomeIcon icon={faEdit} style={{ paddingRight: "5px" }} />}
+            Back
+          </Button>
+        </div>
+      </Modal>
+    );
+
     return (
       <div className={classes.profile}>
         {this.state.feedbackPopup ? feedbackPopup : null}
         {this.state.showSummary ? reportSummary : null}
+        {this.state.reportError ? reportErrorPopUp : null}
         <div className={classes.Background} />
         <div className={classes.Profile}>
           {profile}
