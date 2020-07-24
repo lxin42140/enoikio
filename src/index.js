@@ -15,6 +15,7 @@ import ChatReducer from "./store/reducers/Chat";
 import RequestReducer from './store/reducers/Requests';
 import SearchReducer from './store/reducers/Search';
 import WindowReducer from './store/reducers/Window';
+import LogRocket from 'logrocket';
 
 const rootReducer = combineReducers({
   listing: ListingReducer,
@@ -33,7 +34,7 @@ const composeEnhancers =
 
 const store = createStore(
   rootReducer,
-  composeEnhancers(applyMiddleware(thunk))
+  composeEnhancers(applyMiddleware(thunk, LogRocket.reduxMiddleware()))
 );
 
 const app = (
