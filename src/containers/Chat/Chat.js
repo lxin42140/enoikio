@@ -101,7 +101,10 @@ class Chat extends Component {
       );
     }
 
-    return this.props.windowWidth <= 700 ? (
+    return this.props.error ? (
+      <p style={{ color: "red", fontSize: "small" }}>{this.props.error}</p>
+       ) : 
+      this.props.windowWidth <= 700 ? (
       <div className={classes.Chat}>
         {this.state.showMessages ? null : chatContacts}
         {this.state.showMessages ? chatMessages : null}
@@ -132,6 +135,8 @@ const mapStateToProps = (state) => {
     fullChat: state.chat.fullChat,
     fullChatUID: state.chat.fullChatUID,
     fullChatLoading: state.chat.fullChatLoading,
+
+    error: state.chat.error,
 
     windowWidth: state.window.width,
   };

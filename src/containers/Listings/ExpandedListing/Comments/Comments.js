@@ -28,6 +28,8 @@ class Comments extends Component {
     toggleReply: false,
     replyMessage: "",
     replyKey: "",
+
+    errorMessage: "",
   };
   componentDidMount() {
     if (
@@ -69,6 +71,23 @@ class Comments extends Component {
             isListingOwner: this.props.displayName === this.props.userName,
           });
         }
+      }, error => {
+        let message;
+        switch (error.getCode()) {
+          case (-24): //NETWORK_ERROR
+          case (-4): //DISCONNECTED
+            message = "Oops, please check your network connection and try again!";
+            break;
+          case (-10): //UNAVAILABLE
+          case (-2): //OPERATION_FAILED
+            message = "Oops, the service is currently unavailable. Please try again later!";
+            break;
+          default:
+            message = "Oops, something went wrong. Please try again later!";
+        }
+        this.setState({ 
+          errorMessage: message, 
+        })
       });
   }
 
@@ -134,6 +153,24 @@ class Comments extends Component {
           message: "",
           numStars: 0,
         });
+      })
+      .catch(error => {
+        let message;
+        switch (error.getCode()) {
+          case (-24): //NETWORK_ERROR
+          case (-4): //DISCONNECTED
+            message = "Oops, please check your network connection and try again!";
+            break;
+          case (-10): //UNAVAILABLE
+          case (-2): //OPERATION_FAILED
+            message = "Oops, the service is currently unavailable. Please try again later!";
+            break;
+          default:
+            message = "Oops, something went wrong. Please try again later!";
+        }
+        this.setState({ 
+          errorMessage: message, 
+        })
       });
   };
 
@@ -156,6 +193,23 @@ class Comments extends Component {
             });
           }
         });
+      }, error => {
+        let message;
+        switch (error.getCode()) {
+          case (-24): //NETWORK_ERROR
+          case (-4): //DISCONNECTED
+            message = "Oops, please check your network connection and try again!";
+            break;
+          case (-10): //UNAVAILABLE
+          case (-2): //OPERATION_FAILED
+            message = "Oops, the service is currently unavailable. Please try again later!";
+            break;
+          default:
+            message = "Oops, something went wrong. Please try again later!";
+        }
+        this.setState({ 
+          errorMessage: message, 
+        })
       });
   };
 
@@ -215,10 +269,33 @@ class Comments extends Component {
           replyMessage: "",
           replyKey: "",
         });
+      })
+      .catch(error => {
+        let message;
+        switch (error.getCode()) {
+          case (-24): //NETWORK_ERROR
+          case (-4): //DISCONNECTED
+            message = "Oops, please check your network connection and try again!";
+            break;
+          case (-10): //UNAVAILABLE
+          case (-2): //OPERATION_FAILED
+            message = "Oops, the service is currently unavailable. Please try again later!";
+            break;
+          default:
+            message = "Oops, something went wrong. Please try again later!";
+        }
+        this.setState({ 
+          errorMessage: message, 
+        })
       });
   };
 
   render() {
+    if (this.state.errorMessage) {
+      return (
+        <p style={{ color: "red", fontSize: "small" }}>{this.state.errorMessage}</p>
+      );
+    }
     let commentInput = (
       <div>
         {this.state.isListingOwner ? (

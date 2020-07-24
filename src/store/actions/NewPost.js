@@ -53,7 +53,20 @@ export const submitNewPost = (data) => {
       .push(data)
       .then((res) => dispatch(submitNewPostSuccess()))
       .catch((error) => {
-        const message = error.message.split("-").join(" ");
+        // const message = error.message.split("-").join(" ");
+        let message;
+        switch (error.getCode()) {
+          case (-24): //NETWORK_ERROR
+          case (-4): //DISCONNECTED
+            message = "Oops, please check your network connection and try again!";
+            break;
+          case (-10): //UNAVAILABLE
+          case (-2): //OPERATION_FAILED
+            message = "Oops, the service is currently unavailable. Please try again later!";
+            break;
+          default:
+            message = "Oops, something went wrong. Please try again later!";
+        }
         dispatch(submitNewPostFail(message));
       });
   };
@@ -68,7 +81,20 @@ export const editPost = (editedDetails, node) => {
       .child(node)
       .set(editedDetails)
       .then(dispatch(submitNewPostSuccess()), (error) => {
-        const message = error.message.split("-").join(" ");
+        // const message = error.message.split("-").join(" ");
+        let message;
+        switch (error.getCode()) {
+          case (-24): //NETWORK_ERROR
+          case (-4): //DISCONNECTED
+            message = "Oops, please check your network connection and try again!";
+            break;
+          case (-10): //UNAVAILABLE
+          case (-2): //OPERATION_FAILED
+            message = "Oops, the service is currently unavailable. Please try again later!";
+            break;
+          default:
+            message = "Oops, something went wrong. Please try again later!";
+        }
         dispatch(submitNewPostFail(message));
       });
   };
@@ -86,7 +112,20 @@ export const submitNewPhoto = (imageAsFile, identifier) => {
       dispatch(submitNewPhotoInit());
       submitPhoto(imageAsFile, identifier, 0).then((error) => {
         if (error) {
-          dispatch(submitNewPostFail(error));
+          switch (error.code) {
+            case ('storage/unauthenticated'):
+              dispatch(submitNewPostFail("Oops, you are unauthenticated. Log in and try again!"));
+              break;
+            case ('storage/canceled'):
+              dispatch(submitNewPostFail("Oops, you have cancelled the operation. Please try again!"));
+              break;
+            case ('storage/invalid-url'):
+              dispatch(submitNewPostFail("Oops, the URL is invalid. Please try again!"));
+              break;
+            default:
+              dispatch(submitNewPostFail("Oops, something went wrong. Please try again later!"))
+          }
+          // dispatch(submitNewPostFail(error));
         } else {
           dispatch(submitNewPhotoSuccess());
         }
@@ -106,7 +145,6 @@ async function submitPhoto(imageAsFile, identifier, key) {
       .child("" + key);
 
     await imageRef.put(imageAsFile[key]);
-    // .catch((error) => (error = error.message.split("-").join(" ")));
 
     const metadata = {
       customMetadata: {
@@ -115,7 +153,6 @@ async function submitPhoto(imageAsFile, identifier, key) {
       },
     };
     imageRef.updateMetadata(metadata);
-    // .catch((error) => (error = error.message.split("-").join(" ")));
 
     key += 1;
   }
@@ -134,7 +171,20 @@ export const submitEditedPhoto = (imageAsFile, identifier) => {
       dispatch(submitNewPhotoInit());
       editPhoto(imageAsFile, identifier, 0).then((error) => {
         if (error) {
-          dispatch(submitNewPhotoFail(error));
+          switch (error.code) {
+            case ('storage/unauthenticated'):
+              dispatch(submitNewPostFail("Oops, you are unauthenticated. Log in and try again!"));
+              break;
+            case ('storage/canceled'):
+              dispatch(submitNewPostFail("Oops, you have cancelled the operation. Please try again!"));
+              break;
+            case ('storage/invalid-url'):
+              dispatch(submitNewPostFail("Oops, the URL is invalid. Please try again!"));
+              break;
+            default:
+              dispatch(submitNewPostFail("Oops, something went wrong. Please try again later!"));
+          }
+          // dispatch(submitNewPhotoFail(error));
         } else {
           dispatch(submitNewPhotoSuccess());
         }
@@ -151,7 +201,7 @@ async function editPhoto(imageAsFile, identifier, key) {
       .child("listingPictures")
       .child(identifier)
       .child("" + key);
-      // .child("" + key);
+    // .child("" + key);
 
     if (imageAsFile[key] === null) {
       const list = await imageRef.listAll();
@@ -159,13 +209,13 @@ async function editPhoto(imageAsFile, identifier, key) {
         await imageRef
           .child("" + key)
           .delete()
-          // .catch((error) => (error = error.message.split("-").join(" ")));
+        // .catch((error) => (error = error.message.split("-").join(" ")));
       }
     } else if (typeof imageAsFile[key] !== "string") {
       await imageRef
         .child("" + key)
         .put(imageAsFile[key])
-        // .catch((error) => (error = error.message.split("-").join(" ")));
+      // .catch((error) => (error = error.message.split("-").join(" ")));
       const metadata = {
         customMetadata: {
           name: imageAsFile[key].name,
@@ -175,7 +225,7 @@ async function editPhoto(imageAsFile, identifier, key) {
       await imageRef
         .child("" + key)
         .updateMetadata(metadata)
-        // .catch((error) => (error = error.message.split("-").join(" ")));
+      // .catch((error) => (error = error.message.split("-").join(" ")));
     }
     key += 1;
   }

@@ -12,6 +12,8 @@ const initialState = {
   fullChat: [],
   fullChatUID: "",
   fullChatLoading: false,
+  
+  error: "",
 
   recipient: "",
   recipientProfilePic: "",
@@ -84,6 +86,15 @@ const resetRecipient = (state, action) => {
   });
 };
 
+const fetchChatFail = (state, action) => {
+  return updateObject(state, {
+    initialLoad: false,
+    error: action.message,
+    fullChatLoading: false,
+    fetchChatContactsLoading: false,
+  })
+}
+
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.FETCH_CHAT_CONTACTS_INIT:
@@ -98,6 +109,8 @@ const reducer = (state = initialState, action) => {
       return updateContacts(state, action);
     case actionTypes.RESET_RECIPIENT:
       return resetRecipient(state, action);
+    case actionTypes.FETCH_CHAT_FAIL:
+      return fetchChatFail(state, action);
     default:
       return state;
   }

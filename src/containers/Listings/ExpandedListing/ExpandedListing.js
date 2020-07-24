@@ -56,6 +56,24 @@ class ExpandedListing extends Component {
             pathname: "/chats",
             search: "?" + this.props.expandedListing.displayName,
           });
+        })
+        .catch(error => {
+          let message;
+          switch (error.getCode()) {
+            case (-24): //NETWORK_ERROR
+            case (-4): //DISCONNECTED
+              message = "Oops, please check your network connection and try again!";
+              break;
+            case (-10): //UNAVAILABLE
+            case (-2): //OPERATION_FAILED
+              message = "Oops, the service is currently unavailable. Please try again later!";
+              break;
+            default:
+              message = "Oops, something went wrong. Please try again later!";
+          }
+          this.setState({ 
+            errorMessage: message, 
+          })
         });
     } else {
       this.props.history.push({
@@ -135,6 +153,14 @@ class ExpandedListing extends Component {
     }
   };
   render() {
+    if (this.state.errorMessage) {
+      return (
+        <div className={classes.ExpandedListing}>
+          <p style={{ color: "red", fontSize: "small" }}>{this.state.errorMessage}</p>
+        </div>
+      );
+    }
+
     if (this.props.expandedListingLoading || !this.props.expandedListing) {
       return <Spinner />;
     }

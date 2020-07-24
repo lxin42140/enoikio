@@ -69,6 +69,21 @@ export const fetchAllRequests = () => {
       .child("requests")
       .on("child_removed", (snapShot) => {
         dispatch(removedRequest(snapShot.key));
+      }, error => {
+        let message;
+        switch (error.getCode()) {
+          case (-24): //NETWORK_ERROR
+          case (-4): //DISCONNECTED
+            message = "Oops, please check your network connection and try again!";
+            break;
+          case (-10): //UNAVAILABLE
+          case (-2): //OPERATION_FAILED
+            message = "Oops, the service is currently unavailable. Please try again later!";
+            break;
+          default:
+            message = "Oops, something went wrong. Please try again later!";
+        }
+        dispatch(fetchRequestFail(message));
       });
 
     database
@@ -89,6 +104,21 @@ export const fetchAllRequests = () => {
         result.push(request);
         result.reverse();
         dispatch(fetchRequestSuccess(result));
+      }, error => {
+        let message;
+        switch (error.getCode()) {
+          case (-24): //NETWORK_ERROR
+          case (-4): //DISCONNECTED
+            message = "Oops, please check your network connection and try again!";
+            break;
+          case (-10): //UNAVAILABLE
+          case (-2): //OPERATION_FAILED
+            message = "Oops, the service is currently unavailable. Please try again later!";
+            break;
+          default:
+            message = "Oops, something went wrong. Please try again later!";
+        }
+        dispatch(fetchRequestFail(message));
       });
   };
 };
@@ -102,7 +132,20 @@ export const submitNewRequest = (data) => {
       .push(data)
       .then((res) => dispatch(submitNewRequestSuccess()))
       .catch((error) => {
-        const message = error.message.split("-").join(" ");
+        // const message = error.message.split("-").join(" ");
+        let message;
+        switch (error.getCode()) {
+          case (-24): //NETWORK_ERROR
+          case (-4): //DISCONNECTED
+            message = "Oops, please check your network connection and try again!";
+            break;
+          case (-10): //UNAVAILABLE
+          case (-2): //OPERATION_FAILED
+            message = "Oops, the service is currently unavailable. Please try again later!";
+            break;
+          default:
+            message = "Oops, something went wrong. Please try again later!";
+        }
         dispatch(submitNewRequestFail(message));
       });
   };

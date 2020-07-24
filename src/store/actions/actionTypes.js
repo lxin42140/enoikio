@@ -62,6 +62,7 @@ export const FETCH_FULL_CHAT_INIT = "FETCH_FULL_CHAT_INIT";
 export const FETCH_FULL_CHAT_INIT_SUCCESS = "FETCH_FULL_CHAT_INIT_SUCCESS";
 export const REMOVE_EMPTY_CHAT_CONTACTS = "REMOVE_EMPTY_CHAT_CONTACTS";
 export const RESET_RECIPIENT = "RESET_RECIPIENT";
+export const FETCH_CHAT_FAIL = "FETCH_CHAT_FAIL";
 
 /*----------------------Window----------------------*/
 export const SET_WINDOW_WIDTH = "SET_WINDOW_WIDTH";
