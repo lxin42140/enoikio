@@ -521,7 +521,7 @@ class EditPost extends Component {
       if (formElement.id === "module") {
         if (formElement.config.validated && formElement.config.valid) {
           validationMessage = (
-            <p style={{ color: "grey", fontWeight: "bold" }}>
+            <p style={{ color: "green", fontWeight: "bold" }}>
               {formElement.config.moduleName}
             </p>
           );

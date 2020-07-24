@@ -160,8 +160,28 @@ export const updateUserDetails = (user, photoURL) => {
         dispatch(updatePhotosDetails(photoURL));
       })
       .catch((error) => {
-        let message = error.message.split("-").join(" ");
-        // message = "Oops, something went wrong. Please try again later!";
+        let message;
+        switch (error.code) {
+          case "auth/user-not-found":
+            message = "Wrong email. Please double check your email!";
+            break;
+          case "auth/wrong-password":
+            message = "Wrong password. Please double check your password!";
+            break;
+          case "invalid-email":
+            message = "Please enter a valid email!";
+            break;
+          case "auth/network-request-failed":
+            message = "Network error. Please try again later!";
+            break;
+          case "auth/user-disabled":
+            message = "Your account has been disabled!";
+            break;
+          default:
+            message = "Oops, something went wrong. Please try again later!";
+            break;
+        }
+        // let message = error.message.split("-").join(" ");
         dispatch(authFail(message));
       });
   };
@@ -169,16 +189,43 @@ export const updateUserDetails = (user, photoURL) => {
 
 export const signOut = () => {
   return (dispatch) => {
-    auth.signOut().then((res) => dispatch(logout()));
+    auth
+      .signOut()
+      .then((res) => dispatch(logout()))
+      .catch((error) => {
+        let message;
+        switch (error.code) {
+          case "auth/user-not-found":
+            message = "Wrong email. Please double check your email!";
+            break;
+          case "auth/wrong-password":
+            message = "Wrong password. Please double check your password!";
+            break;
+          case "invalid-email":
+            message = "Please enter a valid email!";
+            break;
+          case "auth/network-request-failed":
+            message = "Network error. Please try again later!";
+            break;
+          case "auth/user-disabled":
+            message = "Your account has been disabled!";
+            break;
+          default:
+            message = "Oops, something went wrong. Please try again later!";
+            break;
+        }
+        // let message = error.message.split("-").join(" ");
+        dispatch(authFail(message));
+      });
   };
 };
 
 export const autoSignIn = () => {
   return (dispatch) => {
     auth.onAuthStateChanged((user) => {
-      // if (user && user.emailVerified) {
-      //   dispatch(authSuccess(user));
-      // }
+      if (user && user.emailVerified) {
+        dispatch(authSuccess(user));
+      }
       if (user) {
         dispatch(authSuccess(user));
       }
@@ -195,7 +242,28 @@ export const passwordReset = (email) => {
         dispatch(passwordResetSuccess());
       })
       .catch((error) => {
-        const message = error.message.split("-").join(" ");
+        let message;
+        switch (error.code) {
+          case "auth/user-not-found":
+            message = "Wrong email. Please double check your email!";
+            break;
+          case "auth/wrong-password":
+            message = "Wrong password. Please double check your password!";
+            break;
+          case "invalid-email":
+            message = "Please enter a valid email!";
+            break;
+          case "auth/network-request-failed":
+            message = "Network error. Please try again later!";
+            break;
+          case "auth/user-disabled":
+            message = "Your account has been disabled!";
+            break;
+          default:
+            message = "Oops, something went wrong. Please try again later!";
+            break;
+        }
+        // let message = error.message.split("-").join(" ");
         dispatch(authFail(message));
       });
   };
@@ -287,17 +355,37 @@ export const signIn = (email, password) => {
       .setPersistence(firebase.auth.Auth.Persistence.SESSION)
       .then((res) => {
         return auth.signInWithEmailAndPassword(email, password).then((user) => {
-          // if (user.user.emailVerified) {
-          dispatch(authSuccess(user.user));
-          updateUserProfile(user.user);
-          // } else {
-          //   dispatch(authFail("Please verify email"));
-          // }
+          if (user.user.emailVerified) {
+            dispatch(authSuccess(user.user));
+            updateUserProfile(user.user);
+          } else {
+            dispatch(authFail("Please verify email"));
+          }
         });
       })
       .catch((error) => {
-        let message = error.message.split("-").join(" ");
-        // message = "Oops, something went wrong. Please try again later!";
+        let message;
+        switch (error.code) {
+          case "auth/user-not-found":
+            message = "Wrong email. Please double check your email!";
+            break;
+          case "auth/wrong-password":
+            message = "Wrong password. Please double check your password!";
+            break;
+          case "invalid-email":
+            message = "Please enter a valid email!";
+            break;
+          case "auth/network-request-failed":
+            message = "Network error. Please try again later!";
+            break;
+          case "auth/user-disabled":
+            message = "Your account has been disabled!";
+            break;
+          default:
+            message = "Oops, something went wrong. Please try again later!";
+            break;
+        }
+        // let message = error.message.split("-").join(" ");
         dispatch(authFail(message));
       });
   };
@@ -308,43 +396,127 @@ export const signUp = (email, password, displayName) => {
     dispatch(authStart());
     updateDisplayNames(displayName).then((error) => {
       if (error) {
-        dispatch(authFail(error));
+        let message;
+        switch (error.Code) {
+          case -4:
+          case -24:
+            message = "Network error. Please try again!";
+            break;
+          case -3:
+            message = "You do not have the permission!";
+            break;
+          default:
+            message = "Oops, something went wrong. Please try again later!";
+            break;
+        }
+        dispatch(authFail(message));
       } else {
         auth
           .createUserWithEmailAndPassword(email, password)
-          .then((user) => {
-            user.user.updateProfile({
-              displayName: displayName,
-            });
-            const actionCodeSettings = {
-              url: "https://enoikio-orbit2020.web.app/auth",
-            };
-            return user.user
-              .sendEmailVerification(actionCodeSettings)
-              .then((res) => {
-                dispatch(sentEmailConfirmation());
+          .then(
+            (user) => {
+              user.user.updateProfile({
+                displayName: displayName,
               });
-          })
+              const actionCodeSettings = {
+                url: "https://enoikio-orbit2020.web.app/auth",
+              };
+              return user.user
+                .sendEmailVerification(actionCodeSettings)
+                .then((res) => {
+                  dispatch(sentEmailConfirmation());
+                });
+            },
+            (error) => {
+              let message;
+              switch (error.code) {
+                case "auth/user-not-found":
+                  message = "Wrong email. Please double check your email!";
+                  break;
+                case "auth/wrong-password":
+                  message =
+                    "Wrong password. Please double check your password!";
+                  break;
+                case "invalid-email":
+                  message = "Please enter a valid email!";
+                  break;
+                case "auth/network-request-failed":
+                  message = "Network error. Please try again later!";
+                  break;
+                case "auth/user-disabled":
+                  message = "Your account has been disabled!";
+                  break;
+                default:
+                  message =
+                    "Oops, something went wrong. Please try again later!";
+                  break;
+              }
+              // let message = error.message.split("-").join(" ");
+              dispatch(authFail(message));
+            }
+          )
           .catch((error) => {
-            const message = error.message.split("-").join(" ");
+            let message;
+            switch (error.code) {
+              case "auth/user-not-found":
+                message = "Wrong email. Please double check your email!";
+                break;
+              case "auth/wrong-password":
+                message = "Wrong password. Please double check your password!";
+                break;
+              case "invalid-email":
+                message = "Please enter a valid email!";
+                break;
+              case "auth/network-request-failed":
+                message = "Network error. Please try again later!";
+                break;
+              case "auth/user-disabled":
+                message = "Your account has been disabled!";
+                break;
+              default:
+                message = "Oops, something went wrong. Please try again later!";
+                break;
+            }
+            // let message = error.message.split("-").join(" ");
+            dispatch(authFail(message));
             database
               .ref()
               .child("displayNames")
-              .once("value", (snapShot) => {
-                snapShot.forEach((data) => {
-                  const displayNames = Object.assign(
-                    [],
-                    data.val().displayNames
-                  );
-                  displayNames.pop();
-                  database
-                    .ref()
-                    .child("displayNames")
-                    .child(data.key)
-                    .update({ displayNames: displayNames })
-                    .then((res) => dispatch(authFail(message)));
-                });
-              });
+              .once(
+                "value",
+                (snapShot) => {
+                  snapShot.forEach((data) => {
+                    const displayNames = Object.assign(
+                      [],
+                      data.val().displayNames
+                    );
+                    displayNames.pop();
+                    database
+                      .ref()
+                      .child("displayNames")
+                      .child(data.key)
+                      .update({ displayNames: displayNames })
+                      .then((res) => dispatch(authFail(message)));
+                  });
+                },
+                (error) => {
+                  let message;
+                  switch (error.Code) {
+                    case -4:
+                    case -24:
+                      message = "Network error. Please try again!";
+                      break;
+                    case -3:
+                      message = "You do not have the permission!";
+                      break;
+                    default:
+                      message =
+                        "Oops, something went wrong. Please try again later!";
+                      break;
+                  }
+                  dispatch(authFail(message));
+                }
+              );
           });
       }
     });
@@ -378,6 +550,6 @@ async function updateDisplayNames(displayName) {
           .set({ displayNames: displayNames });
       }
     })
-    .catch((error) => (error = error.message.split("-").join(" ")));
+    .catch((failedError) => (error = failedError));
   return error;
 }
