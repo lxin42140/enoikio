@@ -60,8 +60,6 @@ class Request extends Component {
   };
 
   deleteRequest = () => {
-    // let hasError = false;
-
     database
       .ref()
       .child("requests")
@@ -71,7 +69,6 @@ class Request extends Component {
         this.setState({ confirmDelete: true, askUserToDelete: false });
       })
       .catch((error) => {
-        // hasError = true;
         let message;
         switch (error.getCode()) {
           case -24: //NETWORK_ERROR
@@ -91,8 +88,6 @@ class Request extends Component {
           errorMessage: message,
         });
       });
-
-    // !hasError ? this.setState({ confirmDelete: true, askUserToDelete: false }) : null;
   };
 
   onChatHandler = (chatDisplayName) => {
