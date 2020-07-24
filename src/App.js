@@ -7,8 +7,10 @@ import asyncComponent from "./hoc/asyncComponent/asyncComponent";
 import Listings from "./containers/Listings/FullListings";
 import * as actions from "./store/actions/index";
 import LogRocket from 'logrocket';
+import setupLogRocketReact from 'logrocket-react';
 
 LogRocket.init('w5d2zb/enoikio');
+setupLogRocketReact(LogRocket);
 
 const asyncNewPost = asyncComponent(() => {
   return import("./containers/NewPost/NewPost");
