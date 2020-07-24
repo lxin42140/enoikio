@@ -429,17 +429,6 @@ class Offer extends Component {
 
     const chatHistory = Object.assign([], this.props.fullChat);
     chatHistory.push(message);
-    database
-      .ref()
-      .child("chats/" + this.props.fullChatUID)
-      .update({
-        chatHistory: chatHistory,
-      })
-      .then((res) => {
-        this.setState({
-          offerType: "ACCEPTED_OFFER",
-        });
-      });
 
     let status =
       "loaned out from " +
@@ -466,7 +455,43 @@ class Offer extends Component {
       .ref()
       .child("listings")
       .child(this.state.interestedListing.key)
-      .update(updates);
+      .once("value", (snapShot) => {
+        if (snapShot.exists()) {
+          database
+            .ref()
+            .child("chats/" + this.props.fullChatUID)
+            .update({
+              chatHistory: chatHistory,
+            })
+            .then((res) => {
+              this.setState({
+                offerType: "ACCEPTED_OFFER",
+              });
+            });
+
+          database
+            .ref()
+            .child("listings")
+            .child(this.state.interestedListing.key)
+            .update(updates);
+        } else {
+          chatHistory.pop();
+          message = {
+            content: "Sorry, the listing has been deleted",
+            sender: this.props.displayName,
+            type: "NORMAL",
+            date: moment().format("DD/MM/YYYY"),
+            time: moment().format("HH:mm:ss"),
+          };
+          chatHistory.push(message);
+          database
+            .ref()
+            .child("chats/" + this.props.fullChatUID)
+            .update({
+              chatHistory: chatHistory,
+            });
+        }
+      });
   };
 
   onRejectOffer = () => {
@@ -485,30 +510,61 @@ class Offer extends Component {
 
     const chatHistory = Object.assign([], this.props.fullChat);
     chatHistory.push(message);
-    database
-      .ref()
-      .child("chats/" + this.props.fullChatUID)
-      .update({
-        chatHistory: chatHistory,
-      })
-      .then((res) => {
-        this.setState({
-          offerType: "REJECTED_OFFER",
-          lessee: "none",
-        });
-      });
 
     let newOffers = Object.assign(
       [],
       this.state.interestedListing.offers
     ).filter((offer) => offer.user !== this.props.recipient);
+
     database
       .ref()
       .child("listings")
       .child(this.state.interestedListing.key)
-      .update({
-        offers: newOffers,
-        status: "available",
+      .once("value", (snapShot) => {
+        if (snapShot.exists()) {
+          database
+            .ref()
+            .child("chats/" + this.props.fullChatUID)
+            .update({
+              chatHistory: chatHistory,
+            })
+            .then((res) => {
+              this.setState({
+                offerType: "REJECTED_OFFER",
+                lessee: "none",
+              });
+            });
+
+          database
+            .ref()
+            .child("listings")
+            .child(this.state.interestedListing.key)
+            .update({
+              offers: newOffers,
+              status: "available",
+            });
+        } else {
+          chatHistory.pop();
+          message = {
+            content: "Sorry, the listing has been deleted",
+            sender: this.props.displayName,
+            type: "NORMAL",
+            date: moment().format("DD/MM/YYYY"),
+            time: moment().format("HH:mm:ss"),
+          };
+          chatHistory.push(message);
+          database
+            .ref()
+            .child("chats/" + this.props.fullChatUID)
+            .update({
+              chatHistory: chatHistory,
+            })
+            .then((res) => {
+              this.setState({
+                lessee: "none",
+              });
+            });
+        }
       });
   };
 
