@@ -60,34 +60,39 @@ class Request extends Component {
   };
 
   deleteRequest = () => {
-    let hasError = false;
+    // let hasError = false;
 
     database
       .ref()
       .child("requests")
       .child(this.props.node)
       .remove()
-      .catch(error => {
-        hasError = true;
+      .then((res) => {
+        this.setState({ confirmDelete: true, askUserToDelete: false });
+      })
+      .catch((error) => {
+        // hasError = true;
         let message;
         switch (error.getCode()) {
-          case (-24): //NETWORK_ERROR
-          case (-4): //DISCONNECTED
-            message = "Oops, please check your network connection and try again!";
+          case -24: //NETWORK_ERROR
+          case -4: //DISCONNECTED
+            message =
+              "Oops, please check your network connection and try again!";
             break;
-          case (-10): //UNAVAILABLE
-          case (-2): //OPERATION_FAILED
-            message = "Oops, the service is currently unavailable. Please try again later!";
+          case -10: //UNAVAILABLE
+          case -2: //OPERATION_FAILED
+            message =
+              "Oops, the service is currently unavailable. Please try again later!";
             break;
           default:
             message = "Oops, something went wrong. Please try again later!";
         }
-        this.setState({ 
-          errorMessage: message, 
-        })
+        this.setState({
+          errorMessage: message,
+        });
       });
 
-    !hasError ? this.setState({ confirmDelete: true, askUserToDelete: false }) : null;
+    // !hasError ? this.setState({ confirmDelete: true, askUserToDelete: false }) : null;
   };
 
   onChatHandler = (chatDisplayName) => {
@@ -250,7 +255,9 @@ class Request extends Component {
 
     const errorModal = (
       <Modal show={this.state.errorMessage}>
-        <p style={{ color: "red", fontSize: "small" }}>{this.state.errorMessage}</p>
+        <p style={{ color: "red", fontSize: "small" }}>
+          {this.state.errorMessage}
+        </p>
         <div
           style={{
             display: "flex",

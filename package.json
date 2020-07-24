@@ -38,6 +38,7 @@
     "grpc": "^1.24.3",
     "html-webpack-plugin": "2.29.0",
     "jest": "20.0.4",
+    "logrocket": "^1.0.10",
     "moment": "^2.26.0",
     "moment-range": "^4.0.2",
     "moment-timezone": "^0.5.31",

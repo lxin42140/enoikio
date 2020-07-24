@@ -6,6 +6,9 @@ import Layout from "./hoc/Layout/Layout";
 import asyncComponent from "./hoc/asyncComponent/asyncComponent";
 import Listings from "./containers/Listings/FullListings";
 import * as actions from "./store/actions/index";
+import LogRocket from 'logrocket';
+
+LogRocket.init('w5d2zb/enoikio');
 
 const asyncNewPost = asyncComponent(() => {
   return import("./containers/NewPost/NewPost");
