@@ -589,6 +589,7 @@ class Offer extends Component {
             break;
           default:
             message = "Oops, something went wrong. Please try again later!";
+            break;
         }
         this.setState({
           errorMessage: message,
