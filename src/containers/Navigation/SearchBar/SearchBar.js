@@ -183,6 +183,7 @@ class SearchBar extends Component {
                   paddingRight: "5px",
                   color: "grey",
                   fontSize: "small",
+                  cursor: "pointer",
                 }}
               >
                 {this.state.filterType === "moduleCode" ? (
