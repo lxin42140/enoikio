@@ -1,5 +1,6 @@
 .NewPost {
     margin: 20px auto;
+    margin-top: 0px;
     width: 80%;
     height: 100%;
     text-align: center;
@@ -7,7 +8,6 @@
     border: 1px solid #eee;
     padding: 10px;
     box-sizing: border-box;
-    height: auto;
 }
 
 .Image {

@@ -3,12 +3,13 @@
     margin-bottom: 50px;
     text-align: center;
     padding-left: 5%;
-    padding-right: 5%
+    padding-right: 5%;
+    height: 100%;
 }
 
 .LockScroll {
     position: fixed;
-    top: 0;
+    width: 90%;
 }
 
 @media (max-width: 320px) {
