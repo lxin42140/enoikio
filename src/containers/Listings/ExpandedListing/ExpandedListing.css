@@ -113,6 +113,13 @@
     height: 50px;
 }
 
+.endOfListing {
+    padding-top: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
 /* Tooltip text */
 .tooltiptext {
     visibility: hidden;
@@ -133,6 +140,14 @@
 }
 
 @media (max-width: 685px) {
+    .ExpandedListingContent {
+        padding-bottom: 125px;
+    }
+
+    .endOfListing {
+        padding-top: 30px;
+    }
+
     .Content {
         display: flex;
         flex-direction: column;

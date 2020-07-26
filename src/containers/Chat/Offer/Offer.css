@@ -64,6 +64,7 @@
 @media (max-width: 800px) {
     .InterestedListingDetails {
         font-size: small;
+        /* padding: 20px */
     }
 
     .promptMessage {

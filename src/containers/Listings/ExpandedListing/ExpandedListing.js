@@ -210,7 +210,7 @@ class ExpandedListing extends Component {
       );
 
     let selections = (
-      <React.Fragment>
+      <div className={classes.endOfListing}>
         <div
           className={classes.listingName}
           onClick={() =>
@@ -241,9 +241,9 @@ class ExpandedListing extends Component {
               style={{ paddingRight: "5px" }}
             />
           }
-          Chat to make offer
+          Make offer
         </Button>
-      </React.Fragment>
+      </div>
     );
 
     if (
@@ -407,7 +407,6 @@ class ExpandedListing extends Component {
                 </li>
               </React.Fragment>
             ) : null}
-            <br />
             <li>
               <b>Posted on: </b>
               {this.props.expandedListing.date}
@@ -512,14 +511,16 @@ class ExpandedListing extends Component {
             </div>
             <div className={classes.Back}>{goBack}</div>
           </div>
-          <Comments
-            comments={this.props.expandedListing.comments}
-            replies={this.props.expandedListing.replies}
-            identifier={this.props.expandedListing.key}
-            userName={this.props.expandedListing.displayName}
-            searchProfileHandler={this.searchProfileHandler}
-            history={this.props.history}
-          />
+          <div style={{ position: "relative" }}>
+            <Comments
+              comments={this.props.expandedListing.comments}
+              replies={this.props.expandedListing.replies}
+              identifier={this.props.expandedListing.key}
+              userName={this.props.expandedListing.displayName}
+              searchProfileHandler={this.searchProfileHandler}
+              history={this.props.history}
+            />
+          </div>
         </div>
         {this.state.askUserToDelete ? askForConfirmation : null}
         {this.state.confirmDelete ? confirmDeleteModal : null}

@@ -352,7 +352,8 @@ export const signIn = (email, password) => {
       .setPersistence(firebase.auth.Auth.Persistence.SESSION)
       .then((res) => {
         return auth.signInWithEmailAndPassword(email, password).then((user) => {
-          if (user.user.emailVerified) {
+          // if (user.user.emailVerified) {
+            if (user) {
             dispatch(authSuccess(user.user));
             updateUserProfile(user.user);
           } else {
