@@ -36,8 +36,9 @@
 }
 
 @media (max-width: 375px) {
-    .Chat {
-        width: max-content;
+    .ChatBox {
+        /* width: max-content; */
+        overflow-y: scroll;
     }
 }
 
