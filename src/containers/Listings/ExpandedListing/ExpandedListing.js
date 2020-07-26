@@ -251,9 +251,9 @@ class ExpandedListing extends Component {
       this.props.expandedListing.displayName === this.props.displayName
     ) {
       selections = (
-        <React.Fragment>
+        <div className={classes.endOfListing}>
           <div
-            style={{ cursor: "pointer", display: "flex", alignItems: "center" }}
+            className={classes.listingName}
             onClick={() =>
               this.searchProfileHandler(this.props.expandedListing.displayName)
             }
@@ -261,12 +261,7 @@ class ExpandedListing extends Component {
             <img
               src={this.props.expandedListing.photoURL}
               alt="Profile"
-              style={{
-                border: "1px solid grey",
-                borderRadius: "50px",
-                width: "50px",
-                height: "50px",
-              }}
+              className={classes.listingProfileImage}
             />
             <p
               style={{
@@ -297,13 +292,13 @@ class ExpandedListing extends Component {
             {<FontAwesomeIcon icon={faTrash} style={{ paddingRight: "5px" }} />}
             Delete
           </Button>
-        </React.Fragment>
+        </div>
       );
     } else if (this.props.isAuthenticated) {
       selections = (
-        <React.Fragment>
+        <div className={classes.endOfListing}>
           <div
-            style={{ cursor: "pointer", display: "flex", alignItems: "center" }}
+            className={classes.listingName}
             onClick={() =>
               this.searchProfileHandler(this.props.expandedListing.displayName)
             }
@@ -311,12 +306,7 @@ class ExpandedListing extends Component {
             <img
               src={this.props.expandedListing.photoURL}
               alt="Profile"
-              style={{
-                border: "1px solid grey",
-                borderRadius: "50px",
-                width: "50px",
-                height: "50px",
-              }}
+              className={classes.listingProfileImage}
             />
             <p
               style={{
@@ -339,9 +329,9 @@ class ExpandedListing extends Component {
                 style={{ paddingRight: "5px" }}
               />
             }
-            Chat to make offer
+            Make offer
           </Button>
-        </React.Fragment>
+        </div>
       );
     }
 
