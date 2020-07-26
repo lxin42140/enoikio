@@ -277,7 +277,7 @@ class ExpandedListing extends Component {
             </p>
           </div>
           <span style={{ paddingRight: "20px" }}>
-            <Button onClick={this.onRedirectToEditListing}>
+            <Button btnType="Important" onClick={this.onRedirectToEditListing}>
               {
                 <FontAwesomeIcon
                   icon={faEdit}
@@ -288,7 +288,6 @@ class ExpandedListing extends Component {
             </Button>
           </span>
           <Button
-            btnType="Important"
             onClick={this.askUserToDelete}
             disabled={this.props.expandedListing.status !== "available"}
           >
