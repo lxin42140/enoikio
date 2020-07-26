@@ -151,7 +151,7 @@ class ExpandedListing extends Component {
       query = query.split("&&")[0];
       this.props.history.push(query);
     } else {
-      this.props.history.goBack();
+      this.props.history.push("/");
     }
   };
   render() {
