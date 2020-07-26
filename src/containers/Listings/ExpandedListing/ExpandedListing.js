@@ -234,7 +234,10 @@ class ExpandedListing extends Component {
             @{this.props.expandedListing.displayName}
           </p>
         </div>
-        <Button onClick={() => this.props.history.push("/auth")}>
+        <Button
+          btnType="Important"
+          onClick={() => this.props.history.push("/auth")}
+        >
           {
             <FontAwesomeIcon
               icon={faComments}
@@ -319,6 +322,7 @@ class ExpandedListing extends Component {
             </p>
           </div>
           <Button
+            btnType="Important"
             onClick={() =>
               this.onChatHandler(this.props.expandedListing.displayName)
             }
