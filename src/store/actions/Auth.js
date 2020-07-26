@@ -226,9 +226,6 @@ export const autoSignIn = () => {
       if (user && user.emailVerified) {
         dispatch(authSuccess(user));
       }
-      if (user) {
-        dispatch(authSuccess(user));
-      }
     });
   };
 };
