@@ -1043,7 +1043,7 @@ class Offer extends Component {
                 Make offer
               </Button>
               <Button onClick={this.onInterestedOffer}>
-                <span style={{ fontSize: "small" }}>
+                <span style={{ fontSize: "x-small" }}>
                   {
                     <FontAwesomeIcon
                       icon={faExclamation}

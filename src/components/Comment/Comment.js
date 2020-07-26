@@ -22,14 +22,18 @@ const comment = (props) => {
             style={{ paddingRight: "5px", color: "grey" }}
           />
         }
-        <div style={{ cursor: "pointer" }}>
-          <img
-            src={props.profilePicture}
-            alt="User profile"
-            className={classes.ReplyProfileImage}
-            onClick={props.onClick}
-          />
+        <div className={classes.tooltip}>
+          <div style={{ cursor: "pointer" }}>
+            <img
+              src={props.profilePicture}
+              alt="User profile"
+              className={classes.ReplyProfileImage}
+              onClick={props.onClick}
+            />
+          </div>
+          <span className={classes.tooltiptext}>Click to go profile</span>
         </div>
+
         <div className={classes.CommentContent}>
           <div className={classes.CommentInfo}>
             <span className={classes.CommentName}>
@@ -51,13 +55,16 @@ const comment = (props) => {
   } else {
     comment = (
       <div className={classes.CommentMessage}>
-        <div style={{ cursor: "pointer" }}>
-          <img
-            src={props.profilePicture}
-            alt="User profile"
-            className={classes.ProfileImage}
-            onClick={props.onClick}
-          />
+        <div className={classes.tooltip}>
+          <div style={{ cursor: "pointer" }}>
+            <img
+              src={props.profilePicture}
+              alt="User profile"
+              className={classes.ProfileImage}
+              onClick={props.onClick}
+            />
+          </div>
+          <span className={classes.tooltiptext}>Click to go profile</span>
         </div>
         <div className={classes.CommentContent}>
           <div className={classes.CommentInfo}>

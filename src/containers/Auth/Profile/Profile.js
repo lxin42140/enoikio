@@ -386,24 +386,26 @@ class Profile extends Component {
       .ref()
       .child("feedbacks")
       .push({ reportDetails })
-      .catch(error => {
+      .catch((error) => {
         let message;
         switch (error.getCode()) {
-          case (-24): //NETWORK_ERROR
-          case (-4): //DISCONNECTED
-            message = "Oops, please check your network connection and try again!";
+          case -24: //NETWORK_ERROR
+          case -4: //DISCONNECTED
+            message =
+              "Oops, please check your network connection and try again!";
             break;
-          case (-10): //UNAVAILABLE
-          case (-2): //OPERATION_FAILED
-            message = "Oops, the service is currently unavailable. Please try again later!";
+          case -10: //UNAVAILABLE
+          case -2: //OPERATION_FAILED
+            message =
+              "Oops, the service is currently unavailable. Please try again later!";
             break;
           default:
             message = "Oops, something went wrong. Please try again later!";
         }
-        this.setState({ 
-          reportError: message, 
-          showSummary: false, 
-        })
+        this.setState({
+          reportError: message,
+          showSummary: false,
+        });
       });
 
     this.reset();
@@ -756,15 +758,18 @@ class Profile extends Component {
 
     let profile = (
       <div className={classes.UserDetails}>
-        <div onClick={this.editProfileImageHandler}>
-          <img
-            className={classes.ProfileImage}
-            src={
-              this.props.photoURL === "" ? profileImage : this.props.photoURL
-            }
-            alt="profile"
-            style={{ cursor: "pointer" }}
-          />
+        <div className={classes.tooltip}>
+          <div onClick={this.editProfileImageHandler}>
+            <img
+              className={classes.ProfileImage}
+              src={
+                this.props.photoURL === "" ? profileImage : this.props.photoURL
+              }
+              alt="profile"
+              style={{ cursor: "pointer" }}
+            />
+          </div>
+          <span className={classes.tooltiptext}>Click to edit</span>
         </div>
         <div>
           <p className={classes.displayName}>@{this.props.displayName}</p>
@@ -917,7 +922,9 @@ class Profile extends Component {
     let reportErrorPopUp = (
       <Modal show={this.state.showSummary}>
         <div className={classes.reportSummary}>
-          <p style={{ color: "red", fontSize: "small" }}>{this.state.reportError}</p>
+          <p style={{ color: "red", fontSize: "small" }}>
+            {this.state.reportError}
+          </p>
         </div>
         <div
           style={{

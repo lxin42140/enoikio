@@ -140,6 +140,9 @@ class Request extends Component {
           <p>
             {this.props.module}:《{this.props.textbook}》
           </p>
+          <span className={classes.tooltiptext}>
+            {this.props.isProfile ? null : "Click to go profile"}
+          </span>
         </div>
 
         <div className={infoStyle}>

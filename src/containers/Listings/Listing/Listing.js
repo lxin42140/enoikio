@@ -46,27 +46,33 @@ class Listing extends Component {
   componentDidUpdate(prevState) {
     if (prevState.liked !== this.state.liked) {
       const likedUsers = Object.assign([], this.state.likedUsers);
-      database.ref().child("listings").child(this.props.node).update({
-        likedUsers: likedUsers,
-      })
-      .catch(error => {
-        let message;
-        switch (error.getCode()) {
-          case (-24): //NETWORK_ERROR
-          case (-4): //DISCONNECTED
-            message = "Oops, please check your network connection and try again!";
-            break;
-          case (-10): //UNAVAILABLE
-          case (-2): //OPERATION_FAILED
-            message = "Oops, the service is currently unavailable. Please try again later!";
-            break;
-          default:
-            message = "Oops, something went wrong. Please try again later!";
-        }
-        this.setState({ 
-          errorMessage: message, 
+      database
+        .ref()
+        .child("listings")
+        .child(this.props.node)
+        .update({
+          likedUsers: likedUsers,
         })
-      });
+        .catch((error) => {
+          let message;
+          switch (error.getCode()) {
+            case -24: //NETWORK_ERROR
+            case -4: //DISCONNECTED
+              message =
+                "Oops, please check your network connection and try again!";
+              break;
+            case -10: //UNAVAILABLE
+            case -2: //OPERATION_FAILED
+              message =
+                "Oops, the service is currently unavailable. Please try again later!";
+              break;
+            default:
+              message = "Oops, something went wrong. Please try again later!";
+          }
+          this.setState({
+            errorMessage: message,
+          });
+        });
     }
   }
 
@@ -182,43 +188,50 @@ class Listing extends Component {
         database
           .ref()
           .child("chats/" + chatKey)
-          .once("value", (snapShot) => {
-            snapShot.forEach((data) => {
-              if (data.key === "chatHistory") {
-                const chatHistory = Object.assign([], data.val());
-                chatHistory.push(message);
-                database
-                  .ref()
-                  .child("chats/" + chatKey)
-                  .update({
-                    chatHistory: chatHistory,
-                  })
-                  .then((res) => {
-                    this.props.history.push({
-                      pathname: "/chats",
-                      search: "?" + this.props.userId,
+          .once(
+            "value",
+            (snapShot) => {
+              snapShot.forEach((data) => {
+                if (data.key === "chatHistory") {
+                  const chatHistory = Object.assign([], data.val());
+                  chatHistory.push(message);
+                  database
+                    .ref()
+                    .child("chats/" + chatKey)
+                    .update({
+                      chatHistory: chatHistory,
+                    })
+                    .then((res) => {
+                      this.props.history.push({
+                        pathname: "/chats",
+                        search: "?" + this.props.userId,
+                      });
                     });
-                  });
+                }
+              });
+            },
+            (error) => {
+              let message;
+              switch (error.getCode()) {
+                case -24: //NETWORK_ERROR
+                case -4: //DISCONNECTED
+                  message =
+                    "Oops, please check your network connection and try again!";
+                  break;
+                case -10: //UNAVAILABLE
+                case -2: //OPERATION_FAILED
+                  message =
+                    "Oops, the service is currently unavailable. Please try again later!";
+                  break;
+                default:
+                  message =
+                    "Oops, something went wrong. Please try again later!";
               }
-            });
-          }, error => {
-            let message;
-            switch (error.getCode()) {
-              case (-24): //NETWORK_ERROR
-              case (-4): //DISCONNECTED
-                message = "Oops, please check your network connection and try again!";
-                break;
-              case (-10): //UNAVAILABLE
-              case (-2): //OPERATION_FAILED
-                message = "Oops, the service is currently unavailable. Please try again later!";
-                break;
-              default:
-                message = "Oops, something went wrong. Please try again later!";
+              this.setState({
+                errorMessage: message,
+              });
             }
-            this.setState({ 
-              errorMessage: message, 
-            })
-          });
+          );
       });
 
     database
@@ -228,23 +241,25 @@ class Listing extends Component {
         lessee: "none",
         status: "available",
       })
-      .catch(error => {
+      .catch((error) => {
         let message;
         switch (error.getCode()) {
-          case (-24): //NETWORK_ERROR
-          case (-4): //DISCONNECTED
-            message = "Oops, please check your network connection and try again!";
+          case -24: //NETWORK_ERROR
+          case -4: //DISCONNECTED
+            message =
+              "Oops, please check your network connection and try again!";
             break;
-          case (-10): //UNAVAILABLE
-          case (-2): //OPERATION_FAILED
-            message = "Oops, the service is currently unavailable. Please try again later!";
+          case -10: //UNAVAILABLE
+          case -2: //OPERATION_FAILED
+            message =
+              "Oops, the service is currently unavailable. Please try again later!";
             break;
           default:
             message = "Oops, something went wrong. Please try again later!";
         }
-        this.setState({ 
-          errorMessage: message, 
-        })
+        this.setState({
+          errorMessage: message,
+        });
       });
   };
 
@@ -274,11 +289,18 @@ class Listing extends Component {
 
     const heartIcon = (
       <div style={{ display: "flex", alignItems: "center", marginTop: "auto" }}>
-        <FontAwesomeIcon
-          icon={faHeart}
-          className={HeartStyle.join(" ")}
-          onClick={this.toggleLikePostHandler}
-        />
+        <div className={classes.tooltip}>
+          <FontAwesomeIcon
+            icon={faHeart}
+            className={HeartStyle.join(" ")}
+            onClick={this.toggleLikePostHandler}
+          />
+          <span className={classes.tooltiptext}>
+            {this.props.userId === this.props.displayName
+              ? "Can't like"
+              : "Click to like"}
+          </span>
+        </div>
         <p
           style={{
             paddingLeft: "5px",
@@ -531,7 +553,11 @@ class Listing extends Component {
       );
     }
 
-    return <div className={ListingStyle}>{this.state.errorMessage ? this.state.errorMessage : listing}</div>;
+    return (
+      <div className={ListingStyle}>
+        {this.state.errorMessage ? this.state.errorMessage : listing}
+      </div>
+    );
   }
 }
 

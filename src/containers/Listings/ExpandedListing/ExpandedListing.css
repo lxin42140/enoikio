@@ -100,6 +100,38 @@
     font-weight: bolder;
 }
 
+.listingName {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.listingProfileImage {
+    border: 1px solid grey;
+    border-radius: 50px;
+    width: 50px;
+    height: 50px;
+}
+
+/* Tooltip text */
+.tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+
+    /* Position the tooltip text - see examples below! */
+    position: absolute;
+    z-index: 1;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.listingName:hover .tooltiptext {
+    visibility: visible;
+}
+
 @media (max-width: 685px) {
     .Content {
         display: flex;
