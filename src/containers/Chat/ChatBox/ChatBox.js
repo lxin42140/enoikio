@@ -119,10 +119,12 @@ class ChatBox extends Component {
             </div>
           ) : null}
         </div>
-        <Offer
-          fullChat={this.props.fullChat}
-          fullChatUID={this.props.fullChatUID}
-        />
+        <div style={{ position: "relative" }}>
+          <Offer
+            fullChat={this.props.fullChat}
+            fullChatUID={this.props.fullChatUID}
+          />
+        </div>
         <div className={classes.ChatBoxMessages}>
           {this.props.fullChatLoading ? (
             <Spinner />
